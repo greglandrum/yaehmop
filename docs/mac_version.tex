@@ -1,0 +1,104 @@
+\chapter{\prog\ on the Macintosh}
+
+As of version 1.2 of \prog, there is a Macintosh port of everything.
+At the moment, the Mac version only runs on Power Macs.
+A port to the 68K based Macs is not suported.
+
+%There hasn't been much testing of \prog\ on Power Macs
+%configured differently than what we have in the group, but it's a fairly
+%safe bet that \viewprog\ will not work on displays that have
+%less than 256 colors available.  There's also a distinct possibility
+%that it won't work on displays with more than 256 colors.  To be safe,
+%go to the Monitors control panel and switch to 256 color mode before
+%running \viewprog.
+
+The Mac port was done using the CodeWarrior compiler from Metrowerks.
+Source code and project files for the Metrowerks IDE are available
+upon request.
+Codewarrior is fantastic ! Metroworks prices it reasonably, includes a ton of
+useful examples and libraries, and has an
+excellent upgrade policy.  In addition, the MW technical support is
+{\bf excellent}.
+
+The Fortran bits of the program were converted using f2c on our
+workstations, and then compiled on the Mac using a port of the f2c
+libraries.  All input and output that would normally go to the
+console on a workstation is handled by the SIOUX library included with
+CodeWarrior.  The basic structure of the graphics stuff used in
+\viewprog\ was done using the EasyApp application shell distributed
+with CW.
+
+\section{A couple of disclaimers}
+The Mac version of \prog\ is not the most beautiful thing that the
+world has ever seen.  Some of the operations are handled in an ugly,
+non-Mac way.  This is a direct consequence of the program's
+Unix heritage.  Hopefully, in some future version these 
+difficulties will be eliminated.
+
+The Mac version of the programs are not nearly as stable as the UNIX
+version, principally because the MacOS isn't a
+protected mode operating system.
+
+\section{Using \calcprog\ on a Macintosh}
+
+When \calcprog\ starts up it will open a standard file choice dialog,
+you should choose the input file in that dialog box.  If the program
+has problems opening the parameter file (usually called {\tt
+eht\_parms.dat}), it'll pop up another dialog box.  You should use that
+dialog box to find and select the parameter file.  You can avoid this
+by having a copy of the parameter file in the same folder as the input file.
+To work around this make an alias for {\tt eht\_parms.dat}, copy it to 
+the input folder, and then rename it {\tt eht\_parms.dat}.
+
+%\section{Using \viewprog\ on a Macintosh}
+
+%While the Mac version of \viewprog\ is very similar to the X version,
+%there are a few differences:
+%\begin{itemize}
+%\item Instead of having button windows open up, new menus are added to the
+%menu bar.   
+
+%\item When opening files, you will not be prompted for the file
+%name, but will be given a standard Mac file choice dialog.
+
+%\item Filling of projected DOSs is not done on screen.
+%If curve filling is turned on, the printed output will
+%be filled properly.
+
+%\item Line styles are indicated with color on screen.  This is because
+%Quickdraw doesn't seem to support dashed line styles.  The Postscript
+%files generated still use dashed line styles like on the Unix version.
+
+%\item Breaking lines and tube bonds are not always drawn properly on screen.
+%This is due to another problem with Quickdraw, which does not define
+%line thicknesses relative to the center of the line.  Again, the
+%Postscript output is fine.
+
+%\item Standard mac printing isn't up and running yet, but you can still
+% create a postscript file and print that just as you would print any
+% postscript file from the mac.  
+%This will probably be fixed in a future version.
+
+%\item Because the Mac mouse only has a single button, some of the
+%selection features work differently.  You must be in {\sf Select} mode
+%to change active objects.
+
+%\end{itemize}
+
+
+\section{The fitting programs}
+
+The fitting programs will open a file choice dialog on start up.  You
+should pick the {\em input} file used to run the calculation.
+
+\section{General Mac hints}
+
+If you get errors about the programs not having enough memory or not
+being able to allocate matrices, increase the size of the memory
+allocation for the troublesome program.  If you don't know how to do
+this:  select the application you want to change, select ``Get
+Info'' from the File menu (or hit CMD-I), then increase the
+``Preferred Size'' entry. 
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+

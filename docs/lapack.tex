@@ -1,0 +1,35 @@
+\chapter{Using the LAPACK diagonalizer}
+
+\calcprog\ can now use a function from the LAPACK library ({\tt
+zhegv}) to diagonalize the hamiltonian.  This diagonalizer is
+significantly faster than the default routine {\tt cboris}.  In
+addition, {\tt zhegv} can be used to generate just the eigenvalues of
+a matrix.  This speeds up band structure calculations and properties
+calculations with the {\sf Just Average E} keyword enormously.  
+
+If you have a binary distribution of the program, it will use {\tt
+zhegv} to diagonalize (this is, unfortunately {\bf not} true of the
+Mac version of the program, which still uses {\tt cboris}).  If you
+have a source distribution, you can turn on the LAPACK diagonalizer by
+including {\tt -DUSE\_LAPACK} in the {\tt CFLAGS} line of the
+makefile.  Most of the functions necessary to use
+LAPACK with \prog\ are distributed in the file {\tt zhegv.f}.
+This is the good news.  
+The bad news is that {\tt zhegv.f} will not work unless you
+have an implementation of the Basic Linear Algebra Subroutines (BLAS)
+library installed on your machine (this is why the Mac version doesn't
+currently support LAPACK).  Most modern distributions of UNIX include
+a specially tuned version of the BLAS library (it's usually {\tt
+/usr/lib/libblas.a}), so you should be able to use LAPACK.  In
+addition, many UNIX implementations will include (as an optional
+product) a tuned version of LAPACK.  The name of this library is very
+system dependant, so you'll have to determine if it exists (if you
+have an SGI, it's {\tt /usr/lib/libcomplib.sgimath.so}).  If you do
+have a vendor-supplied version of LAPACK, it's advisable to
+use it instead of the {\tt zhegv.f} distributed with \prog, the
+vendor product tends to be faster.
+
+If you are willing to compile BLAS for your system, or if you want the
+full LAPACK distribution, you can get them from the netlib server
+({\tt http://netlib.att.com}).  Netlib is a {\bf great} source for
+numerical routines.

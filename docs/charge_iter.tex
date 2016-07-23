@@ -1,0 +1,137 @@
+\documentstyle[12pt,fullpage,misc,titlepage]{report}
+
+\newcommand {\progname}[1] {\mbox {\bf {\sf #1}}}
+\newcommand {\Hii} {\mbox {H$_{ii}$}}
+\newcommand {\Hiip} {\mbox {H$_{ii}^{(k+1)}$}}
+\newcommand {\Hiik} {\mbox {H$_{ii}^{(k)}$}}
+
+\newcommand {\pvar}[1] {\mbox {\sl #1}}
+
+\newenvironment{sampfile}
+{ \baselineskip=12pt 
+\begin{verbatim}}
+{\end{verbatim}}
+
+\begin{document}
+
+\begin{center}
+{\huge Charge Iteration in \calcprog }
+
+{\large Greg Landrum}
+
+{\large \today}
+
+\end{center}
+
+
+\baselineskip = 20pt
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Goals and Problems}
+
+The basic idea of charge iteration is to use calculated charges to
+adjust the diagonal elements of the hamiltonian (the \Hii's) in a
+self-consistent manner.  The main reason I see for doing this is to
+have parameters that are reasonable for a given system that are
+generated in a well defined manner (instead of having a different {\em
+ad hoc} set of parameters for every calculation).  The way this is
+done is using the equation:
+\begin{equation}
+\Hiip = A (Q^{(k)})^{2} + B Q^{(k)} + C
+\label{eqn:basic_chg_it}
+\end{equation}
+where \Hiip\ is the new value of \Hii\ for step $k+1$, $A,B$ and $C$ are 
+parameters and $Q^{(k)}$ is the net charge on the atom calculated
+using the value of $\Hii^{(k)}$.
+
+The traditional problem with charge iteration, as I see it, is that
+the self consistent calculations do not always converge in a timely
+fashion.  Some don't converge at all.  Since the form of the
+expression for \Hiip (Equation \ref{eqn:basic_chg_it}) seems simple
+and unlikely to lead to numeric explosions, I would say that the
+convergence problems may be due to the implementation of the charge
+iteration procedure.
+
+For the sake of clarity (and because I haven't implemented the other
+scheme), I'm going to limit myself to only discussing charge iteration
+using a single configuration (a single set of parameters).
+
+\section{The Old Way}
+
+The implementation of charge iteration in \progname{ICON}, which is
+what we've used, is pretty complicated.  Here's how it works.
+
+The underlying form is that of equation \ref{eqn:basic_chg_it}, but
+the calculation of 
+the value of $Q$ is complicated.  First of all, the occupancy of each
+orbital ($p_i$ where $i$ indexes the orbital) is calculated using a
+damping scheme: 
+\begin{equation}
+p_i^{(k+1)}(initial) = p_i^{(k)}(initial) + \lambda \Delta p_i^{(k)}
+\label{eqn:orb_occup_def}
+\end{equation}
+again $i$ indexes the orbital, $k$ indicates which step we're on,
+$(initial)$ refers to the occupancy at the beginning of the step (not
+the occupancy calculated using the results from this step), $\lambda$
+is a step size, and $\Delta p_i^{(k)}$ is defined as:
+\begin{equation}
+\Delta p_i^{(k)} = p_i^{(k)}(final) - p_i^{(k)}(initial)
+\label{eqn:delta_def}
+\end{equation}
+In equation \ref{eqn:delta_def} $(final)$ refers to the orbital
+occupancy which was calculated in this step.
+
+These orbital occupancies are used to calculate the net charge on each
+atom $\nu$:
+\begin{equation}
+Q_{\nu}^{(k+1)} = \sum_{i\ on\ \nu} p_i^{(k+1)}(initial)
+\label{eqn:old_net_chg_def}
+\end{equation}
+and these $Q_{\nu}^{(k+1)}$'s are used to generate the \Hiip's:
+\begin{equation}
+\Hiip = A_i (Q_{\nu}^{(k+1)})^2 + B_i Q_{\nu}^{(k+1)} + C_i  
+\label{eqn:Hiip_def}
+\end{equation}
+
+The new \Hiip's are used to generate a new hamiltonian and the process
+repeats until some convergence criterion is met.
+
+The presence of the $\lambda$ (step size) in equation
+\ref{eqn:orb_occup_def} is to provide some damping for the adjustment
+(note that $\lambda < 1$).  This lessens problems with \Hii\ values
+``sloshing'' between 2 values. 
+In \progname{ICON}, the value of $\lambda$ is adjusted as the
+calculation proceeds.  This is supposed to speed convergence.  The
+formula for adjusting $\lambda$ is fairly complicated, so I'm not
+going to go into it here.
+
+\section{The New Way}
+
+The way charge iteration is currently done in \calcprog\ is a lot
+simpler and it doesn't seem to have bad convergence problems (of
+course, it hasn't been extensively tested yet).  I've
+taken a very ``first order'' approach.  Instead of damping the changes
+in orbital occupations, I damp the changes in \Hii.  
+So the orbital occupations are not played around with, i.e.:
+\begin{equation}
+p_i^{(k+1)}(initial) = p_i^{(k)}(final)
+\end{equation}
+Equation \ref{eqn:old_net_chg_def} is still used to generate the net
+charges. 
+Then, an undamped new value of \Hii\ is calculated:
+\begin{equation}
+\Hii^{'} = A_i (Q_{\nu}^{(k+1)})^2 + B_i Q_{\nu}^{(k+1)} + C_i  
+\label{eqn:Hiinew_def}
+\end{equation}
+and \Hiip\ is
+calculated as follows:
+\begin{equation}
+\Hiip = \Hiik + \lambda (\Hii^{'} - \Hiik)
+\end{equation}
+
+
+That's it.  It's very first order, but it seems to work reasonably
+well.  It's worth testing this whole thing some more.
+
+
+\end{document}

@@ -1,0 +1,88 @@
+;------------------------------------------------------------------------
+;  This is molecular XeF4 in an idealized geometry.
+;
+; This file shows a number of things including:
+;    an FMO construction for a molecule
+;    use of custom parameters
+;    MOOP curves (COOPs for molecules)
+;    MO printing
+;------------------------------------------------------------------------
+
+; the title
+[XeF4]
+
+; it's a molecular calculation, tell the program that
+molecular
+
+; Cartesian coordinates in Angstroms
+geometry
+5
+1 * 0 0 0 
+2 * -1.90 0 0
+3 F 1.90 0 0
+4 F 0 -1.90 0
+5 F 0 1.90 0 
+
+;FMO specification
+fmo
+; number of fragments
+2
+; number of electrons per fragment
+;Xe4+ and [Br4]4-
+4,32
+; atoms in fragment one
+1
+; atoms in fragment two
+2-5
+
+parameters
+Xe 54 8 5 2.844 -21.21 5 2.485 -12.13
+F 9 7 2 2.425 -40.0 2 2.425 -18.1
+
+electrons
+36
+
+
+print
+distance matrix
+charge mat transpose
+wave func transpose
+net charges
+overlap pop
+reduced overlap pop
+end_print
+
+;------------------------------------------------------------------------
+; This section (average properties and COOP) is used to generate
+; a Molecular Orbital Overlap Population (MOOP) graph (the molecular
+; equivalent of COOP).  
+; fit_coop should be run using a small energy step and large broadening
+; parameter (to give very sharp lines).
+average properties
+
+coop
+4
+atom 1 1 2  0 0 0
+atom 1 1 3  0 0 0
+atom 1 1 4  0 0 0
+atom 1 1 5  0 0 0
+;------------------------------------------------------------------------
+
+; print out some of the molecular orbitals.
+mo print
+15
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20

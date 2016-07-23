@@ -1,0 +1,67 @@
+\chapter{Overview of how a calculation is done}
+
+So you've come up with a cool problem (or it was assigned in class),
+and you want to do an extended \huek\ calculation using \prog.  The
+goal of this section is to get you familiar with the basic process for
+moving from initial idea to final graphs and pictures.
+
+The first step is to set up your input file. 
+Basically, the input file contains a specification of the 
+geometry of your molecule or extended system,
+ the number of electrons in the system, any special information needed 
+(the ranges of Walsh variables, any special parameters you may want to use,
+ etc.) and any printing options that you want to set. \\[0.1in]
+
+
+
+\noindent Here's a minimal input file example called {\tt foo.bind}
+
+
+\shrinkspacing
+\begin{verbatim}
+; the name of the job
+A silly example: a square of H atoms
+
+; specification that this is a molecular problem
+Molecular
+
+;the geometry
+geometry
+4
+1 H 0.0 0.0 0.0
+2 H 1.0 0.0 0.0
+3 H 1.0 1.0 0.0
+4 H 0.0 1.0 0.0
+
+; The number of electrons
+Electrons
+4
+
+; printing options
+PRINT
+Overlap Population
+Reduced overlap population
+charge matrix
+wavefunction
+end_print
+\end{verbatim}
+\resumespacing
+
+
+\noindent The contents of this file will be explained later. \\[0.1in]
+
+\noindent To run the file execute the following command:
+
+{\tt bind foo.bind}
+
+This will create two output files: {\tt foo.bind.status} has some
+status information; {\tt foo.bind.out} has all the results in it.
+
+That's it!
+
+If you had done a Walsh diagram or an average properties calculation
+then there are some utility programs that need to be run to get the
+data in shape to be displayed.  These will be discussed a later.
+
+The data and results are now ready to be displayed using \viewprog\ or
+your favorite plotting program.

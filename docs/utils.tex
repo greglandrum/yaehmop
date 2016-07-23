@@ -1,0 +1,33 @@
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\chapter{Other Utility Programs}
+
+There are a number of other utilities distributed with \prog.  These
+are described below.
+
+\section{sub\_dos and add\_dos}
+
+These are used to manipulate .DOS files.  {\tt sub\_dos} is used to
+subtract two DOS curves from each other.  This is the basic operation
+needed for the Crystal Orbital Displacement (COD) analysis developed
+by Eliseo Ruiz and Santiago Alvarez \cite{cod}. COD is a very sensitive tool for tracking complicated interactions in the solid state.  Running {\tt sub\_dos} without any arguments will give you the correct ordering of arguments.
+
+{\tt add\_dos} is like {\tt sub\_dos} except that it adds two DOS
+curves together.
+
+{\bf Note:} It is very important that the DOS curves used for {\tt
+sub\_dos} are fit (using {\tt fit\_dos}) within the same energy window
+and with the same broadening and energy step.  The programs will warn
+you about this.
+
+\section{cooperate}
+
+{\tt cooperate} reads in the .DMAT file generated when \calcprog\ is
+given the keyword {\sf Dump Distance Matrix} and generates a COOP
+specification that can be pasted into an input file for \calcprog.
+The output from {\tt cooperate} needs very little modification before
+incorporation into an input file.  The necessary modifications are
+fairly obvious.  Once again, running the program without any arguments
+will give you a complete list of possible arguments.
+
+

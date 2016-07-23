@@ -1,0 +1,67 @@
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\chapter{A word (or two) from Greg ... some acknowledgements}
+
+The members of the Hoffmann group were invaluable in the development
+and testing of these programs.  They provided moral support, bug
+reports, featur suggestions, and esthetic criticisms that were
+invaluable.  The group 
+members most involved were: Hugh Genin,  Norman Goldberg, Kimberly
+Lawler, Qiang Liu,  Erika Merschrod, Udo Radius, Grigoriy Vajenine
+(who pointed out  
+that I should be evaluating the radial parts of wavefunctions in
+atomic units), and Kazunari
+Yoshizawa.  In addition, the students and auditors of Chemistry 798 in
+the fall of 1994 and the spring of 1995. acted as unwitting
+beta-testers and uncovered a few   
+problems I never would have found.  Roald Hoffmann (my advisor) was
+very supportive of my efforts and never chastised me for how much
+time I was devoting to this project.  Of course, he {\bf did} accuse
+the program of being vaporware, but this should nip that criticism in
+the bud.  Thanks Roald!   
+
+Edgar M\"{u}ller has provided a number of helpful suggestions as well
+as some Fortran code which served as the template for the
+code to deal with crystallographic coordinates.  Edgar also came up
+with a consistent parameter set for the entire periodic table.  This 
+parameter set is distributed with this release of the program as {\tt
+muller\_parms.dat}.
+
+Paul K\"{o}gerler has also provided suggestions for features which are
+now integrated and has even agreed to add some features himself.
+Expect to see these in a future release.
+
+The function used to diagonalize the inertia tensor as part of the
+symmetry analysis is taken from the {\sf meschach} library.  This is a
+freely available package of functions written in C for working with
+matrices. {\sf meschach} was written by David Stewart and Zbigniew Leyk
+at the Australian National University.  If you want to use this
+function in your own code, please obtain a copy of the entire library.
+I want to go ahead and 
+take the chance to thank David Stewart for making this library freely
+available.  At this point I can't help but interject a piece of 
+propaganda: free software is top quality stuff, find out about it and
+use it! 
+
+The basis of the code to calculate solid isosurfaces was taken from
+the article ``An Implicit Surface Polygonalizer'' by Jules Bloomenthal
+in {\em Graphics Gems IV}, Academic Press, 1994.  If you do graphics,
+taking a look at these books is a really good idea.  
+
+The algorithm used to do hidden line removal in the Jorgenson and
+Salem style MO plots is a slight modification of that used in
+Jorgenson's {\sf PSI88} program.  Because {\sf PSI88} is written in
+Fortran, none 
+of the code from the program was used, I just used {\sf PSI88} to
+figure out the algorithm.
+
+The enhanced postscript code is adapted from the file enhpost.trm for
+{\sf gnuplot} version 3.5.  The original code was written by David Denholm
+and Matt Heffron, both of whom have given me permission to distribute
+this adaptation. 
+
+The code used to contour data (both for FCO and MO plots) is adapted
+from that used in {\sf gnuplot} version 3.5 (I love borrowing code from
+{\sf gnuplot}!).  The original code was written by Gershom Elber and this
+modification is distributed with his permission.
+

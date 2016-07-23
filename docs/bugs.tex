@@ -1,0 +1,81 @@
+\chapter{Those Damn Bugs!}
+
+One thing to be aware of is that \prog\ is under development, so there
+are some features built into it which may or may not be permanent.
+We've tried to indicate wherever possible when things are not finished
+or are in the testing stages.
+
+
+\section{What is a bug?}
+
+There are two possible reasons for a calculation to screw up: a bug in
+the program or a user error.  Please make sure that your input file is
+correct before you send in a bug report.
+
+Any of the following things could indicate a
+bug:
+
+\begin{enumerate}
+
+\item \calcprog\ gives you answers that don't make any sense at all
+
+\item \calcprog\ does something funny like not printing out something
+you told it to print out.
+
+\item \calcprog\ wanders off into space and never comes back (i.e. it
+runs forever).
+
+\item \calcprog\ crashes without giving you some idea of what
+happened.
+
+\item \calcprog\ seg faults and dies. (You see the message: {\tt
+Segmentation Fault: core dumped})
+
+\end{enumerate}
+
+We have yet to see \calcprog\ do anything like \#3 above.  If you do
+think that the run is taking too long, check the status file and make
+sure that it is still doing something.
+
+\calcprog\ should {\bf never} do either \#4 or \#5 above.  If either
+of these happen you have definitely found a bug.  {\bf Please report it}.
+The major cause of segmentation faults seems to be problems in the
+input files given to \calcprog. Error checking routines are in place to
+catch many of these problems, but we probably missed a
+few.  So please let us know if you find input file formats that give
+rise to segmentation faults without generating a warning.
+
+\viewprog\ is a slightly different story.  The code for \viewprog\
+isn't nearly as clean or carefully written as that in \calcprog.  The
+result is that \viewprog\ occasionally will dump core and/or die
+unexpectedly. We're aware of some of these problems and are working on
+them.  If you can make \viewprog\ dump core reproducibly, please let
+us know.  Similarly, if the output from \viewprog\ just looks wrong,
+tell us and we'll see what we can do.
+
+\section{What to do if you find a bug}
+
+In order for us to be able to fix bugs, we have to be able to reproduce
+the circumstances that gave rise to them.  In order to do this, we need
+a copy of the input file that caused the problem.  Please include the
+following in any bug report that you send:
+
+\begin{enumerate}
+
+\item A description of what went wrong, or why you think the answers
+you got are wrong.
+
+\item Copies of the input file (essential), and the status and output
+files (optional, but extremely useful).
+
+\item Information about what kind of computer you are using (machine
+type and operating system version if possible).
+
+\item Some way to get in touch with you.
+
+\end{enumerate}
+
+Please send bug reports to the following email address:
+
+{\tt yaehmop@xtended.chem.cornell.edu}
+

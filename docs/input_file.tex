@@ -1,0 +1,960 @@
+\chapter{The input file}
+
+Like many other programs, the input file for \calcprog\ is based on
+keywords.  This allows the file to be broken into logical 
+blocks and makes the format for constructing the file a little
+less rigid.  Each keyword is described below.  Note that the input
+routine (the parser) is
+not case sensitive when dealing with keywords, i.e. Electrons,
+electrons, and ELECTRONS will all work.
+
+Any line in the input file which begins with a semicolon is ignored.
+This allows comments to be put into the input file. It also makes it
+easy to temporarily change the contents of a file, just put a
+semicolon in front of anything you don't want the program to read.
+Blank lines and spaces in the input are also ignored. \\[0.1in]
+
+\noindent The first non-empty line should contain the title of the job.
+
+
+\section{Keywords}
+The remainder of the file contains the keywords which control the job.
+These keywords are all described below.
+
+The notation used is as follows:  
+
+\begin{itemize}
+
+\item Words in sans-serif style, such as {\sf foo,} are keywords.
+
+\item Words in slanted type, such as \pvar{bar}, are
+variable names used within the program.  They are used for convenience.
+
+\end{itemize}
+
+
+%%%%%%%%%
+\subsection{{\sf Geometry} (required)}
+
+The line following this keyword should have the number of atoms:
+\pvar{num\_atoms}. 
+
+If the line containing the keyword {\sf Geometry} also contains the
+string {\sf Z Matrix} then the input is take to be in Gaussian style Z
+matrix format.  If the line containing {\sf Geometry} also contains
+the string {\sf Crystallographic} then the input is taken to be in
+fractional coordinates and the {\sf Crystal Spec} keyword must be
+specified.  Otherwise the input is assumed to be in Cartesian
+coordinates.  If you are unfamiliar with Z matrix input, it is
+described in a later chapter of this document.
+
+The following \pvar{num\_atoms} lines should contain the atomic
+coordinates and types in the following fashion:
+
+\begin{itemize}
+
+\item Z-matrix Input:  \pvar{number} \pvar{atom\_label} \pvar{ref1}
+\pvar{r} \pvar{ref2}  \pvar{alpha} \pvar{ref3} \pvar{beta}
+
+\item Cartesian Input: \pvar{number} \pvar{atom\_label} \pvar{X}
+\pvar{Y} \pvar{Z}
+
+\item Crystallographic Input: \pvar{number} \pvar{atom\_label} \pvar{X}
+\pvar{Y} \pvar{Z}
+
+\end{itemize}
+
+\pvar{number} is the number of the atom.  There is no reason why the
+atoms in the list have to be in increasing numeric order.
+
+\pvar{atom\_label} is the label for the atom, it should be one or two
+characters long.  If the atom label is a single asterix ({\tt *}),
+then the atom is taken to be a custom type and a symbol and
+parameters should be provided for it in the {\sf Parameters} section.
+If the atom label is an ampersand ({\tt \&}), then the atom is taken
+to be a dummy atom.
+
+The other variables are the coordinates for the atom in whatever
+system is being used.  If a reaction coordinate is being traced out
+(see keyword {\sf Walsh} below), any coordinate which is an integer
+multiple of 1000 is assumed to be variable.  For example: placing 2000
+as the \pvar{X} coordinate of some atom would cause that coordinate to
+take on the values of the second Walsh variable.
+
+
+%%%%%%%%
+%XXX  new XXX
+%\subsection{{\sf Geom frag} (optional)}
+
+%This keyword is used to specify a geometry fragment: a group of atoms
+%that will be inserted as a single unit into the geometry of the unit
+%cell.  
+
+%%%%%%%%
+\subsection{{\sf Lattice} (mandatory for extended systems)}
+
+{\bf NOTE:} If this keyword appears in the file it {\em must} follow
+the {\sf Geometry} keyword in the input file.
+
+These are the lattice parameters.
+The keyword should be followed by a line containing the dimensionality
+of the crystal.  The next line contains the number of overlaps
+considered along each lattice direction. The following lines should
+contain the lattice vectors in the form:  \pvar{atom1} \pvar{atom2},
+where \pvar{atom1} is the beginning of the vector (it is inside the
+unit cell) and \pvar{atom2} is the end of the vector (it is outside
+the unit cell).
+
+{\bf NOTE:}  The ends of the lattice vectors must be the highest
+numbered atoms in the geometry specification. For example, if there are
+are 6 atoms defined for a 3 dimensional unit cell, then the ends of
+the three lattice vectors must be numbers 4, 5, and 6.
+
+Only a number of lattice vectors equal to the dimensionality of the
+crystal need to be provided.  If you feel like putting in zeroes for
+the other lattice vectors, go ahead... we can't stop you.
+
+
+
+%%%%%%%%
+\subsection{{\sf Crystal Spec} (required for use of crystallographic
+coordinates)} 
+
+This section has the stuff needed to define the crystal lattice so
+that crystallographic coordinates can be used.
+
+The first line following the {\sf Crystal Spec} keyword should contain
+the lengths of each of the lattice vectors.  The next line should
+contain the crystallographic angles $\alpha, \beta$ and $\gamma$.
+
+Variables in the {\sf Crystal Spec} section can be used as variables
+in Walsh diagrams in exactly the same way as variables in the {\sf
+Geometry} section, i.e. by using integer multiples of 1000 as values.
+
+For example, the following {\sf Geometry}, {\sf Lattice} and {\sf
+Crystal Spec} 
+sections define a body centered lattice of H atoms where the length of
+the c lattice vector is the first Walsh Variable.
+
+\clearpage
+
+\shrinkspacing
+\begin{verbatim}
+
+Geometry Crystallographic
+5
+1 H 0 0 0
+2 H 0.5 0.5 0.5
+3 H 1 0 0
+4 H 0 1 0
+5 H 0 0 1
+
+Lattice
+3
+5 5 5 
+1 3
+1 4
+1 5
+
+Crystal Spec
+; a  b  c
+  1  1  1000
+; alpha  beta  gamma
+   90     90     90
+
+\end{verbatim}
+\resumespacing
+
+
+%%%%%%%%
+\subsection{{\sf Electrons} (potentially required)}
+
+The line following this keyword should have the number of valence
+electrons in the molecule (or unit cell for an extended system).
+
+%%%%%%%%
+\subsection{{\sf Charge} (potentially required)}
+
+The line following this keyword should have the charge on the molecule
+(or unit cell for an extended system). \\[0.1in]
+
+\noindent {\bf Either the {\sf Charge} or {\sf Electrons} keywords must appear in the
+input file.}
+
+%%%%%%%%
+\subsection{{\sf Alternate Occups} }
+
+This keyword is for looking at the effects of changing the number of
+electrons in the unit cell upon the position of the Fermi level, the
+average energy, and orbital occupations.  This is a far more efficient
+way of probing these changes than rerunning the calculation with
+alternate electron numbers.
+
+On the line following the keyword, the number of alternate occupations
+(\pvar{num\_occups}) should be given.  The next line contains the step
+that is to be taken between occupations.
+
+For example, the following input fragment would result in the program
+doing a calculation with 5 electrons, then printing out the Fermi
+level, average energy, net charges, and orbital occupations for
+4.8,4.6,4.4,4.2, and 4.0 electrons per unit cell.
+
+\shrinkspacing
+\begin{verbatim}
+
+Electrons
+5
+
+Alternate Occup
+; num_occups
+5
+; the step
+-.2
+\end{verbatim}
+\resumespacing
+
+
+
+%%%%%%%%
+\subsection{{\sf Parameters} (optional)}
+
+{\bf NOTE:} If this keyword appears in the file it {\em must} follow
+the {\sf Geometry} keyword in the input file.
+
+There should be a line following this keyword for each type of custom
+atom which is being defined.  Recall that a custom atom is defined by
+replacing the first occurance of that atom's label in the Geometry
+specification with an asterix: {\tt *}. If there are multiple custom
+atom types, then define them in this section in the order in which
+they occurred in the Geometry section. \\
+
+\noindent The format of a parameter specification is:
+
+{\small \pvar{Symbol} \pvar{Atomic\_Number}
+\pvar{Num\_Valence\_Electrons} 
+\pvar{n$_s$} \pvar{$\zeta_s$} \pvar{IP$_s$}
+\pvar{n$_p$} \pvar{$\zeta_p$} \pvar{IP$_p$}
+\pvar{n$_d$} \pvar{$\zeta1_d$} \pvar{IP$_d$} \pvar{c1}
+\pvar{$\zeta2_d$} \pvar{c2}} \\
+
+\noindent and if you're dealing with f-elements (which, like d orbitals, are described by a double zeta expansion) add:
+{\small \pvar{n$_f$} \pvar{$\zeta1_f$} \pvar{IP$_f$} \pvar{c1}
+\pvar{$\zeta2_f$} \pvar{c2}}
+to the end of the parameter specification. \\
+
+\noindent In this specification, the $\zeta$ values are the radial exponents of
+the Slater type orbitals and the H$_{ii}$ values are the valence state
+ionization potentials (diagonal elements of the hamiltonian) for each AO.
+Here's an example of a section of input file where 3 different custom
+atoms are defined:
+
+\shrinkspacing
+\begin{verbatim}
+
+Geometry
+8
+1 *     .000000000     .000000000     .000000000
+2 O    1.952000000    1.952000000     .000000000
+3 *    1.952000000     .000000000    -.3
+4 O    1.952000000     .000000000    1.4862
+5 *    0.000000000    1.952000022    1.9422
+6 O    3.904000044     .000000000     .000000000
+7 O     .000000000    3.904000044     .000000000
+8 O     .000000000    0.0   	     4.152
+
+Parameters
+O  8 6 2 2.275 -32.3 2 2.275 -14.8
+Ti 22 4 4 1.075 -8.970 4 1.075 -5.400 3 4.55 -10.81 .4206 1.400 .7839
+Pb 82 4 6 2.50  -16.70 6 2.06 -8.000
+
+\end{verbatim}
+\resumespacing
+ 
+In this example, atom 1 is an O, atom 3 is a Ti, and atom 5 is a Pb.
+Atoms 2,4,6,7, and 8 will use the same parameters as atom 1.  {\bf
+Clarification:} The parameters specified here for O are the default
+parameters. 
+
+
+%%%%%%%%
+\subsection{{\sf Molecular} (mandatory for molecular calculations)}
+
+Indicates that a molecular calculation (not an extended one) is being
+performed.  Otherwise it is assumed that the calculation is on an
+extended system.
+
+%%%%%%%%
+%\subsection{{\sf Thin} (optional)}
+
+%Do a THIN mode extended calculation.  This is not yet implemented, it
+%will be added later to allow calculations to be run on machines with
+%little available memory.
+
+%%%%%%%%
+%\subsection{{\sf Fat} (optional)}
+
+%Do a FAT mode extended calculation.  This is the default for the
+%program.
+
+%%%%%%%%
+\subsection{{\sf Just Geom} (optional)}
+
+Do not actually do a calculation, just generate the molecular
+geometry.  This is useful to check whether or not an input file is
+okay before running a calculation.  It will also print the estimated
+memory requirements of \calcprog\ for this run into the status file.
+
+
+%%%%%%%%
+\subsection{{\sf Walsh} (optional)}
+
+Do a series of calculations along a reaction coordinate. 
+
+The next line should contain the number of variables (reaction
+coordinates): \pvar{num\_Walsh\_var}, and the number of steps to be taken
+along each coordinate: \pvar{num\_steps}.  There should then be
+\pvar{num\_Walsh\_var} lines consisting of a list of comma separated
+\pvar{num\_steps} 
+values.  
+
+To generate the values of a variable automagically, place an
+exclamation point ({\tt !}) at the beginning of the line for that
+variable followed by the starting and ending values of the variable,
+separated by a comma.
+The program will generate \pvar{num\_steps} values between those
+values.  
+
+For example, the following sample section will generate a
+reaction with coordinate with 5 steps and 2 variables.  The values of
+the first variable will be automatically generated between 1.0 and
+2.0, the values of the second variable are specified explicitly.
+
+\shrinkspacing
+\begin{verbatim}
+
+Walsh
+; the number of variables and number of steps
+2 5
+; use Auto-Walsh for the first variable:
+! 1.0,2.0
+100.0,100.1,100.2,100.3,100.4
+
+\end{verbatim}
+\resumespacing
+
+Please note that, while there are two Walsh variables, they are varied
+simultaneously.  There is not, at this point, a capability to vary the
+Walsh variables independently in order to automatically generate a
+multi-dimensional potential energy surface.
+
+%%%%%%%%
+\subsection{{\sf Symmetry} (optional)}
+
+Find and report all the symmetry elements possessed by the molecule.
+The 
+characters of all wave functions with respect to these operations will
+also be reported. 
+
+{\bf Note:} As is explained in the section of this manual on symmetry
+elements, {\calcprog} does not actually find {\em all} symmetry
+elements.  It only finds those which are aligned with the Cartesian
+axes. You can increase the number of symmetry elements which the
+program finds by making sure that it align with the axes in a
+reasonable manner.
+
+%%%%%%%%
+\subsection{{\sf Symm Tol} (optional)}
+
+Allows the user to adjust the value of the tolerance used
+for determining whether or not symmetry elements are present
+in the molecule.  
+
+The next line should contain the new value of \pvar{symm\_tol}.
+
+If the position of an atom after a symmetry operation differs from
+that of an atom before the symmetry operation is applied by less than 
+\pvar{symm\_tol} \AA, then the two atoms are considered to be equivalent
+under the symmetry operation.
+
+%%%%%%%%
+\subsection{{\sf Principle Axes} (optional)}
+
+Determine the center of mass and principle axes of the molecule and
+transform the atoms into the principle axis frame.  This can allow the
+program to find more symmetry elements.  
+
+{\bf Note:} Principle axes are only found if the {\tt meschach} library
+was linked with \calcprog.  If you do not have {\tt meschach}, then
+the program will just translate the molecule into the center of mass
+frame before finding symmetry elements.
+
+%%%%%%%%
+\subsection{{\sf Zeta} (optional)}
+
+Toggles self consistent variation of radial exponents.  This is under
+development and if you don't know what it means, you probably
+shouldn't be using it.
+
+%%%%%%%%
+\subsection{{\sf Nonweighted} (optional)}
+
+Use the non-weighted H$_{ij}$ form \cite{wolfsberg}. 
+By default the weighted H$_{ij}$
+form is used in order to reduce problems arising from
+counter--intuitive orbital mixing (gasp!) \cite{com1,com2}.
+
+%%%%%%%%
+\subsection{{\sf The Constant} (optional)}
+
+Allows replacement of the value \pvar{K} used in evaluating the H$_{ij}$
+elements.  The next line should contain the new value for \pvar{K}.
+By default \pvar{K}=1.75.
+
+%%%%%%%%
+\subsection{{\sf Zero Overlap} (optional)}
+
+Set some elements of the overlap matrix to zero.  The next line should
+contain the number of different types of overlap being set to zero
+(\pvar{num\_to\_zero}).  The next \pvar{num\_to\_zero} lines should
+consist of:
+
+\pvar{type} \pvar{contrib1} \pvar{contrib2} \pvar{which}
+
+\pvar{type} should be either {\tt Atom} or {\tt Orbital} to indicate
+which type of overlap is being zeroed.  If \pvar{which} is set to {\sf
+Intercell}, then overlaps between \pvar{contrib1} and \pvar{contrib2} 
+{\em between} cells will be zeroed.  If \pvar{which} is set to {\sf
+Intracell} then the overlaps {\em inside} the cell will be zeroed.
+
+{\bf NOTE:}  This option should be used with caution, as it can result
+in a non-positive-definite overlap matrix and non-physical results.
+
+%%%%%%%%
+\subsection{{\sf Nearest Neighbor Contact} (optional)}
+
+Determines the longest contact between atoms in nearest neighbor cells
+that 
+will be reported in the output file.  The next line should contain the
+new value.  The default is 2.5 \AA. \\
+
+\noindent {\bf NOTE:}  This keyword only makes sense for extended systems.
+
+%%%%%%%%
+\subsection{{\sf K Points} (mandatory for Average Properties
+calculations on extended systems)}
+
+A K point set for an average properties calculation.  If you want to
+do a band structure, we recommend that you use the {\sf Band} keyword.
+
+The keyword is followed by a line containing the number of K points:
+\pvar{num\_KPOINTS}.   The next \pvar{num\_KPOINTS} lines should contain
+the coordinates and weights of the K points themselves in the
+following form:
+
+\pvar{a} \pvar{b} \pvar{c} \pvar{weight} \\
+
+\noindent Each K point should go on its own line.
+
+%%%%%%%%
+\subsection{{\sf Band} (optional)}
+
+Generate a band structure.
+
+The line following the keyword should contain the number of K points
+to use along each symmetry line: \pvar{points\_per\_line}.
+
+The next line should have the number of special points to be used:
+\pvar{num\_special\_points}. 
+
+The following \pvar{num\_special\_points} lines should have the names
+and locations of the special points in the form:
+
+\pvar{label} \pvar{x} \pvar{y} \pvar{z}
+
+The program will generate symmetry lines connecting the special points
+in the order in which they are defined.  \pvar{points\_per\_line} K
+points will be generated automatically along each of these symmetry
+lines.  The program will produce an additional output file containing
+the information needed by \viewprog\ to plot the band structure.  If
+your input file is called {\tt foo.bind}, then the band file will be
+called {\tt foo.bind.band}.
+
+For example, the following segment will generate a band diagram with
+symmetry lines containing 40 K points running from $\Gamma$ to X to M and
+then back to $\Gamma$:
+
+\shrinkspacing
+\begin{verbatim}
+
+Band
+; the number of points along each line
+40
+; the number of special points
+4
+Gamma 0.0 0.0 0.0
+X     0.5 0.0 0.0
+M     0.5 0.5 0.0
+Gamma 0.0 0.0 0.0
+
+\end{verbatim}
+\resumespacing
+
+%%%%%%%%
+\subsection{{\sf FMO} (optional)}
+
+Perform Fragment Molecular Orbital analysis.
+
+The next line should contain the number of fragments
+\pvar{num\_FMO\_frags}.  Note that \pvar{num\_FMO\_frags} should be
+$\geq 1$.  There is no upper limit on the number of fragments.
+
+The next line consists of a comma delimited list of the number of
+electrons in each fragment.
+
+The following \pvar{num\_FMO\_frags} lines consist of comma delimited
+lists of the numbers of the atoms in each fragment.
+
+In the specification of atoms for each fragment, you can use a hyphen
+(dash) to indicate groups of sequentially numbered atoms.
+For example, the following segment will generate 2 fragments, the
+first fragment containing atoms 1, 2, 3, 4, 5 and 8 and the second fragment
+containing atoms 6 and 7. \\
+
+
+\shrinkspacing
+\begin{verbatim}
+
+FMO
+; the number of fragments
+2
+; the number of electrons in each fragment
+12,2
+; the lists of atoms contained in each fragment
+1-5,8
+6-7
+
+\end{verbatim}
+\resumespacing
+
+If a molecular calculation is being done, the data necessary to
+construct an FMO interaction diagram will be written to a separate
+output file.
+
+%%%%%%%%
+\subsection{{\sf FCO} (optional)}
+
+Perform Fragment Crystal Orbital analysis.
+The lines following this keyword are identical to those for the {\sf
+FMO} keyword.
+
+
+%%%%%%%%
+\subsection{{\sf Average Properties} (optional)}
+
+Do an average properties calculation for the system.  This consists
+of:
+
+\begin{itemize}
+
+\item Generating a total DOS curve.
+
+\item Finding E$_f$, the Fermi energy.
+
+\item Determining the average overlap population and reduced overlap
+population matrices within the unit cell (if the printing option for
+these is set).
+
+\item Finding average orbital occupations and net charges.
+
+\item Reporting the average values of any COOPs specified (see
+keyword {\sf COOP}).
+
+\item Show average occupations of Fragment MO's (if FMO analysis is
+being done).
+
+\end{itemize}
+
+\noindent {\bf NOTE:} if you are doing an average properties calculation on an
+extended system, you
+{\em must} provide a set of K points, see keyword {\sf K Points}.
+
+Specifying an average properties calculation for a molecular problem
+will allow the generation of MOOP (Molecular Orbital Overlap
+Population) diagrams and the RCM (Reduced Charge Matrix) as for
+extended syatems.
+
+%%%%%%%%
+\subsection{{\sf No Total DOS} (optional)}
+
+Turns off printing of the total DOS into the output file.  This option
+can be used to conserve disk space when the total DOS isn't going to
+be looked at.  
+
+{\bf Note:}  If this keyword is specified neither total DOS nor
+projected DOS calculations will be done.
+
+
+%%%%%%%%
+\subsection{{\sf Dump Overlap} (optional)}
+
+Toggles creation of a binary file containing the overlap matrix at
+each K point.  This file can be used with the {\tt matrix\_view} utility to
+generate pictures of overlap matrices.
+
+%%%%%%%%
+\subsection{{\sf Dump Hamil} (optional)}
+
+Toggles creation of a binary file containing the hamiltonian matrix at
+each K point.  This file can be used with the {\tt matrix\_view} utility to
+generate pictures of hamiltonian matrices.
+
+%%%%%%%%
+\subsection{{\sf Dump Dist} (optional)}
+
+Toggles creation of a binary file containing the distance matrix
+for the system.  This .DMAT file can be used by the utiltity
+{\tt cooperate} to generate specifications for COOPs automatically.
+
+
+%%%%%%%%
+\subsection{{\sf Projected DOS} (optional)}
+
+This section contains the list of densities of states (DOS's) that
+will be projected.  Each DOS can have multiple contributions which
+will be added up.
+
+The keyword is followed by a line containing the number of different
+projections: \pvar{num\_proj\_DOS}. The next \pvar{num\_proj\_DOS} lines
+should consist of:
+
+\pvar{type} \pvar{contrib1} \pvar{weight1}, \pvar{contrib2}
+\pvar{weight2},...
+
+\pvar{type} should be either {\tt Atom}, {\tt Orbital}, or {\tt FMO} to indicate
+whether the contribution from an entire atom, a single orbital, or a
+fragment MO is being projected out.
+
+There can be as many contributions to each projection as
+you like, just put it all on one line and separate the
+\pvar{contrib}--\pvar{weight} pairs by commas.
+Entries for a single projection can be spread over multiple lines by placing a ``$\backslash$'' at the end of each line.
+To {\bf average} contributions make the sum of the individual
+contributions add up to 1.0.  To {\bf add} contributions, make each of
+the contributions 1.0.  In general, it is a good idea to add projected
+DOS curves rather than average them.
+
+%%%%%%%%
+\subsection{{\sf COOP} (optional)}
+
+Do a Crystal Orbital Overlap (or Hamilton) Population analysis \cite{eht2,cohp3,mulliken,coop}. {\bf Note:} the {\sf COOP} option results in a Molecular Orbital Overlap (or Hamilton) Population analysis when the {\sf molecular} keyword is specified.
+
+\noindent The line following the keyword has the total number of COOPs
+specified (not just the number of different types): \pvar{tot\_num\_COOPs}.
+
+\noindent The next \pvar{tot\_num\_COOPs} lines should contain the definitions
+of the COOPs themselves in the form:
+
+\pvar{type} \pvar{which} \pvar{contrib1} \pvar{contrib2} \pvar{a}
+\pvar{b} \pvar{c} \\
+
+\noindent \pvar{type} should be either {\tt Atom}, {\tt Orbital} or {\tt FMO} to indicate
+whether the COOP between atoms, orbitals or fragment MO's is being projected. \\
+
+\noindent Setting \pvar{type} to {\tt H-Atom}, {\tt H-Orbital} or {\tt H-FMO} will generate the corresponding Hamilton population between atoms, orbitals or fragment MO's respectively. \\
+
+\noindent \pvar{which} is the number of the COOP.  Multiple COOPs with the same
+value of \pvar{which} will be averaged. \\
+
+The COOP reported is between \pvar{contrib1} in the unit cell and
+\pvar{contrib2} in a cell defined by the vector (\pvar{a} \pvar{b}
+\pvar{c}).  For example, the following sample section will average 
+the COOP between atoms 1 and 2 in the unit cell with that between atom
+2 in the unit cell and atom 1 in the adjacent cell in the \pvar{b}
+direction:
+
+\shrinkspacing
+\begin{verbatim}
+
+COOP
+; the total number of lines here:
+2
+; definitions of the COOPS
+;type  which  contrib1  contrib2     a b c
+Atom    1       1          2         0 0 0
+Atom    1       2          1         0 1 0
+
+\end{verbatim}
+\resumespacing
+
+\noindent {\bf Note:}  If you are doing a COOP calculation on a high-symmetry
+system where you are using K points within the irreducible wedge of
+the first Brillouin zone, it is very important that you average all
+symmetry equivalent bonds \cite{thesis}.
+If you do not do so, your results may be inaccurate.
+
+%%%%%%%%
+\subsection{{\sf Printing} (optional)}
+
+This keyword controls what information is printed into the output
+file.  In most cases, this also controls what things the program
+actually calculates.  For example, if the user doesn't request that
+the reduced overlap population matrix be printed, then there's no
+reason to calculate it.  We have tried to make the program
+``smart'' about what it calculates, but, there
+may be problems here.  Please let us know if you see strange behavior.
+
+This keyword is different from all the others in that the program
+expects it to be followed by another list of keywords.  In fact, any
+keyword following {\sf Printing} is assumed to be controlling what
+gets printed.  The way to tell \calcprog\ that you are done giving it
+printing options is to either let it hit the end of the file (i.e. to
+have {\sf Printing} as the last keyword in your input file, or to put
+the keyword {\sf End\_Print} at the end of the printing options. \\
+
+\noindent Each of the printing keywords is described below.
+
+\begin{itemize}
+
+\item {\sf Distance:}
+Print the distance matrix.
+
+\item {\sf Overlap Population:}
+Print the Mulliken overlap population matrix.
+
+\item {\sf Reduced Overlap Population:}
+Print the Mulliken reduced overlap population matrix.
+
+\item {\sf Charge Matrix:}
+Print the charge matrix.
+
+%\item {\sf Reduced Charge Matrix:}
+%Print the reduced charge matrix. {\bf NOTE:} this is not yet
+%implemented.
+
+\item {\sf Wave Functions:}
+Print the wavefunctions for the molecule.
+
+\item {\sf Net Charges:}
+Print the net charges on the atoms, as determined using Mulliken
+population analysis.
+
+\item {\sf Overlap:}
+Print the overlap matrix.
+
+\item {\sf Hamil:}
+Print the hamiltonian matrix.
+
+\item {\sf Electrostatic:}
+Print the electrostatic contribution to the total energy.  {\bf NOTE:}
+this is under development and is not to be considered reliable.
+
+\item {\sf Levels:}
+Toggles the printing of energy levels at each k point in an extended
+calculation. 
+
+\item {\sf Fermi:}
+Print the Fermi energy (this is primarily useful in combination with
+the Walsh option, described below). 
+
+
+\item {\sf Orbital Energy:}
+Allows the energy of a particular orbital to be printed.  (this is
+primarily useful in combination with 
+the Walsh option, described below). 
+
+\item {\sf Orbital Coeff:}
+Allows the coefficient of a particular atomic orbital in a given
+molecular orbital to be printed.  (this is
+primarily useful in combination with 
+the Walsh option, described below). 
+
+\item {\sf Orbital Mapping:}
+Generates the scheme used to number the individual atomic orbitals in a calculation (especially useful when working out the contributions for COOP's)
+
+\item {\sf Levels}
+Print out the calculated energy levels at each k point in an extended
+calculation. 
+\end{itemize}
+
+Each of these options control printing at every K point and/or step
+along a reaction coordinate.  Turning on all the printing options can
+lead to a {\bf huge} output file if you have a lot of K points or
+steps in a Walsh diagram.
+
+Placing the keyword {\sf Transpose} after a printing option for a
+matrix will result in the transpose of the matrix being printed.  This
+feature has been introduced to appease those who think that the default
+way of printing is stupid.
+
+To facilitate the construction of graphs of various quantities
+(overlap populations, net charges, etc.) along a reaction coordinate,
+there is a second option that can be used with printing options.  If
+you place the keyword {\sf Walsh} on the same line as a printing
+option, then you can select a particular quantity to monitor along the
+Walsh diagram.  These values are put into a separate file.  If you are
+using an input file named {\tt foo.bind} then the values of these
+quantities would be put into {\tt foo.bind.walsh}.
+
+To use this feature, place {\sf Walsh} after your
+printing keyword, then on the next line put the following three pieces
+of information:
+
+\pvar{type} \pvar{contrib1} \pvar{contrib2}
+
+Once again, \pvar{type} is one of {\tt Atom}, {\tt Orbital} or {\tt FMO} and
+\pvar{contrib1} and \pvar{contrib2} refer to particular atoms,
+orbitals or fragment MO's.
+
+{\bf NOTE:} there are certain combinations of these Walsh printing
+options which do not make sense.  For example, specifying that you
+want to monitor the reduced overlap population between 2 orbitals is
+nonsensical.  The program will notice this and complain, so just think
+a bit before you start printing everything out.
+
+For example, the following section would print out the entire overlap
+population matrix and all the net charges at every step into the main
+output file, and then
+print the overlap population between orbitals 13 and 23 into the Walsh
+output file:
+
+\shrinkspacing
+\begin{verbatim}
+; start dealing with printing options
+Print
+
+Overlap Population
+Net charges
+
+; this is a Walsh printing value
+Overlap Population   Walsh
+Orbital 13 23
+
+End_Print
+\end{verbatim}
+\resumespacing
+
+
+%%%%%%%%
+\subsection{{\sf MO Print} (optional)}
+
+This keyword controls creation of a .MO file.  This can be read in by
+\viewprog\ to produce iso-surface plots of molecular and crystal
+orbitals.
+
+The first line following the keyword contains the number of MO's to be
+printed: \pvar{num\_MOs}.  The next \pvar{num\_MOs} lines contain the
+numbers of the individual MO's that should be printed.
+
+If you are doing an extended calculation, the MO's will be printed at
+each k point.  If you are doing a Walsh diagram, the MO's will be
+printed at each step along the reaction coordinate.  
+
+
+%%%%%%%%
+\subsection{{\sf Orbital Occupations} (optional)}
+This section is used to change the occupations of molecular orbitals.
+This is primarily useful for trying to model open shell systems or
+molecules in excited states.  
+
+The first line following the keyword should contain the number of
+orbital occupations to change, \pvar{num\_occups}.  The next
+\pvar{num\_occups} lines consist of an integer specifying the orbital
+whose occupation should be changed and a real number specifying what
+the new occupation should be.
+
+For example, the following piece of an input file would place 1
+electron in both orbitals 49 and 50:
+
+\shrinkspacing
+\begin{verbatim}
+
+Orbital Occupations
+; the number of occupations to change
+2
+; the orbitals and new occupations
+49 1.0
+50 1.0
+\end{verbatim}
+\resumespacing
+
+%%%%%%%%
+\subsection{{\sf Charge Iteration} (optional)}
+
+\calcprog\ has the capability to perform charge iteration
+(a self consistent adjustment of the H$_{ii}$s in order to lessen the
+amount of charge flow).  
+The charge iteration algorithm in \calcprog is somewhat experimental (... so beware!) and is discussed in the file {\bf charge.ps}.
+
+For those of you who know no fear here's a summary of the CI keywords:
+
+The keywords controlling the CI process are sandwiched between the {\sf charge iteration} and {\sf end charge} keywords.
+
+The keywords within the CI block are: 
+
+{\sf Param}
+followed by a line giving the number of different atoms that parameters
+will be specified for: \pvar{num\_CI\_parms}
+each of the next \pvar{num\_CI\_parms} lines should contain the charge
+iteration parameters in the form:
+\pvar{Atomic\_symbol  $s_A s_B s_C p_A p_B p_C d_A d_B d_C$}
+
+(i.e. the A, B, and C parameters for each of the orbitals.  These are
+the same parameters used in the old programs for single configuration
+CI and are NOT distributed with YAeHMOP).
+{\bf Note:} charge iteration for f orbitals is not supported.
+
+{\sf Vary}(follows Param)
+followed by a single line containing the numbers of the atoms
+whose parameters are to be varied. This is a comma delimited list, you
+can use ``-'' to abbreviate series of atoms (i.e. 1-4 and 1,2,3,4 are
+equivalent)
+
+{\sf Tolerance}
+followed by a single line specifying the tolerance used to terminate the iteration
+
+{\sf lambda}
+followed by a single line specifying the step size for the iteration process
+
+{\sf max iter}
+followed by a single line specifying the maximum number of iterations
+
+
+%%%%%%%%
+\subsection{{\sf Sparsify} (optional)}
+
+This is used to set small elements of the hamiltonian and overlap
+matrices to zero.  
+The next line should contain the value which is considered to be zero.
+
+{\bf NOTE:} This is primarily here for development purposes and 
+we'd encourage you not to use this.
+
+%%%%%%%%
+\subsection{{\sf Just Average E} (optional)}
+
+Tells \calcprog\ to only generate the average energy, total DOS, and
+Fermi level of
+the system.  This causes the program to require considerably less
+memory when run on systems with a lot of orbitals.
+
+If you are using a version of \calcprog\ that uses the
+LAPACK libraries to diagonalize the matrices, then only 
+eigenvalues will be generated.  This can result in a significant speed
+increase.  (A factor of 10 decrease in execution time for
+sufficiently large systems is possible !).
+
+%%%%%%%%
+\subsection{{\sf Just Matrices} (optional)}
+
+Generate just the overlap and hamiltonian matrices, then exit.  This
+is basically useless unless it is used in conjunction with either the
+{\sf Dump Overlap} or {\sf Dump Hamil} keywords, or the {\sf
+Hamiltonian} or {\sf Overlap} printing options.
+
+%%%%%%%%
+\subsection{{\sf Diagwo} (optional)}
+
+Performs the matrix diagonalization without using the overlap matrix,
+so that a calculation is similar to a simple H\"uckel calculation.
+
+

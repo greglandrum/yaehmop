@@ -1,0 +1,70 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Symmetry analysis}
+
+The symmetry analysis performed by \calcprog\ is relatively extensive
+and flexible.  While the program doesn't find all
+of the symmetry elements possessed by molecules, it does get a lot of
+them. 
+
+In order to make the symmetry analysis as flexible as possible, the
+molecule can first be moved to the center of mass frame of reference. 
+The 
+moments of inertia are then found and the whole molecule is rotated
+into the principle axis frame.  This allows molecules which are not
+located exactly at the origin or aligned perfectly with the Cartesian
+axes to be analyzed.  
+
+The transformation to the principle axis frame is controlled by the
+keyword {\sf Principle Axes}.  If this keyword is not specified, the
+symmetry analysis will be done in the orientation specified in the
+{\sf Geometry} section.
+
+The program searches for the following
+symmetry elements:
+
+\begin{itemize}
+
+\item {\bf an inversion center}
+
+\item {\bf rotation axes} from C$_2$ through C$_8$ about the three
+Cartesian axes.
+
+\item {\bf improper rotation axes} from S$_3$ through S$_8$ about the
+three Cartesian axes.
+
+\item {\bf mirror planes} perpendicular to the Cartesian axes.
+
+\end{itemize}
+
+The elements found, their axes, and atoms which are equivalent under
+each operation are printed to the output file.
+
+The characters of the wavefunctions with respect to each operation are
+determined by constructing the appropriate transformation matrix for
+each operation and transforming the vector of atomic orbital
+coefficients for each molecular orbital.  The result of this process
+is the actual character of the wavefunction with respect to the
+symmetry operation, not just a symmetric/anti-symmetric label.
+It is important to realize that the results of this method of
+displaying the results of symmetry analysis can give results which
+are, at first, confusing for degenerate orbitals.  If you are looking
+at the characters of a set of degerate orbitals and trying to compare
+them to the characters given in a character table, it is very
+important that you sum the characters of each of the members of the
+degenerate set.
+
+
+When a reaction coordinate is being followed, \calcprog\ first
+generates all the geometries along the coordinate and determines the
+symmetry elements which they possess.  The only symmetry elements
+reported are those which are conserved along the entire distortion.
+This means that you don't have to worry about moving from high to low
+symmetry geometries or {\it vice versa}.  {\bf Note:} It is possible
+that loss of symmetry elements will lead to problems in constructing a
+Walsh diagram.  In these cases {\bf {\sf fit\_walsh}} will warn you.
+If the diagram as constructed is incorrect, you can either change your
+reaction coordinate to not include geometries with problematic
+degeneracies or edit the {\tt .WALSH} file by hand to fix it.  This is
+explained in more detail below in the section on fitting programs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

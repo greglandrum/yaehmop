@@ -1,0 +1,102 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{What is \prog\ and why should I use it?}
+
+\prog\ is a group of programs for performing extended \huek\
+calculations \cite{eht1,eht2} and analyzing and visualizing the results. 
+The programs \calcprog\ and \viewprog\ form the core of the package.
+
+\section{\calcprog}
+
+\calcprog\ is the program which performs the actual extended
+\huek\ calculations.  It can be used to perform calculations on both
+isolated molecules and extended systems of 1, 2, or 3 dimensions. 
+
+\calcprog\ is an almost complete rewrite of the program \oldprog\
+and is written almost entirely in C (the routines for
+evaluating overlap matrix elements and diagonalizing the
+Hamiltonian matrix from \oldprog\ remain)
+Because of the fact that all memory
+used in the program is allocated dynamically, there are no
+restrictions on the number of atoms, K points, or orbitals which can
+be used (this isn't totally true:  there is a limit of 20 user defined
+atom types).  The only limitation is the amount of memory that your
+computer has and the length of time which you are willing to wait for
+the run to finish.
+
+Because of the fact that \calcprog\ is written to be easy to
+maintain and understand, we have not spent a lot of
+time trying to make it fast.  This isn't to say that it's slow, but it
+certainly could be faster.
+
+The input files to \calcprog\ are keyword based, so, with a few
+exceptions, it doesn't really matter what order things are in.  In
+addition, white space (spaces, tabs, etc.) in the input are ignored.
+
+Here are just a few reasons to use \calcprog:
+\begin{itemize}
+
+\item Built in parameters for most elements.
+
+\item Gaussian style Z--matrix, standard Cartesian, or
+crystallographic coordinate input. 
+
+\item Automatic generation of points along a reaction coordinate (for
+Walsh diagrams).
+
+\item Particular pieces of information can be monitored at each step
+along a reaction coordinate (e.g. the reduced overlap population
+between two atoms can be printed at each step along a Walsh diagram).
+
+\item Automagic generation of K points along symmetry lines for band
+structures.
+
+\item Orientation independent determination of symmetry elements.
+
+\item More symmetry elements are found (up through S$_8$).
+
+\item DOS and COOP data are in ASCII format, so you can plot the data
+with any plotting program... though you will {\em want} to use
+\viewprog\ :-).
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\viewprog}
+
+\viewprog\ is an X--Windows based, interactive program for displaying
+and printing the results obtained using \calcprog\ (though there's no
+reason that it can't be made to display data from other programs).
+
+Some of \viewprog's features are:
+
+\begin{itemize}
+
+\item Interactive 3-D manipulation of molecular structures.
+
+\item Support for extended systems: ``grow'' crystals of any size.
+
+\item Postscript output.
+
+\item It doesn't use Motif.
+
+\item Ability to place as many structures and graphs as desired on the same page. 
+
+\item Numerous options for displaying molecules and MO surfaces.
+
+\item Automatic generation of input files for \genprog{rayshade}, a
+freeware raytracing program.  This can be used to get extra gratuitous
+color 3D plots.
+
+\item The official Roald Hoffmann seal of approval on the way the output looks.
+ ({\bf NOTE:} this feature is still under development.)
+
+\end{itemize}
+
+Both \calcprog\ and \viewprog\ were written to be as easy to port to
+other flavors of UNIX as possible.  This is one of the
+reasons why \viewprog\ doesn't use any of the snazzy user interface
+libraries which are available.
+
+

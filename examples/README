@@ -1,0 +1,16 @@
+These are some sample input files for bind that demonstrate a lot of
+the features and capabilities of bind.  They include cases for
+molecules and extended systems of various dimensionalities.  There
+should also be at least one example for each type of geometry
+specification and some walsh diagram stuff.  Some of the files include
+extracts from the output to allow testing of new installations of the
+program.
+
+I'm always looking for more sample input files, please help out by
+providing some.  Just include your name and a brief explanation of the
+input in a comment towards the beginning.
+
+Thanks
+-greg
+
+04/10/97

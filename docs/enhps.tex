@@ -1,0 +1,39 @@
+%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%
+\chapter{Using the enhanced Postscript features in \viewprog}
+
+It is now possible to include superscripts, subscripts, different
+fonts, and all kinds of other wacky stuff in output from \viewprog.
+This is accomplished using an adaptation of the enhpost terminal type
+from gnuplot.  If you are familiar with this, then you don't have to
+read this section, everything is exactly the same here {\em except}
+that you can't do rotated text.
+
+To get a superscript, use the \^{} symbol.  \^{} only holds for one
+character unless a group of characters is enclosed in squiggly
+brackets (\{ and \}), so the line:
+\begin{verbatim} 	X^10 \end{verbatim}
+comes out looking like: 
+\begin{quotation}
+X$^10$,
+\end{quotation}
+while the line 
+\begin{verbatim} 	X^{10} \end{verbatim} 
+gives:
+\begin{quotation}
+X$^{10}$. 
+\end{quotation}
+To get a subscript, use the \_ symbol.  \_ behaves in the same manner
+as \^\ . 
+
+To change font, put a backslashed version of the name of the font
+inside squiggly brackets with the text to be changed.  For example
+\begin{verbatim} look at {/Symbol G} now \end{verbatim}  
+gives: 
+\begin{quotation}
+look at $\Gamma$ now. 
+\end{quotation}
+
+There are some other features of the enhpost drivers, but these are
+the most important.

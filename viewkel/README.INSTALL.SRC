@@ -1,0 +1,93 @@
+
+
+These are the instructions for compiling and installing viewkel.
+
+
+-------------------------
+| GENERAL INSTRUCTIONS  |
+-------------------------
+In this directory there should be a makefile for the package.  In
+order to successfully install the package, you will have to make a
+couple of changes in the makefile.
+
+The first change is setting where the program bind will look for its
+parameter file.  This file, called atomic_parms.dat contains values of
+the covalent radii for the periodic table as well as numbers
+indicating what color will be used to draw the atoms.
+You should set the
+variable PARM_FILE_LOC in the makefile to wherever this file is
+located.  For example, if you have installed YAeHMOP in the directory 
+/usr/local/src, then you would change the line in the makefile to:
+
+PARM_FILE_LOC = \"/usr/local/src/yaehmop/viewkel/atomic_parms.dat\"
+
+The next change that needs to be made is setting the flags that get
+passed to the compilers.  These are lines which start out:
+
+CFLAGS = 
+
+There are some sample lines in the makefile.
+The line that has the -O switch is for compiling the program with
+optimization, this is the recommended setting.  The line that has the
+-g switch is for compiling with debugging.  This causes the program to
+run much more slowly and to be larger.  I don't recommend using the -g
+switch unless you are actually planning on doing some debugging work.
+
+If you wish to get rid of X support, get rid of the -DX_GRAPHICS.  If
+you wish to get rid of Tektronix support, get rid of the
+-DTEK_GRAPHICS.  If you do not have the HDF libraries installed get
+rid of the -DUSE_HDF.  If you do not have vis5d installed, get rid of
+the -DUSE_V5D.  If your C compiler doesn't barf on function prototypes,
+get rid of -DHPUX.
+
+Make sure that you only have one uncommented CFLAGS line.  Comment out
+all other CFLAGS lines by putting a # in the first column.
+
+The next things to configure are compiler flags that tell it where to
+find the include files for vis5d and/or HDF.  If you do not have these 
+libraries installed, then just remove the end of the line defining the
+flags.  For example, if you do not have the HDF libraries, then you
+should have the following line:
+
+HDFINCLUDEFLAGS =
+
+If you do have one or both of these packages installed, change the
+definitions to point to the location of the include files for the
+package.
+
+Next are the locations of the HDF libraries and the vis5d object
+files.  Again, if you don't have these files, leave the definitions
+blank.  If you do have them, set the pointers to the right place.
+
+
+
+You should now be ready to compile viewkel.
+
+To viewkel compiled just type:
+
+make 
+
+If you have any problems please let me know and I'll see what I can
+do to help.  My email address is:
+landrum@xtended.chem.cornell.edu
+
+-------------------
+| Likely Problems |
+-------------------
+
+The most likely source of trouble in installing viewkel is the
+location of the X windows include files and libraries.  If the
+compiler gives errors when it tries to include the X header files, you
+will need to add a -I to the CFLAGS definition which tells the
+compiler where your X headers are.  If the linker can't find the X
+libraries, you will need to add a -L to the link statement telling it
+where to find the libraries.
+
+Again, if you have problems and you don't know what to do, feel free
+to contact me.
+
+Greg Landrum
+May 1, 1995
+
+
+

@@ -1,0 +1,79 @@
+;------------------------------------------------------------------------
+; Diamond, altered carbon parameters
+;  This has two symmetry lines from the band structure of diamond
+;   and demonstrates the use of custom parameters and printing
+;   values for extended systems.
+;------------------------------------------------------------------------
+
+diamond
+
+; define the geometry, in crystallographic coordinates
+Geometry Crystallographic
+; this is the number of atoms
+5
+; the * here indicates that custom parameters are being used.
+1 * 0.00000  0.00000  0.0000
+2 C 0.25000  0.25000  0.2500
+3 C 0.50000  0.50000  0.0000
+4 C 0.00000  0.50000  0.5000
+5 C 0.50000  0.00000  0.5000
+
+; define custom parameters for C 
+parameters
+C 6 4 2 1.71 -21.4 2 1.625 -11.4
+
+; definition of the lattice
+lattice
+; dimensionality
+3
+; number of overlaps in each direction
+5 5 5 
+; definition of a (it goes from 1->3)
+1 3
+; definition of b (it goes from 1->4)
+1 4
+; definition of c (it goes from 1->5)
+1 5
+
+
+Crystal Spec
+; the lengths of the lattice vectors a, b, and c
+3.570 3.570 3.570
+; the crystallographic angles alpha, beta, and gamma.
+90 90 90
+
+Band
+40
+3
+; The k points are specified in terms of the reciprocal lattice
+;  of the primitive cell, but the high symmetry points are those
+;  for the RL of the cubic FCC cell, so these look a little strange.
+;  The conversions between the two cells can be found in Ashcroft
+;  and Mermin
+L  .5 .5 .5
+G 0 0 0
+X .5 0 .5
+
+print
+distance matrix
+overlap matrix
+hamiltonian
+wave func transp
+charge mat transp
+energy levels
+end_print
+
+average properties
+
+electrons
+8
+
+; These k points are not reliable for a real average properties
+; calculation, but they allow us to look at the wavefunctions,
+; charge matrix, etc. at the high symmetry points.
+k points
+3
+0 0 0 1
+0.5 0 0.5 1
+0.5 0.5 0.5 1
+

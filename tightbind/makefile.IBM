@@ -1,0 +1,118 @@
+#
+#  This is the makefile for the tightbinding programs
+# 
+# created by greg Landrum August 1993
+#
+
+
+CC = cc
+
+# to change where the program looks for the extended hueckel parameters
+#   change the following:
+# This is the one for xtended
+#PARM_FILE_LOC = \"/home/landrum/yaehmop/tightbind/eht_parms.dat\"
+# here's the one for chemres
+#PARM_FILE_LOC = \"/users3/hoffmann/home/landrum/tightbind/eht_parms.dat\"
+PARM_FILE_LOC = \"eht_parms.dat\"
+
+# to use floats instead of doubles, insert -DUSE_FLOATS here.
+#  to perform real symmetry analysis (with principle axis location), use
+#   -DREAL_SYMM_ANALYSIS  here.  To use this you must have the relevant
+#     portions of the meschach libraries installed.
+
+# These are for systems that do not have the meshach libraries installed
+#CFLAGS = -O -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DUNDERSCORE_FORTRAN -fullwarn -w2 -DANAL_ABOUT_PROTOTYPES
+#CFLAGS = -O -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DUNDERSCORE_FORTRAN
+
+# stripped down, with optimization
+#CFLAGS = -O -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DUNDERSCORE_FORTRAN
+
+#stripped down with optimization and LAPACK
+#CFLAGS = -DUSE_LAPACK -O -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -Ae
+
+#stripped down with debugging  and LAPACK
+#CFLAGS = -DUSE_LAPACK -g -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DUNDERSCORE_FORTRAN
+
+# these are for systems that have the meschach libraries
+CFLAGS = -g -I/usr/local/include/ -DREAL_SYMM_ANALYSIS -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DUSE_LAPACK -DDEBUG_SYMM
+
+
+# these are the flags that get passed to the fortran compiler
+#F77FLAGS = -g
+F77FLAGS = -O
+
+# This is the link statement for our RS6000
+LIBS = /usr/local/lib/meschach.a -lxlf -lm -lblas
+#LIBS = /usr/local/lib/meschach.a -lxlf -lm 
+#here's a link statement for chemres (HP-UX)
+#LIBS = -lm -lblas -lF77 -lI77 -lU77 -lisam
+#LIBS = -lm -lblas -lf
+
+# this is for the SGI using the LAPACK libraries
+#LIBS = -lm -lblas_mp -lF77  -lI77 -lU77 -lisam
+
+# this is for f2c testing:
+#LIBS = -L/home/landrum/lib -lf2c -lm
+
+COBJS = main.o genutil.o fileio.o globals.o memory.o distance_mat.o \
+ R_overlap_mat.o mov.o R_hamil.o K_hamil.o kpoints.o K_overlap_mat.o \
+ mulliken.o charge_mat.o zetas.o electrostat.o new3_fileio.o walsh.o \
+ transforms.o symmetry.o princ_axes.o avg_props.o DOS_stuff.o COOP_stuff.o \
+ Zmat.o bands.o FMO_stuff.o xtal_coords.o matrices.o chg_it.o mod_mulliken.o \
+ postprocess.o muller.o geom_frags.o solid_symmetry.o recip_space.o
+
+#F2COBJS = lovlap.f2c.o abfns.f2c.o cboris.f2c.o diag.f2c.o
+FOBJS = lovlap.o abfns.o cboris.o diag.o
+
+LAPACKOBJS = zhegv.o
+#LAPACKOBJS = 
+
+FIT_PROGS = utils/fit_dos utils/fit_coop utils/fit_walsh utils/sub_dos
+
+all: bind 
+
+install: bind
+	cp bind ../bin
+	cd utils;make install
+
+#bind: $(COBJS) $(FOBJS)
+#	cc -o bind $(CFLAGS) $(COBJS) $(FOBJS) $(LIBS)
+
+bind: $(COBJS) $(FOBJS) $(LAPACKOBJS)
+	$(CC) -o bind $(CFLAGS) $(COBJS) $(FOBJS)  $(LAPACKOBJS) $(LIBS)
+
+#bind.64: $(COBJS) $(FOBJS)
+#	cc -o bind.64 $(CFLAGS) $(COBJS) $(FOBJS) $(LIBS)
+
+bind.64: $(COBJS) $(FOBJS) $(LAPACKOBJS)
+	cc -o bind.64 $(CFLAGS) $(COBJS) $(FOBJS) $(LAPACKOBJS) $(LIBS)
+
+
+clean:
+	rm -f $(COBJS)
+
+veryclean:
+	rm -f bind bind.64
+	rm -f $(COBJS) $(FOBJS) $(LAPACKOBJS)
+	cd utils;make clean
+
+.f.o: 
+	f77 $(F77FLAGS) -c $*.f
+
+.c.o: 
+	$(CC) $(CFLAGS) -c $*.c
+
+
+fit_progs: $(FIT_PROGS)
+
+utils/fit_dos: utils/fit_dos.c
+	cd utils; make fit_dos
+
+utils/fit_coop: utils/fit_coop.c
+	cd utils; make fit_coop
+
+utils/fit_walsh: utils/fit_walsh.c
+	cd utils; make fit_walsh
+
+utils/sub_dos: utils/sub_dos.c
+	cd utils; make sub_dos

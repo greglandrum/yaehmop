@@ -1,0 +1,73 @@
+%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%
+\chapter{ Some (hopefully) helpful hints}
+
+\section{Choosing how many overlaps to use}
+
+The overlaps specified determine how many unit cells the program
+uses when building the overlap matrix in K space.
+The important thing when answering this question is to remember that
+the goal is to include all unit cells surrounding the 'home' cell 
+that have a non-zero contribution to the overlap
+matrix. The general criterion here is that you should
+go out far enough that the length of the lattice vector times the
+number of overlaps is between 10 and 20 \AA.  Some systems don't
+require this many overlaps, and some require more.  It's safe to go
+with too many overlaps, though this causes \calcprog\ to use more
+memory and go slower.  If you don't have enough overlaps, the
+diagonalization procedure will fail.  This will be reported in the
+status file after the program finishes running.
+
+
+\section{Choosing the number of k points to use}
+
+This is a tricky question.  The right answer is that you should always
+do a k point convergence test for every calculation (i.e. you should
+try using a variety of different sampling densities and stop when you
+get convergence).   However, this isn't always practical or possible.
+The general guideline we use is that the number of crystal orbitals
+(number of orbitals in the unit cell times the number of k points)
+should be equal to 1000.  This criterion is highly questionable when
+doing slab models of interfaces or surfaces, so be careful with these
+systems.
+
+\section{Choosing the number of points in band structures}
+
+Generally using 40 k points per symmetry line works fine.  If your
+bands are flat, you can use less than this.  If you are really worried
+about seeing weakly avoided crossings and you can't tell if you are
+seeing one, use more points.
+
+
+\section{Calculations on big systems}
+
+When doing calculations on large systems (where the meaning of large
+depends on how much memory your computer has), it's very good idea to
+do the average properties and band structure calculations separately.
+This is because average properties calculations use a lot more memory,
+and band structure calculations use a lot more k points.  If you are
+nearing the limit of the memory available on your machine because of
+the demands of the average properties calculation, the band structure
+calculation will take much much longer than it has too.  You are
+better off if you do the two runs separately.  It's also a good idea
+to do the band structure once, then comment out the band part of the
+input file.  That way if you add projected DOS's or COOPs later, you
+won't accidentally redo the band structure, which won't have changed. 
+
+%\section{Using \viewprog}
+
+%When moving or scaling graphs (property, band, walsh, whatever) in
+%\viewprog, it's a good idea to turn off the curves.  Everything will
+%update a hell of a lot faster if you do.  Once you have everything in
+%place, turn the curves back on. 
+
+%The 3D perspective code in \viewprog\ is stupid and primitive.  It
+%works okay, but the interface is clunky and it is lacking some
+%features that should be there.  The biggest of these is the lack of
+%near plane clipping.  What this means to you, the user, is that
+%objects behind the camera which is showing you the image will show up
+%on screen, they'll just be inverted.  To work around this problem,
+%either move the molecule farther away from you, or adjust the Z
+%scaling. 
+

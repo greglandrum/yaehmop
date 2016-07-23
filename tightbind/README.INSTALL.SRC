@@ -1,0 +1,128 @@
+Last Updated:
+ October 13,1995
+ greg Landrum
+
+These are the instructions for compiling and installing bind and the
+associated fitting programs. 
+
+-------------------------
+| GENERAL INSTRUCTIONS  |
+-------------------------
+In this directory there should be a makefile for the package.  In
+order to successfully install the package, you will have to make a
+couple of changes in the makefile.
+
+The first change is setting where the program bind will look for its
+parameter file.  This file, called eht_parms.dat, contains the Alvarez
+parameters for extended Hueckel calculations.  You should set the
+variable PARM_FILE_LOC in the makefile to wherever this file is
+located.  For example, if you have installed YAeHMOP in the directory 
+/usr/local/src, then you would change the line in the makefile to:
+
+PARM_FILE_LOC = \"/usr/local/src/yaehmop/tightbind/eht_parms.dat\"
+
+The next change that needs to be made is setting the flags that get
+passed to the compilers.  These are lines which start out:
+
+CFLAGS = 
+
+There are 4 sample lines in the makefile. Two of these are for systems
+that do not have the meshach libraries installed.  
+
+If you don't have the meschach libraries, you should uncomment (by
+deleting the # in the first column) one of these lines (the
+non-meschach lines do *not* have the -DREAL_SYMM_ANALYSIS switch).
+The line that has the -O switch is for compiling the program with
+optimization, this is the recommended setting.  The line that has the
+-g switch is for compiling with debugging.  This causes the program to
+run much more slowly and to be larger.  I don't recommend using the -g
+switch unless you are actually planning on doing some debugging work.
+
+If you do have the meschach libraries, you should uncomment one of the
+lines which has the -DREAL_SYMM_ANALYSIS switch.  You will also need
+to change the directory specified after the -I switch to point to
+wherever the meschach include files are.  Once again, using the line
+with the -O switch is recommended.
+
+Make sure that you only have one uncommented CFLAGS line.  Comment out
+all other CFLAGS lines by putting a # in the first column.
+
+If your fortran compiler needs any special arguments, set them on the
+F77FLAGS line.  
+
+Next you need to change the line which tells the linker which
+libraries to include.   These lines start with:
+
+LIBS =
+
+Here you need to make sure that the fortran and math libraries get
+linked in.  The fortran libraries have different names on different
+systems, so you'll have to figure out what switches to use.  If you
+are using the meschach libraries, you'll need to include the path to
+the library file itself (meschach.a) on this line.
+
+Again, make sure that there is only one LIBS line uncommented.
+
+
+You should now be ready to compile the programs.
+
+To get everything compiled just type:
+
+make all
+
+That should take care of building bind and the fitting programs.
+
+The manual for bind is in the directory docs.  The ready-for-printing
+postscript file is called bind_manual.ps, you should be able to print
+this however you normally print postscript files.  The LATeX source
+for the manual is in bind_manual.tex.
+
+If you have any problems please let me know and I'll see what I can
+do to help.  My email address is:
+landrum@xtended.chem.cornell.edu
+
+-------------------
+| Likely Problems |
+-------------------
+
+The most likely sources of trouble in installing bind are the
+interaction between the fortran and C compilers and prototyping.
+
+For some reason, on different systems the fortran compilers make
+different changes to function names.  I have encountered problems with
+this in the past when compiling programs on Sun workstations.  If you
+get a message from the linker about not being able to find the
+symbols abfns or lovlap, you'll have to go into the makefile and add the 
+definition: 
+-DUNDERSCORE_FORTRAN 
+to the CFLAGS line.
+
+
+The most recent versions of bind have function prototypes to help with
+development and debugging.  If you experience compiler error messages
+indicating that prototypes are not supported, you can get rid of them
+by adding:
+-D_NO_PROTO
+to the CFLAGS line.
+
+On some machines (I know this is true on HP's), you will need to tell
+the compiler to use ANSI mode.  On HP's you do this by adding:
+-Ae
+to the CFLAGS line.  I don't know how to do this on other systems, but
+you can probably figure it out from the man page for cc.
+
+If protypes work, but you get errors because the compiler cannot find
+some prototypes it would like to see, try adding:
+-DANAL_ABOUT_PROTOTYPES 
+to the CFLAGS line.  This should help.  If it doesn't you can either
+play with what files are included or turn off prototyping entirely.
+
+
+I'll try and make the installation process for future versions a
+little more automatic with respect to these problem, but I need some
+more data from different operating systems before I can do so.
+
+
+Last Updated:
+ July 15, 1997
+ greg Landrum

@@ -1,0 +1,84 @@
+;------------------------------------------------------------------------
+; Diamond, altered carbon parameters, "fake atoms"
+;
+;  This is identical to the example file 'diamond'
+;   except for the inclusion of an extra basis function (3s) on the C
+;   atoms.  The program doesn't allow more than one s orbital on a
+;   given atom, so we fake the extra orbitals by putting an atom with
+;   a 3s orbital and no core directly on top of each C.  bind detects
+;   the atoms directly on top of each other and sets all overlap matrix
+;   terms between them to zero, so the calculation turns out okay.
+;
+;------------------------------------------------------------------------
+
+diamond with 3s on carbon
+
+Geometry Crystallographic
+7
+1 * 0.00000  0.00000  0.0000
+2 C 0.25000  0.25000  0.2500
+; these are the fake atoms
+3 * 0.0000  0.0000  0.000
+4 XX 0.2500  0.2500  0.25000
+
+
+5 C 0.50000  0.50000  0.0000
+6 C 0.00000  0.50000  0.5000
+7 C 0.50000  0.00000  0.5000
+
+parameters
+; custom C parameters
+C 6 4 2 1.71 -21.4 2 1.625 -11.4
+; XX is the fake atom with a 3s orbital
+XX 1 0 3 5.5 3.25
+
+;------------------
+; all of the rest of this stuff is explained in the example file 'diamond'
+;------------------
+
+Lattice
+3
+5 5 5
+1 5
+1 6
+1 7
+
+Crystal Spec
+3.570 3.570 3.570
+90 90 90
+
+Band
+40
+3
+L  .5 .5 .5
+G 0 0 0
+X .5 0 .5
+
+print
+distance matrix
+overlap matrix
+hamiltonian
+wave func transp
+charge mat transp
+energy levels
+end_print
+
+average properties
+
+electrons
+8
+
+k points
+3
+0 0 0 1
+0.5 0 0.5 1
+0.5 0.5 0.5 1
+
+
+
+
+
+
+
+
+

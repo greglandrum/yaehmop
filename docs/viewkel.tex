@@ -1,0 +1,743 @@
+\chapter{Using \viewprog}
+
+\viewprog\ is written to display results on either X Windows displays
+or Tektronix terminals.  The program will automatically detect whether
+or not X Windows are available and will use them if they are.
+Printing is handled by generating Postscript 
+files which can then be directly printed or included in documents.
+The actual graphics calls used to draw the data are all included in a
+separate file, so it should be reasonably easy to port the program to
+other graphics systems.
+
+Since the use of the X and Tek versions of \viewprog\ is different,
+they will be dealt with separately.
+
+{\bf Note:}  I haven't put much work into the command line (Tektronix)
+version of \viewprog\ recently, so it doesn't have a lot of the
+features mentioned below and some of the features it purportedly does
+have may not work.
+
+\section{Using \viewprog\ in X}
+
+When you start \viewprog\ under X, it will open 2 windows.  The first,
+and larger, window (the graphics window) is used to display output.
+The second window (the main button window) has buttons which are used
+to control the program. 
+
+The individual button windows and the functions of the buttons found
+therein are described below.  Each button is only described once, so
+though many different windows have a {\bf X Legend} button, it is only
+described once. 
+
+You can cause the program to redraw at any time (except when an
+isosurface is being evaluated) by middle clicking in any of the
+windows.
+
+\subsection{Special keys in \viewprog}
+
+There are a number of keys that can be used in \viewprog, some of
+these duplicate features found in button windows, some are unique.
+
+\begin{itemize}
+\item {\bf q}: will cause \viewprog\ to quit.
+\item {\bf r}: switches into rotate mode.
+\item {\bf t}: switches into translate mode.
+\item {\bf c}: switches into center mode.
+\item {\bf s}: switches into scale mode.
+\item {\bf the spacebar}: switches into choose mode.
+\item {\bf h}: in choose mode hides the selected atoms
+\item {\bf +}: in choose mode shows previously hidden atoms
+\item {\bf z}: rotates the selected molecule so that you are looking
+along the Z axis.
+\item {\bf y}: rotates the selected molecule so that you are looking
+along the Y axis.
+\item {\bf x}: rotates the selected molecule so that you are looking
+along the X axis.
+\item {\bf 1}: \viewprog\ will prompt you for a file name to use, then
+write an input file for {\tt rayshade}.
+\item {\bf d}: writes the cartesian coordinates of the molecule to
+standard output.
+\end{itemize}
+
+
+\subsection{General use of buttons}
+
+In order to avoid having to use a user interface library that may not
+exist on some machines, I wrote all the button code myself.  This
+means that the buttons aren't necessarily the most beautiful things
+you've ever seen, and sometimes they behave in ways which are just
+plain wrong (for example, text can overflow out of the button).  The
+most important thing from my perspective is that these buttons do
+work, and the code to deal with them is simple and small.
+
+To activate a button, left click on it.  If it is a toggle button,
+then the toggle will be changed.  If the button is for changing the
+value of some variable, you will be prompted to enter a new value for
+that variable (no, I didn't write dialog box code).  
+
+Buttons which are for toggling the display of lines will show a sample
+of the line style to the right of the button.  You can change this
+line style by right clicking in the toggle button.
+
+\subsection{The main button window}
+
+The buttons in the main button window are described below:
+
+\begin{itemize}
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf the Mode button}:  This is the top button in the window.
+It displays what mode the program is using to manipulate the graphics
+displayed in the graphics window.  Left clicking in this window
+changes the active mode. This mode determines what action
+the control keys have.  The control keys are i,j,k,l,p,and ;.  The
+first four of these form an inverted arrow on a standard keyboard.  
+
+The possible modes are:
+
+\begin{itemize}
+\item None:  the control keys do nothing.
+
+\item Rotate:  the control keys rotate the active object.
+i and k rotate about the y axis, j and l rotate about x, and p and ;
+rotate about z.  Holding down shift while hitting any of these keys
+results in a larger rotation step.  
+In versions of \viewprog\ greater than or equal to 2.0, you can also
+rotate molecules in rotate mode by left clicking and dragging in the
+graphics window.  This is easier to do than it is to explain, so try
+it out.
+{\bf Note:}  Rotations only apply to displayed molecules and MO's, not
+to graphs because that would be silly.
+
+
+\item Translate:  the control keys translate the active object.
+i and k move along the y axis, j and l move along x, and p and ;
+move along z.  Holding down shift while hitting any of these keys
+results in a larger step.  
+
+\item Center:  the control keys translate the center of the active
+object. 
+i and k move along the y axis, j and l move along x, and p and ;
+move along z.  Holding down shift while hitting any of these keys
+results in a larger step. 
+This is different from the {\sf Translate} mode for molecules and MO
+surfaces in that the molecule and the point that the camera used to
+construct the perspective view looks at are move simultaneously.  This
+allows the molecule to be moved about the screen without the view
+changing. 
+In versions of \viewprog\ greater than or equal to 2.0, you can also
+change the center of your molecule by left clicking in the graphics
+window.  When you do this, the center of the molecule will be moved to
+where you clicked.  If you then drag, the molecule will move.
+{\bf Note:}  For anything other than molecules and MO surfaces {\sf
+Translate} and {\sf Center} are equivalent.
+
+\item Scale: the control keys change the size of the active object. 
+j shrinks along x, l grows along x, k shrinks along y, i grows along
+y, ; shrinks along z, and p grows along z.  Once again, holding down
+shift while hitting a key increases the size of the step.
+
+\item Choose: Left clicking on atoms selects them.  Right clicking
+then either displays the distance between those atoms (two selected),
+the angle between them (three selected), or the relevant dihedral
+angle (four selected).  A label is placed at the location
+of the right click and lines are drawn to the controlling atoms.  If
+you right click with just a single atom selected, the coordinates and
+identity of that atom will be printed in the window from which you ran
+\viewprog.  This is a convenient way to find the coordinates of a
+particular atom if you forget (or if you have centered the molecule
+using the ``center'' button in the molecule option window).
+The labels displayed in Choose mode remain on screen until the {\sf
+Clear Labels} button is 
+hit.  
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Read Molecule}:  Reads in the atomic positions of a
+molecule.  You will be prompted for the name of the {\bf output} file
+containing the geometry.  Enter the name of the file in the window
+from which you started up \viewprog.  The molecule will be read in and
+displayed and a molecule button window will be opened.
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Read MO}: Reads in the specification of an MO.  You will be
+prompted for the name of the {\bf input} file used to perform the
+calculation. Enter the name of the file in the window from which you
+started up \viewprog.  The program will read in the geometry of the
+molecule itself from the {\tt .out} file and the MO specification from
+the {\tt .MO} file.  You will be prompted for which MO you which to
+use if there are multiple MO's in the {\tt .MO} file.  {\bf Note:}  To
+use this option you must have specified MO printing when \calcprog\
+was run.   
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Read Contours}:  Reads in a contour plot.  You will be
+prompted for the name of the file containing the contour data.
+This option is primarily intended for dealing with FCO plots.
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Read FMO}:  Reads in FMO data and constructs an interaction
+diagram.  You will be prompted for the name of a {\tt .FMO} file.
+\viewprog\ will read in the FMO data, construct an interaction
+diagram, and open an FMO options window.
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Read Props}:  Reads in average properties (DOS, COOP or
+COD) data and displays it.  You will be prompted for the name of a
+data file (either {\tt .DOS}, {\tt .COOP}, or {\tt .SUB}).  The
+program will read in the data and open a property options window.
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Read Walsh}:  Reads in data for a Walsh diagram.  You will
+be prompted for the name of a {\tt .WALSH} file.  \viewprog\ will read
+in the data and open a walsh option window.
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Read Bands}:  Reads in the data to display a band
+structure.  You will be prompted for the name of a {\tt .bands} file.
+\viewprog\ will display and band structure and open a bands option
+window.
+
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Read Graph}:  Reads in raw data for a graph.  You will be
+prompted for the name of the file containing the graph data.  This
+allows construction of very primitive graphs.  This option just exists
+because it was easy to do.  \viewprog\ is not intended to be a general
+purpose graphing program.
+
+%%%%%%%%%%%%%%%%%
+\item {\bf Fill Proj.s}:  Toggles filling of projected DOS curves.  On
+screen these will be shown shaded, in the printed output they will be
+lined.  {\bf Note:} in the Macintosh version of \viewprog, this
+keyword has no effect on the way things are displayed on screen, it
+does still affect the Postscript output.
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Purge!}: Deletes all currently displayed objects and closes
+all of their button windows.
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Printing Options}:  Opens a window which allows you to
+change some of the default behavior for the Postscript printing.
+
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Print}:  Prompts for the name of a file, then redraws the
+screen, writing its contents to the file as Postscript.  This file can
+then be printed however you normally print {\tt .ps} files.
+
+%%%%%%%%%%%%%%%%%%
+\item {\bf Clear Labels}:  Removes labels from the display.  They
+will not be refreshed, so once you clear them, they are gone.
+
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{The PS options button window}
+
+This window allows you to control some of the default behavior of the
+Postscript printing from \viewprog.  
+
+\begin{itemize}
+\item {\bf Location}:  This button controls where the graph is located
+on the output page.  There are three possible values: Top, Middle and
+Bottom.  The default is Bottom.
+
+\item {\bf Font}: Allows specification of the standard text font.  The
+default is Times--Roman.  {\bf Note:}  This option can be overridden
+using the enhanced Postscript commands (described in an Appendix).
+
+\item {\bf Font Size}: Allows specification of the standard text font
+size (in points).  The default is 12.
+
+\item {\bf Scale}: Allows scaling of the whole output.  This does {\em
+not} affect the size of the text font, to change that use the {\bf Font
+Size} button.
+
+\end{itemize}
+
+{\bf Note:} None of the changes
+made in this window will be visible on screen.
+
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{The molecule button window}
+
+This is the window which is popped up when a molecule is opened.  It
+is used to control the viewing options for the molecule being
+displayed.  
+
+\begin{itemize}
+\item {\bf Hydrogens?}: Toggles drawing of hydrogens.
+
+\item {\bf Dummies?}: Toggles drawing of dummy atoms.
+
+\item {\bf Center}:  When this is pressed, the molecule is moved so
+that it is centered at the center of mass ({\bf Note:} since
+\viewprog\ doesn't actually know what the masses of your atoms are,
+the center of mass is actually calculated assuming all the atoms have
+the same mass.  The resulting positioning is usually still right.).
+
+
+\item {\bf Hide Atoms} Allows you to make it so that some atoms in the
+molecule aren't displayed.  You will be prompted for a list of atoms
+to hide.  Enter a comma delimited list. You can use the dash (hyphen)
+just as it was used in the FMO specification.  For example, the
+following list will hide atoms 1-23 and 99:
+{\tt 1-23, 99}
+
+\item {\bf Show Atoms} Allows you to ``unhide'' atoms you may have hidden
+before. 
+
+\item {\bf Axes?}: Toggles display of a set of axes on screen.
+
+\item {\bf Outlines?}: Toggles the drawing of dark circles around
+the atoms being displayed.
+
+\item {\bf Shading?}: Toggles shading of the atoms being displayed.
+
+\item {\bf Crosses?}: Toggles display of pseudo-3D crosses on the
+atoms.  If this is turned on and shading is turned off, the interiors
+of the atoms are drawn as solid white with the cross superimposed.
+
+\item {\bf Connectors?}: Toggles drawing of lines connecting atoms
+which are a distance within \pvar{bond\_tol} (see below) of the sum of
+their covalent radii apart.
+
+\item {\bf Fancy Lines?}: When this is on lines between atoms are
+drawn as if they are intersecting the sphere of the atoms.  When off,
+the lines are drawn all the way to the center of the atoms.  Turning
+``Fancy Lines'' off is useful when drawing a structure without the
+atoms being displayed.
+
+\item {\bf Breaking Lines?}: When this is turned on, lines ``cut'' those
+behind them that they intersect.
+
+\item {\bf Tube Lines?}:  Toggles display of bonds as tubes instead of
+lines.  Tubes are drawn as a white center with a black edges and 
+cut lines behind them just like breaking lines.  {\bf Note}: if both
+``Tube Bonds'' and ``Breaking Lines'' are turned on, only the Breaking
+Lines will be drawn.
+
+
+\item {\bf Numbers?}: Toggles display of the numbers of atoms.
+
+\item {\bf Symbols?}: Toggles display of atomic symbols.
+
+\item {\bf Line Width}: Used to control the thickness of the lines
+drawn between atoms.
+
+\item {\bf Bond Tol}: Used to enter a new value of \pvar{bond\_tol}.
+When this is changed the lines between atoms are recalculated.
+
+\item {\bf Rad Scale}: Used to control the scaling of the circles
+drawn for atoms.
+
+\item {\bf Grow Xtal!}:  This button only appears for molecules that
+have lattice parameters in the output file (i.e. extended systems).
+Clicking this allows you to show more than one unit cell.
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{The MO button window}
+
+{\bf Note:} This section is substantially changed since \viewprog\
+version 1.2.
+
+When an MO isosurface is opened, two button windows are opened.  One
+of these windows is a Molecule window as described above.  The other
+window is used to control the drawing of MO isosurfaces on
+screen.  These options are described below.
+
+There are two ways to draw isosurfaces in \viewprog\ version 2.  The
+first method draws the isosurface just as it was done in version 1.2:
+a solid isosurface made up of filled triangles is drawn.  These
+isosurfaces do not look particularly good when drawn in viewkel, but
+generate very nice illustrations when {\sf rayshade} is used to
+raytrace the object. The second method draws Jorgenson and Salem style
+contour plots of the surface, with hidden line removal. These plots
+are similar to those generated by {\sf CACAO} and {\sf PSI88}.  I will
+refer to these as ``solid'' surfaces and ``contour'' surfaces
+respectively.  Finally, this button window is also used to generate a
+two dimensional contour plot of an MO, I'll refer to these as ``contour plots''.
+
+While some buttons apply to both types of figures, the majority
+control only solid {\em or} contour surfaces.
+
+To explain what the solid surface buttons do, it is necessary to
+understand how the calculation of solid isosurfaces is done.  The algorithm
+used to generate the polygonal isosurface is taken from a section by
+Jules Bloomenthal (at Xerox PARC) in the book {\em Graphics Gems IV}.
+The algorithm as published is suitable for polygonalization of
+continuous surfaces.  Unfortunately, isosurfaces of molecular and
+crystal orbitals are rarely continuous.  They are, instead, made up of
+a number of discrete parts (usually lobes centered on particular
+atoms).  In order to work around this problem, Bloomethal's algorithm
+has been modified to look for individual pieces of the surface around
+each atom in the molecule.  The algorithm starts at the corners of a
+cube of side length \pvar{search\_radius} centered on each atom.  The
+default value of \pvar{search\_radius} seems to work most of the time,
+if you see that lobes are obviously missing, try changing the value of
+\pvar{search\_radius}.   The algorithm evaluates the MO values on a
+grid of spacing \pvar{voxel\_size}.  Increasing \pvar{voxel\_size}
+results in quicker evaluation and drawing of the surface (less
+triangles are found, so the surface can be drawn more rapidly), but
+the resolution suffers.  Decreasing \pvar{voxel\_size} gives a
+smoother surface, but it takes much longer to calculate and to draw.
+My best advice here is to start with the default value (0.2\AA) and
+then play around with it to see what size suits your purpose.
+
+
+{\bf Some Cautions about solid isosurfaces:} 
+
+\begin{itemize}
+
+\item I haven't had a
+chance to do shading (simulated lights) of the isosurfaces.  I
+think that this will improve the appearance of the final images.  
+
+\item A heuristic needs to be developed to warn the user when lobes of
+the MO might have been missed.  I have some ideas here, but I'm still
+working on them.
+
+\end{itemize}
+
+When the surface is first read in, the user is prompted for values
+used in constructing the radial lookup table.   This is a table of
+values for the radial part of the wavefunctions.  Use of this lookup
+table results in a tremendous gain in speed.  The default values
+should be fine for almost any calculations.
+
+One important note about {\em both} solid and contour isosurfaces: 
+\viewprog\ does not deal with the imaginary part of 
+wavefunctions yet.  I will put this in later, until then, limit
+yourself to pure real wavefunctions.  You'll always be okay with
+molecular wavefunctions, but general k points for extended systems
+will be problematic.
+
+Well, with my salvo of disclaimers fired, here are the explanations of
+the buttons in the MO options window.
+
+\begin{itemize}
+
+\item {\bf Surface?}: Toggles display of the solid isosurface once it has
+been calculated.
+
+\item {\bf Molecule?}: Toggles display of the molecule.
+
+\item {\bf Isosurface}: This is the isosurface value that is displayed
+on screen.  This is applies to both solid and contour isosurfaces.
+
+\item {\bf Voxel Size}: The spacing of the grid used to calculate the
+solid surface.
+
+\item {\bf Search Rad}: The size of the cube around each atom used to
+provide starting points for the solid surface search.
+
+\item {\bf Slop}:  Used to determine how far past the end of the
+molecule's bounding box the solid isosurface grid extends.
+
+\item {\bf Exclude Atoms}:  Used to remove atoms from the calculation
+of the isosurface.  For example, if you are doing a 7 layer metal slab
+and are only interested in the surface states (a topic near and dear
+to my heart), you can exclude the atoms which are in the middle of the
+slab.  This will result in a cleaner looking, more quickly evaluated
+isosurface.  You will be prompted to enter a list of atoms, the syntax
+here is the same as for the Hide Atoms button described in the
+Molecule options section.
+
+\item {\bf Include Atoms}:  This is used if you make a mistake when
+you exclude atoms. It turns the atoms you switched off back on.
+
+\item {\bf Surf Evolve}: Starts the calculation of a solid isosurface.
+
+\item {\bf Change MO}:  Allows you to change which MO you are looking
+at without having to reload the whole molecule.
+
+\item {\bf Tri\_Shading?}: Toggles filling of the triangles which make
+up the displayed solid isosurface.
+
+\item {\bf Tri\_Outlines?}: Toggles the drawing of outlines around the
+triangles which make up the solid isosurface.
+
+\item {\bf Contours?}: Toggles display of the calculated contours that
+make up either a contour plot of an MO or a contour isosurface.
+
+\item {\bf Contour Mode}:  This mode button determines the method
+which is used to generate contour levels in contour plots.  There are
+three possibilities: {\sf Auto} \pvar{num\_contours} contour levels
+are automatically selected between the maximum and minimum values in
+the data set; {\sf Incremental}, you will be prompted for a starting
+value and a step between contours when the contour plot is evaluated;
+{\sf Discrete}, you will be prompted to enter the \pvar{num\_contours}
+contour values when you evaluate the contour plot.  
+
+\item {\bf Contour it}: Evaluates a contour plot.  You will be
+prompted for:
+\begin{itemize}
+\item  the orientation of the plane used to evaluate the contours
+(i.e. perpendicular to X, Y or Z)
+\item  the height and width of the plane in which the MO will be
+evaluated.
+\item the number of steps to take along each side of the evaluation
+plane.
+\item the number of contours you want to use
+\item an offset, this shifts the evaluation plane off the origin,
+useful if you want to contour an MO where most of the density isn't at
+X,Y, or Z = 0.
+\item Whether or not you want to do a ``stack'' of contour plots.
+  If you say yes here, you will be prompted for the number of planes
+you want in the stack, the location of the start of the stack, and the
+distance between planes in the stack.  What this does is generate a
+series of plots which are parallel to each other and located at
+different heights.  This is a quick and dirty way to get a feeling for
+the shape of an MO.  {\bf Note:}  if the contour mode is {\sf Auto},
+\viewprog\ will generate the contour levels automatically in the first
+plane of the stack, but then will use those contour values in all
+other planes.
+\end{itemize}
+
+\viewprog\ will then go off and evaluate the values of the MO in the
+plane, contour that data, show you the values of the contours it
+found, and finally display those contours (if the {\sf Contours?}
+toggle described above is switched on).  MO contour plots are real
+three dimensional objects just like the molecule they are associated
+with, and will rotate, translate, and scale in three dimensions along
+with the molecule.  This feature seems gratuitous, but it's kind of
+fun to play with and it was a lot easier to implement than having the
+contour be a fixed 2D object.  It can even be useful:  if you rotate
+the molecule so that you are looking at the edge of the contour plot,
+you can see exactly where it cuts through your molecule.
+
+\item {\bf Contour Surf}: Evaluates an MO contour plot.
+
+\item {\bf Invert Phase}:  This toggle allows you to invert the phase
+of the MO displayed on screen.  This can be helpful when you want to
+visually compare two similar MO's that have opposite phases: just
+invert the phase of one of them.
+
+\item {\bf Hidden}:  Toggles the use of the hidden line removal
+algorithm for contour plots and MO surfaces.  When \pvar{Hidden} is
+on, you should no longer be able to ``see through'' the MO isosurface.
+However, this can make it take a lot longer to draw plots, so you may
+want to have \pvar{Hidden} turned off when you are rotating your
+molecule.  The hidden line removal does not work particularly well for
+normal contour plots, but \viewprog\ will still allow you to use it if
+you wish. {\bf Note}: there are still some boundary conditions that
+get screwed up sometimes in the hidden line removal.  If a plot looks
+bad: rotate the molecule a small amount, that should clear things up.
+{\bf Very, Very Important Note}:  The hidden line removal algorithm is
+not guaranteed to work at all if you have some contours displayed
+which are not closed (this can arise if the plane in which you
+evaluated the MO was too small).   Sometimes it works, sometimes it
+does stuff that is very, very wrong.  
+
+\item {\bf Grow Xtal}:  This grows the crystal and propagates the MO
+coefficients with the correct phase factors for the given k point.  If 
+you want to display the MO of an extended system in more than one unit
+cell, you {\bf must} use this button to grow the crystal.  Using the
+{\bf Grow Xtal} button in the Molecule button window will not
+correctly propagate the MO coefficients.
+
+\end{itemize}
+
+{\bf Note:}  If are looking at an extended system, and you want to see
+the crystal orbital in more than the home unit cell, you must
+evaluate the isosurface after growing the crystal.
+
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{FMO button window}
+
+This window contains buttons for controlling the display of an FMO
+interaction diagram.
+
+\begin{itemize}
+\item {\bf Electrons}:  Controls the drawing mode for the electrons in
+the interaction diagram.  Each mode is described below:
+
+\begin{itemize}
+\item None: Do not draw electrons.
+
+\item HOMO: Draw electrons only in the highest occupied level of each
+fragment and the molecule.
+
+\item All: Draw electrons in all occupied levels on screen.
+\end{itemize}
+
+\item {\bf Levels}: Toggles display of the levels in the FMO diagram.
+
+\item {\bf Left Fragment}: Controls which fragment is displayed on the
+left side of the interaction diagram.  Set this to zero or -1 to not
+show a fragment on the left side.
+
+\item {\bf Right Fragment}: Controls which fragment is displayed on the
+right side of the interaction diagram.  Set this to zero or -1 to not
+show a fragment on the right side.
+
+\item {\bf Y min}: This is the minimum energy displayed.
+
+\item {\bf Y max}: This is the maximum energy displayed.
+
+\item {\bf Level Width}: The width (horizontal length) of the levels
+drawn.
+
+\item {\bf Thickness}: The thickness of the lines used to draw the
+levels.
+
+\item {\bf Electron len}: The length of the lines used to represent
+electrons.
+
+\item {\bf Y tics}: Toggles the display of tic marks on the y axis.
+
+\item {\bf Frame}: Toggles the display of a frame around the
+interaction diagram.
+
+\item {\bf Show Title}: Toggles display of the title of the graph (if
+one has been entered).
+
+\item {\bf Title}: Allows you to enter a new title to be displayed
+across the top of the graph.
+
+\item {\bf Main Label}: Allows you to enter a new label for the
+central set of levels (those of the full molecule).
+
+\item {\bf Frag {\sf n} Label}: There will be one of these buttons for
+each fragment used in the calculation.  These are used to enter labels
+to be displayed under each fragment displayed.
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{Walsh button window}
+
+This window is used to control the display of Walsh diagrams.  The
+coordinate used to label the x axis is specified when {\sf fit\_walsh}
+is run.
+
+\begin{itemize}
+
+\item {\bf MO's}: Toggles display of the MO levels.
+
+\item {\bf Total E}: Toggles display of the total energy.
+
+\item {\bf X tics}: Toggles display of X tics.
+
+\item {\bf MO tics}: Toggles display of Y axis tic marks (for the
+energies of the MO's displayed) on the left side of the diagram.
+
+\item {\bf Tot E tics}: Toggles display of Y axis tic marks (for the
+total energy curve) on the right side of the diagram.
+
+\item {\bf X Legend}: Allows you to enter a legend to be displayed
+under the X axis.
+
+\item {\bf Y Legend}: Allows you to enter a legend to be displayed
+beside the Y axis.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{Band button window}
+
+Controls the display of band structure data on screen.
+
+\begin{itemize}
+\item {\bf Bands}: toggles display of the bands.
+
+\item {\bf Show Fermi}: toggles display of the Fermi energy on the
+band graph.
+
+\item {\bf Fermi E}: allows you to enter a value for the Fermi energy.
+The location of the Fermi energy is not stored in the band file, so
+you must enter this yourself to get an accurate value.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{Properties button window}
+
+This is used to control display of average properties data (DOS, COOP,
+or COD data).  
+
+\begin{itemize}
+\item {\bf Curve n}: where n is an integer.  This is a toggle to
+control display of each curve in the file.  The numbering of the
+curves varies from type to type:  
+\begin{itemize}
+\item DOS data:  Curve 1 is the total DOS.  Projections are
+labeled starting from Curve 2.  The projections are in the order in
+which they were specified in the input file.
+
+\item COOP data: The curves are numbered in the same way as the COOPs
+were numbered in the input file.
+
+\item COD data: There is only one curve per COD file, this is curve 1.
+\end{itemize}
+
+\item {\bf Integration n}: where n is an integer.  These toggle
+display of
+the integration of the corresponding curve.
+
+\item {\bf Integ Scale}: toggles use of the integration data to label
+the X axis.  This is particularly useful for integrated DOS data.
+There are problems with using this option for COOP and COD data.
+These will be fixed in the next version of the program.
+
+\item {\bf Fermi E}: allows you to change the value of the Fermi energy.
+For DOS and COOP data the value of the Fermi energy is stored in
+the output file, so \viewprog\ will know the proper value.  
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{Graph button window}
+
+This controls displays of graph data.  There are no new buttons for
+control of graph data.
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\section{Using \viewprog\ from a Tek terminal}
+
+When you are sitting at a Tek terminal (Tek 4014 compatible),
+\viewprog\ will use a command line driven interface and will use the
+graphics capabilities of the terminal to display graphs. 
+
+You can get help in the Tek version of the program by typing ``help''
+or ``?'' at the prompt.  This will list all the commands along with a
+brief description.  Since this is available, I will not describe all
+the features here.
+
+Though it can be convenient, the Tek interface does have some
+limitations: 
+
+\begin{itemize}
+\item You can not look at either molecules or MO's.
+
+\item Not all features of each type of graph are modifiable.
+
+\item Once a new graph has been opened, previously opened (and
+displayed) graphs cannot be modified.
+
+\item Due to limitations of the technology, the graph you see onscreen
+is not nearly as similar to what comes out of the printer as in
+the X windows version of \viewprog.
+
+\end{itemize}
+
+{\bf Note:}  It has been a long time since I have worked on the
+Tektronix version of \viewprog, so it's not guaranteed to work at all.
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
