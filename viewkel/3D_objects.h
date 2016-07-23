@@ -1,22 +1,34 @@
 /*******************************************************
-*      Copyright (C) 1995, 1998,1999  Greg Landrum
-*
-*  This file is part of yaehmop.
-*
-*   This is free software.
-* 
-*  Permission is granted to modify, or otherwise fold, spindle, and mutilate this
-*    code provided all copyright notices are left intact.
-*
-*  This code may be distributed to your heart's content, in whatever form,
-*    provided no fee is charged for the distribution, all copyright notices are
-*    left intact, and the source is distributed (without fee) along with any
-*    binaries to anyone who requests it.
-*
-*  There are, of course, no warranties at all on this program.
-*
-********************************************************************/
 
+Copyright (C) 1995 Greg Landrum
+All rights reserved
+
+This file is part of yaehmop.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+********************************************************************/
 
 /******************************
 
@@ -39,7 +51,7 @@
      additions to molec_type to store polyedra centers and cut_offs
    04.09.98 gL:
      changed is_selected field of atom_type to an int.  This was
-     necessary with the new click-drag selection scheme.  I think it may 
+     necessary with the new click-drag selection scheme.  I think it may
      clear up a few other mysterious bugs as well.
    08.09.98 gL:
      support for colored and/or shaded atoms
@@ -49,7 +61,6 @@
      updated form of lattice vectors
      added box stuff and num_along field to molec_type
 ***/
-
 
 #ifndef _3D_OBJECTS_
 #define _3D_OBJECTS_
@@ -62,27 +73,22 @@
 #include "basic_objects.h"
 #endif
 
-
 /****
   used to store the characters of MOs w.r.t. symmetry operations
 
 ****/
-typedef struct{
-  int planes[3];
-} MO_character_type;
-
+typedef struct { int planes[3]; } MO_character_type;
 
 /***********
 
-  parametric surfaces 
+  parametric surfaces
 
 ************/
-typedef struct{
-  int samples1,samples2;
+typedef struct {
+  int samples1, samples2;
   point_type *points;
   int *colors;
 } param_surf_type;
-
 
 /*******
 
@@ -90,12 +96,11 @@ typedef struct{
   a given point
 
 ********/
-typedef struct{
+typedef struct {
   point_type loc;
   point_type grad;
   float val;
 } MO_info_type;
-
 
 /********
 
@@ -103,21 +108,23 @@ typedef struct{
    evaluations
 
 ********/
-typedef struct{
+typedef struct {
   char filled;
   int num_entries;
-  float min_val,max_val;
+  float min_val, max_val;
   float step;
   float *values;
 } lookup_table_type;
 
 /* these macros are used to pull things out of lookup tables */
-#define READ_FROM_LOOKUP_TBL(tbl,x) \
-(( x < tbl->max_val && x > tbl->min_val ) ? \
- tbl->values[(int)floor((x-tbl->min_val)/tbl->step + 0.5)] : 0.0)
-#define INSERT_INTO_LOOKUP_TBL(tbl,x,val) \
- ((x<tbl->max_val && x>tbl->min_val) ?  \
-  tbl->values[(int)floor((x-tbl->min_val)/tbl->step + 0.5)]=val : 0)
+#define READ_FROM_LOOKUP_TBL(tbl, x)                                           \
+  ((x < tbl->max_val && x > tbl->min_val)                                      \
+       ? tbl->values[(int)floor((x - tbl->min_val) / tbl->step + 0.5)]         \
+       : 0.0)
+#define INSERT_INTO_LOOKUP_TBL(tbl, x, val)                                    \
+  ((x < tbl->max_val && x > tbl->min_val)                                      \
+       ? tbl->values[(int)floor((x - tbl->min_val) / tbl->step + 0.5)] = val   \
+       : 0)
 
 /***
 
@@ -125,39 +132,39 @@ typedef struct{
   a given center
 
 ***/
-typedef struct AO_list_type_def{
+typedef struct AO_list_type_def {
   /* the type of this AO (used as a tab into the radial lookup table) */
   int type;
 
   /* the coefficient of this orbital in the MO */
-  float coeff[MAX_MOS],coeffI[MAX_MOS];
+  float coeff[MAX_MOS], coeffI[MAX_MOS];
   /*  float *coeff,*coeffI;*/
-  float zeta1,zeta2,C1,C2;
-  
+  float zeta1, zeta2, C1, C2;
+
 #ifdef INCLUDE_ADF_PLOTS
   /* these are used for the ADF plotting */
-  int kx,ky,kz,kr;
+  int kx, ky, kz, kr;
   float norm_fact;
 #endif
 
-  void (*ang_func) PROTO((point_type *,float,float,float *,point_type *));
-  void (*rad_func) PROTO((point_type *,float, float, float, float,
-			  float,float,float *,point_type *));
+  void(*ang_func) PROTO((point_type *, float, float, float *, point_type *));
+  void(*rad_func) PROTO((point_type *, float, float, float, float, float, float,
+                         float *, point_type *));
 
   lookup_table_type *rad_lookup_tbl;
 
   struct AO_list_type_def *next;
 } AO_list_type;
 
-
 /****
 
   this structure is the linked list of centers (atoms) contributing
   to an MO isosurface
 
-*****/  
+*****/
 typedef struct MO_center_list_type_def {
-  /* a toggle used to indicate if this center is excluded from the calculation */
+  /* a toggle used to indicate if this center is excluded from the calculation
+   */
   char exclude;
 
   /* this center's type */
@@ -170,12 +177,10 @@ typedef struct MO_center_list_type_def {
 
   /* the list of AO components */
   int num_AOs;
-/*  AO_list_type AO_list[MAX_AOS];*/
+  /*  AO_list_type AO_list[MAX_AOS];*/
   AO_list_type *AO_list;
 
 } MO_center_list_type;
-
-
 
 /***********
 
@@ -187,7 +192,7 @@ typedef struct {
   char type[4];
   char color;
   /* stuff for custom atom displays */
-  char custom,crosses_on,outlines_on,shading_on;
+  char custom, crosses_on, outlines_on, shading_on;
 
   int num;
   int *linesto;
@@ -199,23 +204,23 @@ typedef struct {
 #endif
   float rad;
   param_surf_type *p_surf;
-  
+
   /* used for click-selecting atoms */
   int is_selected;
   point_type2D screen_loc;
-  int screen_rad,draw_order;
+  int screen_rad, draw_order;
 
   /* used for coordination polyhedra */
   int num_triangles_in;
   int *triangles_in;
 
   /* information for bond length->bond_valence plots */
-  float ri,ci;
+  float ri, ci;
 
   /* stuff for shading/color of atoms */
   float atom_shade;
   float atom_color[3];
-  long int Cpixel_val[NUM_X_SHADES],Gpixel_val[NUM_X_SHADES];
+  long int Cpixel_val[NUM_X_SHADES], Gpixel_val[NUM_X_SHADES];
 } atom_type;
 
 /***********
@@ -223,17 +228,17 @@ typedef struct {
   a molecule
 
 ***********/
-typedef struct{
+typedef struct {
   /* some booleans that will be used */
   char filename[240];
-  char numbers_on,draw_connectors,outlines_on,shading_on,hydrogens_on;
-  char fancy_lines,symbols_on,axes_on,dummies_on;
-  char breaking_lines, tubes_on, crosses_on,trapezoidal_bonds;
+  char numbers_on, draw_connectors, outlines_on, shading_on, hydrogens_on;
+  char fancy_lines, symbols_on, axes_on, dummies_on;
+  char breaking_lines, tubes_on, crosses_on, trapezoidal_bonds;
   char draw_lattice;
   char draw_box;
   char draw_polyhed;
   int num_atoms;
-  int num_frames,current_frame;
+  int num_frames, current_frame;
   atom_type *atoms;
 
   /* the "bonds" drawn with the molecule */
@@ -246,13 +251,13 @@ typedef struct{
   float bond_rad;
 
   /* this is stuff for dealing with solids */
-  int num_dim,num_atoms_in_cell;
-  point_type lattice_vect[4],orig_lattice[4];
+  int num_dim, num_atoms_in_cell;
+  point_type lattice_vect[4], orig_lattice[4];
   point_type cell_box[8];
   int num_along[3];
 
   /* for doing coordination polyhedra */
-  int num_triangles,num_polyhed_verts;
+  int num_triangles, num_polyhed_verts;
   vertex_type *polyhed_verts;
   triangle_type *triangles;
   int *polyhed_centers;
@@ -261,25 +266,24 @@ typedef struct{
 #ifdef USE_LASSP_ROTATE
   int rotate_tool_on;
   matrix_type rot_matrix;
-#endif  
+#endif
 
 #ifdef INCLUDE_ADF_PLOTS
-  int num_vibrations,active_vibn;
+  int num_vibrations, active_vibn;
   float vibration_scale;
 #endif
 
 #ifdef INCLUDE_BOND_VALENCE
   char valence_for_bonds;
-  float bond_tol2,old_bond_tol2;
+  float bond_tol2, old_bond_tol2;
 #endif
 } molec_type;
-
 
 #ifndef _CONTOUR_
 #include "contour.h"
 #endif
 
-typedef struct MO_contours_def{
+typedef struct MO_contours_def {
   int num_pts;
   double value;
 
@@ -291,13 +295,13 @@ typedef struct MO_contours_def{
   /* the list of hidden points */
   char *hidden_points;
   /* 1/slopes and intercepts */
-  float *inv_slope,*intercept;
+  float *inv_slope, *intercept;
   /* the orientation */
   char orientation;
   /* the coefficients of the equation of the plane */
-  float A_C,B_C,D_C;
+  float A_C, B_C, D_C;
   /* the max and min values */
-  point_type min_vals,max_vals;
+  point_type min_vals, max_vals;
 
   /* the actual data */
   point_type *coords;
@@ -308,49 +312,46 @@ typedef struct MO_contours_def{
 typedef struct {
 
   /* contour details */
-  int num_levels,num_approx_pts,interp_kind,order,levels_kind;
-
+  int num_levels, num_approx_pts, interp_kind, order, levels_kind;
 
   int num_conts;
-  int num_a,num_b;
-  point_type left_top_corner,right_bottom_corner;
+  int num_a, num_b;
+  point_type left_top_corner, right_bottom_corner;
   int orientation;
   iso_curve_type *data;
   float begin_conts;
 
   /* used for arbitrary planes */
-  point_type Bas1,Bas2,Origin;
+  point_type Bas1, Bas2, Origin;
 
   double *levels_list;
   MO_contours_type *contours;
   gnuplot_contour_type *gnu_contours;
 } MO_contour_plot_type;
 
-
-
 /***********
 
   an MO isosurface
 
 ************/
-typedef struct{
+typedef struct {
   char filename[240];
- 
+
   int orig_num_centers;
-  int num_centers,num_centers_in_cell;
+  int num_centers, num_centers_in_cell;
 
   /* keep track of which MO we're looking at */
   int num_MOs, active_MO;
   int *MO_numbers;
-  
-  char display_molec,display_surf;
-  char do_shading,do_lines;
+
+  char display_molec, display_surf;
+  char do_shading, do_lines;
 
   molec_type *molec;
 
   /* stuff for the radial lookup tables */
   int num_lookup_entries;
-  float lookup_min,lookup_max;
+  float lookup_min, lookup_max;
 
   /* the unique center list (for radial lookup tables) */
   int num_unique;
@@ -370,8 +371,8 @@ typedef struct{
   float surface_tolerance;
 
   /* stuff for doing gridded surfaces */
-  float slop,search_radius;
-  point_type bmin,bmax;
+  float slop, search_radius;
+  point_type bmin, bmax;
   int num_steps;
   float voxel_size;
 
@@ -397,14 +398,11 @@ typedef struct{
 
 } MO_surface_type;
 
-
-typedef struct{
-point_type *loc;
-point_type *next;
-float val;
+typedef struct {
+  point_type *loc;
+  point_type *next;
+  float val;
 } contour_point_type;
-
-
 
 /**************
 
@@ -419,11 +417,9 @@ float val;
 #define TRIANGLE_3D 2
 #define LINE_3D 3
 
-typedef struct {
-  point_type *end1,*end2;
-} line_3D_type;
+typedef struct { point_type *end1, *end2; } line_3D_type;
 
-typedef union{
+typedef union {
   contour_point_type contour_point;
   atom_type *atom;
   triangle_type *triangle;
@@ -435,11 +431,6 @@ typedef struct {
   storage_3D object;
 } generic_3D_object;
 
-
-typedef struct{
-  point_type points[4];
-} axis_type;
+typedef struct { point_type points[4]; } axis_type;
 
 #endif
-
-

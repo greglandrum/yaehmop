@@ -1,22 +1,34 @@
 /*******************************************************
-*      Copyright (C) 1995, 1998, 1999 Greg Landrum
-*
-*  This file is part of yaehmop.
-*
-*   This is free software.
-* 
-*  Permission is granted to modify, or otherwise fold, spindle, and mutilate this
-*    code provided all copyright notices are left intact.
-*
-*  This code may be distributed to your heart's content, in whatever form,
-*    provided no fee is charged for the distribution, all copyright notices are
-*    left intact, and the source is distributed (without fee) along with any
-*    binaries to anyone who requests it.
-*
-*  There are, of course, no warranties at all on this program.
-*
-********************************************************************/
 
+Copyright (C) 1995 Greg Landrum
+All rights reserved
+
+This file is part of yaehmop.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+********************************************************************/
 
 /******************************
 
@@ -45,13 +57,12 @@
 
 ***/
 
-
 #ifndef _MY_DEFINES_
 #define _MY_DEFINES_
 
 #ifndef USE_BZERO
-#define bzero(a,b) ( memset((void *)(a),0,(b)) )
-#define bcopy(a,b,c) ( memcpy((void *)(b),(const void *)(a),(c)) )
+#define bzero(a, b) (memset((void *)(a), 0, (b)))
+#define bcopy(a, b, c) (memcpy((void *)(b), (const void *)(a), (c)))
 #endif
 
 /* the number of gray's used */
@@ -64,7 +75,6 @@
 
 /* default tolerance for drawing bonds */
 #define DEF_BOND_TOL 0.10
-
 
 /* the font size used in Postscript printing */
 #define TEXT_SIZE 12
@@ -120,7 +130,6 @@
 #define DEF_CONT_PLOT_X 200
 #define DEF_CONT_PLOT_Y 200
 
-
 /********
   we need some kind of default scaling thing so that graphics
    can be properly displayed on the Mac and other small
@@ -140,7 +149,7 @@
 #define GWINWIDTH 700
 #define GWINHEIGHT 600
 #define ORTHOWIDTH 300
-#define ORTHOHEIGHT 225  
+#define ORTHOHEIGHT 225
 #define BUTWIDTH 220
 #define BUTHEIGHT 600
 
@@ -154,7 +163,6 @@
 #define MO_SURF 7
 #define LABEL 8
 #define CONT_PLOT 9
-
 
 /* types of contour plot */
 #define CONT_GEN 0
@@ -170,7 +178,6 @@
 /* number of initial particles / center */
 #define INIT_PARTS_PER_CENTER 20
 
-
 /**********
 
   defines for Tektronix emulation
@@ -178,10 +185,10 @@
 **********/
 #define TEK_XMAX 1024
 #define TEK_YMAX 780
-#define TEK_VCHAR		25
-#define TEK_HCHAR		14
-#define TEK_VTIC		11
-#define TEK_HTIC		11	
+#define TEK_VCHAR 25
+#define TEK_HCHAR 14
+#define TEK_VTIC 11
+#define TEK_HTIC 11
 
 /*****
   defaults for FMO diagrams
@@ -196,8 +203,7 @@
 /* drawing modes for electron fillings in FMO diagrams */
 #define FMO_FILL_NONE 0
 #define FMO_FILL_HOMO 1
-#define FMO_FILL_ALL  2
-
+#define FMO_FILL_ALL 2
 
 /* stuff to deal with delaunay polygonalizations */
 #define NNSORT_POLYG 0
@@ -226,23 +232,22 @@
 /**** more stuff for contour plots ****/
 #define CONT_PLOT_PROPS_SCALE 0.5
 
-#define INTERP_NOTHING   0            /* Kind of interpolations on contours. */
-#define INTERP_CUBIC     1                           /* Cubic spline interp. */
-#define APPROX_BSPLINE   2                         /* Bspline interpolation. */
+#define INTERP_NOTHING 0 /* Kind of interpolations on contours. */
+#define INTERP_CUBIC 1   /* Cubic spline interp. */
+#define APPROX_BSPLINE 2 /* Bspline interpolation. */
 
-#define LEVELS_AUTO			0		/* How contour levels are set */
-#define LEVELS_INCREMENTAL	1		/* user specified start & incremnet */
-#define LEVELS_DISCRETE		2		/* user specified discrete levels */
-#define DEFAULT_NUM_OF_ZLEVELS  20  /* Some dflt values (setable via flags). */
-#define DEFAULT_NUM_APPROX_PTS  5
-#define DEFAULT_BSPLINE_ORDER  3
+#define LEVELS_AUTO 0             /* How contour levels are set */
+#define LEVELS_INCREMENTAL 1      /* user specified start & incremnet */
+#define LEVELS_DISCRETE 2         /* user specified discrete levels */
+#define DEFAULT_NUM_OF_ZLEVELS 20 /* Some dflt values (setable via flags). */
+#define DEFAULT_NUM_APPROX_PTS 5
+#define DEFAULT_BSPLINE_ORDER 3
 
 /********* stuff for MO contour plots ***********/
 #define ORIENT_X 0
 #define ORIENT_Y 1
 #define ORIENT_Z 2
-#define ORIENT_ARBITRARY 3 
-
+#define ORIENT_ARBITRARY 3
 
 /***** toggles for atom and bond styles *********/
 #define ATOM_PLAIN_FILL 0
@@ -271,21 +276,20 @@
 ********/
 #define MAX_MODES 10 /* any more than this is too many */
 #define MAX_LINES 10 /* the maximum number of lines in a multi-line title */
-#define MAX_ARGS 10 /* the maximum number of arguments a function can take */
+#define MAX_ARGS 10  /* the maximum number of arguments a function can take */
 
 #define TEXTOFF 10
 #define BUTTONOFF 10
 
 #define CURVE_SEG_LEN 50 /* length (in pixels) of sample linestyles shown */
 
-
 /* this is stolen from steve gifford */
 #ifndef PROTO
-# if defined(_NO_PROTO) || defined(_alpha) || defined(MIPSEL)
-#  define PROTO(x) ()
-# else /* defined(_NO_PROTO) || defined(__alpha) || defined(MIPSEL) */
-#  define PROTO(x) x
-# endif /* defined(_NO_PROTO) || defined(__alpha) || defined(MIPSEL) */
+#if defined(_NO_PROTO) || defined(_alpha) || defined(MIPSEL)
+#define PROTO(x) ()
+#else /* defined(_NO_PROTO) || defined(__alpha) || defined(MIPSEL) */
+#define PROTO(x) x
+#endif /* defined(_NO_PROTO) || defined(__alpha) || defined(MIPSEL) */
 #endif /* PROTO */
 
 /********
@@ -294,9 +298,8 @@
   so I made my own....
 
 *********/
-#define rint(a)  (floor((a)+0.5))
+#define rint(a) (floor((a) + 0.5))
 
 #define ABS(__a__) ((__a__) > 0 ? (__a__) : -(__a__))
-
 
 #endif

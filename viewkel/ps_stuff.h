@@ -1,20 +1,33 @@
 /*******************************************************
-*      Copyright (C) 1995, 1998, 1999 Greg Landrum
-*
-*  This file is part of yaehmop.
-*
-*   This is free software.
-* 
-*  Permission is granted to modify, or otherwise fold, spindle, and mutilate this
-*    code provided all copyright notices are left intact.
-*
-*  This code may be distributed to your heart's content, in whatever form,
-*    provided no fee is charged for the distribution, all copyright notices are
-*    left intact, and the source is distributed (without fee) along with any
-*    binaries to anyone who requests it.
-*
-*  There are, of course, no warranties at all on this program.
-*
+
+Copyright (C) 1995 Greg Landrum
+All rights reserved
+
+This file is part of yaehmop.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 ********************************************************************/
 
 /***
@@ -42,7 +55,6 @@
 #include "defines.h"
 #endif
 
-
 /*********
 
   defines for modes and the default fonts
@@ -50,12 +62,11 @@
 *********/
 #define PS_PRINT_BOTTOM 0
 #define PS_PRINT_MIDDLE 1
-#define PS_PRINT_TOP    2
+#define PS_PRINT_TOP 2
 
 #define DEF_PS_FONT "Times-Roman"
 #define DEF_PS_FONT_SIZE 12
 #define DEF_PS_SCALE 1.0
-
 
 /* justification modes */
 #define LEFT_JUST 0
@@ -69,19 +80,17 @@
   Postscript printing options
 
 **************/
-typedef struct{
+typedef struct {
   int where_to_print;
   char fontname[120];
   float fontsize;
   float printscale;
   char tight_b_box;
-  point_type min_pt,max_pt;
+  point_type min_pt, max_pt;
   int atom_sphere_type;
   int bond_type;
-  float atom_shade,bond_shade;
-  float atom_color[3],bond_color[3];
+  float atom_shade, bond_shade;
+  float atom_color[3], bond_color[3];
 } PS_options_type;
-
-
 
 #endif

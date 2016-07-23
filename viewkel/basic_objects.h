@@ -1,22 +1,34 @@
 /*******************************************************
-*      Copyright (C) 1995, 1998,1999  Greg Landrum
-*
-*  This file is part of yaehmop.
-*
-*   This is free software.
-* 
-*  Permission is granted to modify, or otherwise fold, spindle, and mutilate this
-*    code provided all copyright notices are left intact.
-*
-*  This code may be distributed to your heart's content, in whatever form,
-*    provided no fee is charged for the distribution, all copyright notices are
-*    left intact, and the source is distributed (without fee) along with any
-*    binaries to anyone who requests it.
-*
-*  There are, of course, no warranties at all on this program.
-*
-********************************************************************/
 
+Copyright (C) 1995 Greg Landrum
+All rights reserved
+
+This file is part of yaehmop.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+********************************************************************/
 
 /******************************
 
@@ -42,92 +54,76 @@
 #include "defines.h"
 #endif
 
-/******** 
+/********
 
   this is the node for the matrix stack
 
 ********/
-typedef struct matrix_type_def{
+typedef struct matrix_type_def {
   float matrix[DIM][DIM];
   struct matrix_type_def *next;
 } matrix_type;
-
-
-
 
 /**********
 
   a 3D point
 
 **********/
-typedef struct {
-  float x,y,z;
-} point_type;
+typedef struct { float x, y, z; } point_type;
 
+/***********
 
-
-/*********** 
-
-  a 2D point 
+  a 2D point
 
 *************/
-typedef struct {
-  float x,y;
-} point_type2D;
-  
+typedef struct { float x, y; } point_type2D;
 
 /************
 
   used to draw lines between atoms
 
 ************/
-typedef struct{
-  long int end1,end2;
-  char custom,drawn,tube,breaking,arrow,dashed;
+typedef struct {
+  long int end1, end2;
+  char custom, drawn, tube, breaking, arrow, dashed;
   float length;
   int thickness;
   int type;
 } line_type;
 
-
 /************
 
   a triangle with vertices as tabs (used to draw polygonal surfaces)
-  
+
 
 *************/
-typedef struct{
+typedef struct {
   int vertices[3];
-  point_type center,normal;
+  point_type center, normal;
   char perp;
   int color;
 } triangle_type;
-
 
 /***********
 
   triangle vertex, with position and normal
 
 ************/
-typedef struct vertex {		   
-    point_type position, normal;	
-} vertex_type;
+typedef struct vertex { point_type position, normal; } vertex_type;
 
 /************
 
-  a triangle with real vertices specified (used to draw polygonal surfaces)  
+  a triangle with real vertices specified (used to draw polygonal surfaces)
 
 *************/
-typedef struct{
+typedef struct {
   point_type vertices[3];
-  point_type center,normal;
+  point_type center, normal;
   int color;
 } explicit_triangle_type;
 
-
-
 /* a particle */
-typedef struct particle_type_def{
+typedef struct particle_type_def {
   char on_surf;
   char phase;
   int num_neighbors;
@@ -138,6 +134,5 @@ typedef struct particle_type_def{
   struct particle_type_def *next;
   struct particle_type_def *neighbors[6];
 } particle_type;
-
 
 #endif

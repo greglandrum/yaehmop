@@ -1,22 +1,34 @@
 /*******************************************************
-*      Copyright (C) 1995, 1998, 1999 Greg Landrum
-*
-*  This file is part of yaehmop.
-*
-*   This is free software.
-* 
-*  Permission is granted to modify, or otherwise fold, spindle, and mutilate this
-*    code provided all copyright notices are left intact.
-*
-*  This code may be distributed to your heart's content, in whatever form,
-*    provided no fee is charged for the distribution, all copyright notices are
-*    left intact, and the source is distributed (without fee) along with any
-*    binaries to anyone who requests it.
-*
-*  There are, of course, no warranties at all on this program.
-*
-********************************************************************/
 
+Copyright (C) 1995 Greg Landrum
+All rights reserved
+
+This file is part of yaehmop.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+********************************************************************/
 
 /******************************
 
@@ -40,7 +52,6 @@
 
 ***/
 
-
 #ifndef _GRAPH_OBJECTS_
 #define _GRAPH_OBJECTS_
 
@@ -57,15 +68,15 @@
   this structure is used to display the energy levels in FMO
   diagrams nicely (so that degeneracies are represented correctly)
 
-****/  
-typedef struct FMO_level_type_def{
+****/
+typedef struct FMO_level_type_def {
   char highest;
   int num_degen;
   int number;
   float num_electrons;
   float energy;
 
-  float xmin,xmax,yloc;
+  float xmin, xmax, yloc;
 
   struct FMO_level_type_def *next;
 } FMO_level_type;
@@ -73,9 +84,9 @@ typedef struct FMO_level_type_def{
 /***********
 
   a fragment (for FMO)
-  
+
 ***********/
-typedef struct{
+typedef struct {
   char label[NORMAL_STR_LEN];
   char show_label;
 
@@ -86,33 +97,30 @@ typedef struct{
   /* sometimes we want to specify occupations in the .FMO file */
   float *occups;
 
-
   FMO_level_type *levels;
 } FMO_fragment_type;
-  
 
 /***********
 
   this is used to connect the levels in FMO diagrams
-  
+
 ************/
-typedef struct FMO_connect_type_def{
+typedef struct FMO_connect_type_def {
   int which_frag;
   char linestyle;
   float contrib;
   int fragment_level, main_level;
   struct FMO_connect_type_def *next;
 } FMO_connect_type;
-  
-  
+
 /*************
 
-  used to display FMO diagrams 
+  used to display FMO diagrams
 
 **************/
-typedef struct{
+typedef struct {
   char filename[NORMAL_STR_LEN];
-  char xlegend[NORMAL_STR_LEN],ylegend[NORMAL_STR_LEN];
+  char xlegend[NORMAL_STR_LEN], ylegend[NORMAL_STR_LEN];
   char title[NUM_TITLE_LINES][NORMAL_STR_LEN];
   char label[NORMAL_STR_LEN];
   char do_title;
@@ -134,11 +142,11 @@ typedef struct{
   /* the length of lines used to indicate electron filling (in pixels) */
   int electron_length;
 
-  int left_fragment,right_fragment;
+  int left_fragment, right_fragment;
 
-  float max_y,min_y;
-  float old_max_y,old_min_y;
-  float tic_sep_y,num_tics_y,tic_start_y;
+  float max_y, min_y;
+  float old_max_y, old_min_y;
+  float tic_sep_y, num_tics_y, tic_start_y;
 
   /* used to determine what is considered a degeneracy */
   float degen_tol;
@@ -157,44 +165,42 @@ typedef struct{
 
 } FMO_diagram_type;
 
-
 /********
 
-  a graph 
+  a graph
 
 *********/
-typedef struct{
+typedef struct {
   char filename[NORMAL_STR_LEN];
   int num_p;
   int num_curves;
-  char xlegend[NORMAL_STR_LEN],ylegend[NORMAL_STR_LEN];
+  char xlegend[NORMAL_STR_LEN], ylegend[NORMAL_STR_LEN];
   char title[NUM_TITLE_LINES][NORMAL_STR_LEN];
-  char do_x_tics,do_y_tics,do_title;
+  char do_x_tics, do_y_tics, do_title;
   char *curves_to_display;
-  char *styles,*fills;
+  char *styles, *fills;
   char *curve_names;
-  point_type2D *data,*raw_data;
+  point_type2D *data, *raw_data;
 
-  float min_x,max_x;
-  float max_y,min_y;
-  float old_min_x,old_max_x;
-  float old_max_y,old_min_y;
-  float tic_sep_x,num_tics_x,tic_start_x;
-  float tic_sep_y,num_tics_y,tic_start_y;
+  float min_x, max_x;
+  float max_y, min_y;
+  float old_min_x, old_max_x;
+  float old_max_y, old_min_y;
+  float tic_sep_x, num_tics_x, tic_start_x;
+  float tic_sep_y, num_tics_y, tic_start_y;
 } graph_type;
-
 
 /*********
 
   for displaying properties calculations results
 
 **********/
-typedef struct{
+typedef struct {
   char filename[NORMAL_STR_LEN];
   graph_type *the_data;
   graph_type *the_integration;
-  float max_x,max_y,min_x,min_y;
-  float old_max_x,old_max_y,old_min_x,old_min_y;
+  float max_x, max_y, min_x, min_y;
+  float old_max_x, old_max_y, old_min_x, old_min_y;
   char type;
   char show_fermi;
   char integs_for_tics;
@@ -206,7 +212,7 @@ typedef struct{
   special points (for band structures)
 
 **********/
-typedef struct{
+typedef struct {
   point_type loc;
   char name[80];
 } special_point_type;
@@ -216,7 +222,7 @@ typedef struct{
   band structures
 
 *************/
-typedef struct{
+typedef struct {
   char filename[NORMAL_STR_LEN];
   int num_special_points;
   int points_per_line;
@@ -239,13 +245,12 @@ typedef struct{
   walsh diagrams
 
 *************/
-typedef struct{
+typedef struct {
   char filename[NORMAL_STR_LEN];
-  int num_orbs,num_p;
+  int num_orbs, num_p;
   graph_type *the_data;
   graph_type *total_E;
 } walsh_graph_type;
-
 
 /********
 
@@ -256,41 +261,39 @@ typedef struct{
 #include "contour.h"
 #endif
 
-
-typedef struct{
+typedef struct {
   char filename[NORMAL_STR_LEN];
   int type;
-  int num_p,disp_num_p;
+  int num_p, disp_num_p;
   int num_curves;
-  char xlegend[NORMAL_STR_LEN],ylegend[NORMAL_STR_LEN];
+  char xlegend[NORMAL_STR_LEN], ylegend[NORMAL_STR_LEN];
   char title[NUM_TITLE_LINES][NORMAL_STR_LEN];
-  char do_x_tics,do_y_tics,do_title;
+  char do_x_tics, do_y_tics, do_title;
   char total_DOS_on_y;
   char *curves_to_display;
   char *styles;
-  iso_curve_type *data,*raw_data;
-  point_type2D *data2D,*raw_data2D;
+  iso_curve_type *data, *raw_data;
+  point_type2D *data2D, *raw_data2D;
   gnuplot_contour_type **contours;
 
   /* contour details */
-  int num_levels,num_approx_pts,interp_kind,order,levels_kind;
+  int num_levels, num_approx_pts, interp_kind, order, levels_kind;
 
-  float min_x,max_x,step_x;
-  float max_y,min_y,step_y;
+  float min_x, max_x, step_x;
+  float max_y, min_y, step_y;
   float max_DOS;
-  int raw_num_x,raw_num_y;
-  int num_x,num_y;
-  float old_min_x,old_max_x;
-  float old_max_y,old_min_y;
-  float tic_sep_x,num_tics_x,tic_start_x;
-  float tic_sep_y,num_tics_y,tic_start_y;
-  float min_z,max_z;
-  float old_min_z,old_max_z;
+  int raw_num_x, raw_num_y;
+  int num_x, num_y;
+  float old_min_x, old_max_x;
+  float old_max_y, old_min_y;
+  float tic_sep_x, num_tics_x, tic_start_x;
+  float tic_sep_y, num_tics_y, tic_start_y;
+  float min_z, max_z;
+  float old_min_z, old_max_z;
   float begin_conts;
   int num_conts;
   double *levels_list;
 
 } contour_plot_type;
-
 
 #endif
