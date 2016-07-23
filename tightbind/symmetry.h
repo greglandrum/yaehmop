@@ -1,22 +1,34 @@
 /*******************************************************
-*      Copyright (C) 1995 Greg Landrum
-*
-*  This file is part of yaehmop.
-*
-*   This is free software.
-* 
-*  Permission is granted to modify, or otherwise fold, spindle, and mutilate this
-*    code provided all copyright notices are left intact.
-*
-*  This code may be distributed to your heart's content, in whatever form,
-*    provided no fee is charged for the distribution, all copyright notices are
-*    left intact, and the source is distributed (without fee) along with any
-*    binaries to anyone who requests it.
-*
-*  There are, of course, no warranties at all on this program.
-*
-********************************************************************/
 
+Copyright (C) 1995 Greg Landrum
+All rights reserved
+
+This file is part of yaehmop.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+********************************************************************/
 
 /****************************************************************************
 *
@@ -32,17 +44,14 @@
 *
 *****************************************************************************/
 
-
 #ifndef SYM_OPS_DEFINED
 #define SYM_OPS_DEFINED
-
 
 /************
   the dimensionality of the transformation matrices (this should be 3 so
   long as no translations are being looked for)
 *************/
 #define T_MAT_DIM 3
-
 
 /************
   the dimensionality of the d orbital transformation matrices (this should be
@@ -59,7 +68,6 @@
 /* tolerance for declaring positions the same */
 #define SYMM_TOL 1e-3
 
-
 /******
   used to indicate whether or not equivalent atoms should be printed when a
   symmetry element is displayed.
@@ -68,9 +76,11 @@
 #define SHOW_EQUIV 1
 
 /* determine if two points are the same to within a tolerance */
-#define POINTS_ARE_THE_SAME(a,b,tol) \
-  (fabs((a)->x-(b)->x)<tol && fabs((a)->y-(b)->y)<tol && fabs((a)->z-(b)->z)<tol?1:0)
-
+#define POINTS_ARE_THE_SAME(a, b, tol)                                         \
+  (fabs((a)->x - (b)->x) < tol && fabs((a)->y - (b)->y) < tol &&               \
+           fabs((a)->z - (b)->z) < tol                                         \
+       ? 1                                                                     \
+       : 0)
 
 /**********
   list names of all the symmetry operations that will be searched for here
@@ -78,8 +88,13 @@
   to facilitate counting the number of operations, make sure that Identity
    is last in this list.
 ***********/
-enum possible_sym_op { Inversion, Rotation, Improper_Rotation,
-			  Mirror, Identity };
+enum possible_sym_op {
+  Inversion,
+  Rotation,
+  Improper_Rotation,
+  Mirror,
+  Identity
+};
 
 /************
   the axes that will be checked (note that this will mean different things
@@ -90,7 +105,6 @@ enum possible_sym_op { Inversion, Rotation, Improper_Rotation,
 ************/
 enum possible_axis { X_Ax, Y_Ax, Z_Ax, No_Axis };
 
-
 /********
   the structure used to store the individual symmetry operations and their
   matrix representations.
@@ -98,10 +112,10 @@ enum possible_axis { X_Ax, Y_Ax, Z_Ax, No_Axis };
   the symmetry ops are gonna be stored as a linked list for simplicity's and
   efficiency's sake.
 *********/
-typedef struct sym_op_type_def{
+typedef struct sym_op_type_def {
   enum possible_sym_op type;
   int order;
-  char present,redundant;
+  char present, redundant;
   real t_mat[T_MAT_DIM][T_MAT_DIM];
   real d_t_mat[D_T_MAT_DIM][D_T_MAT_DIM];
   point_type axis;
@@ -115,11 +129,10 @@ typedef struct sym_op_type_def{
      of atom 3.
   *******/
   int *equiv_atoms;
-  
+
   struct sym_op_type_def *next;
 } sym_op_type;
 
 extern sym_op_type *sym_ops_present;
-
 
 #endif
