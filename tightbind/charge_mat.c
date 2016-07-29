@@ -89,7 +89,7 @@ void eval_charge_matrix(cell,eigenset,overlap,num_orbs,
 
   num_atoms = cell->num_atoms;
   num_electrons = cell->num_electrons;
-  
+
   /* now, loop over crystal orbitals, then atomic orbitals */
   electrons_done = 0;
 
@@ -126,7 +126,7 @@ void eval_charge_matrix(cell,eigenset,overlap,num_orbs,
 	Sjk_I = overlap.mat[jtab+k];
 	Cik_R = eigenset.vectR[itab+k];
 	Cik_I = eigenset.vectI[itab+k];
-	
+
 	AO_chg +=  Sjk_R * Cik_R - Sjk_I * Cik_I;
 	AO_chgI += Sjk_R * Cik_I + Sjk_I * Cik_R;
       }

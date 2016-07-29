@@ -107,18 +107,18 @@ void build_FMO_overlap(details,num_orbs,num_atoms,overlap,orbital_lookup_table)
   int FMO_begin1,FMO_end1,FMO_begin2,FMO_end2;
   int frag,atom1,atom2;
   int num_frags;
-  
+
   if( !details->num_FMO_frags ) num_frags = details->num_FCO_frags;
   else num_frags = details->num_FMO_frags;
 
   if( !details->FMO_frags ){
     FATAL_BUG("Bad FMO_frag_type array passed to build_FMO_overlap.");
   }
-  
+
   /* loop over fragments */
   for(frag=0;frag<num_frags;frag++){
     FMO_frag = &(details->FMO_frags[frag]);
-    
+
     /* loop over the atoms which contribute to this fragment */
     for( atom1=0;atom1<FMO_frag->num_atoms;atom1++){
       /******
@@ -149,7 +149,7 @@ void build_FMO_overlap(details,num_orbs,num_atoms,overlap,orbital_lookup_table)
 	      for( j=0; j<(end2-begin2); j++){
 		jtab = j+begin2;
 		FMO_jtab = j+FMO_begin2;
-		
+
 		FMO_frag->overlap_K.mat[FMO_itab+FMO_jtab] =
 		  overlap.mat[itab+jtab];
 	      }
@@ -193,27 +193,27 @@ void build_FMO_hamil(details,num_orbs,num_atoms,hamil,orbital_lookup_table)
   int FMO_begin1,FMO_end1,FMO_begin2,FMO_end2;
   int frag,atom1,atom2;
   int num_frags;
-  
+
   if( !details->num_FMO_frags ) num_frags = details->num_FCO_frags;
   else num_frags = details->num_FMO_frags;
-  
-  
+
+
   if( !details->FMO_frags ){
     FATAL_BUG("Bad FMO_frag_type array passed to build_FMO_hamil.");
   }
-  
+
 
   /******
-    
+
     this is the basically the same code used to build the overlap
     matrices
-    
+
   *******/
 
   /* loop over fragments */
   for(frag=0;frag<num_frags;frag++){
     FMO_frag = &(details->FMO_frags[frag]);
-    
+
     /* loop over the atoms which contribute to this fragment */
     for( atom1=0;atom1<FMO_frag->num_atoms;atom1++){
       /******
@@ -242,7 +242,7 @@ void build_FMO_hamil(details,num_orbs,num_atoms,hamil,orbital_lookup_table)
 	      for( j=0; j<(end2-begin2); j++){
 		jtab = j+begin2;
 		FMO_jtab = j+FMO_begin2;
-		
+
 		FMO_frag->hamil_K.mat[FMO_itab+FMO_jtab] =
 		  hamil.mat[itab+jtab];
 	      }
@@ -297,14 +297,14 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
   int info, itype;
   int num_orbs2;
 #endif
-  
+
   if( !details->num_FMO_frags ) num_frags = details->num_FCO_frags;
   else num_frags = details->num_FMO_frags;
 
   if( !details->FMO_frags ){
     FATAL_BUG("Bad FMO_frag_type array passed to diagonalize_FMO.");
   }
-  
+
   fprintf(output_file,";------------------ FMO Analysis --------------\n");
   fprintf(output_file,"#NUM_FRAGMENTS: %d\n",num_frags);
 
@@ -326,9 +326,9 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
 	fprintf(output_file,"S(K) ---\n");
       }
       printmat(FMO_frag->overlap_K.mat,num_orbs,num_orbs,output_file,1e-4,
-	       details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);      
+	       details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
     }
-    
+
     /* What about the hamiltonian? */
     if( details->hamil_PRT ){
       fprintf(output_file,
@@ -340,14 +340,14 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
 	fprintf(output_file,"H(K) ---\n");
       }
       printmat(FMO_frag->hamil_K.mat,num_orbs,num_orbs,output_file,1e-4,
-	       details->hamil_PRT & PRT_TRANSPOSE_FLAG,details->line_width);      
+	       details->hamil_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
     }
 
     fprintf(stdout,"]");
 
 #ifndef USE_LAPACK
     /******
-      The matrix diagonalization routine destroys the overlap matrix, so we 
+      The matrix diagonalization routine destroys the overlap matrix, so we
       make a copy of it in work3.
     *******/
     bcopy((char *)FMO_frag->overlap_K.mat,(char *)work3,num_orbs*num_orbs*sizeof(real));
@@ -367,13 +367,13 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
     if( diag_error != 0 ){
       error("Problems in the FMO diagonalization, try more overlaps.");
     }
-    
+
     /*********
 
       at this point, hamilK.mat contains the real part of the eigenvectors,
       eigenset.vectI contains the imaginary part, and
       eigenset.val has the energies.
-      
+
       copy the information from hamilK.mat into eigenset.vectR
 
     **********/
@@ -381,10 +381,10 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
 	  num_orbs*num_orbs*sizeof(real));
 #else
       /**********
-	
+
 	we're using LAPACK to diagonalize and we need to copy the matrices into those
 	used by the LAPACK diagonalizer
-	
+
 	**********/
       for(j=0;j<num_orbs;j++){
 	jtab = j*num_orbs;
@@ -406,7 +406,7 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
 
       }
 
-    
+
       itype = 1;
       if( details->just_avgE ){
 	jobz = 'N';
@@ -471,11 +471,11 @@ INCREASE to the right)\n");
     /********
       use the work2 array to store the occupation numbers for later use
       (in case they become needed later....)
-      
+
       do this by setting a pointer to work2 to make things a little more
       readable.
     *********/
-    occupations = work2; 
+    occupations = work2;
 
     /* zero out the occupations array */
     bzero((char *)occupations,num_orbs*sizeof(real));
@@ -492,7 +492,7 @@ INCREASE to the right)\n");
 
     /******
 
-      FMO properties spoo goes HERE 
+      FMO properties spoo goes HERE
 
     ******/
 
@@ -533,7 +533,7 @@ void gen_FMO_tform_matrices(details)
   int frag,i,j,k;
   int itab,jtab;
   int num_frags;
-  
+
   if( !details->num_FMO_frags ) num_frags = details->num_FCO_frags;
   else num_frags = details->num_FMO_frags;
 
@@ -583,7 +583,7 @@ void gen_FMO_tform_matrices(details)
 	      Thus far, after months of use everything seems fine, but I'm wary.
 
 	      BEWARE!!! :-)
-	      
+
 	    ********/
 	    matR[itab+j] -= EIGENVECT_I(FMO_frag->eigenset,j,k)*
 	    S_ELEMENT_I(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
@@ -604,8 +604,8 @@ fprintf(output_file,"\n\n\n");
 #endif
   }
 }
-	
-	
+
+
 /****************************************************************************
 *
 *                   Procedure tform_wavefuncs_to_FMO_basis
@@ -653,7 +653,7 @@ void tform_wavefuncs_to_FMO_basis(details,num_orbs,num_atoms,eigenset,orbital_lo
   real *results_matR,*results_matI;
   real *T_matR,*T_matI;
   real accumR, accumI;
-  
+
 
   /* start by getting pointers to and zeroing out the results matrices */
   results_matR = details->FMO_props->eigenset.vectR;
@@ -661,7 +661,7 @@ void tform_wavefuncs_to_FMO_basis(details,num_orbs,num_atoms,eigenset,orbital_lo
   bzero(results_matR,num_orbs*num_orbs*sizeof(real));
   bzero(results_matI,num_orbs*num_orbs*sizeof(real));
 
-  
+
 
   for(i=0;i<num_orbs;i++){
     /* check to see if we need to move onto the next fragment */
@@ -792,7 +792,7 @@ void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
   real *results_matR,*results_matI;
   real *T_matR,*T_matI;
   real accumR, accumI;
-  
+
   /* start by getting pointers to and zeroing out the results matrix */
   results_matR = cmplx_mat.matR;
   results_matI = cmplx_mat.matI;
@@ -804,7 +804,7 @@ void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
     Do the first matrix multiply and fill the temporary matrix
 
   *********/
-  
+
   /* first loop over rows in the temporary matrix */
   for(i=0;i<num_orbs;i++){
 
@@ -855,7 +855,7 @@ void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
 	  for(k=0;k<(end1-begin1);k++){
 	    FMO_ktab = k+FMO_begin1;
 	    ktab = (k+begin1);
-	    
+
 	    accumR += AO_matR[itab + ktab]*T_matR[FMO_ktab+FMO_jtab];
 	  }
 	}
@@ -919,7 +919,7 @@ void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
 	  /* loop over the atom's orbitals */
 	  for(k=0;k<(end1-begin1);k++){
 	    FMO_ktab = k+FMO_begin1;
-	    
+
 	    ktab = (k+begin1)*num_orbs;
 	    accumR += T_matR[FMO_itab + FMO_ktab]*temp_matR[ktab+jtab];
 	  }
@@ -931,7 +931,7 @@ void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
     }
     num_orbs_this_frag++;
   }
-  
+
 #ifdef DEBUG
 fprintf(output_file,"\n\n\n\t FMO matrix \n");
 printmat(results_matR,num_orbs,num_orbs,output_file,1e-5,0,details->line_width);
@@ -988,7 +988,7 @@ void tform_hermetian_matrix_to_FMO_basis(details,num_orbs,num_atoms,herm_mat,
   real *results_mat;
   real *T_matR,*T_matI;
   real accumR, accumI;
-  
+
 
   /* start by zeroing out the results matrix */
   bzero(results.mat,num_orbs*num_orbs*sizeof(real));
@@ -999,7 +999,7 @@ void tform_hermetian_matrix_to_FMO_basis(details,num_orbs,num_atoms,herm_mat,
     Do the first matrix multiply and fill the temporary matrix
 
   *********/
-  
+
   /* first loop over rows in the temporary matrix */
   for(i=0;i<num_orbs;i++){
 
@@ -1150,7 +1150,7 @@ fprintf(output_file,"\n\n\n");
     }
     num_orbs_this_frag++;
   }
-#ifdef DEBUG  
+#ifdef DEBUG
 fprintf(output_file,"\n\n\n\t FMO overlap matrix \n");
 printmat(results.mat,num_orbs,num_orbs,output_file,1e-5,details->line_width);
 fprintf(output_file,"\n\n\n");

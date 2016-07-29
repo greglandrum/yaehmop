@@ -37,39 +37,39 @@ integer *l1, *l2, *m, *n1, *n2, *maxcal;
     static doublereal tr, rho1, rho2;
 
 
-/*  ******************************************************************** 
+/*  ********************************************************************
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
 /*  *     SUBROUTINE ABFNS        CALLED FROM MOV                   * */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *       ABFNS    SUBROUTINE TO CALCULATE THE AB FUNCTIONS          * 
+/*  *       ABFNS    SUBROUTINE TO CALCULATE THE AB FUNCTIONS          *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *       SUBROUTINES USED:                                          * 
+/*  *       SUBROUTINES USED:                                          *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *             NONE                                                 * 
+/*  *             NONE                                                 *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *       ORIGIN LOST IN ANTIQUITY                                   * 
+/*  *       ORIGIN LOST IN ANTIQUITY                                   *
 */
 
 /*       modified by greg in modernity (august 1993) so that it doesn't us
 e that*/
 /*         damn common block any more. */
 
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  ******************************************************************** 
+/*  ********************************************************************
 */
 
 
@@ -195,7 +195,7 @@ L42:
 	for (j = 1; j <= 500; ++j) {
 /* Computing 2nd power */
 	    d__1 = rho2;
-	    tr = tr * (d__1 * d__1) / (doublereal) ((real) ((j << 1) * ((j << 
+	    tr = tr * (d__1 * d__1) / (doublereal) ((real) ((j << 1) * ((j <<
 		    1) + 1)));
 	    if ((d__1 = tr / b[in], abs(d__1)) - 1e-7 <= 0.) {
 		goto L51;
@@ -213,7 +213,7 @@ L44:
 	for (j = 1; j <= 500; ++j) {
 /* Computing 2nd power */
 	    d__1 = rho2;
-	    tr = tr * (d__1 * d__1) / (doublereal) ((real) ((j << 1) * ((j << 
+	    tr = tr * (d__1 * d__1) / (doublereal) ((real) ((j << 1) * ((j <<
 		    1) - 1)));
 	    if ((d__1 = tr / b[in], abs(d__1)) - 1e-7 <= 0.) {
 		goto L51;

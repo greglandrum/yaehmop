@@ -69,7 +69,7 @@ void error( errorstring )
 }
 
 /*********
-  converts a string to all uppercase 
+  converts a string to all uppercase
 **********/
 void upcase(string)
   char *string;
@@ -100,7 +100,7 @@ void upcase(string)
  * Action: Reads in lines from 'file' until one is hit that does not begin
  *     with a ; or a return. puts the first non-comment line into instring
  *     and then returns.
- * 
+ *
  *    if 'toggle is set to FATAL then hitting EOF will result in
  *      program termination with a call to fatal.
  *    if 'toggle is set to ERROR then EOF results in a call to error then
@@ -116,11 +116,11 @@ int skipcomments(file,string,toggle)
   char *string;
   char toggle;
 {
-  
+
   /* use the first element of string to check for EOF */
   string[0] = 0;
   fgets(string,MAX_STR_LEN,file);
-  while( string[0] == '\n' || string[0] == ';' 
+  while( string[0] == '\n' || string[0] == ';'
 	&& string[0] != 0 ){
     string[0] = 0;
     fgets(string,MAX_STR_LEN,file);

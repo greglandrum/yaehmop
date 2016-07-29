@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ********************************************************************/
 /************************************************************************
-  This is program for reading molecular orbital energy levels 
+  This is program for reading molecular orbital energy levels
     out of output files and connecting close energy levels to
     generate an output file
     which can be used to generate a walsh diagram.
@@ -140,16 +140,16 @@ void construct_lines(points,num_orbs,num_symm,num_steps)
   char foundit;
   real closest,dist,ediff;
   int which_is_closest;
-  
+
   for(i=0;i<num_steps-1;i++){
 #if 1
     /* now loop over the orbitals here and match them */
     for(j=0;j<num_orbs;j++){
       points[i*num_orbs+j].next = &(points[(i+1)*num_orbs+j]);
     }
-#endif    
+#endif
   }
-}	
+}
 
 
 /****************************************************************************
@@ -179,7 +179,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
   int num_orbs,num_symm,num_steps;
   real *xvals,*tot_E;
   walsh_point_type *points;
-  
+
   /*****
     first read until we find out the number of orbitals in the
     unit cell.
@@ -193,7 +193,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
   sscanf(instring,"%s %d",com_string,&num_orbs);
 
   rewind(infile);
-  
+
   /*****
 
     okay, now find out how many Walsh variables and steps there are.
@@ -220,7 +220,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
       printf("That was a bogus value, try again.\n");
   }
   which_var -= 1;
-  
+
   /* find out how many symmetry elements need to be dealt with */
   skipcomments(infile,instring,FATAL);
   upcase(instring);
@@ -232,7 +232,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
   skipcomments(infile,instring,FATAL);
   sscanf(instring,"%d",&num_symm);
 
-  
+
   /* get some memory */
   num_p = num_steps * num_orbs;
   points = (walsh_point_type *)calloc(num_p,sizeof(walsh_point_type));
@@ -243,7 +243,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
 
   tot_E = (real *)calloc(num_steps,sizeof(real));
   if( !tot_E )fatal("Can't get space to store total energies.");
-  
+
   /******
     now go through and get space to store the characters
     with respect to the sym ops.
@@ -253,7 +253,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
     if( !points[i].symmetries )
       fatal("Can't get memory for characters.");
   }
-  
+
   /********
     loop through the steps contained in the output file.
   ********/
@@ -289,7 +289,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
       skipcomments(infile,instring,FATAL);
       sscanf(instring,"%s %lf",com_string,&(points[i*num_orbs+j].energy));
     }
-      
+
 
     /* get the total energy */
     skipcomments(infile,instring,FATAL);
@@ -346,13 +346,13 @@ void main()
 #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
-  
+
 	/* set up some stuff for Sioux */
 	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;	
+	SIOUXSettings.asktosaveonclose = FALSE;
 	SIOUXSettings.autocloseonquit = FALSE;
 	printf("Starting dumb_walsh.\n");
-	
+
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
   	fatal("User cancelled intial file open");
@@ -364,7 +364,7 @@ void main()
 //  argc = ccommand(&argv);
 
 #endif
-  
+
   /* open the files */
   if( argc < 2 ){
     fprintf(stderr,"Usage: fit_walsh <input_file>\n");
@@ -391,11 +391,11 @@ void main()
     fprintf(stderr,"Can't open output file: %s\n", instring);
     fatal("Can't open file.");
   }
-  
+
 
   /* parse the input file */
   extract_walsh_data(infile,&points,&xvals,&tot_E,&num_orbs,&num_symm,&num_steps);
-  
+
   /* form the lines */
   construct_lines(points,num_orbs,num_symm,num_steps);
 

@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       things seem to be okay now.   It still gets broken sometimes
       when crystals are grown with custom bonds, but I haven't tracked
       that little taste of evil down yet... at least it doesn't crash.
-      I suspect it has something to do with atoms being renumbered.  
+      I suspect it has something to do with atoms being renumbered.
       This probably needs to be changed.
    02.05.98 gL:
      crashing bug due to new_molecule returning too soon on failure
@@ -101,7 +101,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   this has got the stuff for dealing with molecules
 
-*********/  
+*********/
 #include "viewkel.h"
 
 #define ATOM_RAD 20
@@ -137,7 +137,7 @@ int comp_atom_dists(const void *d1,const void *d2)
  *
  * Arguments: num_selected: int
  *                     obj: pointer to object_type
- *            
+ *
  * Returns: none
  *
  * Action: Hides all atoms other than those within the coordination
@@ -328,11 +328,11 @@ void adjust_color(int num_selected,object_type *obj,int shade_or_color)
   for(i=0;i<molec->num_atoms && num_found < num_selected;i++){
     if(atoms[i].is_selected){
       /******
-        
+
         insert a pointer to the atom into the selected_atoms
         array.  Put it in the slot corresponding to its selection
         order.
-        
+
         ******/
       selected_atom = &(atoms[i]);
       num_found++;
@@ -344,7 +344,7 @@ void adjust_color(int num_selected,object_type *obj,int shade_or_color)
   printf("Altering atom: %s(%d)\n",selected_atom->type,
 	 selected_atom->num);
   changed = 0;
-  
+
   switch(shade_or_color){
   case ATOM_SHADE_FILL:
     oldshade = selected_atom->atom_shade;
@@ -367,15 +367,15 @@ void adjust_color(int num_selected,object_type *obj,int shade_or_color)
     if( selected_atom->atom_color[1] > 1 ) selected_atom->atom_color[1] = 1;
     if( selected_atom->atom_color[2] < 0 ) selected_atom->atom_color[2] = 0;
     if( selected_atom->atom_color[2] > 1 ) selected_atom->atom_color[2] = 1;
-    
+
     changed = 1;
     break;
   }
-  
+
   if(changed){
 #ifdef X_GRAPHICS
     refresh_all_colormaps = 1;
-#endif    
+#endif
     if(!selected_atom->custom){
       selected_atom->outlines_on = molec->outlines_on;
       selected_atom->shading_on = molec->shading_on;
@@ -405,7 +405,7 @@ void adjust_color(int num_selected,object_type *obj,int shade_or_color)
 	    break;
 	  }
 	}
-      }	  
+      }
     }
   } else{
     printf("Okay, you didn't change anything...\n");
@@ -462,16 +462,16 @@ void adjust_style(int num_selected,object_type *obj)
   selected_atoms = (atom_type **)D_CALLOC(num_selected,
                                         sizeof(atom_type *));
   if(!selected_atoms)fatal("Can't get memory for selected atoms array");
-  
+
   num_found = 0;
   for(i=0;i<molec->num_atoms && num_found < num_selected;i++){
     if(atoms[i].is_selected){
       /******
-        
+
         insert a pointer to the atom into the selected_atoms
         array.  Put it in the slot corresponding to its selection
         order.
-        
+
         ******/
       selected_atoms[atoms[i].is_selected-1] = &(atoms[i]);
       num_found++;
@@ -541,7 +541,7 @@ void adjust_style(int num_selected,object_type *obj)
 	    molec->atoms[i].color =
 	      selected_atoms[0]->color;
 	  }
-	}	  
+	}
       }
     } else{
       printf("Okay, you didn't change anything...\n");
@@ -583,7 +583,7 @@ void adjust_style(int num_selected,object_type *obj)
 	  the_line = find_the_line(selected_atoms[0]->num,selected_atoms[1]->num,
 				   molec);
 	}
-	
+
       }
     }
 
@@ -707,7 +707,7 @@ int find_numbered_atom(atom_type *array,int length,int number)
   for(i=0;i<length;i++){
     if(array[i].num == number) return(i);
   }
-  
+
   error("Can't find an atom for a connector.");
   return(-1);
 }
@@ -719,12 +719,12 @@ int find_numbered_atom(atom_type *array,int length,int number)
  *
  * Arguments:    num_args: int
  *              molec_ptr: pointer to pointer to char
- *            
+ *
  * Returns: none
  *
  * Action: centers the molecule pointed to by molec_ptr about the origin.
  *    this is intended to be called from a button window
- *  
+ *
  ****************************************************************************/
 void center_molecule(int num_args,char **molec_ptr)
 {
@@ -758,7 +758,7 @@ void center_molecule(int num_args,char **molec_ptr)
   }else{
     return;
   }
-  
+
   /* move the atoms */
   for(i=0;i<molec->num_atoms*molec->num_frames;i++){
     molec->atoms[i].loc.x -= center.x;
@@ -802,11 +802,11 @@ void center_molecule(int num_args,char **molec_ptr)
  *
  * Arguments: molec: pointer to molecule
  *          bmin,bmax: pointers to point_type
- *            
+ *
  * Returns: none
  *
  * Action: determines a bounding box for the molecule 'molec
- *  
+ *
  ****************************************************************************/
 void determine_mol_bounds(molec_type *molec,point_type *bmin,
 			  point_type *bmax)
@@ -819,7 +819,7 @@ void determine_mol_bounds(molec_type *molec,point_type *bmin,
   bmax->x = -1e10;
   bmax->y = -1e10;
   bmax->z = -1e10;
-  
+
   for(i=0;i<molec->num_atoms;i++){
     if( molec->atoms[i].loc.x < bmin->x )
       bmin->x = molec->atoms[i].loc.x;
@@ -852,13 +852,13 @@ void determine_mol_bounds(molec_type *molec,point_type *bmin,
  *
  *                   Function hide_atoms
  *
- * Arguments:  
- *            
+ * Arguments:
+ *
  * Returns: none
  *
  * Action:  allows the user to exclude particular atoms from the
  *  display of the molecule
- *  
+ *
  ****************************************************************************/
 void hide_atoms(int num_args,char **molec_ptr)
 {
@@ -874,7 +874,7 @@ void hide_atoms(int num_args,char **molec_ptr)
 
   printf("Please enter the numbers of the atoms you wish to hide:\n");
   fgets(instring,MAX_STR_LEN,stdin);
-  
+
   parse_integer_string(instring,&atoms_to_exclude,&num_to_exclude);
 
   /*******
@@ -901,14 +901,14 @@ void hide_atoms(int num_args,char **molec_ptr)
  *
  *                   Function show_atoms
  *
- * Arguments:  
- *            
+ * Arguments:
+ *
  * Returns: none
  *
  * Action:  allows the user to include particular atoms in the
  *  display of the molecule.  Note that there is no point
  *  in doing this unless they have explicitly hidden some atoms
- *  
+ *
  ****************************************************************************/
 void show_atoms(int num_args,char **molec_ptr)
 {
@@ -924,7 +924,7 @@ void show_atoms(int num_args,char **molec_ptr)
 
   printf("Please enter the numbers of the atoms you wish to show:\n");
   fgets(instring,MAX_STR_LEN,stdin);
-  
+
   parse_integer_string(instring,&atoms_to_exclude,&num_to_exclude);
 
   /*******
@@ -951,13 +951,13 @@ void show_atoms(int num_args,char **molec_ptr)
  * Procedure determine_connections
  *
  * Arguments: molec: pointer to molecule
- *            
+ *
  * Returns: none
  *
  * Action: This uses the covalent radii of the atoms in the molecule
  *    to determine which ones should be connected by lines ("bonds")
  *    when the molecule is drawn.
- *  
+ *
  ****************************************************************************/
 void determine_connections(molec_type *molec)
 {
@@ -1141,7 +1141,7 @@ void determine_connections(molec_type *molec)
       }
     }
   }
-  
+
   if( num_connectors > 0 ) molec->num_lines[0] = num_connectors;
   if(connectors_per_atom) D_FREE(connectors_per_atom);
 
@@ -1154,12 +1154,12 @@ void determine_connections(molec_type *molec)
  *
  * Arguments: num_atoms: integer
  *            atom: a pointer to atom_type
- *            
+ *
  * Returns: none
  *
  * Action: This routine reads in the information about the atoms in 'atoms from
  *  the parameter file.
- *  
+ *
  ****************************************************************************/
 void fill_atomic_info(int num_atoms,atom_type *atoms)
 {
@@ -1233,7 +1233,7 @@ void fill_atomic_info(int num_atoms,atom_type *atoms)
 
 #ifdef X_GRAPHICS
     refresh_all_colormaps = 1;
-#endif    
+#endif
 
 }
 
@@ -1244,14 +1244,14 @@ void fill_atomic_info(int num_atoms,atom_type *atoms)
  *
  * Arguments:   infile: pointer to type FILE
  *              molec: a pointer to molecule_type
- *            
+ *
  * Returns: none
  *
  * Action: This routine reads in the information for viewing a molecule from
  *    'infile.  The data is stored in 'molec
  *
  *  The file format assumed is that used in the output files from bind.
- *  
+ *
  ****************************************************************************/
 void read_molecule_data(FILE *infile,molec_type *molec)
 {
@@ -1259,7 +1259,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
   char foostring[80];
   int bin_read_failed;
   char instring[MAX_STR_LEN];
-  
+
   int i,j;
   char extended_system;
   int eof_hit;
@@ -1271,7 +1271,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
 
   if(!infile)FATAL_BUG("No file passed to read_molecule_data!");
   if(!molec)FATAL_BUG("No molecule passed to read_molecule_data!");
-  
+
   /* check if there is a binary save file around which we can use */
   sprintf(instring,"%s.BIN",molec->filename);
   test = fopen(instring,"r");
@@ -1330,8 +1330,8 @@ void read_molecule_data(FILE *infile,molec_type *molec)
   }else{
     num_frames = 1;
   }
-    
-   
+
+
   /* get memory for the atoms */
   molec->atoms = (atom_type *)D_CALLOC(num_atoms*num_frames,sizeof(atom_type));
   if( !(molec->atoms) ){
@@ -1339,7 +1339,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
     display("Ouch!");
     return;
   }
-  
+
 
   which_step = 0;
   while( num_steps != 0  && which_step == 0){
@@ -1353,7 +1353,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
       which_step = 0;
     }
   }
-  
+
   /* find the atomic positions */
   if( which_step == 0 ){
     which_step = 1;
@@ -1386,7 +1386,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
       upcase(instring);
     }
 
-  }    
+  }
 
   if( reading_movie ){
     num_to_skip = 10;
@@ -1409,7 +1409,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
 		   i,j,lines_read);
 	    fatal("EOF hit reading movie!");
 	  }
-	    
+
 	}
 	num_skipped++;
       }
@@ -1501,7 +1501,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
 
   fprintf(stderr,"Done Reading Molecular Data.\n");
   display("GO!");
-  
+
   /* that's that (I think) */
 }
 
@@ -1510,7 +1510,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
  *                   Procedure new_molecule
  *
  * Arguments: filename: pointer to type char
- *            
+ *
  * Returns: none
  *
  * Action: does everything to get space for and read in a new molecule
@@ -1531,7 +1531,7 @@ void new_molecule(char *filename)
   whichobj->prim = (prim_type *)D_CALLOC(1,sizeof(prim_type));
   if( !whichobj->prim )fatal("Can't get space for molecule primitive.");
   whichobj->prim->which = MOLECULE;
-  
+
   whichobj->prim->molec = (molec_type *)D_CALLOC(1,sizeof(molec_type));
   if( !whichobj->prim->molec )
     fatal("Can't get space for molecule.");
@@ -1577,13 +1577,13 @@ void new_molecule(char *filename)
   }
 #endif
 
-  
+
   if( infile ){
-    strcpy(whichobj->prim->molec->filename,file_name);    
+    strcpy(whichobj->prim->molec->filename,file_name);
     read_molecule_data(infile,whichobj->prim->molec);
   }
-  
-    
+
+
   /* check to see if any atoms were actually read in.... */
   if(!whichobj->prim->molec->num_atoms){
     /* no... free the memory that we asked for */
@@ -1616,9 +1616,9 @@ void new_molecule(char *filename)
     whichobj->prim->molec->dummies_on = 1;
     whichobj->prim->molec->line_width = 1;
     whichobj->prim->molec->rad_mult = 1.0;
-    whichobj->prim->molec->tubes_on = 1;    
+    whichobj->prim->molec->tubes_on = 1;
     whichobj->prim->molec->bond_rad = 0.05;
   }
-  
+
 }
 

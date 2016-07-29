@@ -14,7 +14,7 @@
     the atoms:  num symbol x y z
     the geometry line (i.e. Geometry Crystallographic or Geometry)
     any additional lines are passed on verbatim to the bind input file.
-   
+
     NOTE:  it is assumed that the lattice vectors are defined by the first
         and last ndim atoms.
 */
@@ -30,7 +30,7 @@ typedef struct{
   char type[4];
   point_type loc;
 } atom_type;
-  
+
 typedef struct{
   int num_dim;
   int num_raw_atoms,num_atoms;
@@ -40,7 +40,7 @@ typedef struct{
   point_type vects[3];
   int overlaps[3];
 } molec_type;
-  
+
 
 #define ERROR 11
 #define FATAL 22
@@ -81,7 +81,7 @@ void error( errorstring )
  * Action: Reads in lines from 'file' until one is hit that does not begin
  *     with a ; or a return. puts the first non-comment line into instring
  *     and then returns.
- * 
+ *
  *    if 'toggle is set to FATAL then hitting EOF will result in
  *      program termination with a call to fatal.
  *    if 'toggle is set to ERROR then EOF results in a call to error then
@@ -106,7 +106,7 @@ int skipcomments(FILE *file,char *string,char toggle)
   ********/
   i = 0;
   while(string[i] == ' ') i++;
-  while( string[i] == '\n' || string[i] == ';' 
+  while( string[i] == '\n' || string[i] == ';'
 	&& string[i] != 0 ){
     string[0] = 0;
     fgets(string,MAX_STR_LEN,file);
@@ -137,7 +137,7 @@ void read_from_file(FILE *infile, molec_type *molec)
   char instring[MAX_STR_LEN];
   int foo_int;
   int i;
-  
+
   skipcomments(infile,instring,FATAL);
   sscanf(instring,"%d",&molec->num_dim);
   skipcomments(infile,instring,FATAL);
@@ -154,7 +154,7 @@ void read_from_file(FILE *infile, molec_type *molec)
   if( !molec->raw_atoms ){
     fatal("Can't get space for raw_atoms");
   }
-  
+
   for(i=0;i<molec->num_raw_atoms;i++){
     skipcomments(infile,instring,FATAL);
     sscanf(instring,"%d %s %lf %lf %lf",&foo_int,molec->raw_atoms[i].type,
@@ -225,7 +225,7 @@ void grow_it(molec_type *solid,int num_a,int num_b, int num_c)
   }
 
   solid->atoms = temp_atoms;
-  
+
   solid->num_electrons = solid->num_raw_electrons * num_a * num_b * num_c;
 
   solid->vects[0].x *= num_a;solid->vects[0].y *= num_a;solid->vects[0].z *= num_a;
@@ -257,7 +257,7 @@ void main(int argc,char **argv)
   /* prompt for the size */
   printf("The file system has: %d atoms and is %d dimensional\n",
 	 molec.num_raw_atoms,molec.num_dim);
-  
+
   printf("Please enter the number of cells along each lattice direction on separate lines.\n");
   printf("(a)  ");
   scanf("%d",&num_a);
@@ -271,7 +271,7 @@ void main(int argc,char **argv)
     if( num_b < 1 ){
       error("Don't enter dumb values!");
       num_b = 1;
-    }  
+    }
   }
   else{
     num_b = num_c = 1;
@@ -282,7 +282,7 @@ void main(int argc,char **argv)
     if( num_c < 1 ){
       error("Don't enter dumb values!");
       num_c = 1;
-    }  
+    }
   }
   else{
     num_c = 1;
@@ -332,7 +332,7 @@ void main(int argc,char **argv)
   for(i=0;i<molec.num_dim;i++){
     fprintf(outfile,"1 %d\n",molec.num_atoms+i+1);
   }
-  
+
   /* now read and write back out the rest of the file */
   while(skipcomments(infile,instring,IGNORE)>=0){
     fputs(instring,outfile);
@@ -342,6 +342,6 @@ void main(int argc,char **argv)
 
   fclose(outfile);
 }
-  
-     
-    
+
+
+

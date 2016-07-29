@@ -58,7 +58,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Action:  This uses the AO occupations in 'AO_occups to update
  *   atomic Hii's using the charge iteration formula.
- *  
+ *
  ****************************************************************************/
 void update_chg_it_parms(details,cell,AO_occups,converged,num_orbs,
 			 orbital_lookup_table)
@@ -92,7 +92,7 @@ void update_chg_it_parms(details,cell,AO_occups,converged,num_orbs,
   parms = &(details->chg_it_parms);
 
   num_calls++;
-    
+
   num_atoms = cell->num_atoms;
   /* loop over atoms */
   *converged = 1;
@@ -151,7 +151,7 @@ void update_chg_it_parms(details,cell,AO_occups,converged,num_orbs,
 	denom = fabs(old_p_occup - tot_p_occup);
       if( atom->nd && fabs(old_d_occup - tot_d_occup) > denom)
 	denom = fabs(old_d_occup - tot_d_occup);
-      
+
       /* figure out the lambda */
       if( parms->variable_step ){
 	if( num_calls == 1 ) adjust = denom;
@@ -170,7 +170,7 @@ fprintf(stderr,"It: %d, denom: %lf tol: %lf\n",num_calls,denom,parms->tolerance)
 
 	/* make sure that the lambda isn't too big, so we don't explode */
 	if( lambda > parms->lampri ) lambda = parms->lampri;
-	
+
 #if 0
 	/* damp the AO occupations */
 	if( num_calls != 1 ){
@@ -183,7 +183,7 @@ fprintf(stderr,"It: %d, denom: %lf tol: %lf\n",num_calls,denom,parms->tolerance)
 	  damped_d_occup = tot_d_occup;
 	}
 #endif
-	
+
 
 	/* figure out the (damped) net charge */
 	old_chg = atom->num_valence - (old_s_occup + old_p_occup +
@@ -217,9 +217,9 @@ fprintf(stderr,"It: %d, denom: %lf tol: %lf\n",num_calls,denom,parms->tolerance)
 	if( atom->np ) fprintf(output_file,"P:% -6.4lf ",new_Hpp);
 	if( atom->nd ) fprintf(output_file,"D:% -6.4lf ",new_Hdd);
 	fprintf(output_file,"\n");
-      }      
+      }
     }
-  }  
+  }
 
   /* copy over the AO occupations */
   bcopy((char *)AO_occups,(char *)AO_store,num_orbs*sizeof(real));
@@ -231,5 +231,5 @@ fprintf(stderr,"It: %d, denom: %lf tol: %lf\n",num_calls,denom,parms->tolerance)
   if( *converged )
     fprintf(stderr,"Charge iteration converged after %d (of %d max) iterations\n",
 			   num_calls,parms->max_it);
-    
+
 }

@@ -55,7 +55,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
- 
+
 /****************************************************************************
  *
  *                   Procedure gen_symm_lines
@@ -73,12 +73,12 @@ void gen_symm_lines(bands)
   int i,j;
   int points_per_line;
   point_type spacing,curr_loc;
-  
+
   points_per_line = bands->points_per_line;
-  
+
   /* loop over the special points */
   for( i=0; i<bands->num_special_points-1; i++){
-    
+
     /****
       determine the spacing between k points in each direction
       along this line
@@ -89,21 +89,21 @@ void gen_symm_lines(bands)
 		 bands->special_points[i].loc.y) / points_per_line;
     spacing.z = (bands->special_points[i+1].loc.z -
 		 bands->special_points[i].loc.z) / points_per_line;
-    
+
     curr_loc.x = bands->special_points[i].loc.x;
     curr_loc.y = bands->special_points[i].loc.y;
     curr_loc.z = bands->special_points[i].loc.z;
-    
+
     for(j=0;j<points_per_line;j++){
       bands->lines[i*points_per_line+j].loc.x = curr_loc.x;
       bands->lines[i*points_per_line+j].loc.y = curr_loc.y;
       bands->lines[i*points_per_line+j].loc.z = curr_loc.z;
-      
+
       curr_loc.x += spacing.x;
       curr_loc.y += spacing.y;
       curr_loc.z += spacing.z;
     }
-    
+
     /* now put in the last special point */
     bands->lines[(bands->num_special_points-1)*points_per_line].loc.x =
       bands->special_points[bands->num_special_points-1].loc.x;
@@ -191,12 +191,12 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
   int info, itype;
   int num_orbs2;
 #endif
-  
+
   if( details->Execution_Mode == FAT && !details->store_R_overlaps )
     mat_save = overlapK.mat;
 
   bands = details->band_info;
-  
+
   num_KPOINTS = (bands->num_special_points-1) *
 		  bands->points_per_line + 1;
 
@@ -222,7 +222,7 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
   }
 
   fprintf(band_file,"; Begin band data.\n");
-  
+
   /********
 
     here's the loop over the k point set.
@@ -232,7 +232,7 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
     /* get a pointer to the k point we're working on */
     kpoint = &(bands->lines[i]);
 
-    
+
     /*****
 
       build the overlap matrix and hamiltonian
@@ -256,9 +256,9 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
       FATAL_BUG("Somehow a bogus execution mode got passed to generate_band_structure.");
     }
 fprintf(stderr,">");
-    
+
     /******
-      The matrix diagonalization routine destroys the overlap matrix, 
+      The matrix diagonalization routine destroys the overlap matrix,
        but that's okay, because we don't need it again later when doing band
        structures.  skipping a bcopy will save some time.
     *******/

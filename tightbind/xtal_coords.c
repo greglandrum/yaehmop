@@ -87,8 +87,8 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
     fprintf(output_file,"# beta: % 6.4lf\n",cell->xtal_defn.angles[1]);
     fprintf(output_file,"# gamma: % 6.4lf\n",cell->xtal_defn.angles[2]);
   }
-      
-  
+
+
   /* set up the transformation matrix */
   cos_alpha = cos(cell->xtal_defn.angles[0]*PI/180.0);
   cos_beta = cos(cell->xtal_defn.angles[1]*PI/180.0);
@@ -102,7 +102,7 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
   if( printing ){
     fprintf(output_file,"#Cell Volume: %6.4lf cubic Angstroms\n",cell_volume);
   }
-	    
+
 
   /* first do the diagonal terms */
   tform_mat[0][0] = cell->xtal_defn.axis_lengths[0];
@@ -117,7 +117,7 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
   tform_mat[1][0] = 0.0;
   tform_mat[2][0] = 0.0;
   tform_mat[2][1] = 0.0;
-  
+
   /* now transform all the atomic locations */
   transform_atoms(cell->atoms,tform_mat,cell->num_raw_atoms);
 
@@ -137,4 +137,4 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
   }
 }
 
-    
+

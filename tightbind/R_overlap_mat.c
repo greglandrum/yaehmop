@@ -88,7 +88,7 @@ void zero_overlaps(real *overlap,detail_type *details,int num_orbs,int num_atoms
   int i,j,k;
   int begin1,end1,begin2,end2;
   int contrib1,contrib2;
-  
+
   if( !details->overlaps_off )
     FATAL_BUG("Bad overlaps_off passed to zero_overlaps.");
 
@@ -105,7 +105,7 @@ void zero_overlaps(real *overlap,detail_type *details,int num_orbs,int num_atoms
 			&begin1,&end1);
 	find_atoms_orbs(num_orbs,num_atoms,contrib2,orbital_lookup_table,
 			&begin2,&end2);
-	
+
 	/* ignore dummy atoms */
 	if(begin1 >=0 && begin2 >= 0 ){
 	  for(j=begin1;j<end1;j++){
@@ -147,13 +147,13 @@ void zero_overlaps(real *overlap,detail_type *details,int num_orbs,int num_atoms
 *
 *  Hugh and I figured out some of what happens here. (but we didn't make the
 *    code any more palatable).
-*  
+*
 *   Between each pair of atoms mov is called.  Mov evaluates
 *     the overlap matrix elements between those atoms in a basis
 *     of sigma, pi, and delta (with phi if those icky f orbitals
 *     are being used).  The ugly transformation matrix crap that
 *     is at the top of the double loop over all atoms constructs
-*     the matrix to transform from this simple (spherical polar) 
+*     the matrix to transform from this simple (spherical polar)
 *     basis back into the cartesian (sensible, but hard to do the
 *     math) basis.  I still have no idea how mov works and God
 *     forbid that I should *ever* have to look at lovlap.
@@ -169,41 +169,41 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
   real p_trans_mat[P_SIZE],d_trans_mat[D_SIZE],f_trans_mat[F_SIZE];
   real sigma,pi,delta,phi;
   real temp;
-  
+
   int i,j,k,j_end;
   int i_tab,j_tab;
   int i_orb,j_orb;
   int la,lb;
   int q_num1,q_num2;
-  
+
   /* zero out the transformation matrices just to make sure */
   bzero(p_trans_mat,(P_SIZE)*sizeof(real));
   bzero(d_trans_mat,(D_SIZE)*sizeof(real));
   bzero(f_trans_mat,(F_SIZE)*sizeof(real));
   bzero(overlap,num_orbs*num_orbs*sizeof(real));
-  
+
   /*
     printf("add: %6.4lf %6.4lf %6.4lf\n",distances.x,distances.y,distances.z);
     printf("MOVLAP\n");
     */
   j_end = cell->num_atoms;
   for(i=0;i<cell->num_atoms;i++){
-    
+
     /******
       check to see if we are evaluating the overlap matrix
       within the unit cell. If so, only some of the elements need
       to be evaluated.
       ******/
     if(doing_unit_cell) j_end = i;
-    
+
     /*******
-      since i refers to the other atoms in the unit cell, a tab 
+      since i refers to the other atoms in the unit cell, a tab
       needs to be kept in order to actually find where the
       orbitals for the i'th atom begin
       ********/
-    
+
     i_tab = orbital_lookup_table[i];
-    
+
     /* trap dummy atoms */
     if(i_tab >= 0 ){
       for(j=0;j<j_end;j++){
@@ -217,12 +217,12 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	    fprintf(stderr,"dist: %6.4lf %6.4lf %6.4lf\n",dist_vect.x,dist_vect.y,dist_vect.z);
 	    */
 	  temp = dist_vect.x*dist_vect.x + dist_vect.y*dist_vect.y;
-	  
+
 	  /* distance in the xy plane */
-	  xy_dist = sqrt(temp);      
+	  xy_dist = sqrt(temp);
 	  /* total distance */
 	  tot_dist = sqrt(temp + dist_vect.z*dist_vect.z);
-	  
+
 
 	  /************
 
@@ -235,21 +235,21 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	    if the total distance is greater than the cut off, then
 	    we can skip evaluating this puppy...
 
-	    
+
 	    throughout this we make the implicit assumption that the
 	    overlap matrix has been initially zeroed.
 
 	  *********/
 	  if( tot_dist >= 1e-6 && tot_dist <= details->rho ){
-	  
+
 	    /********
-	      
+
 	      set up the cosines and sines of the angles A & B
-	      
+
 	      A is the angle between the distance vector and the z axis
 	      B is the angle between the xy projection of the distance
 	      vector and the x axis
-	      
+
 	      *********/
 	    if( xy_dist < 1e-5 ){
 	      cosB = 1.0;
@@ -260,9 +260,9 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	      cosB = dist_vect.x/xy_dist;
 	      sinB = dist_vect.y/xy_dist;
 	      sinA = xy_dist/tot_dist;
-	    }	
+	    }
 	    cosA = dist_vect.z/tot_dist;
-	    
+
 	    /*******
 	      build the p projection matrix
 	      (order:  x,y,z)
@@ -276,7 +276,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	    p_trans_mat[6+BEGIN_P] =-sinB;
 	    p_trans_mat[7+BEGIN_P] =cosB;
 	    p_trans_mat[8+BEGIN_P] =0.0;
-	    
+
 	    /*******
 	      build the d projection matrix
 	      (order:  x2-y2,z2,xy,xz,yz)
@@ -304,10 +304,10 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	      d_trans_mat[12+BEGIN_D] =sinA*c2B;
 	      d_trans_mat[13+BEGIN_D] =-p_trans_mat[4+BEGIN_P];
 	      d_trans_mat[14+BEGIN_D] =p_trans_mat[3+BEGIN_P];
-	   } 
-	    
+	   }
+
 	    /* only do these if both atoms have d or f orbitals */
-	    
+
 	    if((cell->atoms[i].nd || cell->atoms[i].nf) && (cell->atoms[j].nd || cell->atoms[j].nf)){
 	      d_trans_mat[15+BEGIN_D] =.50*(1.0+cosA*cosA)*c2B;
 	      d_trans_mat[16+BEGIN_D] =.50*SQRT3*sinA*sinA;
@@ -319,11 +319,11 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	      d_trans_mat[22+BEGIN_D] =cosA*c2B;
 	      d_trans_mat[23+BEGIN_D] =p_trans_mat[1+BEGIN_P];
 	      d_trans_mat[24+BEGIN_D] =-p_trans_mat[0+BEGIN_P];
-	    }  
+	    }
 	    /*******
 	      build the f projection matrix
 	      *******/
-	    
+
 	    if( cell->atoms[i].nf || cell->atoms[j].nf ){
 
 	      /* some useful definitions */
@@ -353,9 +353,9 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	      f_trans_mat[19+BEGIN_F] =(-SQRT15)*0.25*s3B*sinA*sinA;
 	      f_trans_mat[20+BEGIN_F] =SQRT15*0.25*sinA*sinA*cosB*(4*cosB*cosB-3);
 	    }
-	    
+
 	    /*   only do these if both atoms have d or f orbitals */
-	    
+
 	    if( (cell->atoms[i].nd || cell->atoms[i].nf) && (cell->atoms[j].nd || cell->atoms[j].nf)){
 	      f_trans_mat[21+BEGIN_F] =0.0;
 	      f_trans_mat[22+BEGIN_F] =SQRT10*0.5*sinB*cosA*sinA;
@@ -372,9 +372,9 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	      f_trans_mat[33+BEGIN_F] =SQRT6*0.25*c3B*sinA*(1+cosA*cosA);
 	      f_trans_mat[34+BEGIN_F] =SQRT6*0.25*s3B*sinA*(1+cosA*cosA);
 	    }
-	    
+
 	    /*   only do these if both atoms have f orbitals */
-	    
+
 	    if( cell->atoms[i].nf && cell->atoms[j].nf){
 	      f_trans_mat[35+BEGIN_F] =SQRT10*0.25*sinA*(cosA*cosA-1);
 	      f_trans_mat[36+BEGIN_F] =SQRT15*0.25*cosB*cosA*sinA*sinA;
@@ -393,13 +393,13 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	    }
 	    /* AUI is 1/BOHR where BOHR is the Bohr radius */
 	    tot_dist *= AUI;
-	    
+
 	    /*************
-	      
+
 	      Now actually evaluate the overlaps
-	      
+
 	      **************/
-	    
+
 	    /*-----------
 	      < S(i) | S(j) >
 	      -------------*/
@@ -620,7 +620,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 		  q_num1,q_num2,la,lb,cell->atoms);
 
 	      /* fprintf(stderr, "S-F:  (sigma) %f \n",sigma);  */
-	      
+
 	      for(j_orb=BEGIN_F;j_orb<=END_F;j_orb++){
 		overlap[(i_tab*num_orbs)+j_tab+j_orb]=
 		  f_trans_mat[j_orb]*sigma;
@@ -632,7 +632,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 
 	      }
 	    }
-	    
+
 	    /*------------
 	      < P(i) | F(j) >
 	      -------------*/
@@ -646,7 +646,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 		  q_num1,q_num2,la,lb,cell->atoms);
 
 	      sigma *= -1;
-	      
+
 	      /* fprintf(stderr, "P-F:  (sigma,pi) %f %f \n",
 		      sigma, pi);  */
 
@@ -665,7 +665,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 		}
 	      }
 	    }
-    
+
 	    /*------------
 	      < D(i) | F(j) >
 	      ------------*/
@@ -679,7 +679,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 		  q_num1,q_num2,la,lb,cell->atoms);
 
 	      pi *= -1;
-	      
+
 	      /* fprintf(stderr, "D-F:  (sigma,pi,delta) %f %f %f \n",
 		      sigma,pi,delta);   */
 
@@ -739,7 +739,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 		}
 	      }
 	    }
-    
+
 	    /*------------
 	      < F(i) | S(j) >
 	      -----------*/
@@ -753,15 +753,15 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 		  q_num1,q_num2,la,lb,cell->atoms);
 
 	      sigma *= -1;
-	      
+
 	      /* fprintf(stderr, "F-S: (sigma) %f \n",sigma);  */
-	      
+
 	      for(i_orb=BEGIN_F;i_orb<=END_F;i_orb++){
 		overlap[(i_tab+i_orb)*num_orbs + j_tab]=
 		  f_trans_mat[i_orb]*sigma;
 	      }
 	    }
-    
+
 	    /*------------
 	      < F(i) | P(j) >
 	      ------------*/
@@ -787,7 +787,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 		}
 	      }
 	    }
-	    
+
 	    /*-------------
 	      < F(i) | D(j) >
 	      ------------*/
@@ -803,7 +803,7 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	      sigma *= -1; delta *= -1;
 
 	      /* fprintf(stderr, "F-D: (sigma,pi,delta) %f %f %f \n",sigma,pi,delta); */
-	      
+
 	      for(i_orb=BEGIN_F;i_orb<=END_F;i_orb++){
 		for(j_orb=BEGIN_D;j_orb<=END_D;j_orb++){
 		  overlap[(i_tab+i_orb)*num_orbs + j_tab + j_orb]=
@@ -820,11 +820,11 @@ void calc_R_overlap(real *overlap,cell_type *cell,detail_type *details,
 	}
       }
     }
-  }  
+  }
 #ifdef PRINTMAT
 fprintf(status_file,"---- S(R) (%lf %lf %lf) rho: %lf----\n",
 	distances.x,distances.y,distances.z,details->rho);
-printmat(overlap,num_orbs,num_orbs,status_file,1e-10,0,details->line_width);  
+printmat(overlap,num_orbs,num_orbs,status_file,1e-10,0,details->line_width);
 #endif
 
   /* do the symmetrization thing */
@@ -846,7 +846,7 @@ printmat(overlap,num_orbs,num_orbs,status_file,1e-10,0,details->line_width);
     zero_overlaps(overlap,details,num_orbs,cell->num_atoms,doing_unit_cell,
 		  orbital_lookup_table);
   }
-	
+
 
 fprintf(stdout,".\n");
 
@@ -855,7 +855,7 @@ fprintf(stdout,".\n");
 #ifdef PRINTMAT
 fprintf(status_file,"---- S(R) (%lf %lf %lf) rho: %lf----\n",
 	distances.x,distances.y,distances.z,details->rho);
-printmat(overlap,num_orbs,num_orbs,status_file,1e-6,0,details->line_width);  
+printmat(overlap,num_orbs,num_orbs,status_file,1e-6,0,details->line_width);
 #endif
 #endif
 }
@@ -913,7 +913,7 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
   point_type distances;
   real temp,min=100.0;
   int min_dir;
-  
+
   /* if this is the first call for this cycle, find the dimensions */
   if( cell->dim > 0 && which_one==0){
     /* find the dimensions of the unit cell */
@@ -923,7 +923,7 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
       cell_dim[i].x = cell->atoms[jtab].loc.x-cell->atoms[itab].loc.x;
       cell_dim[i].y = cell->atoms[jtab].loc.y-cell->atoms[itab].loc.y;
       cell_dim[i].z = cell->atoms[jtab].loc.z-cell->atoms[itab].loc.z;
-      
+
       /* we use this to keep track of the shortest distance */
       temp = sqrt(cell_dim[i].x*cell_dim[i].x+
 		  cell_dim[i].y*cell_dim[i].y+
@@ -941,7 +941,7 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
   }
   if( fabs(details->rho) <= 1e-3 )
     details->rho = 10.0;
-    
+
   /* initialize the overlap matrix to zeroes (just in case) */
   if( details->store_R_overlaps ){
     for(i=0;i<tot_overlaps;i++){
@@ -956,11 +956,11 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
   }
   overlaps_so_far = 0;
   overlap_tab = 0;
-  
+
   /******
-    
+
     first do the unit cell
-    
+
   ******/
   distances.x=distances.y=distances.z=0.0;
   if( details->store_R_overlaps || overlaps_so_far == which_one ){
@@ -978,13 +978,13 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
       }
     }
   }
-  overlaps_so_far++;    
+  overlaps_so_far++;
   if( details->store_R_overlaps ) overlap_tab += num_orbs*num_orbs;
 
   /*******
-    
+
     now move into the other cells.
-  
+
   ********/
   if( cell-> dim > 0){
     for(i=1;i<=cell->overlaps[0];i++){
@@ -1000,10 +1000,10 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
       if( details->store_R_overlaps ) overlap_tab += num_orbs*num_orbs;
     }
   }
-  
+
   /* if the crystal is 1-D then we're done. */
   if( cell->dim > 1 ){
-    
+
     /* take care of the remainder of the layer containing the unit cell */
     for(i=0;i<=2*cell->overlaps[0];i++){
       itab = cell->overlaps[0] - i;
@@ -1012,7 +1012,7 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
 	  distances.x = itab*cell_dim[0].x + j*cell_dim[1].x;
 	  distances.y = itab*cell_dim[0].y + j*cell_dim[1].y;
 	  distances.z = itab*cell_dim[0].z + j*cell_dim[1].z;
-	  
+
 	  calc_R_overlap(&(overlap.mat[overlap_tab]),cell,details,
 			 num_orbs,distances,FALSE,orbital_lookup_table);
 	  found = 1;
@@ -1037,7 +1037,7 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
 	      ktab*cell_dim[1].y;
 	    distances.z = itab*cell_dim[2].z + jtab*cell_dim[0].z +
 	      ktab*cell_dim[1].z;
-	    
+
 	    calc_R_overlap(&(overlap.mat[overlap_tab]),cell,details,
 			   num_orbs,distances,FALSE,orbital_lookup_table);
 	    found = 1;

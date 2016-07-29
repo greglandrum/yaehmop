@@ -123,7 +123,7 @@ void build_k_hamil_THIN(cell,hamilR,hamilK,overlapK,num_orbs)
   int i,j;
   int itab,jtab;
   real temp,temp2;
-  
+
   hamilK.mat[0] = hamilR.mat[0]*(1-THE_CONST+THE_CONST*overlapK.mat[0]);
   for(i=1;i<num_orbs;i++){
     itab = i*num_orbs;

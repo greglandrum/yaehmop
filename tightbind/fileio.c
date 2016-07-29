@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /***
   Edit History:
-  
+
   March '98: WG
     - write f orbital parameters to .out [write_atom_parms()]
     - read in f orbital parameters, normalize f zeta coeff's [fill_atomic_parms()]
@@ -85,7 +85,7 @@ atom_type custom_atoms[MAX_CUSTOM_ATOMS];
  *
  * Returns: none
  *
- * Action:  This reads in the coordinates of a geometry fragment 
+ * Action:  This reads in the coordinates of a geometry fragment
  *           from 'infile.  It does *not* take care of evaluating
  *           z matrix positions or anything of the sort.
  *
@@ -120,16 +120,16 @@ void read_geom_frag(FILE *infile,geom_frag_type *geom_frag)
     /*  figure out which atom this is */
     sscanf(instring,"%d",&which);
     which--;
-    
+
     /* a modicum of error checking */
     if( which < 0 ){
       fatal("Atom number specified which is less than zero.");
     }
-    
+
     if( which >= geom_frag->num_atoms ){
       fatal("Atom number specified which is larger than num_atoms.");
     }
-    
+
     if( !geom_frag->using_Z_mat ){
       sscanf(instring,"%d %s  %lf %lf %lf",&foo_int,
              geom_frag->atoms[which].symb,
@@ -150,7 +150,7 @@ void read_geom_frag(FILE *infile,geom_frag_type *geom_frag)
       geom_frag->atoms[which].Zmat_loc.ref3--;
     }
     geom_frag->atoms[which].symb[2] = 0;
-    
+
     /*********
       'which_atom is used to store where the atom was positioned in the
       geometry specification.  This is necessary in order to be able
@@ -175,12 +175,12 @@ void read_geom_frag(FILE *infile,geom_frag_type *geom_frag)
     geom_frag = new_frag;
   }
 }
-  
-  
 
 
 
-  
+
+
+
 
 /****************************************************************************
  *
@@ -193,7 +193,7 @@ void read_geom_frag(FILE *infile,geom_frag_type *geom_frag)
  *
  * Returns: none
  *
- * Action: 
+ * Action:
  *   writes all the atomic positions to the output file.
  *
  *****************************************************************************/
@@ -202,7 +202,7 @@ void write_atom_coords(atom_type *atoms,int num_atoms,
 {
   int i,j;
   char found_this_one;
-  
+
   fprintf(output_file,"; ********* Atoms within the unit cell:  *********\n");
   fprintf(output_file,"# NUMBER OF ATOMS: \n\t%d\n",num_atoms);
   if( using_Zmat ){
@@ -213,8 +213,8 @@ void write_atom_coords(atom_type *atoms,int num_atoms,
   }
   else{
     fprintf(output_file,"# ATOMIC POSITIONS\n");
-  } 
-  
+  }
+
   for(i=0;i<num_atoms;i++){
     /* write the parameters */
     if( !using_Zmat ){
@@ -227,7 +227,7 @@ void write_atom_coords(atom_type *atoms,int num_atoms,
 	      atoms[i].Zmat_loc.ref1+1,atoms[i].Zmat_loc.bond_length,
 	      atoms[i].Zmat_loc.ref2+1,atoms[i].Zmat_loc.alpha,
 	      atoms[i].Zmat_loc.ref3+1,atoms[i].Zmat_loc.beta);
-    }      
+    }
 
   }
 }
@@ -243,7 +243,7 @@ void write_atom_coords(atom_type *atoms,int num_atoms,
  *
  * Returns: none
  *
- * Action: 
+ * Action:
  *   writes all the atomic parms to the output file.
  *
  *****************************************************************************/
@@ -254,23 +254,23 @@ void write_atom_parms(detail_type *details,atom_type *atoms,int num_atoms,
   atom_type *atom;
   int i,j;
   char found_this_one;
-  
+
   if( first_call ){
     unique_atoms = (atom_type *)calloc(num_atoms,sizeof(atom_type));
     if(!unique_atoms)fatal("Can't allocate unique atom list");
     num_unique_atoms = 0;
     max_num_unique = num_atoms;
   }
-  
+
   /********
-      
+
     on the first call we want to find the unique atoms.
-    
+
     if we're doing either zeta variation or charge iteration,
     this means any atom which is being varied.  That way we
     print out the values of atoms which are unique, but don't print
     out twenty billion things that are the same.
-      
+
     **********/
   for( i=0; i<num_atoms; i++ ){
     found_this_one = 0;
@@ -302,12 +302,12 @@ void write_atom_parms(detail_type *details,atom_type *atoms,int num_atoms,
     fprintf(output_file,"\n\n# ******** Extended Hueckel Parameters ********\n");
     fprintf(output_file,";  FORMAT  quantum number orbital: Hii, <c1>, exponent1,\
  <c2>, <exponent2>\n\n");
-  
+
     for(i=0;i<num_unique_atoms;i++){
       if( details->vary_zeta ||
          ((details->do_chg_it || details->do_muller_it) &&
           atoms[unique_atoms[i].which_atom].chg_it_vary)){
-        
+
         fprintf(output_file,
                 "ATOM: %s(%d)   Atomic number: %d  # Valence Electrons: %d\n",
                 unique_atoms[i].symb,unique_atoms[i].which_atom+1,
@@ -361,7 +361,7 @@ void write_atom_parms(detail_type *details,atom_type *atoms,int num_atoms,
  *
  * Returns: none
  *
- * Action: 
+ * Action:
  *   sets the atoms up with charge iteration parameters
  *   atomic wavefunction parameters not supplied by the input file are read
  *   out of a parameter file with the name indicated in the #define for
@@ -393,7 +393,7 @@ void fill_chg_it_parms(atoms,num_atoms,num_lines,infile)
     /* now loop over all the atoms and pop these parameters in */
     for( j=0;j<num_atoms;j++){
       upcase(atoms[j].symb);
-      
+
       if( !strncmp(atoms[j].symb,symb,2) ){
 	atoms[j].s_A = s_A; atoms[j].s_B = s_B, atoms[j].s_C = s_C;
 	atoms[j].p_A = p_A; atoms[j].p_B = p_B, atoms[j].p_C = p_C;
@@ -413,7 +413,7 @@ void fill_chg_it_parms(atoms,num_atoms,num_lines,infile)
  *
  * Returns: none
  *
- * Action: 
+ * Action:
  *   sets all the atoms up with extended hueckel parameters
  *   atomic wavefunction parameters not supplied by the input file are read
  *   out of a parameter file with the name indicated in the #define for
@@ -435,30 +435,30 @@ void fill_atomic_parms(atoms,num_atoms,infile)
   int save_which;
   char found;
   real temp;
-  
+
   int num_custom;
-  
+
   char ang[2],tstring[10];
   int atnum,nzeta,nquant,nval;
   real Hii,exp1,exp2,c1,c2;
-  
-  
-  
+
+
+
   /* open the parameter file */
 #ifndef USING_THE_MAC
   parm_file_name = (char *)getenv("BIND_PARM_FILE");
 #else
   parm_file_name = 0;
-#endif    
+#endif
   if( !parm_file_name ){
     parm_file_name = (char *)calloc(240,sizeof(char));
     if(!parm_file_name)fatal("can't get memory for parm_file_name");
     safe_strcpy(parm_file_name,EHT_PARM_FILE);
   }
   parmfile = fopen(parm_file_name,"r");
-  
+
   bzero(custom_atoms,MAX_CUSTOM_ATOMS*sizeof(atom_type));
-  
+
   /* make sure that it opened, but don't exit if not... */
 #ifndef USING_THE_MAC
   if(!parmfile){
@@ -472,19 +472,19 @@ void fill_atomic_parms(atoms,num_atoms,infile)
   if( !parmfile ){
   	error("Can't open parm file, please specify a name");
   	parmfile = choose_mac_file(parm_file_name,MAC_FOPEN_OPEN_NOCD);
-  	if( !parmfile ) fatal("Still can't do it.");  
+  	if( !parmfile ) fatal("Still can't do it.");
   }
 #endif
   /* loop over the atoms and get the parameters */
   num_custom = 0;
   for(i=0;i<num_atoms;i++){
 
-#if 0    
+#if 0
     /******
       if the first character in the symbol is a space, then move
       the second character to the first position, this makes searching
       for parameters much easier
-      ******/       
+      ******/
     if( atoms[i].symb[0] == ' ' || atoms[i].symb[0] == '\t'){
       atoms[i].symb[0] = atoms[i].symb[1];
       atoms[i].symb[1] = 0;
@@ -497,7 +497,7 @@ void fill_atomic_parms(atoms,num_atoms,infile)
     if(atoms[i].symb[1] == '\n'){
       atoms[i].symb[1] = 0;
     }
-    
+
 #endif
     /*******
       if it's a dummy atom, then we don't have to really do anything
@@ -505,7 +505,7 @@ void fill_atomic_parms(atoms,num_atoms,infile)
     if( atoms[i].symb[0] == '&' ){
       atoms[i].at_number = -1;
     }
-    
+
 
     /*******
       if it's a special atom appearing for the first time, then get
@@ -531,7 +531,7 @@ void fill_atomic_parms(atoms,num_atoms,infile)
 			&(custom_atoms[num_custom].coeff_f1),
 			&(custom_atoms[num_custom].exp_f2),
 			&(custom_atoms[num_custom].coeff_f2));
-      
+
 #if 0
       /* patch up the custom name */
       if(custom_atoms[num_custom].symb[0]==' '||custom_atoms[num_custom].symb[0] =='\t'){
@@ -541,8 +541,8 @@ void fill_atomic_parms(atoms,num_atoms,infile)
       if(custom_atoms[num_custom].symb[1] == '\t'){
 	custom_atoms[num_custom].symb[1] = 0;
       }
-      
-#endif      
+
+#endif
       upcase(custom_atoms[num_custom].symb);
       /***********
 	we're not guaranteed to have gotten information on all the orbitals,
@@ -565,7 +565,7 @@ void fill_atomic_parms(atoms,num_atoms,infile)
 	custom_atoms[num_custom].nf=0;
 	break;
       }
-      
+
       /*******
 	Normalize the d-coefficients.
 	******/
@@ -573,17 +573,17 @@ void fill_atomic_parms(atoms,num_atoms,infile)
 	temp = 4.0*(custom_atoms[num_custom].exp_d*custom_atoms[num_custom].exp_d2/
 		  pow(custom_atoms[num_custom].exp_d+custom_atoms[num_custom].exp_d2,2.0));
 	temp = pow(temp,((real)custom_atoms[num_custom].nd+.5));
-	
+
 	temp = sqrt(custom_atoms[num_custom].coeff_d1*custom_atoms[num_custom].coeff_d1+
 		    custom_atoms[num_custom].coeff_d2*custom_atoms[num_custom].coeff_d2+
 		    2.0*temp*custom_atoms[num_custom].coeff_d1*
 		    custom_atoms[num_custom].coeff_d2);
 	temp = 1.0/temp;
-	
+
 	custom_atoms[num_custom].coeff_d1 *= temp;
 	custom_atoms[num_custom].coeff_d2 *= temp;
       }
-      
+
       /*******
 	Normalize the f-coefficients.
 	******/
@@ -591,24 +591,24 @@ void fill_atomic_parms(atoms,num_atoms,infile)
 	temp = 4.0*(custom_atoms[num_custom].exp_f*custom_atoms[num_custom].exp_f2/
 		  pow(custom_atoms[num_custom].exp_f+custom_atoms[num_custom].exp_f2,2.0));
 	temp = pow(temp,((real)custom_atoms[num_custom].nf+.5));
-	
+
 	temp = sqrt(custom_atoms[num_custom].coeff_f1*custom_atoms[num_custom].coeff_f1+
 		    custom_atoms[num_custom].coeff_f2*custom_atoms[num_custom].coeff_f2+
 		    2.0*temp*custom_atoms[num_custom].coeff_f1*
 		    custom_atoms[num_custom].coeff_f2);
 	temp = 1.0/temp;
-	
+
 	custom_atoms[num_custom].coeff_f1 *= temp;
 	custom_atoms[num_custom].coeff_f2 *= temp;
       }
-      
-      
+
+
       /************
-	
+
 	make sure that the atomic list has these parameters
 	since I copy the whole block at once, I need to save the
 	atomic position and then re-insert it into the atom structure
-	
+
 	**************/
       bcopy((char *)&(atoms[i].loc),(char *)&(saveloc),sizeof(point_type));
       bcopy((char *)&(atoms[i].Zmat_loc),(char *)&saveZloc,sizeof(Z_mat_type));
@@ -620,40 +620,40 @@ void fill_atomic_parms(atoms,num_atoms,infile)
       atoms[i].which_atom = save_which;
       bcopy((char *)&saveloc,(char *)&(atoms[i].loc),sizeof(point_type));
       bcopy((char *)&saveZloc,(char *)&(atoms[i].Zmat_loc),sizeof(Z_mat_type));
-      
+
       num_custom++;
     }
     else{
       found = 0;
-      
+
       /*****
 	check to see if this is a custom atom that has already been hit
 	******/
   	upcase(atoms[i].symb);
       for(j=0;j<num_custom;j++){
-		
+
 		upcase(custom_atoms[j].symb);
 	if(!strncmp(atoms[i].symb,custom_atoms[j].symb,2)){
 	  /* BINGO! copy the data and save the location. */
 	  bcopy((char *)&(atoms[i].loc),(char *)&(saveloc),sizeof(point_type));
 	  bcopy((char *)&(atoms[i].Zmat_loc),(char *)&saveZloc,sizeof(Z_mat_type));
 	  save_which = atoms[i].which_atom;
-	  
+
 	  bcopy((char *)&(custom_atoms[j]),(char *)&(atoms[i]),
 		sizeof(atom_type));
-	  atoms[i].which_atom = save_which;	  
+	  atoms[i].which_atom = save_which;
 	  bcopy((char *)&saveloc,(char *)&(atoms[i].loc),sizeof(point_type));
 	  bcopy((char *)&saveZloc,(char *)&(atoms[i].Zmat_loc),sizeof(Z_mat_type));
-	  
+
 	  found = 1;
 	}
       }
-      
+
       /******
 	look for the parameters in the param file
 	*******/
       rewind(parmfile);
-      
+
       while(!found && skipcomments(parmfile,instring,IGNORE)>=0 ){
 	/* compare two characters and see if this is the right atom */
 	sscanf(instring,"%s",tstring);
@@ -662,7 +662,7 @@ void fill_atomic_parms(atoms,num_atoms,infile)
 	  /* it is... read out the data */
 	  sscanf(instring,"%s %d %d %d %d %s %lf %lf %lf %lf %lf",
 		 tstring,&atnum,&nval,&nzeta,&nquant,ang,&Hii,&exp1,&exp2,&c1,&c2);
-	  
+
 	  atoms[i].at_number = atnum;
 	  atoms[i].num_valence = nval;
 	  /* figure out which type of orbital this is */
@@ -695,17 +695,17 @@ void fill_atomic_parms(atoms,num_atoms,infile)
 	    if( nzeta == 2 ){
 	      atoms[i].exp_d2 = exp2;
 	      atoms[i].coeff_d2 = c2;
-	      
+
 	      /*******
 		this is some kind of wierd coefficient adjustment business that
 		they do in the original source... I'm not sure why...
 		******/
 	      temp = 4.0*(exp1*exp2/pow(exp1+exp2,2.0));
 	      temp = pow(temp,(real)nquant+.5);
-	      
+
 	      temp = sqrt(c1*c1+c2*c2+2*temp*c1*c2);
 	      temp = 1.0/temp;
-	      
+
 	      atoms[i].coeff_d1 *= temp;
 	      atoms[i].coeff_d2 *= temp;
 	    }
@@ -721,17 +721,17 @@ void fill_atomic_parms(atoms,num_atoms,infile)
 	    if( nzeta == 2 ){
 	      atoms[i].exp_f2 = exp2;
 	      atoms[i].coeff_f2 = c2;
-	      
+
 	      /*******
 		this is some kind of wierd coefficient adjustment business that
 		they do in the original source... I'm not sure why...
 		******/
 	      temp = 4.0*(exp1*exp2/pow(exp1+exp2,2.0));
 	      temp = pow(temp,(real)nquant+.5);
-	      
+
 	      temp = sqrt(c1*c1+c2*c2+2*temp*c1*c2);
 	      temp = 1.0/temp;
-	      
+
 	      atoms[i].coeff_f1 *= temp;
 	      atoms[i].coeff_f2 *= temp;
 	    }
@@ -781,9 +781,9 @@ void parse_printing_options(infile,details,cell)
   int EOF_hit;
   int which;
   printing_info_type *print_info;
-  
+
   /**********
-    
+
     NOTE: when adding keywords to this, remember that strstr searches for
     substrings.  Therefore it is important that longer strings come before
     shorter strings with a common substring.
@@ -791,16 +791,16 @@ void parse_printing_options(infile,details,cell)
     construct or else the matching will be done incorrectly
     (strstr("REDUCED OVERLAP POP", "OVERLAP POP") returns a value, whereas:
     strstr("OVERLAP POP","REDUCED OVERLAP POP") returns zero.
-    
+
     **********/
-  
+
   /* read until we hit either the EOF or the keyword END_PRINT */
   EOF_hit = 0;
   while( EOF_hit > -1 ){
     EOF_hit = skipcomments(infile,instring,IGNORE);
     upcase(instring);
     if( EOF_hit > -1 ){
-      
+
       /*----------------------------------------------------------------------*/
       if(strstr(instring,"END_PRINT") || strstr(instring,"END PRINT")){
 	EOF_hit = -1;
@@ -935,39 +935,39 @@ void parse_printing_options(infile,details,cell)
 	fprintf(stderr,"Did you forget to include end_print?\n");
 	error("Bad print option.");
       }
-      
+
       /********
-	
+
 	Okay, now we've parsed the keyword. Check to see if there are
 	any other options
-	
+
 	********/
       if(strstr(instring,"WALSH")){
 	/* they want to follow this variable along the Walsh diagram... */
-	
+
 	/* get space for the printing option */
 	print_info = (printing_info_type *)calloc(1,sizeof(printing_info_type));
 	if( !print_info ) fatal("Can't get memory to store printing options.");
-	
+
 	/* put this structure at the head of the printing options linked list */
 	print_info->next = details->step_print_options;
 	details->step_print_options = print_info;
-	
+
 	/* we know the kind of the printing option already (it was set above) */
 	print_info->which_to_print = which;
-	
+
 	/* now read out the parameters */
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%s %d %d",type_string,&(print_info->contrib1),
 	       &(print_info->contrib2));
-	
+
 	upcase(type_string);
-	
+
 	/* account for the C indexing thing */
 	print_info->contrib1--;
 	print_info->contrib2--;
-	
-	
+
+
 	/*******
 	  some printing options only take one argument, to make sure these don't alert
 	   the error checking, adjust those now.
@@ -979,7 +979,7 @@ void parse_printing_options(infile,details,cell)
 	  print_info->contrib1 = 0;
 	  print_info->contrib2 = 0;
 	}
-	
+
 	/* figure out the type */
 	if(strstr(type_string,"ORB")){
 	  print_info->type = P_DOS_ORB;
@@ -997,7 +997,7 @@ void parse_printing_options(infile,details,cell)
 	}
 	else if(strstr(type_string,"ATOM")){
 	  print_info->type = P_DOS_ATOM;
-	  
+
 	  /******
 	    error checking
 	    *******/
@@ -1055,7 +1055,7 @@ void parse_equiv_atoms(infile,details,cell)
     /* insert it in the list */
     equiv_list->next = cell->equiv_atoms;
     cell->equiv_atoms = equiv_list;
-    
+
     skipcomments(infile,instring,FATAL);
     parse_integer_string(instring,&values_read,&num_read);
     for(j=0;j<num_read;j++) values_read[j]--;
@@ -1084,7 +1084,7 @@ void parse_equiv_atoms(infile,details,cell)
     fprintf(output_file,"\n");
     equiv_list = equiv_list->next;
   }
-#endif      
+#endif
 }
 /****************************************************************************
  *
@@ -1114,7 +1114,7 @@ void parse_muller_parms(infile,details,cell)
   int *numbers_read=0,num_read;
   real E_vals[7],Z_vals[7];
   atom_type *atom,*atom2;
-  
+
   /* read out the number of params that are going to be given */
   skipcomments(infile,instring,FATAL);
   sscanf(instring,"%d",&num_parms);
@@ -1157,7 +1157,7 @@ void parse_muller_parms(infile,details,cell)
 	atom->muller_d_Z[1] = Z_vals[3];
 	atom->muller_d_Z[2] = Z_vals[4];
 	atom->muller_d_Z[3] = Z_vals[5];
-	
+
 	/********
 
 	  repeat the process for the s and p parameters
@@ -1264,19 +1264,19 @@ void parse_muller_parms(infile,details,cell)
 	  fatal("Bad line in Muller parms section");
 	atom->muller_s_E[0] = E_vals[2];
 	atom->muller_s_E[1] = E_vals[1];
-	atom->muller_s_E[2] = E_vals[0];	
-	atom->muller_s_Z[0] = Z_vals[2];	
-	atom->muller_s_Z[1] = Z_vals[1];	
-	atom->muller_s_Z[2] = Z_vals[0];	
+	atom->muller_s_E[2] = E_vals[0];
+	atom->muller_s_Z[0] = Z_vals[2];
+	atom->muller_s_Z[1] = Z_vals[1];
+	atom->muller_s_Z[2] = Z_vals[0];
       }
 
       /*******
-	
+
 	figure out the initial parameters based on the initial occupations
-	
+
       *******/
       calc_muller_init_parms(atom);
-      
+
 
       /* now copy the parameters into the other atoms of the same type */
       atom->chg_it_vary = 1;
@@ -1332,9 +1332,9 @@ void parse_charge_iteration(infile,details,cell)
   int num_parm_lines;
   chg_it_parm_type *parms;
 
-  
+
   /*********
-    
+
       NOTE: before adding keywords to this, make sure to read the
         warning in parse_printing_options.
 
@@ -1350,7 +1350,7 @@ void parse_charge_iteration(infile,details,cell)
       /*----------------------------------------------------------------------*/
       if(strstr(instring,"END_CHARGE") || strstr(instring,"END CHARGE")){
 	EOF_hit = -1;
-      } 
+      }
       /*----------------------------------------------------------------------*/
       else if(strstr(instring, "VARY")){
 	skipcomments(infile,instring,FATAL);
@@ -1419,8 +1419,8 @@ void parse_charge_iteration(infile,details,cell)
       }
     }
   }
-}      
-	
+}
+
 
 
 
@@ -1462,7 +1462,7 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
   int num_k_points,max_k_points;
   real *real_ptr;
   int *int_ptr,*iarray;
-  int reading_atom_nums;  
+  int reading_atom_nums;
   int idle;
   real ecut,eerr;
   char got_geom;
@@ -1476,29 +1476,29 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
   real weight,tot_K_weight;
   int max_p_DOS;
   p_DOS_type *p_DOS;
-  
+
   real begin_walsh,end_walsh;
-  
-  
+
+
   /* open the input file */
   if( !the_file ){
   	infile = fopen(name,"r");
   } else{
   	infile = the_file;
   }
-  
+
   /* make sure that it opened */
   if(!infile){
     safe_strcpy(err_string,"Can't open input file: ");
     strcat(err_string,name);
     fatal(err_string);
   }
-  
+
   /*******
     initialize some variables
     ********/
   details->walsh_details.num_steps = 1;
-  details->walsh_details.num_vars = 0;    
+  details->walsh_details.num_vars = 0;
   details->use_symmetry = 0;
   details->find_princ_axes = 0;
   details->vary_zeta = 0;
@@ -1536,7 +1536,7 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
 #ifdef SUPPORT_NEW3_FILEIO
   /* start reading that puppy in! */
   skipcomments(infile,instring,FATAL);
-  
+
 
   /*********
     check to see what kind of file this is...
@@ -1554,7 +1554,7 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
       ******/
     safe_strcpy(details->title,instring);
     read_NEW3file(cell,details,infile);
-    
+
   }
   else{
 #endif
@@ -1570,11 +1570,11 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
 
     safe_strcpy(details->title,instring);
     fprintf(output_file,"#JOB_TITLE: %s\n", details->title);
-    
+
     /**********
-      
+
       now loop through the keywords until we hit the end of the file.
-      
+
 
       NOTE: before adding keywords to this, make sure to read the
         warning in parse_printing_options.
@@ -1583,7 +1583,7 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
     while(skipcomments(infile,instring,IGNORE)>-1){
       /* convert the string to upper case */
       upcase(instring);
-      
+
       /*----------------------------------------------------------------------*/
       if(strstr(instring,"MOLECUL")){
 	fprintf(status_file,"Doing a molecular calculation.\n");
@@ -1593,19 +1593,19 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
 	if( !details->K_POINTS ) fatal("Can't allocate the single k point.");
 	details->K_POINTS[0].weight = 1.0;
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if(strstr(instring,"THIN")){
 	fprintf(status_file,"Doing a THIN mode extended calculation.\n");
 	details->Execution_Mode = THIN;
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if(strstr(instring,"FAT")){
 	fprintf(status_file,"Doing a FAT mode extended calculation.\n");
 	details->Execution_Mode = FAT;
       }
-#ifdef INCLUDE_NETCDF_SUPPORT      
+#ifdef INCLUDE_NETCDF_SUPPORT
       /*----------------------------------------------------------------------*/
       else if(strstr(instring,"NETCDF")){
 	fprintf(status_file,"I'll be writing a netCDF file.");
@@ -1618,14 +1618,14 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
  evaluated.\n");
 	details->eval_electrostat = 1;
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if(strstr(instring,"NONWEIGHTED")){
 	fprintf(status_file,"The nonweighted Hij form will be used.\n");
 	details->weighted_Hij = 0;
       }
-      
-      /*----------------------------------------------------------------------*/      
+
+      /*----------------------------------------------------------------------*/
       else if(strstr(instring,"THE CONST")){
 	fprintf(status_file,"Reading in a new value for the constant K.\n");
 	if( sscanf(instring,"%s %s %lf",string1,string2,
@@ -1636,7 +1636,7 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
 	fprintf(status_file,"K = %lf\n",details->the_const);
       }
 
-      /*----------------------------------------------------------------------*/      
+      /*----------------------------------------------------------------------*/
       else if(strstr(instring,"NEAREST NEIGHBOR")){
 	if( sscanf(instring,"%s %s %lf",string1,string2,
 		   &(details->close_nn_contact)) != 3 ){
@@ -1644,49 +1644,49 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
 	  sscanf(instring,"%lf",&(details->close_nn_contact));
 	}
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"ZETA") ){
 	fprintf(status_file,"Self consistant variation of orbital exponents will be \
 done.\n");
 	details->vary_zeta = 1;
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"JUST GE") ){
 	fprintf(status_file,"Only the geometries will be generated.\n");
 	details->just_geom = 1;
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"AVERAGE PROP") ){
 	fprintf(status_file,"Average Propeties will be calculated.\n");
 	details->avg_props = 1;
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"GEOM FRAG") ){
         if( got_geom )
           fatal("You must specify the Geometry keyword after the Geom Frag keyword.");
-        
+
         if( details->do_muller_it )
           fatal("Muller iteration and Geom Frags are incompatible (for now).");
         if( details->do_chg_it )
           fatal("Charge iteration and Geom Frags are incompatible (for now).");
-          
+
         /* get memory for the geom_frag and slap it in the list */
         geom_frag = (geom_frag_type *)calloc(1,sizeof(geom_frag_type));
         if( !geom_frag ) fatal("Can't get memory for geom_frag\n");
         geom_frag->next = cell->geom_frags;
         cell->geom_frags = geom_frag;
-        
+
         if( strstr(instring,"Z MATRIX") ){
           geom_frag->using_Z_mat = 1;
         }
 
         read_geom_frag(infile,geom_frag);
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if(strstr(instring,"GEOM")){
 	/* check to see if we are doing a Z matrix input file */
@@ -1707,15 +1707,15 @@ done.\n");
 	}
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d",&(cell->num_atoms));
-	
+
 	/* allocate space for the atoms */
 	cell->atoms = (atom_type *)calloc(cell->num_atoms,sizeof(atom_type));
 	if(!cell->atoms){
 	  sprintf(err_string,"Can't allocate memory for: %d atoms.",cell->num_atoms);
 	  fatal("Can't allocate memory for the atoms.");
 	}
-	
-	skipcomments(infile,instring,FATAL);	
+
+	skipcomments(infile,instring,FATAL);
 	/**************
 
 	  check to see if we are going to be reading numbers at the beginning
@@ -1733,12 +1733,12 @@ done.\n");
 	}
 
 	/*************
-	  
+
 	  read in the individual atomic locations
-  
+
         **************/
 	for(i=0;i<cell->num_atoms;i++){
-	  
+
 	  /*  figure out which atom this is */
 	  if( reading_atom_nums ){
 	    sscanf(instring,"%d",&which);
@@ -1746,16 +1746,16 @@ done.\n");
 	  } else{
 	    which = i;
 	  }
-	  
+
 	  /* a modicum of error checking */
 	  if( which < 0 ){
 	    fatal("Atom number specified which is less than zero.");
 	  }
-	  
+
 	  if( which >= cell->num_atoms ){
 	    fatal("Atom number specified which is larger than num_atoms.");
 	  }
-	  
+
 	  if( !Zmat ){
 	    if( reading_atom_nums ){
 	      sscanf(instring,"%d %s  %lf %lf %lf",&foo_int,
@@ -1778,10 +1778,10 @@ done.\n");
 	    cell->atoms[which].Zmat_loc.ref1--;
 	    cell->atoms[which].Zmat_loc.ref2--;
 	    cell->atoms[which].Zmat_loc.ref3--;
-	    
+
 	  }
 	  cell->atoms[which].symb[2] = 0;
-	  
+
 	  /*********
 	    'which_atom is used to store where the atom was positioned in the
 	    geometry specification.  This is necessary in order to be able
@@ -1789,15 +1789,15 @@ done.\n");
 	    *********/
 	  cell->atoms[which].which_atom = i;
 
-	  if(i+1 < cell->num_atoms) skipcomments(infile,instring,FATAL);	
-	}    
+	  if(i+1 < cell->num_atoms) skipcomments(infile,instring,FATAL);
+	}
 	fprintf(status_file,"Read: %d atoms\n",cell->num_atoms);
 
         cell->num_raw_atoms = cell->num_atoms;
 
         got_geom = 1;
       } /* end of keyword GEOMETRY */
-      
+
       /*----------------------------------------------------------------------*/
       else if(strstr(instring,"ELECTR")){
 	if( cell->charge != -1000.0 ){
@@ -1854,7 +1854,7 @@ done.\n");
 		details->symm_tol);
       }
 
-     
+
       /*----------------------------------------------------------------------*/
       else if(strstr(instring,"PRINC")){
 	fprintf(status_file,"The principle axes of the molecule will be found.\n");
@@ -1862,26 +1862,26 @@ done.\n");
       }
       /*----------------------------------------------------------------------*/
       else if(strstr(instring,"WALSH")){
-	walsh = &(details->walsh_details);      
+	walsh = &(details->walsh_details);
 	/*************
-	  
+
 	  deal with a walsh diagram
-	  
+
 	  **************/
 	/* read in the number of variables and steps */
-	skipcomments(infile,instring,FATAL);    
+	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d %d", &(walsh->num_vars),&(walsh->num_steps));
-	
+
 	/* get space to store the variables' values */
 	walsh->values = (real *)calloc(walsh->num_vars*walsh->num_steps,
 					sizeof(real));
 	if(!walsh->values) fatal("Can't get memory for Walsh value array.");
-	
+
 	/* now read in the individual values */
 	for(i=0;i<walsh->num_vars;i++){
 	  itab = i*walsh->num_steps;
 	  skipcomments(infile,instring,FATAL);
-	  
+
 	  /* check to see if we are doing AUTO-WALSH(tm) */
 	  if( instring[0] == '!' || instring[1] == '!' ){
 	    sscanf(instring,"!%lf,%lf",&begin_walsh,&end_walsh);
@@ -1890,8 +1890,8 @@ done.\n");
 	  }
 	  else{
 	    /* we're doing it the old way... */
-	    
-	    /*  use strtok to get the first comma delimited number */	  
+
+	    /*  use strtok to get the first comma delimited number */
 	    safe_strcpy(numstring,(char *)strtok(instring,(const char *)","));
 	    for(j=0;j<walsh->num_steps;j++){
 	      /*  use strtok to get the next comma delimited number */
@@ -1904,21 +1904,21 @@ done.\n");
 	fprintf(output_file,"\n# Walsh Information:\n");
 	fprintf(output_file,"%d Variables will be changed with\n",walsh->num_vars);
 	fprintf(output_file,"%d steps each.\n\n",walsh->num_steps);
-	
+
 	/* symmetry will always be used for Walsh diagrams, so turn it on now. */
 	fprintf(status_file,"Symmetry will be used in the calculations.\n");
 	details->use_symmetry = 1;
       }/* end of keyword WALSH */
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"PARAM") ){
         /* make sure we have the geomtery already */
         if( !got_geom ) fatal("You must specify the Geometry before the Parameters.");
 
 	/*************
-	  
+
 	  fill in the atomic parameters
-	  
+
 	  *************/
 	fill_atomic_parms(cell->atoms,cell->num_atoms,infile);
 
@@ -1933,11 +1933,11 @@ done.\n");
           charge_to_num_electrons(cell);
         }
 
-	
+
 	got_params = 1;
 	fprintf(status_file,"Completed parameter acquisition.\n");
       } /* end of keyword PARAMETERS */
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"LATTICE") ){
 	if( details->Execution_Mode == MOLECULAR ){
@@ -1949,11 +1949,11 @@ done.\n");
 	  fprintf(status_file,"Processing lattice parameters.\n");
 	  skipcomments(infile,instring,FATAL);
 	  sscanf(instring,"%d",&(cell->dim));
-	  
+
 	  skipcomments(infile,instring,FATAL);
 	  sscanf(instring,"%d %d %d",
 		 &(cell->overlaps[0]),&(cell->overlaps[1]),&(cell->overlaps[2]));
-	  
+
 	  /* zero out un-needed overlaps (just in case) */
 	  if( cell->dim < 3) {
 	    cell->overlaps[2] = 0;
@@ -1965,30 +1965,30 @@ done.\n");
 	  if(cell->dim < 1){
 	    fatal("Silly dimensionality given in the lattice parameter section.");
 	  }
-	  
+
 	  skipcomments(infile,instring,FATAL);
-	  sscanf(instring,"%d %d",	  
+	  sscanf(instring,"%d %d",
 		 &(cell->tvects[0].begin),&(cell->tvects[0].end));
-	  
+
 	  if(cell->tvects[0].end <= cell->num_atoms - cell->dim )
 	    fatal("Please make the ends of the lattice vectors the HIGHEST numbered atoms.");
 
 	  if( cell->dim > 1){
 	    skipcomments(infile,instring,FATAL);
-	    sscanf(instring,"%d %d",	  
+	    sscanf(instring,"%d %d",
 		   &(cell->tvects[1].begin),&(cell->tvects[1].end));
 	    if(cell->tvects[1].end <= cell->num_atoms - cell->dim )
 	      fatal("Please make the ends of the lattice vectors the HIGHEST numbered atoms.");
 	  }
 	  if(cell->dim > 2){
 	    skipcomments(infile,instring,FATAL);
-	    sscanf(instring,"%d %d",	  
+	    sscanf(instring,"%d %d",
 		   &(cell->tvects[2].begin),&(cell->tvects[2].end));
 
 	    if(cell->tvects[2].end <= cell->num_atoms - cell->dim )
 	      fatal("Please make the ends of the lattice vectors the HIGHEST numbered atoms.");
 	  }
-	  
+
 	  /*********
 	    now check to see if the order of any of the end points
 	    needs to be changed
@@ -1997,7 +1997,7 @@ done.\n");
 	    /* first decrement the tabs since we index arrays from 0 */
 	    cell->tvects[j].end--;
 	    cell->tvects[j].begin--;
-	    
+
 	    if(cell->tvects[j].end < cell->tvects[j].begin){
 	      temp = cell->tvects[j].end;
 	      cell->tvects[j].end = cell->tvects[j].begin;
@@ -2014,7 +2014,7 @@ done.\n");
 
 	}
       } /* end of keyword LATTICE */
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"K POINTS AUTO") ||
 	      strstr(instring,"K-POINTS AUTO") ||
@@ -2045,17 +2045,17 @@ done.\n");
 	  fprintf(status_file,"Warning: a K point set was specified for a molecular \
 calculation.\n");
 	}
-	
+
 	/* read out the number of k points. */
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d",&(details->num_KPOINTS));
-	
+
 	/* get space for the k points */
 	points = (k_point_type *)calloc(details->num_KPOINTS,sizeof(k_point_type));
 	if(!points)fatal("Can't allocate memory for k point set.");
-	
+
 	fprintf(status_file,"Reading %d K points.\n",details->num_KPOINTS);
-	
+
 	/* now read the points */
 	for(i=0;i<details->num_KPOINTS;i++){
 	  skipcomments(infile,instring,FATAL);
@@ -2067,7 +2067,7 @@ calculation.\n");
 	/* set the pointer in the details structure */
 	details->K_POINTS = points;
       } /* end of keyword K POINTS */
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"K OFFSET") ){
 	if(sscanf(instring,"%s %s %lf",string1,string2,&(details->k_offset)) != 3){
@@ -2080,7 +2080,7 @@ calculation.\n");
 	/* read out the number of overlaps to zero */
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d",&(details->num_overlaps_off));
-	
+
 	/* get space to store the zeroed overlaps */
 	details->overlaps_off = (overlap_cancel_type *)
 	  calloc(details->num_overlaps_off,sizeof(overlap_cancel_type));
@@ -2106,7 +2106,7 @@ calculation.\n");
 	  if(strstr(err_string,"INTER")){
 	    details->overlaps_off[i].inter_cell = 1;
 	  } else details->overlaps_off[i].inter_cell = 0;
-	  
+
 	  /* now decrement the contributions */
 	  details->overlaps_off[i].which1--;
 	  details->overlaps_off[i].which2--;
@@ -2126,17 +2126,17 @@ calculation.\n");
 	/* read out the number of projections */
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d",&(details->num_proj_DOS));
-	
+
 	/* get space for the projections */
 	details->proj_DOS = (p_DOS_type *)calloc(details->num_proj_DOS,
 						 sizeof(p_DOS_type));
 	if( !details->proj_DOS )
 	  fatal("Can't get memory to hold projected DOS info.");
-	
+
 	/* now read the individual projections */
 	for(i=0;i<details->num_proj_DOS;i++){
 	  skipcomments(infile,instring,FATAL);
-	  
+
 	  p_DOS = &(details->proj_DOS[i]);
 
 	  /* first get memory for the contributions to this projection */
@@ -2160,9 +2160,9 @@ calculation.\n");
 	  *******/
 	  p_DOS->contributions[0]--;
 	  p_DOS->weight_sum = p_DOS->weights[0];
-	  
+
 	  p_DOS->num_contributions = 1;
-	  
+
 	  /* check to see the type of contribution */
 	  upcase(numstring);
 	  if( strstr(numstring,"ORB") ){
@@ -2215,7 +2215,7 @@ calculation.\n");
 		/* copy over the old data */
 		bcopy((char *)real_ptr,(char *)p_DOS->weights,p_DOS->num_contributions*
 		      sizeof(real));
-		
+
 		int_ptr = p_DOS->contributions;
 		p_DOS->contributions = (int *)calloc(max_p_DOS,sizeof(int));
 		if( !p_DOS->contributions )
@@ -2226,32 +2226,32 @@ calculation.\n");
 		      p_DOS->num_contributions*sizeof(int));
 	      }
 	    }
-	  }		 
+	  }
 	}
       } /* end of keyword PROJECT */
-      
+
       else if( strstr(instring,"COOP") ){
 	/* read out the total number of COOPs in the file */
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d",&num_COOPS);
-	
+
 	/* loop until we've read in all of the COOP's in the file */
 	for(i=0;i<num_COOPS;i++){
 	  /* get space for the new COOP */
 	  new_COOP = (COOP_type *)calloc(1,sizeof(COOP_type));
 	  if( !(new_COOP) ) fatal("Can't get space for a COOP.");
-	  
+
 	  /* read in the information */
 	  skipcomments(infile,instring,FATAL);
 	  sscanf(instring,"%s %d %d %d %lf %lf %lf",
 		 numstring,&(new_COOP->which),&(new_COOP->contrib1),
 		 &(new_COOP->contrib2),&(new_COOP->cell.x),
 		 &(new_COOP->cell.y),&(new_COOP->cell.z));
-	  
+
 	  /* deal with the array indexing thing */
 	  new_COOP->contrib1--;
 	  new_COOP->contrib2--;
-	  
+
 	  /* figure out what type of COOP it is */
 	  upcase(numstring);
 	  if(strstr(numstring,"H-ATOM")){
@@ -2273,7 +2273,7 @@ calculation.\n");
 	    new_COOP->type = P_DOS_FMO;new_COOP->energy_weight= FALSE;
 	  }
 	  else fatal("Invalid COOP type in input file.");
-	  
+
 	  /*******
 	    now put this COOP into the proper place in the linked list.
 	    Start out by finding the right type column, then put this element
@@ -2307,15 +2307,15 @@ calculation.\n");
 	  }
 	}
       } /* end of keyword COOP */
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"MO PRINT") ){
 	/* deal with printing MO's */
-	
+
 	/* first read out the number of MOs to print */
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d",&(details->num_MOs_to_print));
-	
+
 	/* get memory */
 	details->MOs_to_print = (int *)calloc(details->num_MOs_to_print,
 					      sizeof(int));
@@ -2335,9 +2335,9 @@ calculation.\n");
 	  to get their own function.
 	  *****/
 	parse_printing_options(infile,details,cell);
-	
+
       } /* end of keyword PRINT */
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"BAND") ){
 	/* first get space for the band info storage */
@@ -2345,21 +2345,21 @@ calculation.\n");
 	  (band_info_type *)calloc(1,sizeof(band_info_type));
       	if( !details->band_info )fatal("Can't get space for the band info.");
 	band_info = details->band_info;
-	
+
 	/* read in the number of k points per symmetry line*/
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d",&(band_info->points_per_line));
-	
+
 	/* now get the number of special points */
 	skipcomments(infile,instring,FATAL);
 	sscanf(instring,"%d",&(band_info->num_special_points));
-	
+
 	/* get space for the special points */
 	band_info->special_points = (special_point_type *)
 	  calloc(band_info->num_special_points,sizeof(special_point_type));
 	if(!band_info->special_points)
 	  fatal("Can't get space for special point storage.");
-	
+
 	/* get space for the K points */
 	band_info->lines = (k_point_type *)
 	  calloc((band_info->num_special_points-1)*
@@ -2367,7 +2367,7 @@ calculation.\n");
 		 sizeof(special_point_type));
 	if(!band_info->lines)
 	  fatal("Can't get space for storage of symmetry lines.");
-	
+
 	/* read in the special points */
 	for(i=0;i<band_info->num_special_points;i++){
 	  skipcomments(infile,instring,FATAL);
@@ -2376,12 +2376,12 @@ calculation.\n");
 		 &band_info->special_points[i].loc.y,
 		 &band_info->special_points[i].loc.z);
 	}
-	
+
 	/* okay, got'em all, now generate the symmetry lines */
 	gen_symm_lines(band_info);
-	
+
 	/* that's all we need to do. */
-	
+
       } /* end of keyword BAND */
       else if( strstr(instring,"DIAGWO") ){
 	details->diag_wo_overlap=1;
@@ -2554,7 +2554,7 @@ calculation.\n");
 	  details->orbital_occups =
 	    (orbital_occup_type *)calloc(details->num_orbital_occups,sizeof(orbital_occup_type));
 	  if( !details->orbital_occups ) fatal("Can't get space for orbital occupations");
-	  
+
 	  for(i=0;i<details->num_orbital_occups;i++){
 	    skipcomments(infile,instring,FATAL);
 	    sscanf(instring,"%d %lf",&(details->orbital_occups[i].orb),
@@ -2590,7 +2590,7 @@ calculation.\n");
       else if( strstr(instring,"JUST MATR") ){
 	details->just_matrices = 1;
       }
-      
+
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"ALTERNATE O") ){
 	skipcomments(infile,instring,FATAL);
@@ -2603,7 +2603,7 @@ calculation.\n");
       else if( strstr(instring,"MULLER IT") ){
         if( cell->geom_frags )
           fatal("Muller iteration and Geom Frags are incompatible (for now).");
-          
+
 	details->do_muller_it = 1;
 	details->avg_props = 1;
       }
@@ -2656,7 +2656,7 @@ calculation.\n");
 	  sscanf(instring,"%d",&details->line_width);
 	}
       }
-      
+
       /*----------------------------------------------------------------------*/
       /* hmmm, we shouldn't have gotten here. spew some error messages */
       else{
@@ -2664,7 +2664,7 @@ calculation.\n");
 	strcat(tempstring,instring);
 	error(tempstring);
       }
-    }  /* end of keyword loop */    
+    }  /* end of keyword loop */
     /********
       make sure that we have parameters for the atoms by this point.
       If there was no PARAM keyword in the file, then we won't have,
@@ -2689,9 +2689,9 @@ calculation.\n");
       if( cell->charge != -1000.0 ){
 	charge_to_num_electrons(cell);
       }
-	
+
       fprintf(status_file,"Completed parameter acquisition.\n");
-    }      
+    }
 
     /*******
 
@@ -2726,7 +2726,7 @@ calculation.\n");
   }
 #endif
 }
-    
+
 /**************************************************************************************
    NOTE:  AUTO-WALSH is a registered trademark of Sneaky Weasel Software and should
     not be used without permission or even mentioned without the appropriate reverence
@@ -2734,5 +2734,5 @@ calculation.\n");
 
    The preceding message was a big joke.
 ***************************************************************************************/
-    
-    
+
+

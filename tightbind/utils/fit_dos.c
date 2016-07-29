@@ -55,7 +55,7 @@ void main()
   point_type *points,*tpoints;
   real *integration;
   int *num_states,*t_states;
-  
+
   int max_p,num_p,num_so_far;
   real E_min,E_max,E_step,curr_E,E_diff;
   real DOS_here;
@@ -75,13 +75,13 @@ void main()
 #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
-  
+
 	/* set up some stuff for Sioux */
 	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;	
+	SIOUXSettings.asktosaveonclose = FALSE;
 	SIOUXSettings.autocloseonquit = FALSE;
 	printf("Starting fit_dos.\n");
-	
+
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
   	fatal("User cancelled intial file open");
@@ -114,7 +114,7 @@ void main()
     fatal("Can't open file.");
   }
 
-  
+
   E_step = ENERGY_STEP;
   broadening = BROADENING;
 
@@ -144,7 +144,7 @@ void main()
 
   if( !num_states ) fatal("Can't get space for num_states.");
 
-  
+
   /*******
 
     if the file included a walsh diagram, the information for the
@@ -187,7 +187,7 @@ void main()
   }
   if( eof_hit < 0 ){
     fatal("End of file hit before DOS data was found.\n");
-  }    
+  }
 
   /*****
 
@@ -218,7 +218,7 @@ void main()
 	upcase(instring);
       }
       eof_hit = skipcomments(infile,instring,FATAL);
-      upcase(instring);      
+      upcase(instring);
       i++;
     }
     /* we're at the right step... move on to the DOS data */
@@ -230,7 +230,7 @@ void main()
       upcase(instring);
     }
   }
-      
+
   /* open the output file */
   if( num_walsh_steps ){
     sprintf(instring,"%s.step%d.DOS",argv[1],which_walsh_step);
@@ -260,19 +260,19 @@ void main()
   sscanf(instring,"%d",&(num_states[0]));
   num_curves++;
   skipcomments(infile,instring,FATAL);
-  
+
   /******
 
     okay, we're at the beginning of the DOS data, now read it all in.
      Stop when we hit a line beginning with a #
-    
+
   *******/
   skipcomments(infile,instring,FATAL);
   while(instring[0] != '#'){
     sscanf(instring,"%lf %lf",&(points[num_p].height),&(points[num_p].energy));
     num_p++;
     num_so_far++;
-    
+
     /* check to see if we need more memory */
     if( num_p == max_p ){
       max_p += 100;
@@ -323,7 +323,7 @@ void main()
 	/* free up the old memory */
 	free(t_states);
       }
-	
+
 
       /******
 	deal with the possibility of multiple contributions to the projected
@@ -346,7 +346,7 @@ void main()
 	sscanf(instring,"%lf %lf",&(points[num_p].height),&(points[num_p].energy));
 	num_p++;
 	num_so_far++;
-	
+
 	/* check to see if we need more memory */
 	if( num_p == max_p ){
 	  max_p += 100;
@@ -362,10 +362,10 @@ void main()
     }
   }
   /******
-    
+
     now that we have all the points, generate the curve by smoothing
     the data we have with Gaussians.
-    
+
   *******/
   num_E_steps = (int)ceil(fabs(E_max-E_min)/E_step)+1;
 
@@ -384,8 +384,8 @@ void main()
       /* add the value of the integration at the previous energy step */
       if( i != 0 ){
 	integration[i*num_DOS+j] = integration[(i-1)*num_DOS+j];
-      }	
-      
+      }
+
       /* now loop over all the points in this DOS curve */
       for(k=0;k<points_per_DOS;k++,num_p++){
 	E_diff = curr_E - points[num_p].energy;
@@ -412,7 +412,7 @@ void main()
 
   ******/
   fprintf(outfile,"# END OF DOS\n");
-  fprintf(outfile,"# BEGIN INTEGRATION\n");  
+  fprintf(outfile,"# BEGIN INTEGRATION\n");
   for(i=0, curr_E=E_min;i<num_E_steps;i++, curr_E += E_step ){
     for( j=0; j<num_DOS; j++ ){
       fprintf(outfile,"%lf ",integration[i*num_DOS+j]);
@@ -421,7 +421,7 @@ void main()
   }
 
   /****
-    find and read out the fermi energy 
+    find and read out the fermi energy
   *****/
   eof_hit = skipcomments(infile,instring,IGNORE);
   upcase(instring);
@@ -438,10 +438,10 @@ void main()
     fermi = 0;
   }
   fprintf(outfile,"\n#FERMI_ENERGY: %lf\n",fermi);
-  
+
   printf("Done!\n\n");
 }
-    
+
 
 
 

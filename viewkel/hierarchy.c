@@ -69,16 +69,16 @@ void makenewobject(void)
 {
   head_type *new_head;
   object_type *new_object;
-  
+
   /* allocate a new head node */
   new_head = (head_type *)D_CALLOC(1,sizeof(head_type));
   /* now allocate space for the new object */
   new_object = (object_type *)D_CALLOC(1,sizeof(object_type));
   if( !new_head || !new_object )fatal( "Memory allocation." );
-  
+
   new_head->next = head;
   head = new_head;
-  
+
   /* set the pointer to this object */
   new_head->obj=new_object;
 
@@ -106,7 +106,7 @@ void addchild( object_type *parent, object_type *child )
   int i;
   object_type *newobj;
   head_type *temp1, *temp2;
-  
+
   if( parent == child ){
     display("No way bud.");
     return;
@@ -121,7 +121,7 @@ void addchild( object_type *parent, object_type *child )
   parent->prim = 0;
   newobj->rot.x=parent->rot.x;newobj->rot.y=parent->rot.y;newobj->rot.z=parent->rot.z;
   newobj->scale.x=parent->scale.x;newobj->scale.y=parent->scale.y;newobj->scale.z=parent->scale.z;
-  newobj->cent.x=parent->cent.x;newobj->cent.y=parent->cent.y;newobj->cent.z=parent->cent.z;  
+  newobj->cent.x=parent->cent.x;newobj->cent.y=parent->cent.y;newobj->cent.z=parent->cent.z;
   while(parent->children[i]){
     newobj->children[i]=parent->children[i];
     parent->children[i]=0;
@@ -129,7 +129,7 @@ void addchild( object_type *parent, object_type *child )
   }
   /* there is no need to update the bounding box since the screen will be
      redrawn after this */
-  
+
   /* now, the parents parms should be set */
   parent->scale.x=1;parent->scale.y=1;parent->scale.z=1;
   parent->rot.x=0;parent->rot.y=0;parent->rot.z=0;
@@ -141,7 +141,7 @@ void addchild( object_type *parent, object_type *child )
   /* set the pointers to the new object and to child */
   parent->children[0]=newobj;
   parent->children[1]=child;
-  
+
   /* now clear up the pointers to child */
   if( parenthead ){
     /* if the child comes off of a forest node, then kill that node */
@@ -191,7 +191,7 @@ void addchild( object_type *parent, object_type *child )
 void free_obj(object_type *obj)
 {
   int i,j;
-  
+
   if( obj->prim->molec ){
     molec_type *molec;
     molec = obj->prim->molec;
@@ -209,9 +209,9 @@ void free_obj(object_type *obj)
     if( molec->lines ) D_FREE(molec->lines);
     D_FREE(molec->num_lines);
     if( molec->polyhed_centers ) D_FREE(molec->polyhed_centers);
-    if( molec->polyhed_rads ) D_FREE(molec->polyhed_rads);    
-    if( molec->polyhed_verts ) D_FREE(molec->polyhed_verts);    
-    if( molec->triangles ) D_FREE(molec->triangles);    
+    if( molec->polyhed_rads ) D_FREE(molec->polyhed_rads);
+    if( molec->polyhed_verts ) D_FREE(molec->polyhed_verts);
+    if( molec->triangles ) D_FREE(molec->triangles);
     D_FREE(molec);
   }
   if( obj->prim->cont_plot ){
@@ -242,7 +242,7 @@ void free_obj(object_type *obj)
 	D_FREE(cont1);
 	cont1 = cont2;
       }
-    }	     
+    }
 
     if( cont_plot->contours ) D_FREE(cont_plot->contours);
 
@@ -318,9 +318,9 @@ void free_obj(object_type *obj)
     if( molec->lines ) D_FREE(molec->lines);
     D_FREE(molec->num_lines);
     if( molec->polyhed_centers ) D_FREE(molec->polyhed_centers);
-    if( molec->polyhed_rads ) D_FREE(molec->polyhed_rads);    
-    if( molec->polyhed_verts ) D_FREE(molec->polyhed_verts);    
-    if( molec->triangles ) D_FREE(molec->triangles);    
+    if( molec->polyhed_rads ) D_FREE(molec->polyhed_rads);
+    if( molec->polyhed_verts ) D_FREE(molec->polyhed_verts);
+    if( molec->triangles ) D_FREE(molec->triangles);
     D_FREE(molec);
   }
   if( obj->prim->graph ){
@@ -412,14 +412,14 @@ void free_obj(object_type *obj)
     }
     D_FREE(obj->prim->label);
   }
-  
+
   /* free up the button window, if it exists */
   if( obj->prim->but_win && obj->prim->but_win->child )
     free_child_but_win(obj->prim->but_win->child);
   if( obj->prim->but_win ) free_but_win(obj->prim->but_win,&button_wins);
 
   D_FREE(obj->prim);
-}  
+}
 
 
 
@@ -441,10 +441,10 @@ void clearall(void)
   int i;
   object_type *obj1, *obj2;
   head_type *head1, *head2;
-  
+
   /* make sure that there are some objects present */
   if( !head ) return;
-  
+
   /* get rid of them */
   head1=head;
   while( head1 ){
@@ -475,7 +475,7 @@ void clearall(void)
   camera->vup.z=0;
   camera->hsize=10;
   camera->foclength=15.975;
-  
+
   redrawgraph();
   display("Hierarchy tree purged");
 }
@@ -496,10 +496,10 @@ void clear_labels(void)
   int i;
   object_type *obj1, *obj2;
   head_type *head1, *head2;
-  
+
   /* make sure that there are some objects present */
   if( !head ) return;
-  
+
   /* get rid of them */
   head1=head;
   while( head1 ){
@@ -525,7 +525,7 @@ void clear_labels(void)
     }
   }
   whichobj=head->obj;
-  
+
   redrawgraph();
   display("Labels purged");
 }
@@ -549,7 +549,7 @@ void select_object(int xpos,int ypos)
 {
   head_type *temphead;
   int done;
-  
+
   /* step through all the objects */
   temphead = head;
   done = 0;
@@ -582,7 +582,7 @@ fprintf(stderr,"pos: (%d,%d), bmin: (%f %f), bmax: (%f %f)\n",
  *
  * Returns: int
  *
- * Action:   This finds the first atom that 
+ * Action:   This finds the first atom that
  *    includes the point 'xpos,'ypos in its radius
  *    if no atom is found then nothing is done
  *
@@ -595,7 +595,7 @@ int select_atom(molec_type *molec,int xpos,int ypos)
   int which;
   float dist;
   atom_type *atoms;
-  
+
   if( !molec ) FATAL_BUG("Bogus molec passed to select_atom");
 
   if(molec->num_frames > 1)
@@ -642,7 +642,7 @@ int select_atom(molec_type *molec,int xpos,int ypos)
         removing selected atoms can be tricky if they
         are low numbered (we don't want to leave holes in
         the selected atoms array).
-        
+
         so... loop over the other selected atoms and
         decrement their is_selected fields.
       *******/
@@ -661,7 +661,7 @@ int select_atom(molec_type *molec,int xpos,int ypos)
       num_selected--;
     }else{
       /*******
-        
+
         keep track of the selection order, so that
         the handedness of stuff can be dealt with
 
@@ -687,7 +687,7 @@ int select_atom(molec_type *molec,int xpos,int ypos)
  *
  * Returns: int
  *
- * Action:   This finds all of the atoms which  
+ * Action:   This finds all of the atoms which
  *    fall inside the box defined by startx,starty,endx,endy
  *
  *    if no atoms are found then nothing is done
@@ -701,7 +701,7 @@ int select_atoms_in_region(molec_type *molec,int startx,int starty,
   int i;
   int which=0;
   atom_type *atoms;
-  
+
   if( !molec ) FATAL_BUG("Bogus molec passed to select_atom");
 
   if(molec->num_frames > 1)

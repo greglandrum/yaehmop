@@ -73,7 +73,7 @@ int *my_malloc(long size)
   }
   return tptr;
 }
-    
+
 /****************************************************************************
 *
 *                   Procedure my_calloc
@@ -103,7 +103,7 @@ int *my_calloc(int num, int size)
   }
   return tptr;
 }
-    
+
 /****************************************************************************
 *
 *                   Procedure my_realloc
@@ -131,14 +131,14 @@ int *my_realloc(int *ptr, int size)
   }else{
     tot_usage += size;
   }
-  
+
   /* we've got the new memory, copy in the old data */
   bcopy(ptr,tptr,size);
   /* free up the old pointer */
   free(ptr);
   return tptr;
 }
-    
+
 
 
 
@@ -165,13 +165,13 @@ int *my_realloc(int *ptr, int size)
 *
 * Returns: none
 *
-* Action: 
+* Action:
 *      This allocates the memory necessary for the Hamiltonian and overlap
 *      matrices.  It also sets the variables indicating the dimensions
 *      of these arrays.
 *
 *    The amount of memory used depends on the mode in which the program is
-*     running. 
+*     running.
 *
 * For Fat mode:
 *    The overlap matrix in R space is num_orbs*num_orbs*tot_overlaps in size
@@ -180,7 +180,7 @@ int *my_realloc(int *ptr, int size)
 *     case) overlaps possible.
 *
 *    The Hamiltonian matrix in R space is only num_orbs*num_orbs in
-*      size. 
+*      size.
 *
 *
 * For Thin mode:
@@ -220,7 +220,7 @@ void allocate_matrices(cell,details,H_R,S_R,
   cell_type *cell;
   detail_type *details;
   hermetian_matrix_type *H_R,*S_R;
-  hermetian_matrix_type *H_K,*S_K;  
+  hermetian_matrix_type *H_K,*S_K;
   complex **cmplx_hamil,**cmplx_overlap;
   eigenset_type *eigenset;
   real **work1,**work2,**work3;
@@ -266,7 +266,7 @@ void allocate_matrices(cell,details,H_R,S_R,
 						     sizeof(int));
       if( !FMO_frag->orbital_lookup_table )
 	fatal("Can't get space for an FMO orbital_lookup_table.");
-      
+
       for( j=0;j<FMO_frag->num_atoms;j++ ){
 	find_atoms_orbs(num_orbs,cell->num_atoms,FMO_frag->atoms_in_frag[j],
 			orbital_lookup_table,&begin,&end);
@@ -287,23 +287,23 @@ void allocate_matrices(cell,details,H_R,S_R,
     }
   }
 
-  
+
   /* here's some stuff that is specific to extended systems */
   if( cell->dim > 0){
     /* figure out how many distinct overlaps there will be */
     *tot_overlaps = (2*cell->overlaps[0]+1)*(2*cell->overlaps[1]+1)*
       cell->overlaps[2] + cell->overlaps[0] + 1 +
 	(2*cell->overlaps[0]+1)*cell->overlaps[1];
-    
+
     fprintf(status_file,"%d overlaps will be considered.\n",*tot_overlaps);
 
     /* figure out about how much memory is gonna be needed */
     if( details->Execution_Mode == FAT ){
 
       if( !details->num_KPOINTS || *tot_overlaps <= details->num_KPOINTS
-	 || details->the_COOPS 
+	 || details->the_COOPS
 	 || details->num_FMO_frags
-	 || details->num_FCO_frags	 
+	 || details->num_FCO_frags
 	 || details->band_info ){
 	mem_per_overlapR = num_orbs*(num_orbs)*(*tot_overlaps);
 	mem_per_overlapK = num_orbs*(num_orbs);
@@ -337,18 +337,18 @@ void allocate_matrices(cell,details,H_R,S_R,
 
   /* this is the total amount needed for the average properties */
   mem_for_avg_props = num_orbs*(num_orbs)*details->num_KPOINTS*3 +
-    (num_orbs)*details->num_KPOINTS; 
+    (num_orbs)*details->num_KPOINTS;
 
   /* this is an _approximate_ measure of the amount of memory required */
   estimated_usage =
     mem_per_hamR + mem_per_hamK + mem_per_overlapR + mem_per_overlapK
       + 3*(num_orbs)*(num_orbs)+3*(num_orbs) + cell->num_atoms;
-    
+
 
   /******
 
     it's gonna take about twice as much memory if we're doing FMO
-    
+
     This is an *extremely* approximate measure.
 
   ****/
@@ -356,7 +356,7 @@ void allocate_matrices(cell,details,H_R,S_R,
     mem_for_avg_props *= 2;
     estimated_usage += mem_per_hamK + mem_per_overlapK + num_orbs;
   }
-    
+
   /***********
     Since the total amount of memory for the avg_props array will
     eventually be needed (to actually calculate the properties),
@@ -390,7 +390,7 @@ is present.\n");
       estimated_usage += mem_for_avg_props;
     }
   }
-    
+
   estimated_usage *= sizeof(real); /* convert to bytes */
   estimated_usage /= 1024; /* then to Kbytes */
 
@@ -402,10 +402,10 @@ is present.\n");
 
   if( !details->just_geom ){
     /*********
-      
+
       now actually get the memory
       (and make sure that we got it)
-      
+
       ***********/
     H_R->mat = (real *)my_malloc(mem_per_hamR*sizeof(real));
     S_R->mat = (real *)my_malloc(mem_per_overlapR*sizeof(real));
@@ -427,14 +427,14 @@ is present.\n");
       if( !(*cmplx_hamil) || !(*cmplx_overlap) ){
 	fatal("Can't allocate complex matrices");
       }
-#endif    
-    
+#endif
+
       eigenset->vectR = (real *)my_calloc(num_orbs*(num_orbs),sizeof(real));
       eigenset->vectI = (real *)my_calloc(num_orbs*(num_orbs),sizeof(real));
       eigenset->val = (real *)my_calloc(num_orbs,sizeof(real));
       if( !(eigenset->vectR) || !(eigenset->val) )
 	fatal("Can't allocate space for the eigenset storage.");
-    
+
     /* only get space for mulliken population analysis if we need to */
       if( details->OP_mat_PRT || details->ROP_mat_PRT || details->net_chg_PRT
 	  || details->vary_zeta || details->avg_props){
@@ -449,7 +449,7 @@ is present.\n");
 	  fatal("Can't get space for reduced OP matrix.");
       }
     /* only get space for modified mulliken population analysis if we need to */
-      if( details->mod_OP_mat_PRT || details->mod_ROP_mat_PRT || 
+      if( details->mod_OP_mat_PRT || details->mod_ROP_mat_PRT ||
 	 details->mod_net_chg_PRT){
 	properties->mod_OP_mat = (real *)my_calloc(num_orbs*(num_orbs),sizeof(real));
 	properties->mod_net_chgs = (real *)my_calloc(cell->num_atoms,sizeof(real));
@@ -472,7 +472,7 @@ is present.\n");
 	    fatal("Can't get space for the reduced charge matrix.");
 	}
       }
-    
+
       /* the temporary storage arrays */
       *work1 = (real *)my_calloc(num_orbs,sizeof(real));
       *work2 = (real *)my_calloc(num_orbs,sizeof(real));
@@ -484,21 +484,21 @@ is present.\n");
       *cmplx_work = (complex *)my_malloc(num_orbs*num_orbs*sizeof(complex));
       if( !(*cmplx_work) )
 	fatal("Can't get space for complex work array");
-#endif    
-    }    
+#endif
+    }
     /********
-      
+
       get space for the average properties data
       ( if we need it and aren't running in THIN mode )
-      
+
       *********/
     if( details->Execution_Mode != THIN && details->avg_props &&
-	!details->just_matrices){      
+	!details->just_matrices){
       *avg_prop_info = (avg_prop_info_type *)my_calloc(details->num_KPOINTS,
 						    sizeof(avg_prop_info_type));
       if( !(*avg_prop_info) )
 	fatal("Can't get info for average properties info array.");
-      
+
       /******
 	loop through and get the memory for each element of the
 	avg_prop_info array
@@ -512,7 +512,7 @@ is present.\n");
 #endif
 	  (*avg_prop_info)[i].chg_mat = (float *)my_calloc(num_orbs*(num_orbs),
 							sizeof(float));
-	  
+
 	  if( !(*avg_prop_info)[i].chg_mat ){
 	    fatal("Can't get memory for an array within the avg_prop_info array.");
 	  }
@@ -534,15 +534,15 @@ is present.\n");
 	    fatal("Can't get memory for an FMO array within the avg_prop_info array.");
 	}
       }
-      
+
       *orbital_ordering = (K_orb_ptr_type *)my_calloc(num_orbs*
 						   details->num_KPOINTS,
 						   sizeof(K_orb_ptr_type));
       if(!(*orbital_ordering))
 	fatal("Can't get memory for orbital ordering array.");
-      
+
     }
-    
+
     /********
 
       allocate the memory needed for the FMO analysis
@@ -552,14 +552,14 @@ is present.\n");
 
       details->FMO_props = (FMO_prop_type *)my_calloc(1,sizeof(FMO_prop_type));
       if( !details->FMO_props ) fatal("Can't get memory for FMO_props.");
-      
+
       details->FMO_props->eigenset.vectR = (real *)my_calloc((num_orbs)*(num_orbs),
 						     sizeof(real));
       details->FMO_props->eigenset.vectI = (real *)my_calloc((num_orbs)*(num_orbs),
 						     sizeof(real));
       if( !details->FMO_props->eigenset.vectI )
 	fatal("Can't get memory for eigenvectors in FMO basis.");
-      
+
       details->FMO_props->eigenset.dim = num_orbs;
       /*****
 	we don't need to get memory to store energies... that's already
@@ -649,22 +649,22 @@ is present.\n");
 	FMO_frag->eigenset.vectI = (real *)my_calloc(FMO_frag->num_orbs*FMO_frag->num_orbs,
 						   sizeof(real));
 	FMO_frag->eigenset.val = (real *)my_calloc(FMO_frag->num_orbs,sizeof(real));
-	
+
 	if( !(FMO_frag->eigenset.vectR) || !(FMO_frag->eigenset.val) )
 	  fatal("Can't allocate space for the FMO eigenset storage.");
 
       }
     }
     /* that's that, everything is set.... */
-  }  
+  }
 }
-    
-
-  
 
 
 
 
-  
-    
-  
+
+
+
+
+
+

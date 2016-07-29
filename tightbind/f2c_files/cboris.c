@@ -10,7 +10,7 @@
 extern int cchol_(integer *n, integer *nd, doublereal *a, integer *fail);
 extern int ctred2_(integer *n, integer *nd, doublereal *a, doublereal *b,
 					doublereal *d,doublereal *e,doublereal *f);
-					
+
 extern int ctql2_(integer *n, integer *nd, doublereal *d, doublereal *e,
 					doublereal *f,doublereal *a,doublereal *b,integer *fail);
 
@@ -23,7 +23,7 @@ doublereal *a, *b, *c, *d, *e, *f;
 integer *fail;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, 
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2,
 	    i__3;
 
     /* Local variables */
@@ -152,11 +152,11 @@ L11:
 	    i__3 = ia;
 	    for (k = 1; k <= i__3; ++k) {
 		a[i + j * a_dim1] = a[i + j * a_dim1] - a[k + j * a_dim1] * b[
-			i + k * b_dim1] + c[k + j * c_dim1] * b[k + i * 
+			i + k * b_dim1] + c[k + j * c_dim1] * b[k + i *
 			b_dim1];
 /* L20: */
 		c[i + j * c_dim1] = c[i + j * c_dim1] - a[k + j * a_dim1] * b[
-			k + i * b_dim1] - c[k + j * c_dim1] * b[i + k * 
+			k + i * b_dim1] - c[k + j * c_dim1] * b[i + k *
 			b_dim1];
 	    }
 L21:
@@ -179,11 +179,11 @@ L21:
 	    i__3 = ja;
 	    for (k = 1; k <= i__3; ++k) {
 		a[i + j * a_dim1] = a[i + j * a_dim1] - a[i + k * a_dim1] * b[
-			j + k * b_dim1] - c[i + k * c_dim1] * b[k + j * 
+			j + k * b_dim1] - c[i + k * c_dim1] * b[k + j *
 			b_dim1];
 /* L30: */
 		c[i + j * c_dim1] = c[i + j * c_dim1] + a[i + k * a_dim1] * b[
-			k + j * b_dim1] - c[i + k * c_dim1] * b[j + k * 
+			k + j * b_dim1] - c[i + k * c_dim1] * b[j + k *
 			b_dim1];
 	    }
 L31:
@@ -233,11 +233,11 @@ L41:
 	    i__3 = *n;
 	    for (k = ia; k <= i__3; ++k) {
 		a[i + j * a_dim1] = a[i + j * a_dim1] - a[k + j * a_dim1] * b[
-			k + i * b_dim1] - c[k + j * c_dim1] * b[i + k * 
+			k + i * b_dim1] - c[k + j * c_dim1] * b[i + k *
 			b_dim1];
 /* L50: */
 		c[i + j * c_dim1] = c[i + j * c_dim1] + a[k + j * a_dim1] * b[
-			i + k * b_dim1] - c[k + j * c_dim1] * b[k + i * 
+			i + k * b_dim1] - c[k + j * c_dim1] * b[k + i *
 			b_dim1];
 	    }
 L51:

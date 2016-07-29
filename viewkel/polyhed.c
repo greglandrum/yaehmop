@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   this has got the stuff for dealing with coordination
   polyhedra
 
-*********/  
+*********/
 #include "viewkel.h"
 #include "polyhed.h"
 
@@ -68,7 +68,7 @@ void set_tri_parms(triangle_list_type *temp_tri,atom_type *active_atoms){
   temp_tri->tri.center.z = (active_atoms[i].loc.z +
 			    active_atoms[j].loc.z +
 			    active_atoms[k].loc.z ) / 3;
-	
+
   /* set normal */
   V3Sub(&active_atoms[i].loc,&active_atoms[j].loc,&v1);
   V3Sub(&active_atoms[i].loc,&active_atoms[k].loc,&v2);
@@ -124,7 +124,7 @@ void set_tri_parms(triangle_list_type *temp_tri,atom_type *active_atoms){
     if(active_atoms[k].loc.z < temp_tri->bmin.z )
       temp_tri->bmin.z = active_atoms[k].loc.z;
 
-	  
+
     /* make sure the normal points away from the central atom */
     V3Sub(&temp_tri->tri.center,&active_atoms[0].loc,&v1);
     proj = V3Dot(&temp_tri->tri.normal,&v1);
@@ -161,7 +161,7 @@ void gen_coord_polyhed(molec_type *molec)
   else atoms = molec->atoms;
 
   readfloatparm("coordination cut off",&cut_off);
-  
+
   num_polyhed=0;
   for(i=0;i<molec->num_atoms;i++){
     if( atoms[i].is_selected ){
@@ -187,7 +187,7 @@ void gen_coord_polyhed(molec_type *molec)
       }
     }
   }
-    
+
 }
 /****************************************************************************
  *
@@ -208,7 +208,7 @@ void gen_coord_polyhed(molec_type *molec)
  *
  *  if 'initialize is nonzero, existing triangles will be
  *   blown out.
- *  
+ *
  ****************************************************************************/
 void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
 			int initialize)
@@ -298,7 +298,7 @@ void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
 
     molec->triangles = (triangle_type *)D_CALLOC(num_tris,
 					       sizeof(triangle_type));
-    
+
     if(!molec->triangles) fatal("Can't get space to store triangles.");
 
     if(molec->polyhed_verts)D_FREE(molec->polyhed_verts);
@@ -309,7 +309,7 @@ void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
     molec->num_triangles = 0;
     molec->num_polyhed_verts = 0;
   } else{
-    
+
     molec->triangles = (triangle_type *)
       D_REALLOC((void *)molec->triangles,
 	      (num_tris+molec->num_triangles)*sizeof(triangle_type));
@@ -326,7 +326,7 @@ void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
   }
 
 
-    
+
   i=molec->num_triangles;
 
   tri1 = tri_list;
@@ -364,7 +364,7 @@ while(tri1){
 	  tri1->tri.normal.x,tri1->tri.normal.y,tri1->tri.normal.z);
   tri1 = tri1->next;
 }
-  
+
 
   /* clean up the memory we allocated */
   tri1 = tri_list;

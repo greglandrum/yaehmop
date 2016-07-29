@@ -76,11 +76,11 @@ void R_space_Hamiltonian(cell,details,overlap,hamil,num_orbs,orbital_lookup_tabl
   int orb_tab1;
   atom_type *atom_ptr1;
 
-  /* put in the diagonal elements */  
+  /* put in the diagonal elements */
   for(i=0;i<cell->num_atoms;i++){
     atom_ptr1 = &(cell->atoms[i]);
     orb_tab1 = orbital_lookup_table[i];
-    
+
     /* trap dummy atoms */
     if( orb_tab1 >= 0 ){
       if( atom_ptr1->ns != 0 ) hamil.mat[orb_tab1+BEGIN_S]
@@ -98,8 +98,8 @@ void R_space_Hamiltonian(cell,details,overlap,hamil,num_orbs,orbital_lookup_tabl
 	  hamil.mat[orb_tab1+j] = atom_ptr1->coul_f;
 	}
     }
-  }      
-}    
+  }
+}
 
 /****************************************************************************
  *
@@ -133,7 +133,7 @@ void full_R_space_Hamiltonian(cell_type *cell,detail_type *details,
 #if 0
 real *rham;
 
-rham = (real *)calloc(num_orbs*num_orbs,sizeof(real));  
+rham = (real *)calloc(num_orbs*num_orbs,sizeof(real));
 #endif
 
   /* get space for the diagonal elements if it hasn't been done already */
@@ -145,7 +145,7 @@ rham = (real *)calloc(num_orbs*num_orbs,sizeof(real));
   /******
     put in the diagonal elements. These are just the coulomb
     integrals, which are given in the input file.
-  *******/  
+  *******/
   for(i=0;i<cell->num_atoms;i++){
     atom_ptr1 = &(cell->atoms[i]);
     orb_tab1 = orbital_lookup_table[i];
@@ -171,7 +171,7 @@ rham = (real *)calloc(num_orbs*num_orbs,sizeof(real));
 	      atom_ptr1->coul_d;
 	}
       }
-      
+
       if( atom_ptr1->nf != 0 ){
 	for(j=BEGIN_F;j<=END_F;j++){
 	  diagonal_elements[orb_tab1+j] =
@@ -179,7 +179,7 @@ rham = (real *)calloc(num_orbs*num_orbs,sizeof(real));
 	      atom_ptr1->coul_f;
 	}
       }
-    }      
+    }
   }
   /* now do the off diagonals */
   for(i=1;i<num_orbs;i++){
@@ -216,6 +216,6 @@ printmat(overlap.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);
   fprintf(output_file,"\n\n----------------------------------Hamiltonian:\n");
 printmat(rham,num_orbs,num_orbs,output_file,1e-6,details->line_width);
 #endif
-}    
+}
 
 

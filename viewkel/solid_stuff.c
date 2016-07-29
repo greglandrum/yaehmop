@@ -48,14 +48,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ***/
 
 /********
-  
+
   This has everything that has to be kept separate for solids....
     this isn't a whole lot, because basically we can treat solids
     like molecules.
 
   written by greg Landrum,  September 1994
 
-*********/  
+*********/
 
 
 #include "viewkel.h"
@@ -66,13 +66,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Arguments: num_args: int
  *             solid_p: array of pointers to char
- *            
+ *
  * Returns: none
  *
  * Action: Prompts the user for the number of cells along each lattice
  *    vector to display, calculates the position of atoms along
  *    the lattice vectors, and adds them to the list of atoms.
- *  
+ *
  ****************************************************************************/
 void grow_solid(int num_args,char *solid_p[MAX_ARGS])
 {
@@ -84,7 +84,7 @@ void grow_solid(int num_args,char *solid_p[MAX_ARGS])
   atom_type *temp_atoms;
   int old_num_atoms;
   int num_added;
-  
+
   /* first get a pointer to the molecule that we are working with */
   solid = (molec_type *)solid_p[0];
 
@@ -109,7 +109,7 @@ void grow_solid(int num_args,char *solid_p[MAX_ARGS])
       display("HEY!");
       error("Don't enter dumb values!");
       num_b = 1;
-    }  
+    }
   }
   else{
     num_b = num_c = 1;
@@ -120,7 +120,7 @@ void grow_solid(int num_args,char *solid_p[MAX_ARGS])
       display("HEY!");
       error("Don't enter dumb values!");
       num_c = 1;
-    }  
+    }
   }
   else{
     num_c = 1;
@@ -140,7 +140,7 @@ void grow_solid(int num_args,char *solid_p[MAX_ARGS])
   temp_atoms = (atom_type *)D_CALLOC(solid->num_atoms*solid->num_frames,
 				   sizeof(atom_type));
   if( !temp_atoms ) fatal("Memory allocation: can't get space for more atoms.");
-  
+
   /* now grow the crystal */
   num_added = 0;
   for(frame = 0;frame < solid->num_frames; frame++){
@@ -176,7 +176,7 @@ void grow_solid(int num_args,char *solid_p[MAX_ARGS])
 	      solid->atoms[frame*old_num_atoms+l].loc.z +
 	      dist_a.z + dist_b.z + dist_c.z;
 	    temp_atoms[num_added].num = num_added;
-	    
+
 	    /* we copied over some pointers too... this is bad */
 	    temp_atoms[num_added].linesto = 0;
 #ifdef INCLUDE_ADF_PLOTS
@@ -216,23 +216,23 @@ void grow_solid(int num_args,char *solid_p[MAX_ARGS])
   solid->cell_box[0].x = solid->lattice_vect[0].x;
   solid->cell_box[0].y = solid->lattice_vect[0].y;
   solid->cell_box[0].z = solid->lattice_vect[0].z;
-  solid->cell_box[1].x = 
+  solid->cell_box[1].x =
     num_a*solid->orig_lattice[1].x;
-  solid->cell_box[1].y = 
+  solid->cell_box[1].y =
     num_a*solid->orig_lattice[1].y;
-  solid->cell_box[1].z = 
+  solid->cell_box[1].z =
     num_a*solid->orig_lattice[1].z;
-  solid->cell_box[3].x = 
+  solid->cell_box[3].x =
     num_b*solid->orig_lattice[2].x;
-  solid->cell_box[3].y = 
+  solid->cell_box[3].y =
     num_b*solid->orig_lattice[2].y;
-  solid->cell_box[3].z = 
+  solid->cell_box[3].z =
     num_b*solid->orig_lattice[2].z;
-  solid->cell_box[4].x = 
+  solid->cell_box[4].x =
     num_b*solid->orig_lattice[3].x;
-  solid->cell_box[4].y = 
+  solid->cell_box[4].y =
     num_b*solid->orig_lattice[3].y;
-  solid->cell_box[4].z = 
+  solid->cell_box[4].z =
     num_b*solid->orig_lattice[3].z;
   V3Add(&solid->cell_box[1],&solid->cell_box[3],
 	&solid->cell_box[2]);
@@ -248,7 +248,7 @@ void grow_solid(int num_args,char *solid_p[MAX_ARGS])
   }
 
   display("There ya go!");
-}	  
+}
 
 
 
@@ -258,12 +258,12 @@ void grow_solid(int num_args,char *solid_p[MAX_ARGS])
  *
  * Arguments: num_args: int
  *             solid_p: array of pointers to char
- *            
+ *
  * Returns: none
  *
  * Action: This is the same as grow_solid (above), only the wavefunction
  *   coefficients are updates as well.
- *  
+ *
  ****************************************************************************/
 void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
 {
@@ -276,7 +276,7 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
   atom_type *temp_atoms;
   int num_added,old_num_atoms;
   float kdotr,cos_kdotr,sin_kdotr;
-  
+
   /* first get a pointer to the molecule that we are working with */
   solid = (molec_type *)solid_p[0];
   MO_surf = (MO_surface_type *)solid_p[1];
@@ -287,7 +287,7 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
     error("grow_solid_with_surface called with a molecule as an argument. This is a bug.");
     return;
   }
-  
+
   display("Look in the xterm");
   printf("This crystal is %d dimensional.\n",solid->num_dim);
   printf(" Please enter the number of cells along each lattice direction on separate lines.\n");
@@ -304,7 +304,7 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
       display("HEY!");
       error("Don't enter dumb values!");
       num_b = 1;
-    }  
+    }
   }
   else{
     num_b = num_c = 1;
@@ -315,7 +315,7 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
       display("HEY!");
       error("Don't enter dumb values!");
       num_c = 1;
-    }  
+    }
   }
   else{
     num_c = 1;
@@ -341,7 +341,7 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
   temp_centers = (MO_center_list_type *)D_CALLOC(MO_surf->num_centers,
 					       sizeof(MO_center_list_type));
   if( !temp_centers ) fatal("Can't get space for more orbitals.");
-  
+
   /* now grow the crystal */
   num_added = 0;
   for(i=0;i<num_a;i++){
@@ -375,7 +375,7 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
 		MO_surf->raw_MO_centers[0].AO_list[0].coeffI[0]);
 #endif
 
-	
+
 	/* now update the locations */
 	for(l=0;l<solid->num_atoms_in_cell;l++){
 	  l = num_added % MO_surf->num_centers_in_cell;
@@ -384,11 +384,11 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
 		     sizeof(AO_list_type));
 	  if( !temp_centers[num_added].AO_list )
 	    fatal("can't allocate new AO_list_type\n");
-	
+
 	  bcopy((char *)MO_surf->raw_MO_centers[l].AO_list,
 		(char *)temp_centers[num_added].AO_list,
 		MO_surf->raw_MO_centers[l].num_AOs*sizeof(AO_list_type));
-	  
+
 
 	  /* we copied over some pointers too... this is bad */
 	  temp_atoms[num_added].linesto = 0;
@@ -416,7 +416,7 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
 #ifdef DEBUG
 	    printf("(i,j,k): (%d %d %d), num: %d kdotr: %lf, cos: %lf, sin: %lf\n",
 		   i,j,k,num_added,kdotr,cos_kdotr,sin_kdotr);
-#endif	    
+#endif
 	    /* update the phase of the wavefunction contributions */
 	    for(m=0;m<temp_centers[num_added].num_AOs;m++){
 #ifdef DEBUG
@@ -473,7 +473,7 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
   D_FREE(solid->atoms);
   solid->atoms = temp_atoms;
   MO_surf->MO_centers = temp_centers;
-  
+
 #ifdef DEBUG
   printf("\n-----\n");
   for(i=0;i<MO_surf->num_centers;i++){
@@ -499,23 +499,23 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
   solid->cell_box[0].x = solid->lattice_vect[0].x;
   solid->cell_box[0].y = solid->lattice_vect[0].y;
   solid->cell_box[0].z = solid->lattice_vect[0].z;
-  solid->cell_box[1].x = 
+  solid->cell_box[1].x =
     num_a*solid->orig_lattice[1].x;
-  solid->cell_box[1].y = 
+  solid->cell_box[1].y =
     num_a*solid->orig_lattice[1].y;
-  solid->cell_box[1].z = 
+  solid->cell_box[1].z =
     num_a*solid->orig_lattice[1].z;
-  solid->cell_box[3].x = 
+  solid->cell_box[3].x =
     num_b*solid->orig_lattice[2].x;
-  solid->cell_box[3].y = 
+  solid->cell_box[3].y =
     num_b*solid->orig_lattice[2].y;
-  solid->cell_box[3].z = 
+  solid->cell_box[3].z =
     num_b*solid->orig_lattice[2].z;
-  solid->cell_box[4].x = 
+  solid->cell_box[4].x =
     num_b*solid->orig_lattice[3].x;
-  solid->cell_box[4].y = 
+  solid->cell_box[4].y =
     num_b*solid->orig_lattice[3].y;
-  solid->cell_box[4].z = 
+  solid->cell_box[4].z =
     num_b*solid->orig_lattice[3].z;
   V3Add(&solid->cell_box[1],&solid->cell_box[3],
 	&solid->cell_box[2]);
@@ -530,8 +530,8 @@ void grow_solid_with_surface(int num_args,char *solid_p[MAX_ARGS])
 	  &solid->cell_box[i]);
   }
 
-  
+
   display("There ya go!");
-}	  
+}
 
 

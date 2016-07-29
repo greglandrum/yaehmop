@@ -69,12 +69,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *                   Function choose_MO
  *
  * Arguments:  surf: pointer to MO_surface_type
- *            
+ *
  * Returns: int
  *
  * Action:  allows the user to choose a new MO from the available list.
  *   returns the number of the MO selected, or -1 on failure.
- *  
+ *
  ****************************************************************************/
 int choose_MO(MO_surface_type *surf)
 {
@@ -114,13 +114,13 @@ int choose_MO(MO_surface_type *surf)
  *
  *                   Function exclude_atoms
  *
- * Arguments:  
- *            
+ * Arguments:
+ *
  * Returns: none
  *
  * Action:  allows the user to exclude particular atoms from the
  *  calculation of the MO surface
- *  
+ *
  ****************************************************************************/
 void exclude_atoms(int num_args,char **MO_surf_ptr)
 {
@@ -136,7 +136,7 @@ void exclude_atoms(int num_args,char **MO_surf_ptr)
 
   printf("Please enter the numbers of the atoms you wish to exclude:\n");
   fgets(instring,MAX_STR_LEN,stdin);
-  
+
   parse_integer_string(instring,&atoms_to_exclude,&num_to_exclude);
 
   /*******
@@ -164,14 +164,14 @@ void exclude_atoms(int num_args,char **MO_surf_ptr)
  *
  *                   Function include_atoms
  *
- * Arguments:  
- *            
+ * Arguments:
+ *
  * Returns: none
  *
  * Action:  allows the user to include particular atoms for the
  *  calculation of the MO surface.  There's no reason to do this
  *  if they haven't alread excluded some.
- *  
+ *
  ****************************************************************************/
 void include_atoms(int num_args,char **MO_surf_ptr)
 {
@@ -187,7 +187,7 @@ void include_atoms(int num_args,char **MO_surf_ptr)
 
   printf("Please enter the numbers of the atoms you wish to include:\n");
   fgets(instring,MAX_STR_LEN,stdin);
-  
+
   parse_integer_string(instring,&atoms_to_include,&num_to_include);
 
   /*******
@@ -215,13 +215,13 @@ void include_atoms(int num_args,char **MO_surf_ptr)
  *
  *                   Function change_active_MO
  *
- * Arguments:  
- *            
+ * Arguments:
+ *
  * Returns: none
  *
  * Action:  allows the user to change which MO surface they are
  *   looking at.
- *  
+ *
  ****************************************************************************/
 void change_active_MO(int num_args,char **MO_surf_ptr)
 {
@@ -246,12 +246,12 @@ void change_active_MO(int num_args,char **MO_surf_ptr)
  *
  * Arguments: infile: pointer to type FILE
  *              surf: pointer to MO_surface_type
- *            
+ *
  * Returns: int
  *
  * Action:  Reads the information for an MO isosurface out of 'infile
  *     and puts it all into 'surf.
- * 
+ *
  *   If there is a problem reading the file, then a nonzero number is
  *    returned to indicate failure.
  *
@@ -291,7 +291,7 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
     skipcomments(infile,instring);
     upcase(instring);
   }
-  
+
   printf("Enter contraction coefficient [%lf]: ",DEFAULT_CONTRACT);
 
   fgets(foostring,80,stdin);
@@ -300,21 +300,21 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
   } else{
     contraction = DEFAULT_CONTRACT;
   }
-  
+
   surf->contraction = contraction;
 
   printf("\nEnter number of radial lookup table entries [%d]: ",
 	 DEFAULT_NUM_ENTRIES);
 
   fgets(foostring,80,stdin);
-  
+
   if(foostring[0] != '\n' && foostring[0] != 0 ){
     surf->num_lookup_entries = atoi(foostring);
   } else{
     surf->num_lookup_entries = DEFAULT_NUM_ENTRIES;
   }
-  
-  
+
+
   printf("\nEnter minimum lookup table value [%lf]: ",
 	 DEFAULT_LOOKUP_MIN);
 
@@ -324,7 +324,7 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
   } else{
     surf->lookup_min = DEFAULT_LOOKUP_MIN;
   }
-  
+
   printf("\nEnter maximum lookup table value [%lf]: ",
 	 DEFAULT_LOOKUP_MAX);
 
@@ -359,7 +359,7 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
     expd2 *= contraction;
     expf1 *= contraction;
     expf2 *= contraction;
-    
+
     unique_center = &(surf->unique_centers[surf->num_unique]);
     unique_center->type = (char *)D_CALLOC(8,sizeof(char));
     if( !unique_center->type )
@@ -380,11 +380,11 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
     if(!unique_center->AO_list){
       fatal("can't allocate unique_center->AO_list");
     }
-    
+
     /*******************
-      
+
       s orbitals
-      
+
     ********************/
     unique_center->num_AOs = 0;
     if( ns ){
@@ -394,15 +394,15 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
 	AO->rad_func = eval_1_rad; break;
       case 2:
 	AO->rad_func = eval_2_rad; break;
-      case 3:	  
+      case 3:
 	AO->rad_func = eval_3_rad; break;
-      case 4:	  
+      case 4:
 	AO->rad_func = eval_4_rad; break;
-      case 5:	  
+      case 5:
 	AO->rad_func = eval_5_rad; break;
-      case 6:	  
+      case 6:
 	AO->rad_func = eval_6_rad; break;
-      case 7:	  
+      case 7:
 	AO->rad_func = eval_7_rad; break;
       }
       AO->zeta1 = exps;
@@ -420,32 +420,32 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
 						   sizeof(float));
       if( !AO->rad_lookup_tbl->values )
 	fatal("Can't get lookup table entries memory");
-      
+
       unique_center->num_AOs += 1;
     }
-    
+
     /*******************
-      
+
       p orbitals
-      
+
     ********************/
     if( np ){
-      for( j=unique_center->num_AOs; j<unique_center->num_AOs+3; j++ ){ 
+      for( j=unique_center->num_AOs; j<unique_center->num_AOs+3; j++ ){
 	AO = &(unique_center->AO_list[j]);
 	switch(np){
 	case 1:
 	  AO->rad_func = eval_1_rad; break;
 	case 2:
 	  AO->rad_func = eval_2_rad; break;
-	case 3:	  
+	case 3:
 	  AO->rad_func = eval_3_rad; break;
-	case 4:	  
+	case 4:
 	  AO->rad_func = eval_4_rad; break;
-	case 5:	  
+	case 5:
 	  AO->rad_func = eval_5_rad; break;
-	case 6:	  
+	case 6:
 	  AO->rad_func = eval_6_rad; break;
-	case 7:	  
+	case 7:
 	  AO->rad_func = eval_7_rad; break;
 	}
 	AO->zeta1 = expp;
@@ -477,30 +477,30 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
       }
       unique_center->num_AOs += 3;
     }
-    
+
     /*******************
-      
+
       d orbitals
-      
+
       ********************/
     if( nd ){
       /* set the radial functions */
-      for( j=unique_center->num_AOs; j<unique_center->num_AOs+5; j++ ){ 
+      for( j=unique_center->num_AOs; j<unique_center->num_AOs+5; j++ ){
 	AO = &(unique_center->AO_list[j]);
 	switch(nd){
 	case 1:
 	  AO->rad_func = eval_1_rad; break;
 	case 2:
 	  AO->rad_func = eval_2_rad; break;
-	case 3:	  
+	case 3:
 	  AO->rad_func = eval_3_rad; break;
-	case 4:	  
+	case 4:
 	  AO->rad_func = eval_4_rad; break;
-	case 5:	  
+	case 5:
 	  AO->rad_func = eval_5_rad; break;
-	case 6:	  
+	case 6:
 	  AO->rad_func = eval_6_rad; break;
-	case 7:	  
+	case 7:
 	  AO->rad_func = eval_7_rad; break;
 	}
 	AO->zeta1 = expd1;
@@ -552,7 +552,7 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
 	  AO->rad_func = eval_5_rad; break;
 	case 6:
 	  AO->rad_func = eval_6_rad; break;
-	case 7:	  
+	case 7:
 	  AO->rad_func = eval_7_rad; break;
 	}
 	AO->zeta1 = expf1;
@@ -586,18 +586,18 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
       surf->unique_centers = (MO_center_list_type *)
 	D_REALLOC((char *)surf->unique_centers,
 		(unsigned)(max_unique*sizeof(MO_center_list_type)));
-      if( !surf->unique_centers ) 
-	fatal("Can't D_REALLOC unique_center memory.");      
+      if( !surf->unique_centers )
+	fatal("Can't D_REALLOC unique_center memory.");
     }
 
     /********
-      
+
       now loop over all the centers and set up the
       angular parms of those that
       are this type.
 
       set the appropriate pointers to the lookup tables as well.
-    
+
     *********/
     center = surf->MO_centers;
     for(i=0;i<surf->num_centers;i++){
@@ -618,16 +618,16 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
 	  if(!center[i].AO_list) fatal("can't allocate center[i].AO_list");
 	}
 	/********
-	  
+
 	  this is the right type, add in the parms
 
 	*********/
 
         center[i].color = color;
 	/*******************
-	  
+
 	  s orbitals
-	  
+
 	********************/
 	center[i].num_AOs = 0;
 	if( ns ){
@@ -639,12 +639,12 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
 	}
 
 	/*******************
-	  
+
 	  p orbitals
-	  
+
 	  ********************/
 	if( np ){
-	  for( j=center[i].num_AOs; j<center[i].num_AOs+3; j++ ){ 
+	  for( j=center[i].num_AOs; j<center[i].num_AOs+3; j++ ){
 	    AO = &(center[i].AO_list[j]);
 	    AO->zeta1 = expp;
 	    AO->zeta2 = 0;
@@ -661,12 +661,12 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
 	}
 
 	/*******************
-	  
+
 	  d orbitals
-	  
+
 	  ********************/
 	if( nd ){
-	  for( j=center[i].num_AOs; j<center[i].num_AOs+5; j++ ){ 
+	  for( j=center[i].num_AOs; j<center[i].num_AOs+5; j++ ){
 	    AO = &(center[i].AO_list[j]);
 	    AO->zeta1 = expd1;
 	    AO->zeta2 = expd2;
@@ -732,7 +732,7 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
     sscanf(instring,"%d %lf %lf %lf",&(MO_numbers[i]),
 	   &(MO_kpoints[i].x),&(MO_kpoints[i].y),&(MO_kpoints[i].z));
   }
-    
+
   /* set pointers to those arrays */
   surf->kpoints = MO_kpoints;
   surf->MO_numbers = MO_numbers;
@@ -807,9 +807,9 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
 
   /* if we made it to here, everything is fine... return now */
   return(0);
-      
+
 }
-  
+
 
 
 /****************************************************************************
@@ -817,11 +817,11 @@ int read_MO_surface(FILE *infile,MO_surface_type *surf)
  *                   Procedure new_MO_surface
  *
  * Arguments: filename: pointer to type char
- *            
+ *
  * Returns: none
  *
  * Action:  Does everything necessary to construct a new MO isosurface.
- *  
+ *
  ****************************************************************************/
 void new_MO_surface(char *filename)
 {
@@ -832,7 +832,7 @@ void new_MO_surface(char *filename)
   FILE *infile;
   MO_surface_type *MO_surf;
   MO_center_list_type *center;
-  
+
   failed = 0;
 
   /* set up a new object to hold the surface */
@@ -843,14 +843,14 @@ void new_MO_surface(char *filename)
   whichobj->prim = (prim_type *)D_CALLOC(1,sizeof(prim_type));
   if( !whichobj->prim )fatal("Can't get space for surface primitive.");
   whichobj->prim->which = MO_SURF;
-  
+
   whichobj->prim->MO_surf = (MO_surface_type *)
     D_CALLOC(1,sizeof(MO_surface_type));
   if( !whichobj->prim->MO_surf)
     fatal("Can't get space for MO surface.");
-  MO_surf = whichobj->prim->MO_surf;  
-  
-#ifndef USING_THE_MAC 
+  MO_surf = whichobj->prim->MO_surf;
+
+#ifndef USING_THE_MAC
   if( !filename ){
     display("Look in the xterm...");
 #ifndef USE_READLINE
@@ -867,11 +867,11 @@ void new_MO_surface(char *filename)
       error("Bad file name");
       file_name[0] = 0;
     }
-#endif    
+#endif
   }else{
     strcpy(file_name,filename);
   }
-  
+
 #else
   if(!filename){
     infile = choose_mac_file(file_name,MAC_FOPEN_NOOPEN_CD);
@@ -881,12 +881,12 @@ void new_MO_surface(char *filename)
   }
 #endif
 
- 
+
   /*********
-    
+
     open the output file to read out the atomic coordinates and set up
     the molecule structure associated with this surface.
-    
+
   *********/
   strcpy(whichobj->prim->MO_surf->filename,file_name);
   strcpy(file_name_copy,file_name);
@@ -897,39 +897,39 @@ void new_MO_surface(char *filename)
     display("oooooops!");
     failed = 1;
   }
-  
+
   /* read out the molecular data */
   if( !failed ){
     whichobj->prim->MO_surf->molec = (molec_type *)
       D_CALLOC(1,sizeof(molec_type));
     if( !whichobj->prim->MO_surf->molec )
       fatal("Can't get space to store the associated molecule.");
-    
+
     read_molecule_data(infile,whichobj->prim->MO_surf->molec);
-    
-    
+
+
     /*********
-      
+
       allocate space for the centers in the MO_surf structure,
       then loop through them
-      
+
       *********/
     MO_surf->num_centers = MO_surf->molec->num_atoms;
     MO_surf->MO_centers = (MO_center_list_type *)
       D_CALLOC(MO_surf->num_centers,sizeof(MO_center_list_type));
     if( !MO_surf->MO_centers ) fatal("Can't get memory for MO_centers.");
-    
+
     center = MO_surf->MO_centers;
     for(i=0;i<MO_surf->num_centers;i++){
       /* set the pointer to this center's location and symbol */
       center[i].loc = &(MO_surf->molec->atoms[i].loc);
       center[i].type = MO_surf->molec->atoms[i].type;
     }
-    
+
     /*********
-      
+
       open the MO file to read out the MO details
-      
+
       *********/
     strcpy(file_name_copy,file_name);
     strcat(file_name_copy,".MO");
@@ -939,7 +939,7 @@ void new_MO_surface(char *filename)
       display("oooooops!");
       failed = 1;
     }
-    
+
   }
   /* read out the MO details and make sure things went okay */
   if( !failed ){
@@ -978,7 +978,7 @@ void new_MO_surface(char *filename)
     build_MO_surf_button_window(&button_wins,MO_surf);
     whichobj->prim->but_win = button_wins;
     build_molec_button_window(&whichobj->prim->but_win->child,MO_surf->molec);
-    
+
 #endif
 
     whichobj->prim->which = MO_SURF;
@@ -989,7 +989,7 @@ void new_MO_surface(char *filename)
     MO_surf->search_radius = .1;
     MO_surf->do_shading = 1;
     MO_surf->display_molec = 1;
-    
+
     /* copy the MO_list into a raw MO_list array */
     if(MO_surf->molec->num_dim > 0){
       MO_surf->raw_MO_centers =
@@ -1042,13 +1042,13 @@ void new_MO_surface(char *filename)
  *
  * Arguments: infile: pointer to type FILE
  *           MO_surf: pointer to MO_surface_type
- *            
+ *
  * Returns: int
  *
  * Action:  Reads out both atomic positions and the MO data for an ADF MO
  *       returns 0 on success, 1 otherwise
  *
- *  
+ *
  ****************************************************************************/
 int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
 {
@@ -1077,7 +1077,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
   molec = (molec_type *)D_CALLOC(1,sizeof(molec_type));
   if(!molec)fatal("Can't get memory for the molecule.");
   MO_surf->molec = molec;
-  
+
   MO_surf->adf_plot = 1;
 
   /* Get the radial lookup table parameters */
@@ -1085,14 +1085,14 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
 	 DEFAULT_NUM_ENTRIES);
 
   fgets(foostring,80,stdin);
-  
+
   if(foostring[0] != '\n' && foostring[0] != 0 ){
     MO_surf->num_lookup_entries = atoi(foostring);
   } else{
     MO_surf->num_lookup_entries = DEFAULT_NUM_ENTRIES;
   }
-  
-  
+
+
   printf("\nEnter minimum lookup table value [%lf]: ",
 	 DEFAULT_LOOKUP_MIN);
 
@@ -1102,7 +1102,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
   } else{
     MO_surf->lookup_min = DEFAULT_LOOKUP_MIN;
   }
-  
+
   printf("\nEnter maximum lookup table value [%lf]: ",
 	 DEFAULT_LOOKUP_MAX);
   fgets(foostring,80,stdin);
@@ -1141,7 +1141,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
     curr_center->AO_list = (AO_list_type *)
       D_CALLOC(curr_center->num_AOs,sizeof(AO_list_type));
     if(!curr_center->AO_list) fatal("can't allocated curr_center->AO_list.");
-#if 0    
+#if 0
     if( curr_center->num_AOs >= MAX_AOS){
       FATAL_BUG("MAX_AOS too small for this system");
     }
@@ -1170,9 +1170,9 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
     skipcomments(infile,instring);
     sscanf(instring,"%d",&(num_per_type[i]));
 
-    
+
   }
-				     
+
   /* read out the total number of atoms */
   while(!strstr(instring,"#NUM_ATOMS")){
     skipcomments(infile,instring);
@@ -1189,7 +1189,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
   MO_surf->num_centers = molec->num_atoms;
   MO_surf->orig_num_centers = molec->num_atoms;
   MO_surf->raw_MO_centers = MO_surf->MO_centers;
-  
+
   /* read in the atomic positions */
   for(i=0;i<molec->num_atoms;i++){
     skipcomments(infile,instring);
@@ -1209,7 +1209,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
   atoms_so_far = 0;
   for(i=0;i<num_types;i++){
     curr_center = &MO_surf->unique_centers[i];
-    
+
     for(j=0;j<num_per_type[i];j++){
       center = &MO_surf->MO_centers[atoms_so_far];
       center->loc = &molec->atoms[atoms_so_far].loc;
@@ -1223,7 +1223,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
 
       strcpy(molec->atoms[atoms_so_far].type,curr_center->type);
       molec->atoms[atoms_so_far].num = atoms_so_far;
-      
+
       atoms_so_far++;
     }
   }
@@ -1233,9 +1233,9 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
   molec->bond_tol = DEF_BOND_TOL;
   molec->old_bond_tol = DEF_BOND_TOL;
   determine_connections(molec);
-  
 
-      
+
+
   /* read the number of irreps */
   while(!strstr(instring,"#NUM_IRREPS")){
     skipcomments(infile,instring);
@@ -1245,7 +1245,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
 
   irrep_names = (char *)D_CALLOC(num_irreps*80,sizeof(char));
   if(!irrep_names)fatal("Can't allocate irrep names");
-  
+
   /*******
 
     scan through the file until we've found all the irreps,
@@ -1263,7 +1263,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
     sscanf(instring,"%s",curr_irrep_name);
     curr_irrep_name+=80;
   }
-  
+
   choice = 0;
   while(!choice){
     printf("there are %d irreps in the file\n",num_irreps);
@@ -1338,7 +1338,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
     num_MOs = max_MOs;
     display("Nice try...");
   }
-  
+
   MO_surf->num_MOs = num_MOs;
   if( num_MOs >= MAX_MOS ) FATAL_BUG("MAX_MOS is too small for this system");
 
@@ -1353,7 +1353,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
   for(i=0;i<num_MOs;i++){
     skipcomments(infile,instring);
     sscanf(instring,"%lf",&energies[i]);
-    
+
     skipcomments(infile,instring);
     strcpy(tempstring,instring);
     string_token = strtok(tempstring," ");
@@ -1394,7 +1394,7 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
       center->AO_list[offset].coeff[j] = coeffs[j*num_AOs_involved+i];
     }
   }
-  
+
   which_MO = choose_MO(MO_surf);
   MO_surf->active_MO = which_MO;
 
@@ -1412,11 +1412,11 @@ int read_ADF_MO_data(FILE *infile,MO_surface_type *MO_surf)
  *                   Procedure new_ADF_MO_surface
  *
  * Arguments: filename: pointer to type char
- *            
+ *
  * Returns: none
  *
  * Action:  Does everything necessary to construct a new MO isosurface. for an ADF plot
- *  
+ *
  ****************************************************************************/
 void new_ADF_MO_surface(char *filename)
 {
@@ -1428,7 +1428,7 @@ void new_ADF_MO_surface(char *filename)
   MO_surface_type *MO_surf;
 
 
-  
+
   failed = 0;
 
   /* set up a new object to hold the surface */
@@ -1439,14 +1439,14 @@ void new_ADF_MO_surface(char *filename)
   whichobj->prim = (prim_type *)D_CALLOC(1,sizeof(prim_type));
   if( !whichobj->prim )fatal("Can't get space for surface primitive.");
   whichobj->prim->which = MO_SURF;
-  
+
   whichobj->prim->MO_surf = (MO_surface_type *)
     D_CALLOC(1,sizeof(MO_surface_type));
   if( !whichobj->prim->MO_surf)
     fatal("Can't get space for MO surface.");
-  MO_surf = whichobj->prim->MO_surf;  
-  
-#ifndef USING_THE_MAC 
+  MO_surf = whichobj->prim->MO_surf;
+
+#ifndef USING_THE_MAC
   if( !filename ){
     display("Look in the xterm...");
 #ifndef USE_READLINE
@@ -1463,11 +1463,11 @@ void new_ADF_MO_surface(char *filename)
       error("Bad file name");
       file_name[0] = 0;
     }
-#endif    
+#endif
   }else{
     strcpy(file_name,filename);
   }
-  
+
  #else
   if(!filename){
     infile = choose_mac_file(file_name,MAC_FOPEN_NOOPEN_CD);
@@ -1476,12 +1476,12 @@ void new_ADF_MO_surface(char *filename)
     strcpy(file_name,filename);
   }
 #endif
-  
- 
+
+
   /*********
-    
+
     open the file and make sure it's valid
-    
+
   *********/
   strcpy(whichobj->prim->MO_surf->filename,file_name);
   infile = fopen(file_name,"r");
@@ -1499,10 +1499,10 @@ void new_ADF_MO_surface(char *filename)
       display("whoopsy!");
       failed = 1;
     }
-    
+
     /* read out the data */
     rewind(infile);
-    
+
     failed = read_ADF_MO_data(infile,MO_surf);
   }
 
@@ -1537,7 +1537,7 @@ void new_ADF_MO_surface(char *filename)
     build_MO_surf_button_window(&button_wins,MO_surf);
     whichobj->prim->but_win = button_wins;
     build_molec_button_window(&whichobj->prim->but_win->child,MO_surf->molec);
-    
+
 #endif
 
     whichobj->prim->which = MO_SURF;
@@ -1548,7 +1548,7 @@ void new_ADF_MO_surface(char *filename)
     MO_surf->search_radius = .1;
     MO_surf->do_shading = 1;
     MO_surf->display_molec = 1;
-    
+
     MO_surf->raw_MO_centers = MO_surf->MO_centers;
 
     /* set up some default parameters */

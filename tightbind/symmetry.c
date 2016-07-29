@@ -61,7 +61,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 * Returns: none
 *
-* Action:  prints out a description of 'elem on 'the_file 
+* Action:  prints out a description of 'elem on 'the_file
 *
 *  if show_equiv == SHOW_EQUIV, then the atoms which are interconverted by
 *    this symmetry op will be printed out as well.
@@ -140,7 +140,7 @@ void compare_molecules(atoms,locs1,locs2,num_atoms,equiv_atoms,present,symm_tol)
 {
   int i,j;
   char found;
-  
+
   /* initialize present to 0 so that we can bomb out at any time */
   *present = 0;
 
@@ -173,7 +173,7 @@ void compare_molecules(atoms,locs1,locs2,num_atoms,equiv_atoms,present,symm_tol)
       found = 1;
       equiv_atoms[i] = -1;
     }
-    
+
     /* if we didn't find this atom, we might as well go ahead and return */
     if( !found ) return;
   }
@@ -243,27 +243,27 @@ void construct_rotn_mats(enum possible_axis axis,real angle,
     t_mat[2][2] = cos(angle);
     t_mat[1][2] = -sin(angle);
     t_mat[2][1] = sin(angle);
-    
+
     /* d orbital transformations */
     d_t_mat[0][0] = (1.0/4.0)*cos(2.0*angle) + 3.0/4.0;
     d_t_mat[2][2] = cos(angle);
     d_t_mat[3][3] = cos(angle);
     d_t_mat[4][4] = cos(2.0*angle);
     d_t_mat[1][1] = (3.0/4.0)*cos(2.0*angle) + 1.0/4.0;
-    
+
     d_t_mat[0][4] = (1.0/2.0)*sin(2.0*angle);
     d_t_mat[0][1] = (sqrt(3.0)/4.0)*cos(2.0*angle) - sqrt(3.0)/4.0;
-    
+
     d_t_mat[2][3] = -sin(angle);
-    
+
     d_t_mat[3][2] = sin(angle);
-    
+
     d_t_mat[4][3] = -(1.0/2.0)*sin(2.0*angle);
     d_t_mat[4][1] = -(sqrt(3.0)/2.0)*sin(2.0*angle);
-    
+
     d_t_mat[1][0] = (sqrt(3.0)/4.0)*cos(2.0*angle) - sqrt(3.0)/4.0;
     d_t_mat[1][4] = (sqrt(3.0)/2.0)*sin(2.0*angle);
-    
+
     axis_v->x = 1.0;
     break;
   case Y_Ax:
@@ -272,27 +272,27 @@ void construct_rotn_mats(enum possible_axis axis,real angle,
     t_mat[2][2] = cos(angle);
     t_mat[0][2] = sin(angle);
     t_mat[2][0] = -sin(angle);
-    
+
     /* d orbital transformations */
     d_t_mat[0][0] = (1.0/4.0)*cos(2.0*angle) + 3.0/4.0;
     d_t_mat[2][2] = cos(angle);
     d_t_mat[3][3] = cos(2.0*angle);
     d_t_mat[4][4] = cos(angle);
     d_t_mat[1][1] = (3.0/4.0)*cos(2.0*angle) + 1.0/4.0;
-    
+
     d_t_mat[0][3] = -(1.0/2.0)*sin(2.0*angle);
     d_t_mat[0][1] = -(sqrt(3.0)/4.0)*cos(2.0*angle) + sqrt(3.0)/4.0;
-    
+
     d_t_mat[2][4] = sin(angle);
-    
+
     d_t_mat[3][2] = (1.0/2.0)*sin(2.0*angle);
     d_t_mat[3][1] = -(sqrt(3.0)/2.0)*sin(2.0*angle);
-    
+
     d_t_mat[4][2] = -sin(angle);
-    
+
     d_t_mat[1][0] = -(sqrt(3.0)/4.0)*cos(2.0*angle) + sqrt(3.0)/4.0;
     d_t_mat[1][3] = (sqrt(3.0)/2.0)*sin(2.0*angle);
-    
+
     axis_v->y = 1.0;
     break;
   case Z_Ax:
@@ -301,24 +301,24 @@ void construct_rotn_mats(enum possible_axis axis,real angle,
     t_mat[1][1] = cos(angle);
     t_mat[0][1] = -sin(angle);
     t_mat[1][0] = sin(angle);
-    
+
     /* d orbital transformations */
     d_t_mat[0][0] = cos(2.0*angle);
     d_t_mat[2][2] = cos(2.0*angle);
     d_t_mat[3][3] = cos(angle);
     d_t_mat[4][4] = cos(angle);
-    
+
     d_t_mat[0][2] = -sin(2.0*angle);
     d_t_mat[2][0] = sin(2.0*angle);
-    
+
     d_t_mat[3][4] = -sin(angle);
     d_t_mat[4][3] = sin(angle);
-    
+
     axis_v->z = 1.0;
     break;
   }
 }
-  
+
 /****************************************************************************
 *
 *                   Procedure gen_sym_ops
@@ -344,25 +344,25 @@ void gen_sym_ops(the_ops,num_ops)
   enum possible_axis axis;
   real angle;
   int i;
-  
+
   /**********
-    get space for the first operation 
+    get space for the first operation
     *********/
   op_ptr = make_new_sym_op();
-  
+
   /* set it to the head of the list */
   *the_ops = op_ptr;
-  
+
   *num_ops = 1;
-  
+
   /* loop over operations */
   for( op = 0; op < Identity; op++ ){
-    
+
     if( op != Inversion ){
-      
+
       /* loop over axes (if needed) */
       for( axis = 0; axis < No_Axis; axis++ ){
-	
+
 	switch(op){
 	case Rotation:
 	  /******
@@ -378,7 +378,7 @@ void gen_sym_ops(the_ops,num_ops)
 				op_ptr->d_t_mat);
 	    /******
 	      we're done with that element, get space for and put it at the tail of
-              the linked list 
+              the linked list
 	    ******/
 	    op_ptr->next = make_new_sym_op();
 	    op_ptr = op_ptr->next;
@@ -388,7 +388,7 @@ void gen_sym_ops(the_ops,num_ops)
 	case Improper_Rotation:
 	  /*****
 	    these are standard rotation matrices with a sign flip for
-	    the reflection  
+	    the reflection
 	  *****/
 	  for( i=3; i<=MAX_ORDER; i++){
 	    angle = TWOPI / (real)i;
@@ -420,7 +420,7 @@ void gen_sym_ops(the_ops,num_ops)
 
 	      op_ptr->d_t_mat[1][0] = (sqrt(3.0)/4.0)*cos(2.0*angle) - sqrt(3.0)/4.0;
 	      op_ptr->d_t_mat[1][4] = (sqrt(3.0)/2.0)*sin(2.0*angle);
-	      
+
 	      break;
 	    case Y_Ax:
 	      op_ptr->t_mat[0][0] = cos(angle);
@@ -478,7 +478,7 @@ void gen_sym_ops(the_ops,num_ops)
 	    op_ptr->type = Improper_Rotation;
 	    /******
 	      we're done with that element, get space for and put it at the tail of
-	      the linked list 
+	      the linked list
 	      ******/
 	    op_ptr->next = make_new_sym_op();
 	    op_ptr = op_ptr->next;
@@ -486,7 +486,7 @@ void gen_sym_ops(the_ops,num_ops)
 	  }
 	  break;
 	case Mirror:
-	  
+
 	  op_ptr->type = Mirror;
 	  switch(axis){
 	  case X_Ax:
@@ -494,7 +494,7 @@ void gen_sym_ops(the_ops,num_ops)
 
 	    op_ptr->d_t_mat[2][2] = -1.0;
 	    op_ptr->d_t_mat[3][3] = -1.0;
-	    
+
 	    op_ptr->axis.x = 1.0;
 	    break;
 	  case Y_Ax:
@@ -540,12 +540,12 @@ void gen_sym_ops(the_ops,num_ops)
       *num_ops++;
     }
   }
-  
+
   /* put in the identity operation */
   op_ptr->type = Identity;
 }
 
-	      
+
 /****************************************************************************
 *
 *                   Procedure find_off_axis_sym_ops
@@ -555,9 +555,9 @@ void gen_sym_ops(the_ops,num_ops)
 *
 * Returns: none
 *
-* Action:  Gets the memory, sets up the matrices for, and test for the 
-*    presence of symmetry operations which do not lie on the cartesian axes.  
-*    This looks for rotation axes and mirror planes which are perpendicular 
+* Action:  Gets the memory, sets up the matrices for, and test for the
+*    presence of symmetry operations which do not lie on the cartesian axes.
+*    This looks for rotation axes and mirror planes which are perpendicular
 *    to rotation axes of order higher than 2.
 *
 *****************************************************************************/
@@ -617,7 +617,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 	determine which perpendicular axes we should start from.
 	if this is an even order axis, then we only need to start
 	from one, otherwise we should try starting from both
-	
+
       ****/
       order_is_odd = curr_op->order % 2;
       try_x = try_y = try_z = 1;
@@ -651,11 +651,11 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 	bzero(t_mat,T_MAT_DIM*T_MAT_DIM*sizeof(real));
 	for(k=0;k<T_MAT_DIM;k++)t_mat[k][k]=1;
 	bzero(d_t_mat,D_T_MAT_DIM*D_T_MAT_DIM*sizeof(real));
-	for(k=0;k<D_T_MAT_DIM;k++)d_t_mat[k][k]=1;	  
+	for(k=0;k<D_T_MAT_DIM;k++)d_t_mat[k][k]=1;
 	bzero(neg_t_mat,T_MAT_DIM*T_MAT_DIM*sizeof(real));
 	for(k=0;k<T_MAT_DIM;k++)neg_t_mat[k][k]=1;
 	bzero(neg_d_t_mat,D_T_MAT_DIM*D_T_MAT_DIM*sizeof(real));
-	for(k=0;k<D_T_MAT_DIM;k++)neg_d_t_mat[k][k]=1;	  
+	for(k=0;k<D_T_MAT_DIM;k++)neg_d_t_mat[k][k]=1;
 	if(curr_op->axis.x != 0)temp_ax = X_Ax;
 	else if(curr_op->axis.y != 0)temp_ax = Y_Ax;
 	else if(curr_op->axis.z != 0)temp_ax = Z_Ax;
@@ -664,7 +664,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 			   t_mat,d_t_mat);
 	construct_rotn_mats(temp_ax,-base_angle,&temp_pt,
 			   neg_t_mat,neg_d_t_mat);
-	
+
 	/******
 	  generate MAX_OFF_AXIS_ORDER-1 rotations about this axis
 	  ******/
@@ -675,7 +675,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 	    bzero(temp_mat,T_MAT_DIM*T_MAT_DIM*sizeof(real));
 	    for(k=0;k<T_MAT_DIM;k++)temp_mat[k][k]=1;
 	    bzero(temp_d_mat,D_T_MAT_DIM*D_T_MAT_DIM*sizeof(real));
-	    for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;	  
+	    for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;
 	    temp_ax = X_Ax;
 	    construct_rotn_mats(temp_ax,angle,&(op_ptr->axis),temp_mat,
 				temp_d_mat);
@@ -691,14 +691,14 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 			  (real *)temp_d_mat2,D_T_MAT_DIM);
 	    mult_matrices((real *)neg_d_t_mat,(real *)temp_d_mat2,
 			  (real *)op_ptr->d_t_mat,D_T_MAT_DIM);
-	    
+
 	    op_ptr->angle = angle;
 	    op_ptr->order = i;
 	    op_ptr->type = Rotation;
-	    
+
 	    /******
 	      we're done with that element, get space for and put it at the tail of
-	      the linked list 
+	      the linked list
 	      ******/
 	    op_ptr->next = make_new_sym_op();
 	    last_op = op_ptr;
@@ -708,7 +708,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 	    bzero(temp_mat,T_MAT_DIM*T_MAT_DIM*sizeof(real));
 	    for(k=0;k<T_MAT_DIM;k++)temp_mat[k][k]=1;
 	    bzero(temp_d_mat,D_T_MAT_DIM*D_T_MAT_DIM*sizeof(real));
-	    for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;	  
+	    for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;
 	    temp_ax = Y_Ax;
 	    construct_rotn_mats(temp_ax,angle,&(op_ptr->axis),temp_mat,
 				temp_d_mat);
@@ -733,7 +733,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 	    bzero(temp_mat,T_MAT_DIM*T_MAT_DIM*sizeof(real));
 	    for(k=0;k<T_MAT_DIM;k++)temp_mat[k][k]=1;
 	    bzero(temp_d_mat,D_T_MAT_DIM*D_T_MAT_DIM*sizeof(real));
-	    for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;	  
+	    for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;
 	    temp_ax = Z_Ax;
 	    construct_rotn_mats(temp_ax,angle,&(op_ptr->axis),temp_mat,
 				temp_d_mat);
@@ -760,7 +760,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 	  bzero(temp_mat,T_MAT_DIM*T_MAT_DIM*sizeof(real));
 	  for(k=0;k<T_MAT_DIM;k++)temp_mat[k][k]=1;
 	  bzero(temp_d_mat,D_T_MAT_DIM*D_T_MAT_DIM*sizeof(real));
-	  for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;	  
+	  for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;
 	  temp_mat[0][0] = -1.0;
 	  temp_d_mat[2][2] = -1.0;
 	  temp_d_mat[3][3] = -1.0;
@@ -783,7 +783,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 	  bzero(temp_mat,T_MAT_DIM*T_MAT_DIM*sizeof(real));
 	  for(k=0;k<T_MAT_DIM;k++)temp_mat[k][k]=1;
 	  bzero(temp_d_mat,D_T_MAT_DIM*D_T_MAT_DIM*sizeof(real));
-	  for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;	  
+	  for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;
 	  temp_mat[1][1] = -1.0;
 	  temp_d_mat[2][2] = -1.0;
 	  temp_d_mat[4][4] = -1.0;
@@ -806,7 +806,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 	  bzero(temp_mat,T_MAT_DIM*T_MAT_DIM*sizeof(real));
 	  for(k=0;k<T_MAT_DIM;k++)temp_mat[k][k]=1;
 	  bzero(temp_d_mat,D_T_MAT_DIM*D_T_MAT_DIM*sizeof(real));
-	  for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;	  
+	  for(k=0;k<D_T_MAT_DIM;k++)temp_d_mat[k][k]=1;
 	  temp_mat[2][2] = -1.0;
 	  temp_d_mat[3][3] = -1.0;
 	  temp_d_mat[4][4] = -1.0;
@@ -869,7 +869,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 #endif
       compare_crystal_lattice(cell,cell_dim,tformed_cell,&(present_for_lattice),
 			      details->symm_tol,mapping);
-      
+
 #ifdef GAG_ME_WITH_SYMMETRY
       if( present_for_lattice ){
 	name_sym_element(this_op,stdout,cell->num_atoms,NO_EQUIV);
@@ -935,8 +935,8 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
     	this_op = this_op->next;
     }
   }
-    
-  /* now count the operators */  
+
+  /* now count the operators */
   *num_ops = 0;
   this_op = the_ops;
   while(this_op){
@@ -946,7 +946,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
   /* we're done... whew! */
 }
 
-	      
+
 /****************************************************************************
 *
 *                   Procedure find_sym_ops
@@ -991,7 +991,7 @@ void find_sym_ops(details,cell)
 
   fprintf(output_file,
 	  "\n\n#---------------------- SYMMETRY ANALYSIS ----------------------\n");
-  
+
 
   /********
     there's always at least one operation (Identity), so it's safe to
@@ -1007,7 +1007,7 @@ void find_sym_ops(details,cell)
     if(!new_locs) fatal("Can't allocate atomic location storage in find_sym_ops.");
   }
 
-  /********** 
+  /**********
 
     find the centre of mass if this is a molecular problem
 
@@ -1040,11 +1040,11 @@ void find_sym_ops(details,cell)
 
     if( details->find_princ_axes ){
       /*********
-      
+
 	find the principle axes of the inertia tensor, then use
 	these to transform the atoms into the frame in which this tensor
 	is diagonal.
-      
+
       **********/
       find_princ_axes(cell->atoms,COM_locs,cell->princ_axes,moments,num_atoms);
       transform_3x3_transpose(COM_locs,cell->princ_axes,num_atoms);
@@ -1052,7 +1052,7 @@ void find_sym_ops(details,cell)
     /*********
 
       display the principle axes and moments of inertia
-      
+
       *********/
       fprintf(output_file,"\n;  Principle Axes and Moments of Inertia: \n");
       for( i=0;i<3; i++){
@@ -1060,7 +1060,7 @@ void find_sym_ops(details,cell)
 		cell->princ_axes[0][i],cell->princ_axes[1][i],
 		cell->princ_axes[2][i],moments[i]);
       }
-    
+
       fprintf(output_file,"\n; Positions of Atoms in Principle Axis Frame:\n");
       for(i=0;i<num_atoms;i++){
 	fprintf(output_file,"%d \t%lf %lf %lf \n",i+1,
@@ -1084,20 +1084,20 @@ void find_sym_ops(details,cell)
       COM_locs[i].x=atom->loc.x;
       COM_locs[i].y=atom->loc.y;
       COM_locs[i].z=atom->loc.z;
-    }      
+    }
   }
-    
+
   /********
 
     now check for the presence of symmetry elements by looping through the
     list of symmetry operations... remove any element which is not present
     from the list.
 
-  *********/  
+  *********/
   last_op = 0;
   this_op = sym_ops_present;
   num_ops = 0;
-  
+
   while(this_op){
 
     /* for each operation, get a fresh set of coordinates */
@@ -1115,7 +1115,7 @@ void find_sym_ops(details,cell)
     /* get space for the equivalent atoms array */
     this_op->equiv_atoms = (int *)calloc(num_atoms,sizeof(int));
     if( !(this_op->equiv_atoms) ) fatal("Can't get memory for equiv_atom array.");
-    
+
     /* check to see if the transformed molecule is equivalent */
     if( cell->dim == 0 ){
       compare_molecules(cell->atoms,COM_locs,new_locs,num_atoms,this_op->equiv_atoms,
@@ -1144,7 +1144,7 @@ void find_sym_ops(details,cell)
 	printf("c -> (%d %d %d)\n",(int)mapping[6],(int)mapping[7],(int)mapping[8]);
       }
 #endif
-      
+
     }
     /* was this element present? */
     if( !present_for_basis || !present_for_lattice ){
@@ -1186,10 +1186,10 @@ void find_sym_ops(details,cell)
     }
   }
   /* find the minimal rotations */
-  last_op = sym_ops_present;  
+  last_op = sym_ops_present;
   while(last_op){
     if( last_op->type == Rotation ){
-      this_op = sym_ops_present;  
+      this_op = sym_ops_present;
       while(this_op){
 	if( this_op != last_op && this_op->type == Rotation &&
 	    this_op->axis.x == last_op->axis.x &&
@@ -1202,7 +1202,7 @@ void find_sym_ops(details,cell)
 	}
 	this_op = this_op->next;
       }
-    }    
+    }
     last_op = last_op->next;
   }
 
@@ -1237,7 +1237,7 @@ void find_sym_ops(details,cell)
   if(new_locs) free(new_locs);
 }
 
-	      
+
 /****************************************************************************
 *
 *                   Procedure find_walsh_sym_ops
@@ -1255,7 +1255,7 @@ void find_sym_ops(details,cell)
 *
 *  Any symmetry element which disappears along the distortion is removed
 *  from the list, and any element which appears will never be found.
-* 
+*
 *****************************************************************************/
 void find_walsh_sym_ops(cell,details)
   cell_type *cell;
@@ -1272,7 +1272,7 @@ void find_walsh_sym_ops(cell,details)
   real moments[3];
   int num_ops_present=0;
   int num_steps;
-  
+
   /* set up the first geometry */
   walsh_update(cell,details,0,0);
 
@@ -1281,15 +1281,15 @@ void find_walsh_sym_ops(cell,details)
 
   /* generate the initial list of symmetry elements */
   gen_sym_ops(&sym_ops_present,&num_ops);
-  
+
   /* get space for the arrays used to store locations */
   COM_locs = (point_type *)calloc(num_atoms,sizeof(point_type));
   new_locs = (point_type *)calloc(num_atoms,sizeof(point_type));
   if(!new_locs) fatal("Can't allocate atomic location storage in find_sym_ops.");
 
-  /********** 
+  /**********
 
-    find the centre of mass 
+    find the centre of mass
 
   ***********/
   cell->COM.x = cell->COM.y = cell->COM.z = 0.0;
@@ -1316,14 +1316,14 @@ void find_walsh_sym_ops(cell,details)
 
   *********/
   translate_atoms(COM_locs,cell->COM,num_atoms);
-  
+
   if( details->find_princ_axes ){
     /*********
-      
+
       find the principle axes of the inertia tensor, then use
       these to transform the atoms into the frame in which this tensor
       is diagonal.
-      
+
       **********/
     find_princ_axes(cell->atoms,COM_locs,cell->princ_axes,moments,num_atoms);
     transform_3x3_transpose(COM_locs,cell->princ_axes,num_atoms);
@@ -1333,18 +1333,18 @@ void find_walsh_sym_ops(cell,details)
     cell->princ_axes[1][1] = 1.0;
     cell->princ_axes[2][2] = 1.0;
   }
-  
+
   /********
 
     now check for the presence of symmetry elements by looping through the
     list of symmetry operations... remove any element which is not present
     from the list.
 
-  *********/  
+  *********/
   last_op = 0;
   this_op = sym_ops_present;
   num_ops = 0;
-  
+
   while(this_op){
 
     /* for each operation, get a fresh set of coordinates */
@@ -1356,7 +1356,7 @@ void find_walsh_sym_ops(cell,details)
     /* get space for the equivalent atoms array */
     this_op->equiv_atoms = (int *)calloc(num_atoms,sizeof(int));
     if( !(this_op->equiv_atoms) ) fatal("Can't get memory for equiv_atom array.");
-    
+
     /* check to see if the transformed molecule is equivalent */
     compare_molecules(cell->atoms,COM_locs,new_locs,num_atoms,this_op->equiv_atoms,
 		      &(present),details->symm_tol);
@@ -1419,7 +1419,7 @@ void find_walsh_sym_ops(cell,details)
       /* get space for the equivalent atoms array */
       this_op->equiv_atoms = (int *)calloc(num_atoms,sizeof(int));
       if( !(this_op->equiv_atoms) ) fatal("Can't get memory for equiv_atom array.");
-    
+
       /* check to see if the transformed molecule is equivalent */
       compare_molecules(cell->atoms,COM_locs,new_locs,num_atoms,this_op->equiv_atoms,
 			&(present),details->symm_tol);
@@ -1432,7 +1432,7 @@ void find_walsh_sym_ops(cell,details)
 	  /* free up all the memory used by this element */
 	  free(this_op->equiv_atoms);
 	  free(this_op);
-	  
+
 	  this_op = last_op->next;
 	}
 	else{
@@ -1507,9 +1507,9 @@ void find_MO_symmetries(num_orbs,details,cell,eigenset,overlap,orbital_lookup_ta
   eigenset_type eigenset;
   hermetian_matrix_type overlap;
   int *orbital_lookup_table;
-{  
+{
   static real *AO_coeffs=0;
-  static real *norm_fact=0;  
+  static real *norm_fact=0;
   int i,j,k,ops_so_far;
   int num_atoms;
   int atom1,atom2;
@@ -1529,7 +1529,7 @@ void find_MO_symmetries(num_orbs,details,cell,eigenset,overlap,orbital_lookup_ta
     norm_fact = (real *)calloc(num_orbs,sizeof(real));
     if( !norm_fact ) fatal("Can't get memory for norm_fact in find_MO_symmetries.");
   }
-  
+
   num_atoms = cell->num_atoms;
 
   /********
@@ -1547,7 +1547,7 @@ operations present.\n");
 	  i++;
 	  sym_op=sym_op->next;
 	  }
-	
+
 	fprintf(output_file,"\n");
 
   /* determine the normalization constants */
@@ -1559,11 +1559,11 @@ operations present.\n");
     norm_fact[i] = 1.0/norm_fact[i];
   }
 
-  
+
   /* first loop over MO's */
   for(i=0;i<num_orbs;i++){
     fprintf(output_file,"% 4d:---> ",i+1);
-    
+
 
     /******
 
@@ -1593,14 +1593,14 @@ operations present.\n");
 	      copy the AO's from atom 1 into a vector so that they can be
 	      transformed.
 	    ***********/
-	    if( begin_atom1 != -1 && begin_atom2 != -1 ){ 
+	    if( begin_atom1 != -1 && begin_atom2 != -1 ){
 	      for(j=begin_atom1;j<end_atom1;j++){
 		AO_coeffs[j-begin_atom1] = EIGENVECT_R(eigenset,i,j);
 	      }
 
 	      /* now transform the orbitals */
 	      transform_orbitals(&(cell->atoms[atom1]),AO_coeffs,sym_op);
-	      
+
 	      /* loop through the AO's and multiply coefficients */
 	      for(j=0,k=begin_atom2;j<(end_atom1-begin_atom1);j++,k++){
 		MO_character += AO_coeffs[j]*EIGENVECT_R(eigenset,i,k);

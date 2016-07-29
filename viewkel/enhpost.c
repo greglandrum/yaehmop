@@ -6,14 +6,14 @@
   It contains stuff for doing fancy things with postscript.
 
     This file is modified and distributed with the permission of
-    David Denholm and Matt Heffron.  
+    David Denholm and Matt Heffron.
 
     If there are problems, please report them to me.
 
     Adapted by greg Landrum, July 1995
 
     Changes include:
-      -removal of rotated text support 
+      -removal of rotated text support
         This was taken out for user interface issues....
 	 as soon as those are worked out, putting the rotated
 	 text back in would be a damn good idea.
@@ -24,25 +24,25 @@
 
 
 /*
- * Copyright (C) 1990 - 1993   
+ * Copyright (C) 1990 - 1993
  *
  * Permission to use, copy, and distribute this software and its
- * documentation for any purpose with or without fee is hereby granted, 
- * provided that the above copyright notice appear in all copies and 
- * that both that copyright notice and this permission notice appear 
+ * documentation for any purpose with or without fee is hereby granted,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
  * in supporting documentation.
  *
  * Permission to modify the software is granted, but not the right to
- * distribute the modified code.  Modifications are to be distributed 
+ * distribute the modified code.  Modifications are to be distributed
  * as patches to released version.
- *  
+ *
  * This software  is provided "as is" without express or implied warranty.
- * 
+ *
  * This file is included by ../term.c.
  *
  * This terminal driver supports:
  *     enhpost		Enhanced PostScript
- * It is an extension to the postscript terminal driver and depends on 
+ * It is an extension to the postscript terminal driver and depends on
  * that being included (in ../term.c) before this is included.
  *
  * AUTHORS
@@ -61,7 +61,7 @@
  * more text - hopefully useful for hats and such things..?
  * It's all done with recursion, so you can change font inside the phantom
  * box, etc.
- * 
+ *
  * send your comments or suggestions to (info-gnuplot@dartmouth.edu).
  *
  * ALMOST the same as 'postscript' except for string handling.
@@ -81,7 +81,7 @@
 
     21.05.98 gL:
       added Cshadecirc, shadecirc, Cstoptube, and stoptube
-      to PS header to clean up the PS a little bit, and 
+      to PS header to clean up the PS a little bit, and
       add the possibility for shaded circles.
 
     29.05.98 gL:
@@ -134,15 +134,15 @@ char *ENHPS_header[] = {
 
 /* flush left show */
 "/Lshow { currentpoint stroke M\n",
-"  0 exch R MFshow } bind def\n", 
+"  0 exch R MFshow } bind def\n",
 
 /* flush right show */
 "/Rshow { currentpoint stroke M\n",
-"  exch dup MFwidth neg 3 -1 roll R MFshow } def\n", 
+"  exch dup MFwidth neg 3 -1 roll R MFshow } def\n",
 
 /* centred show */
 "/Cshow { currentpoint stroke M\n",
-"  exch dup MFwidth -2 div 3 -1 roll R MFshow } def\n", 
+"  exch dup MFwidth -2 div 3 -1 roll R MFshow } def\n",
 
 NULL
 };
@@ -309,7 +309,7 @@ char *ENHPS_RememberFont(char *fname)
   for (fnp=ENHPS_DocFonts; fnp && strcmp(fnp->name, fname); fnp = fnp->next);
   if (fnp)
     return fnp->name;	/* we must have found it in the list */
-   
+
   fnp = (struct ENHPS_FontName *)D_MALLOC(sizeof(struct ENHPS_FontName));
   if( !fnp ) fatal("Can't get fnp memory");
   fnp->name = D_CALLOC(1+strlen(fname),sizeof(char));
@@ -326,7 +326,7 @@ void ENHPS_init(void)
   strcpy(ps_font,PS_options.fontname);
 
   (void)ENHPS_RememberFont(ps_font);
-  
+
 }
 
 
@@ -418,28 +418,28 @@ char *ENHPS_recurse(char *p,char brace, char *fontname,
 	      /*{{{  deal with it*/
 	      if (brace)
 		return (p);
-				
+
 	      fprintf(stderr, "enhpost printer driver - spurious }\n");
 	      break;
 	      /*}}}*/
-		
+
 	    case '_'  :
 	    case '^'  :
 	      /*{{{  deal with super/sub script*/
-    
+
 	      shift = (*p == '^') ? 0.5 : -0.3;
-				
+
 	      ENHPS_FLUSH
-				
+
 		p = ENHPS_recurse(p+1, FALSE, fontname, fontsize*0.8, base+shift*fontsize, widthflag);
-				
+
 	      break;
 	      /*}}}*/
-		
+
 	    case '{'  :
 	      /*{{{  recurse (possibly with a new font) */
 	      ENHPS_DEBUG(("Dealing with {\n"))
-    
+
 		if (*++p == '/')
 		    {		/* then parse a fontname, optional fontsize */
 		      while (*++p == ' ');
@@ -448,17 +448,17 @@ char *ENHPS_recurse(char *p,char brace, char *fontname,
 			++p;
 		      if (ch == '=')
 			  {
-			    *p++ = '\0';				
+			    *p++ = '\0';
 			    /*{{{  get optional font size*/
 			    ENHPS_DEBUG(("Calling strtod(%s) ...", p))
 			      f = (float)strtod(p, &p);
 			    ENHPS_DEBUG(("Retured %.1f and %s\n", f, p))
-      
+
 			      if (f)
 				f *= PS_SC; /* remember the scaling */
 			      else
 				f = fontsize;
-      
+
 			    ENHPS_DEBUG(("Font size %.1f\n", f))
 			      /*}}}*/
 			  }
@@ -466,8 +466,8 @@ char *ENHPS_recurse(char *p,char brace, char *fontname,
 			  {
 			    *p++ = '\0';
 			    f = fontsize;
-			  }				
-    
+			  }
+
 		      while (*p == ' ')
 			++p;
 		      if (*localfontname)
@@ -481,28 +481,28 @@ char *ENHPS_recurse(char *p,char brace, char *fontname,
 		      f = fontsize;
 		    }
 	      /*}}}*/
-				
+
 	      ENHPS_DEBUG(("Before recursing, we are at [%p] %s\n", p, p))
-				
+
 		p = ENHPS_recurse(p, TRUE, localfontname, f, base, widthflag);
-				
+
 	      ENHPS_DEBUG(("BACK WITH %s\n", p));
-				
+
 	      ENHPS_FLUSH
-  
+
 		break;
 	      /*}}}*/
-				
+
 	    case '@' :
 	      /*{{{  phantom box - prints next 'char', then restores currentpoint */
-    
+
 	      ENHPS_FLUSH
-    
+
 		p = ENHPS_recurse(++p, FALSE, fontname, fontsize, base, FALSE);
-					
+
 	      break;
 	      /*}}}*/
-		
+
 	    case '('  :
 	    case ')'  :
 	      /*{{{  an escape and print it */
@@ -512,11 +512,11 @@ char *ENHPS_recurse(char *p,char brace, char *fontname,
 	      fputc(*p, psfile);
 	      break;
 	      /*}}}*/
-		
+
 	    case '\\'  :
 	      /*{{{  is it an escape */
 	      /* special cases */
-				
+
 	      if (p[1]=='\\' || p[1]=='(' || p[1]==')')
 		  {
 		    ENHPS_OPEN
@@ -547,17 +547,17 @@ char *ENHPS_recurse(char *p,char brace, char *fontname,
 		fputs("\\305",psfile);
 		p+=3;
 	      }
-    
+
 	      ++p;
 	      /* just go and print it (fall into the 'default' case) */
-    
+
 	      /*}}}*/
 	    default:
 	      /*{{{  print it */
 	      ENHPS_OPEN
-    
+
 		fputc(*p, psfile);
-    
+
 	      /*}}}*/
 
 	    }
@@ -572,11 +572,11 @@ char *ENHPS_recurse(char *p,char brace, char *fontname,
 	      ENHPS_FLUSH
 		return(p);	/* the ++p in the outer copy will increment us */
 	    }
-	
+
       }
   ENHPS_FLUSH
     return p;
-} 
+}
 /*}}}*/
 
 /*{{{  ENHPS_put_text(x,y,str) */
@@ -591,7 +591,7 @@ int ENHPS_put_text(unsigned int x, unsigned int y,char *str,
   fputs("[ ",psfile);
 
   /* set up the globals */
-	
+
   ENHps_opened_string = FALSE;
   ENHps_max_height = -1000;
   ENHps_min_height = 1000;
@@ -601,7 +601,7 @@ int ENHPS_put_text(unsigned int x, unsigned int y,char *str,
 			       (float)0.0, TRUE)));
 
   ENHps_max_height += ENHps_min_height;
-		
+
   fprintf(psfile, "] %.1f ", -ENHps_max_height/3);
 
   switch(horiz_justify)
@@ -623,11 +623,11 @@ int ENHPS_put_text(unsigned int x, unsigned int y,char *str,
  *                Procedure open_ps_button_window
  *
  * Arguments:  none
- *            
+ *
  * Returns: none
  *
  * Action:  opens up the ps options button window
- *  
+ *
  ****************************************************************************/
 void open_ps_button_window(void)
 {
@@ -677,7 +677,7 @@ void do_ps_output(void)
       filename[0] = 0;
     }
 #endif
-  
+
   psfile = fopen(filename,"w+");
   if(!psfile){
     error("Can't open output file.");
@@ -729,9 +729,9 @@ void do_ps_output(void)
   fprintf(psfile,"%%%%Pages: 1\n");
   fprintf(psfile,"%%%%BoundingBox: %6.2lf %6.2lf %6.2lf %6.2lf\n",
 	  bbx1,bby1,bbx2,bby2);
-  fprintf(psfile,"%%%%EndComments\n\n");  
-  
-  
+  fprintf(psfile,"%%%%EndComments\n\n");
+
+
   ENHPS_init();
 
   fprintf(psfile,"%% This is hacked straight out of the Blue book (from Adobe) \n");
@@ -896,14 +896,14 @@ void do_ps_output(void)
   fprintf(psfile,"end\n");
   fprintf(psfile,"/%s exch definefont pop\n",PS_options.fontname);
 
-  
+
   fprintf(psfile,"/textsize %lf def\n",PS_options.fontsize);
   fprintf(psfile,
 	  "/normalfont {/%s findfont textsize scalefont setfont} def\n",
 	  PS_options.fontname);
   fprintf(psfile,
 	  "/symbolfont {/Symbol findfont textsize scalefont setfont} def\n");
-  
+
   fprintf(psfile,"normalfont\n");
   fprintf(psfile,"/thesize %lf def\n",
 	  8.5*72.0*PS_options.printscale/(float)g_xmax);
@@ -916,15 +916,15 @@ void do_ps_output(void)
   fprintf(psfile,"              1 -0.5 scale 0 0 2 index 0 180 arcn stroke\n");
   fprintf(psfile,"              0.5 2.0 scale 0 0 2 index 90 270 arc stroke\n");
   fprintf(psfile,"              2.0 -1.0 scale pop 1 index -1 mul 1 index -1 mul translate pop pop} def\n");
-  
+
   /* some definitions which will be used for displaying text */
   fprintf(psfile,"/SNP {stroke newpath} def\n");
   fprintf(psfile,"/vshift -1 textsize mul def\n");
   fprintf(psfile,"/M {moveto} def\n");
-  fprintf(psfile,"/L {lineto} def\n");  
+  fprintf(psfile,"/L {lineto} def\n");
   fprintf(psfile,"/R {rmoveto} def\n");
-  fprintf(psfile,"/SG {setgray} def\n");  
-  
+  fprintf(psfile,"/SG {setgray} def\n");
+
   fprintf(psfile,"/MFshow {{dup dup 0 get findfont exch 1 get scalefont setfont\n");
   fprintf(psfile,"     [ currentpoint ] exch dup 2 get 0 exch rmoveto dup 4 get show dup\n");
   fprintf(psfile,"     3 get {2 get neg 0 exch rmoveto pop} {pop aload pop moveto}ifelse} forall} bind def\n");
@@ -932,12 +932,12 @@ void do_ps_output(void)
   fprintf(psfile,"      4 get stringwidth pop add}\n");
   fprintf(psfile,"    {pop} ifelse} forall} bind def\n");
   fprintf(psfile,"/Lshow { currentpoint stroke M\n");
-  fprintf(psfile,"  0 exch iscaleit R MFshow stroke scaleit} bind def\n"); 
+  fprintf(psfile,"  0 exch iscaleit R MFshow stroke scaleit} bind def\n");
   fprintf(psfile,"/Rshow { currentpoint stroke M\n");
   fprintf(psfile,"  exch dup iscaleit MFwidth neg 3 -1 roll R MFshow stroke scaleit } def\n");
   fprintf(psfile,"/Cshow { currentpoint stroke M\n");
   fprintf(psfile,"  exch dup iscaleit MFwidth -2 div 3 -1 roll R MFshow stroke scaleit} def\n");
-  
+
   fprintf(psfile,"%%\n%% These next three are for triangles\n%%\n");
   fprintf(psfile,"%%    here you can change the shading of triangles\n");
   fprintf(psfile,"%%    increase 1 to decrease the range of colors and\n");
@@ -960,7 +960,7 @@ void do_ps_output(void)
   fprintf(psfile,"%%    Gives a lovely faintly reddish aqua.  If you\n");
   fprintf(psfile,"%%    play with the divisors and offsets (0.5 in each\n");
   fprintf(psfile,"%%    of the above examples), you should get the idea\n");
-  fprintf(psfile,"%%    pretty quickly.\n");    
+  fprintf(psfile,"%%    pretty quickly.\n");
   fprintf(psfile,"/SNG { 1 div 0 add setgray } def\n");
   fprintf(psfile,"/fT { M L L L fill stroke} def\n");
   fprintf(psfile,"%% if you don't like the outlines, substitute the\n");
@@ -977,7 +977,7 @@ void do_ps_output(void)
 
   fprintf(psfile,"\n%%%%Page: 1 1\n\n");
   fprintf(psfile,"scaleit\n");
-  
+
   fprintf(psfile,"0.0 %lf translate\n",translation);
 
 
@@ -1011,19 +1011,19 @@ void do_ps_output(void)
     if( PS_options.bond_color[2] > 1 ) PS_options.bond_color[2] = 1;
     break;
   }
-  
-  
+
+
   /* set a toggle to let the redraw routines know to dump to ps */
   doing_ps = 1;
-  
+
   redrawgraph();
-  
+
   doing_ps = 0;
-  
+
   fprintf(psfile,"showpage\n");
   ENHPS_reset();
 
-  
+
   fclose(psfile);
 }
 

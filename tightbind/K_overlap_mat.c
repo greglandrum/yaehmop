@@ -77,7 +77,7 @@ void build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs)
   int ltab,mtab;
 
   point_type kpointloc;
-  
+
   real kdotR,temp;
   real cos_term,sin_term;
   real *which_overlap;
@@ -103,7 +103,7 @@ void build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs)
       overlapK.mat[mtab+l] = overlapR.mat[mtab+l];
     }
   }
-  
+
   /* sum up the individual overlaps, just like when overlapR was built */
   for(i=1;i<=cell->overlaps[0];i++){
     which_overlap += num_orbs*num_orbs;
@@ -126,9 +126,9 @@ void build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs)
     /* the last diagonal element */
     overlapK.mat[num_orbs*num_orbs-1] += cos_term*which_overlap[num_orbs*num_orbs-1];
   }
-      
+
   if( cell->dim != 1 ){
-    
+
     /******
       take care of the remainder of the layer containing the unit cell
       for each overlap the procedure is the same as above
@@ -184,7 +184,7 @@ void build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs)
 
 #ifdef PRINTMAT
 fprintf(output_file,"---------- S(k) ------\n");
-printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);  
+printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);
 #endif
 
   /* that's it! */
@@ -204,7 +204,7 @@ printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);
 *
 * Returns: none
 *
-* Action: This generates the overlap matrix for a given k-point 
+* Action: This generates the overlap matrix for a given k-point
 *
 ****************************************************************************/
 void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
@@ -219,7 +219,7 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
   int ltab,mtab;
 
   point_type kpointloc;
-  
+
   real kdotR;
   real cos_term,sin_term;
   real *which_overlap;
@@ -229,7 +229,7 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
   static point_type distances;
   real temp,min=100.0;
   int min_dir;
-  
+
   /* this is some stuff that only needs to be done once */
   if( first_call ){
     first_call = 0;
@@ -240,7 +240,7 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
       cell_dim[i].x = cell->atoms[jtab].loc.x-cell->atoms[itab].loc.x;
       cell_dim[i].y = cell->atoms[jtab].loc.y-cell->atoms[itab].loc.y;
       cell_dim[i].z = cell->atoms[jtab].loc.z-cell->atoms[itab].loc.z;
-      
+
       /* we use this to keep track of the shortest distance */
       temp = sqrt(cell_dim[i].x*cell_dim[i].x+
 		  cell_dim[i].y*cell_dim[i].y+
@@ -250,7 +250,7 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
 	min_dir = i;
       }
     }
-    
+
     /* a quick value for rho */
     if( fabs(details->rho) <= 1e-3 )
       details->rho = min*(cell->overlaps[min_dir]+1)+.01;
@@ -263,16 +263,16 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
 
 
   /******
-    
+
     first do the unit cell
-    
+
   ******/
   distances.x=distances.y=distances.z=0.0;
   calc_R_overlap(overlapR.mat,cell,details,
 		 num_orbs,distances,TRUE,orbital_lookup_table);
 
   /*********
-    copy the unit cell overlap values into the k space matrix 
+    copy the unit cell overlap values into the k space matrix
     and put 1's on the diagonal and copy the elements across the diagonal
   **********/
   for(j=0;j<num_orbs;j++){
@@ -286,9 +286,9 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
   }
 
   /*******
-    
+
     now move into the other cells.
-    
+
   ********/
   for(i=1;i<=cell->overlaps[0];i++){
     distances.x = i*cell_dim[0].x;
@@ -315,9 +315,9 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
     /* the last diagonal element */
     overlapK.mat[num_orbs*num_orbs-1] += cos_term*overlapR.mat[num_orbs*num_orbs-1];
   }
-      
+
   if( cell->dim != 1 ){
-    
+
     /******
       take care of the remainder of the layer containing the unit cell
       for each overlap the procedure is the same as above
@@ -328,7 +328,7 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
 	distances.x = itab*cell_dim[0].x + j*cell_dim[1].x;
 	distances.y = itab*cell_dim[0].y + j*cell_dim[1].y;
 	distances.z = itab*cell_dim[0].z + j*cell_dim[1].z;
-	
+
 	calc_R_overlap(overlapR.mat,cell,details,
 		       num_orbs,distances,FALSE,orbital_lookup_table);
 
@@ -363,7 +363,7 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
 	    ktab*cell_dim[1].y;
 	  distances.z = itab*cell_dim[2].z + jtab*cell_dim[0].z +
 	    ktab*cell_dim[1].z;
-	  
+
 	  calc_R_overlap(overlapR.mat,cell,details,
 			 num_orbs,distances,FALSE,orbital_lookup_table);
 
@@ -388,7 +388,7 @@ void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
 
 #ifdef PRINTMAT
 fprintf(output_file,"---------- S(k) ------\n");
-printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);  
+printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);
 #endif
 }
 
@@ -425,13 +425,13 @@ void build_all_K_overlaps(cell,details,overlapR,overlapK,num_orbs,
   int ltab,mtab;
 
   point_type kpointloc;
-  
+
   real kdotR,temp;
   real cos_term,sin_term;
   real *which_Koverlap;
   int overlaps_so_far;
 
-    
+
   overlaps_so_far = 0;
   R_space_overlap_matrix(cell,details,overlapR,num_orbs,tot_overlaps,
 			 orbital_lookup_table,overlaps_so_far);
@@ -447,14 +447,14 @@ void build_all_K_overlaps(cell,details,overlapR,overlapK,num_orbs,
 	kpointloc.x = TWOPI*kpoint->loc.x;
 	kpointloc.y = TWOPI*kpoint->loc.y;
 	kpointloc.z = TWOPI*kpoint->loc.z;
-    
+
 
 	which_Koverlap[ltab+m] = 0.0;
 	which_Koverlap[mtab+l] = overlapR.mat[mtab+l];
       }
     }
   }
-    
+
   /* sum up the individual overlaps, just like when overlapR was built */
   for(i=1;i<=cell->overlaps[0];i++){
     R_space_overlap_matrix(cell,details,overlapR,num_orbs,tot_overlaps,
@@ -467,7 +467,7 @@ void build_all_K_overlaps(cell,details,overlapR,overlapK,num_orbs,
       kpointloc.x = TWOPI*kpoint->loc.x;
       kpointloc.y = TWOPI*kpoint->loc.y;
       kpointloc.z = TWOPI*kpoint->loc.z;
-      kdotR = kpointloc.x*(real)i;    
+      kdotR = kpointloc.x*(real)i;
       cos_term = cos(kdotR);
       sin_term = sin(kdotR);
 
@@ -488,9 +488,9 @@ void build_all_K_overlaps(cell,details,overlapR,overlapK,num_orbs,
       which_Koverlap[num_orbs*num_orbs-1] +=
 	cos_term*overlapR.mat[num_orbs*num_orbs-1];
     }
-  }    
+  }
   if( cell->dim != 1 ){
-      
+
     /******
       take care of the remainder of the layer containing the unit cell
       for each overlap the procedure is the same as above
@@ -572,7 +572,7 @@ void build_all_K_overlaps(cell,details,overlapR,overlapK,num_orbs,
 
 #ifdef PRINTMAT
   fprintf(output_file,"---------- S(k) ------\n");
-  printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);  
+  printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);
 #endif
 
   /* that's it! */

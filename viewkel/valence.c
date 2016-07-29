@@ -51,13 +51,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 float calc_R0(float c1,float r1,float c2,float r2)
 {
   float result;
-  
+
   result = sqrt(c1)-sqrt(c2);
   result *= result;
   result *= r1*r2;
   result /= c1*r1 + c2*r2;
   result += r1+r2;
-  
+
   return(result);
 }
 
@@ -68,33 +68,33 @@ float calc_R0(float c1,float r1,float c2,float r2)
  * Arguments:  atom1,atom2: pointers to atom_type
  *                 length: float
  *        R0_val,valence: pointers to float
- *            
+ *
  * Returns: none
  *
  * Action: Calculates the bond valence between atoms 'atom1 and 'atom2
  *   using the bond length 'length.
  *
  *  If *R0_val is nonzero, it will be used to calculate the valence, which
- *   is returned in 'valence, otherwise the ci and ri parameters from the 
- *   atoms are used.  
+ *   is returned in 'valence, otherwise the ci and ri parameters from the
+ *   atoms are used.
  *
- *  On Return: 'RO_val contains the R0 value (calculated or passed in) 
+ *  On Return: 'RO_val contains the R0 value (calculated or passed in)
  *   and 'valence contains the calculated value of the valence.
- *  
+ *
  ****************************************************************************/
 void bond_length_to_bond_valence(atom_type *atom1,atom_type *atom2,
 				 float length,float *R0_val,
 				 float *valence)
 {
-  
+
   /* do we need to calculate R0? */
   if(*R0_val == 0.0){
-   
+
     if( atom1->ci == 0.0 || atom2->ci == 0.0 ) *R0_val = 0.0;
     else{
       *R0_val = calc_R0(atom1->ci,atom1->ri,atom2->ci,atom2->ri);
     }
-  } 
+  }
 
 
   /******
@@ -108,7 +108,7 @@ void bond_length_to_bond_valence(atom_type *atom1,atom_type *atom2,
     return;
   }
   *valence = (float)exp((double)(*R0_val-length)/(double)BVAL);
-    
+
 }
 #endif
 

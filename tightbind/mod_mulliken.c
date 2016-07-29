@@ -39,8 +39,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 #include "bind.h"
 
-      
-    
+
+
 
 
 /****************************************************************************
@@ -94,27 +94,27 @@ void modified_mulliken(cell,eigenset,overlap,num_orbs,
   int begin_of_atom,end_of_atom;
   real OP_accum,net_chg,tot_chg;
   real OP_accumI;
-  
+
   num_atoms = cell->num_atoms;
-  
+
   /* zero out arrays which will be used */
   bzero((char *)accum,num_orbs*sizeof(real));
 
-  
+
   /********
 
     this is using the following formula:
 
-                  
+
 
     i != j
                           OP[i][j]
-    mod_OP[i][j] =  -------------------  
+    mod_OP[i][j] =  -------------------
                     OP[i][i] + OP[j][j]
-      
+
     i == j
 
-    mod_OP[i][i] = OP[i][i] 
+    mod_OP[i][i] = OP[i][i]
 
   *********/
 
@@ -128,35 +128,35 @@ void modified_mulliken(cell,eigenset,overlap,num_orbs,
 
       if( i != j ){
 	mod_OP_matrix[itab+j] = OP_matrix[itab+j]/
-	  (OP_matrix[itab+i] + OP_matrix[jtab+j]); 
+	  (OP_matrix[itab+i] + OP_matrix[jtab+j]);
       }
       else{
 	mod_OP_matrix[itab+i] =  OP_matrix[itab+i];
       }
     }
   }
-  
+
   /*******
-    
-    generate the net charges 
-    
+
+    generate the net charges
+
   ********/
   for(i=0;i<cell->num_atoms;i++){
     find_atoms_orbs(num_orbs,cell->num_atoms,i,orbital_lookup_table,
 		    &begin_of_atom,&end_of_atom);
     if( begin_of_atom >= 0 ){
       net_chg = 0.0;
-      
+
       for(j = begin_of_atom;j<end_of_atom;j++){
 	jtab = j*num_orbs;
 	for(k=0;k<num_orbs;k++){
 	  if( k==j ) net_chg -= mod_OP_matrix[jtab+k];
 	  else net_chg -= mod_OP_matrix[jtab+j]*mod_OP_matrix[jtab+k];
 	}
-      }      
+      }
       /* subtract off the number of valence electrons */
       net_chg += cell->atoms[i].num_valence;
-      
+
       net_chgs[i] = net_chg;
     }
   }

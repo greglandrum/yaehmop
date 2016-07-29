@@ -54,7 +54,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    uh, I forgot something when I did that stuff above, so the MO
    symmetry printing wasn't working for walsh diagrams.  That's
    fixed now (the mirror plane toggles are static).  Yippee.
-  
+
   24.02.99, gL:
     added a bogus etime function for linux installations which need it.
 
@@ -173,7 +173,7 @@ void error( errorstring )
 	bzero(composite_string,255*sizeof(char));
 	strcpy((char *)composite_string,initstring);
 	strcat((char *)composite_string,errorstring);
-	
+
 	ParamText(CtoPstr(composite_string),NULL,NULL,NULL);
 	disposition = Alert(131, NULL);
 	switch(disposition){
@@ -193,7 +193,7 @@ void handle_sigint()
 }
 
 /*********
-  converts a string to all uppercase 
+  converts a string to all uppercase
 **********/
 void upcase(string)
   char *string;
@@ -230,7 +230,7 @@ char *safe_strcpy(str1,str2)
   if( !str2 ){
     str1[0] = 0;
   } else{
-    strcpy(str1,str2);    
+    strcpy(str1,str2);
   }
   return(str1);
 }
@@ -247,7 +247,7 @@ char *safe_strcpy(str1,str2)
 * Action: centers the string 'src in the string 'dest.
 *     'dest should be at least 'dest_len+1 long and (obviously)
 *     'dest_len should be longer than the string in 'src.
-*  
+*
 *****************************************************************************/
 void center_text_string(char *src, char *dest, int dest_len)
 {
@@ -275,7 +275,7 @@ void center_text_string(char *src, char *dest, int dest_len)
 * Action: left justifies string 'src in the string 'dest.
 *     'dest should be at least 'dest_len+1 long and (obviously)
 *     'dest_len should be longer than the string in 'src.
-*  
+*
 *****************************************************************************/
 void left_just_text_string(char *src, char *dest, int dest_len)
 {
@@ -288,7 +288,7 @@ void left_just_text_string(char *src, char *dest, int dest_len)
   for(i=src_len;i<=dest_len;i++) dest[i] = ' ';
   dest[dest_len+1] = 0;
 }
-    
+
 
 
 /****************************************************************************
@@ -300,20 +300,20 @@ void left_just_text_string(char *src, char *dest, int dest_len)
 *orbital_lookup_table: pointer to int
 *                atoms: pointer to atom_type
 *             num_atoms: integer
-*                 
+*
 * Returns: none
 *
 * Action: Figures out the name of orbital 'orb_num
-*  
+*
 *****************************************************************************/
 void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
 			 int num_orbs,atom_type *atoms,int num_atoms)
 {
   int i,j,orb_offset;
   atom_type *atom;
-  
+
   if(orb_num >= num_orbs) FATAL_BUG("Bogus orb_num passed to map_orb_num_to_name.");
-  
+
   for(i=0;i<num_atoms;i++){
     if(i == num_atoms-1 ){
       orb_offset = orb_num-orbital_lookup_table[i];
@@ -331,7 +331,7 @@ void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
     }
   }
 
-    
+
 
   if(atom->ns){
     if( orb_offset == 0){
@@ -420,7 +420,7 @@ void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
 
   error("Can't map orbital number to atom.");
 }
-    
+
 
 
 
@@ -447,7 +447,7 @@ void debugmat( mat, num_row, num_col, tol )
   int beg_col,end_col;
   int which_part,num_parts;
   real val;
-  
+
   beg_col = 0;
 
   /* check to see if we're gonna have to break it into multiple parts */
@@ -475,11 +475,11 @@ void debugmat( mat, num_row, num_col, tol )
 	  /* check to see if the value is less than the tolerance */
 	  if( fabs(val) <= tol ) val = 0.0;
 	  fprintf(stdout,"  % -6.4g",val);
-	}	
+	}
       }
       fprintf(stdout,"\n");
     }
-  
+
     beg_col=end_col;
     end_col+=8;
   }
@@ -515,7 +515,7 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
   int which_part,num_parts;
   int cols_per_line;
   real val;
-  
+
   /* figure out how many columns we get.... */
   cols_per_line = (int)floor((real)width/10);
 
@@ -543,7 +543,7 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
 	  fprintf(outfile,"%4d",i+1);
 	}
 	else fprintf(outfile,"    ");
-	
+
 	for( j=beg_col; j<end_col && j< num_col; j++ ){
 
 	  /* begin each column with a header */
@@ -553,11 +553,11 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
 	    /* check to see if the value is less than the tolerance */
 	    if( fabs(val) <= tol ) val = 0.0;
 	    fprintf(outfile,"  % -6.4lf",val);
-	  }	
+	  }
 	}
 	fprintf(outfile,"\n");
       }
-      
+
       beg_col=end_col;
       end_col+=cols_per_line;
     }
@@ -578,7 +578,7 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
 	  fprintf(outfile,"%4d",i+1);
 	}
 	else fprintf(outfile,"    ");
-	
+
 	for( j=beg_row; j<end_row && j< num_row; j++ ){
 
 	  /* begin each column with a header */
@@ -588,11 +588,11 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
 	    /* check to see if the value is less than the tolerance */
 	    if( fabs(val) <= tol ) val = 0.0;
 	    fprintf(outfile,"  % -6.4lf",val);
-	  }	
+	  }
 	}
 	fprintf(outfile,"\n");
       }
-      
+
       beg_row=end_row;
       end_row+=cols_per_line;
     }
@@ -643,7 +643,7 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
   /* we need to subtract one from this to leave room for the row labels */
   cols_per_line--;
 
-  
+
   beg_col = 0;
   beg_row = 0;
 
@@ -672,7 +672,7 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
 	  }
 	}
 	else fprintf(outfile,"               ");
-	
+
 	for( j=beg_col; j<end_col && j< num_col; j++ ){
 
 	  /* begin each column with a header */
@@ -694,11 +694,11 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
 	    /* check to see if the value is less than the tolerance */
 	    if( fabs(val) <= tol ) val = 0.0;
 	    fprintf(outfile," % -18.4lf",val);
-	  }	
+	  }
 	}
 	fprintf(outfile,"\n");
       }
-      
+
       beg_col=end_col;
       end_col+=cols_per_line;
     }
@@ -727,7 +727,7 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
 	  }
 	}
 	else fprintf(outfile,"               ");
-	
+
 	for( j=beg_row; j<end_row && j< num_row; j++ ){
 
 	  /* begin each column with a header */
@@ -747,11 +747,11 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
 	    /* check to see if the value is less than the tolerance */
 	    if( fabs(val) <= tol ) val = 0.0;
 	    fprintf(outfile," % -18.4lf",val);
-	  }	
+	  }
 	}
 	fprintf(outfile,"\n");
       }
-      
+
       beg_row=end_row;
       end_row+=cols_per_line;
     }
@@ -801,7 +801,7 @@ void print_sym_mat( real *mat, int num_row, int num_col, FILE *outfile, char *le
 
   /* we need to subtract one from this to leave room for the row labels */
   cols_per_line--;
-  
+
 
   /* check to see if we're gonna have to break it into multiple parts */
   beg_col = 0;
@@ -881,7 +881,7 @@ void print_sym_mat( real *mat, int num_row, int num_col, FILE *outfile, char *le
  * Action: Reads in lines from 'file' until one is hit that does not begin
  *     with a ; or a return. puts the first non-comment line into instring
  *     and then returns.
- * 
+ *
  *    if 'toggle is set to FATAL then hitting EOF will result in
  *      program termination with a call to fatal.
  *    if 'toggle is set to ERROR then EOF results in a call to error then
@@ -906,7 +906,7 @@ int skipcomments(FILE *file,char *string,char toggle)
   ********/
   i = 0;
   while(string[i] == ' ') i++;
-  while( string[i] == '\n' || string[i] == ';' 
+  while( string[i] == '\n' || string[i] == ';'
 	&& string[i] != 0 ){
     string[0] = 0;
     fgets(string,MAX_STR_LEN,file);
@@ -940,7 +940,7 @@ int skipcomments(FILE *file,char *string,char toggle)
 *                atom: int
 *orbital_lookup_table: pointer to int
 *           begin,end: pointers to int
-*      
+*
 * Returns: none
 *
 * Action: Finds the beginning and end of the orbitals of atom 'atom in
@@ -994,7 +994,7 @@ void find_atoms_orbs(num_orbs,num_atoms,atom,orbital_lookup_table,begin,end)
   }
   /* that's all there is to do! */
 }
-      
+
 
 /****************************************************************************
  *
@@ -1002,7 +1002,7 @@ void find_atoms_orbs(num_orbs,num_atoms,atom,orbital_lookup_table,begin,end)
  *
  * Arguments:  vect: pointer to point_type
  *             cell: pointer to cell_type
- *      
+ *
  * Returns: int
  *
  * Action:  Determines which R space overlap matrix should be used to
@@ -1177,7 +1177,7 @@ void check_for_errors(cell,details,num_orbs)
       COOP_ptr2 = COOP_ptr2->next_to_avg;
     }
     COOP_ptr = COOP_ptr->next_type;
-  }    
+  }
 
   /* did they combine goofy stuff with the just_avgE option? */
   if( details->just_avgE ){
@@ -1194,7 +1194,7 @@ void check_for_errors(cell,details,num_orbs)
       fatal("There's a bad printing option combined with Just Average Energy keyword.");
     }
   }
-}  
+}
 
 
 
@@ -1238,12 +1238,12 @@ void build_orbital_lookup_table(cell,num_orbs,orbital_lookup_table)
   /* get space for the orbital lookup table */
   *orbital_lookup_table = (int *)calloc(cell->num_atoms,sizeof(int));
   if( !(*orbital_lookup_table) ) fatal("Can't allocate orbital lookup table.");
-  
+
   /********
-    
+
     now get the number of orbitals in the unit cell and fill the orbital
     lookup table
-    
+
   ********/
   num_so_far = 0;
   for(i=0;i<cell->num_raw_atoms;i++){
@@ -1325,7 +1325,7 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
   sym_op_type *symm_op;
   int ops_passed;
   real this_character;
-  
+
 
 
   /*******
@@ -1356,7 +1356,7 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
     fprintf(MO_file,"#end_parms\n");
 
     fprintf(MO_file,"#Num_AOs %d\n",num_orbs);
-    
+
 
     /* now write out which MO's are being printed */
     if( details->walsh_details.num_steps == 0 ){
@@ -1374,7 +1374,7 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
 	    fprintf(MO_file,"%d %lf %lf %lf %d\n",details->MOs_to_print[k]+1,
 		    details->K_POINTS[j].loc.x,details->K_POINTS[j].loc.y,
 		    details->K_POINTS[j].loc.z,i+1);
-	  }	
+	  }
 	}
       }
     } else{
@@ -1385,7 +1385,7 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
 	}
       }
     }
-      
+
     first_call = 0;
     /***
       if we did symmetry analysis, dump some info about that
@@ -1408,7 +1408,7 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
       }
     }
   }
-  
+
 
 /* round a to nearest int */
 #define ROUND(a)	(int)floor((a)+0.5)
@@ -1493,7 +1493,7 @@ double d_sign(a,b)
 
   if( a >= 0 ) x = a;
   else x = -a;
-  
+
   if( b >= 0 ) return x;
   else return -x;
 }
@@ -1533,7 +1533,7 @@ void parse_integer_string(string,values,num_values)
   /* get some initial memory */
   *values = (int *)calloc(max_values,sizeof(int));
   if( !(*values )) fatal("Can't allocate values in parse_integer_string");
-  
+
   /* first copy the input string */
   safe_strcpy(local_string,string);
 
@@ -1572,7 +1572,7 @@ void parse_integer_string(string,values,num_values)
  * Arguments: file: integer
  *             mat: pointer to real
  *        num_orbs: integer
- *        
+ *
  *
  *
  * Returns: none
@@ -1592,11 +1592,11 @@ void dump_hermetian_mat(file,mat,num_orbs)
  *
  *                   Procedure dump_sparse_mat
  *
- * Arguments: file: pointer to FILE 
+ * Arguments: file: pointer to FILE
  *             mat: pointer to real
  *        num_orbs: integer
  *         cut_off: real
- *        
+ *
  *
  *
  * Returns: none
@@ -1653,7 +1653,7 @@ void dump_sparse_mat(file,mat,num_orbs,cut_off)
   for(i=0;i<num_orbs;i++){
     fprintf(file,"%d\n",nonzero_elements_per_row[i]);
   }
-  
+
   /* write the nonzero elements */
   num_written = 0;
   for(i=0;i<num_orbs;i++){
@@ -1728,7 +1728,7 @@ void charge_to_num_electrons(cell)
 int etime_()
 #else
 int etime()
-#endif     
+#endif
 {
   return 0;
 }

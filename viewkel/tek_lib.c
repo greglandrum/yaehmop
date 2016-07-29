@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   This file contains stuff for dealing with Tektronix terminal emulators
 
     It was liberally hacked from the gnuplot vttek terminal driver.
-    
+
       Created by greg Landrum  September, 1994
 
 **************************************************/
@@ -84,8 +84,8 @@ void TEK_graphics(void)
 		       1. clear screen
 		       */
   (void) fflush(Tek_file);
-  sleep(1);  
-  /* sleep 1 second to allow screen time to clear on real 
+  sleep(1);
+  /* sleep 1 second to allow screen time to clear on real
      tektronix terminals */
 }
 
@@ -118,7 +118,7 @@ void TEK_vector(unsigned int x,unsigned int y)
 
 /******************
   These are the linetypes for VT-type terminals in tektronix emulator mode:
-  
+
   `=solid
   a=fine dots
   b=short dashes
@@ -128,7 +128,7 @@ void TEK_vector(unsigned int x,unsigned int y)
   i=bold fine dots
   j=bold short dashes,
   k=bold dash dot
-  l=bold long dash dot 
+  l=bold long dash dot
   ********************/
 void TEK_linetype(int linetype)
 {
@@ -152,7 +152,7 @@ void TEK_center_text(unsigned int x,unsigned int y,char *str)
 {
   TEK_put_text(x-strlen(str)*TEK_HCHAR/2,y,str);
 }
-  
+
 void TEK_right_text(unsigned int x,unsigned int y,char *str)
 {
   TEK_put_text(x-strlen(str)*TEK_HCHAR,y,str);

@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ********************************************************************/
 
 #include "viewkel.h"
-  
+
 /****************************************************************************
  *
  *                   Procedure readobj
@@ -49,21 +49,21 @@ snap_type *readobj(snap_type *snapptr,object_type *obj)
 {
   int i;
   snap_type *tempsnap;
-  
+
   /* first read in the information from the snapshot */
   obj->cent.x=snapptr->xc;obj->cent.y=snapptr->yc;obj->cent.z=snapptr->zc;
   obj->trans.x=snapptr->xt;obj->trans.y=snapptr->yt;obj->trans.z=snapptr->zt;
   obj->scale.x=snapptr->xs;obj->scale.y=snapptr->ys;obj->scale.z=snapptr->zs;
   obj->rot.x=snapptr->xr;obj->rot.y=snapptr->yr;obj->rot.z=snapptr->zr;
   tempsnap = snapptr->next;
-  
+
   /* now recurse over the children */
   i=0;
   while( obj->children[i] ){
     tempsnap = readobj( tempsnap, obj->children[i] );
     i++;
   }
-  
+
   /* finally return the last unused snap shot */
   return( tempsnap );
 }
@@ -85,9 +85,9 @@ void readsnap( int which, shead_type *shead )
   shead_type *tempshead;
   snap_type *snapptr;
   head_type *temphead;
-  
+
   tempshead=shead;
-  
+
   /* find the proper keyframe */
   while( tempshead && tempshead->which < which )tempshead=tempshead->next;
   /* make sure that the keyframe actually exists */
@@ -102,15 +102,15 @@ void readsnap( int which, shead_type *shead )
   /* set up the camera parms */
   camera->vup.x=tempshead->vup.x;camera->vup.y=tempshead->vup.y;
   camera->vup.z=tempshead->vup.z;
-  
+
   camera->la.x=tempshead->la.x;camera->la.y=tempshead->la.y;
   camera->la.z=tempshead->la.z;
-  
+
   camera->lf.x=tempshead->lf.x;camera->lf.y=tempshead->lf.y;
   camera->lf.z=tempshead->lf.z;
-  
+
   camera->foclength=tempshead->foclength;
-  
+
   /* now fill in the hierarchy tree */
   snapptr = tempshead->snap;
   temphead=head;
@@ -141,16 +141,16 @@ snap_type *snapobj( object_type *obj )
 {
   int i;
   snap_type *newsnap, *tempsnap;
-  
+
   newsnap=(snap_type *)D_CALLOC(1,sizeof(snap_type));
   if(!newsnap)fatal("Memory Allocation.");
-  
+
   /* fill in the parameters for this object */
   newsnap->xc=obj->cent.x;newsnap->yc=obj->cent.y;newsnap->zc=obj->cent.z;
   newsnap->xt=obj->trans.x;newsnap->yt=obj->trans.y;newsnap->zt=obj->trans.z;
   newsnap->xs=obj->scale.x;newsnap->ys=obj->scale.y;newsnap->zs=obj->scale.z;
   newsnap->xr=obj->rot.x;newsnap->yr=obj->rot.y;newsnap->zr=obj->rot.z;
-  
+
   /* now recurse over the children */
   i=0;
   tempsnap=newsnap;
@@ -179,7 +179,7 @@ void takesnap( int which )
 {
   shead_type *tempshead,*lastshead;
   head_type *temphead;
-  
+
   /* find the correct location for this keyframe in the list */
   tempshead = shead;
   if( !tempshead ){
@@ -222,21 +222,21 @@ void takesnap( int which )
       }
     }
   }
-  
-  
+
+
   /* now that the new snap node is inserted, fill the camera parms */
   tempshead->vup.x=camera->vup.x;tempshead->vup.y=camera->vup.y;
   tempshead->vup.z=camera->vup.z;
-  
+
   tempshead->la.x=camera->la.x;tempshead->la.y=camera->la.y;
   tempshead->la.z=camera->la.z;
-  
+
   tempshead->lf.x=camera->lf.x;tempshead->lf.y=camera->lf.y;
   tempshead->lf.z=camera->lf.z;
-  
+
   tempshead->foclength=camera->foclength;
   tempshead->which = which;
-  
+
   /* that takes care of setting up the node.  time to take the snapshot */
   temphead = head;
   /* go through the whole forest of objects */
@@ -265,18 +265,18 @@ void animateit(int from,int to)
   char string1[80],string2[80];
   shead_type *frame1, *frame2, interp;
   snap_type *snap1, *snap2, *tempsnap;
-  
+
   /* make sure that the two keyframes are in proper order */
   if( to < from ){
     start = to;
     to = from;
     from = start;
   }
-  
+
   /* set up the interpolated snapshot head */
   interp.which=0;
   interp.next=0;
-  
+
   /* now build the interpolation keyframe list.  This is just as long as
      any of the keyframe lists, so build it by traversing one */
   tempsnap = (snap_type *)D_CALLOC(1,sizeof(snap_type));
@@ -308,7 +308,7 @@ void animateit(int from,int to)
     display( string1 );
     return;
   }
-  
+
   /* loop until the first keyframe in the interval is not equal to to */
   while( start < to ){
     /* get the next keyframe */
@@ -321,7 +321,7 @@ void animateit(int from,int to)
       return;
     }
     end = frame2->which;
-    
+
     /* now loop between the two keyframes */
     for(i=start;i<=end;i++){
       gap = (float)(i-start)/(float)(end-start);
@@ -329,41 +329,41 @@ void animateit(int from,int to)
       snap1=frame1->snap;
       snap2=frame2->snap;
       tempsnap = interp.snap;
-      
+
       /* interpolate the camera parameters */
       interp.lf.x=(1-gap)*frame1->lf.x+gap*frame2->lf.x;
       interp.lf.y=(1-gap)*frame1->lf.y+gap*frame2->lf.y;
       interp.lf.z=(1-gap)*frame1->lf.z+gap*frame2->lf.z;
-      
+
       interp.la.x=(1-gap)*frame1->la.x+gap*frame2->la.x;
       interp.la.y=(1-gap)*frame1->la.y+gap*frame2->la.y;
       interp.la.z=(1-gap)*frame1->la.z+gap*frame2->la.z;
-      
+
       interp.vup.x=(1-gap)*frame1->vup.x+gap*frame2->vup.x;
       interp.vup.y=(1-gap)*frame1->vup.y+gap*frame2->vup.y;
       interp.vup.z=(1-gap)*frame1->vup.z+gap*frame2->vup.z;
-      
+
       interp.foclength=(1-gap)*frame1->foclength+gap*frame2->foclength;
-      
+
       /* fill in the interpolated snap list */
       while( snap1 ){
 	/* do the object parameters */
 	tempsnap->xt=(1-gap)*snap1->xt+gap*snap2->xt;
 	tempsnap->yt=(1-gap)*snap1->yt+gap*snap2->yt;
 	tempsnap->zt=(1-gap)*snap1->zt+gap*snap2->zt;
-	
+
 	tempsnap->xs=(1-gap)*snap1->xs+gap*snap2->xs;
 	tempsnap->ys=(1-gap)*snap1->ys+gap*snap2->ys;
 	tempsnap->zs=(1-gap)*snap1->zs+gap*snap2->zs;
-	
+
 	tempsnap->xc=(1-gap)*snap1->xc+gap*snap2->xc;
 	tempsnap->yc=(1-gap)*snap1->yc+gap*snap2->yc;
 	tempsnap->zc=(1-gap)*snap1->zc+gap*snap2->zc;
-	
+
 	tempsnap->xr=(1-gap)*snap1->xr+gap*snap2->xr;
 	tempsnap->yr=(1-gap)*snap1->yr+gap*snap2->yr;
 	tempsnap->zr=(1-gap)*snap1->zr+gap*snap2->zr;
-	
+
 	snap1 = snap1->next;
 	snap2 = snap2->next;
 	tempsnap = tempsnap->next;
@@ -391,7 +391,7 @@ void animateit(int from,int to)
 void doanimation(void)
 {
   int start, end;
-  
+
   display("Look in the xterm...");
   printf( "Start animation at which keyframe: ");
   scanf( "%d", &start );
@@ -413,7 +413,7 @@ void doanimation(void)
 void getkeyframe(void)
 {
   int which;
-  
+
   display("Look in the xterm...");
   printf( "Read in which keyframe: ");
   scanf( "%d", &which );
@@ -433,7 +433,7 @@ void getkeyframe(void)
 void takekeyframe(void)
 {
   int which;
-  
+
   display("Look in the xterm...");
   printf( "Save which keyframe: ");
   scanf( "%d", &which );

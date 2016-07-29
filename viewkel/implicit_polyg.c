@@ -128,9 +128,9 @@ typedef struct intlists {	   /* list of list of integers */
 typedef struct process {	   /* parameters, function, storage */
   /* implicit surface function */
     double (*function) PROTO((double,double,double));
-    /* triangle output function */    
+    /* triangle output function */
     int (*triproc) PROTO((int,int,int,VERTICES));
-    
+
     double size, delta;		   /* cube size, normal delta */
     int bounds;			   /* cube range within lattice */
     point_type start;		   /* start point on surface */
@@ -153,7 +153,7 @@ VERTICES gvertices;  /* global needed by application */
 
   internal prototypes for these functions live here
    to avoid type definition problems.
-   
+
 ********/
 #ifndef PROTO
 # if defined(_NO_PROTO) || defined(_alpha) || defined(MIPSEL)
@@ -214,12 +214,12 @@ int triangle (int i1, int i2, int i3, VERTICES vertices)
   char sign1,sign2,sign3,is_degen;
   point_type temp_v;
   point_type *v1,*v2,*v3;
-  
+
   /* check phases, we may be able to ditch this guy */
   v1 = &(vertices.ptr[i1].position);
   v2 = &(vertices.ptr[i2].position);
   v3 = &(vertices.ptr[i3].position);
-  
+
   gMO_info->loc.x = v1->x;
   gMO_info->loc.y = v1->y;
   gMO_info->loc.z = v1->z;
@@ -234,7 +234,7 @@ int triangle (int i1, int i2, int i3, VERTICES vertices)
   calc_MO_value(gsurf->active_MO,gMO_info,gcenters,gnum_centers,gsurf->adf_plot);
   if( gMO_info->val >= 0 ) sign2 = 1;
   else sign2 = 0;
-  
+
   if( sign1 == sign2 ){
     gMO_info->loc.x = v3->x;
     gMO_info->loc.y = v3->y;
@@ -253,7 +253,7 @@ int triangle (int i1, int i2, int i3, VERTICES vertices)
 
       *********/
       is_degen = 0;
-      
+
       /* start by looking for 2 degen points */
       if(V3SquaredLength(V3Sub(v1,v2,&temp_v)) <= 0.005 ||
 	 V3SquaredLength(V3Sub(v1,v3,&temp_v)) <= 0.005 ||
@@ -262,7 +262,7 @@ int triangle (int i1, int i2, int i3, VERTICES vertices)
 	if( V3SquaredLength(V3Cross(V3Sub(v1,v2,&temp_v),V3Sub(v1,v3,&temp_v),
 				    &temp_v)) <= 0.005 )
 	  is_degen = 1;
-      
+
 
       if( !is_degen ){
 #endif
@@ -307,7 +307,7 @@ double happy_helper_function(double x,double y,double z)
 /**********
 
   construct_MO_isosurface: call polygonize() with MO evaluation function
- 
+
 ***********/
 void construct_MO_isosurface(int num_args,char **MO_surf_ptr)
 {
@@ -333,11 +333,11 @@ void construct_MO_isosurface(int num_args,char **MO_surf_ptr)
   step_size = gsurf->voxel_size;
   /* figure out how many steps are needed */
   max_len = gsurf->bmax.x - gsurf->bmin.x;
-  if( gsurf->bmax.y-gsurf->bmin.y > max_len ) 
+  if( gsurf->bmax.y-gsurf->bmin.y > max_len )
      max_len = gsurf->bmax.y - gsurf->bmin.y;
   if( gsurf->bmax.z-gsurf->bmin.z > max_len )
       max_len = gsurf->bmax.z - gsurf->bmin.z;
-  
+
   max_len += 2.0*gsurf->slop;
   gsurf->num_steps = ceil(max_len/(2.0*step_size));
 
@@ -356,7 +356,7 @@ void construct_MO_isosurface(int num_args,char **MO_surf_ptr)
   fprintf(stdout, "\nvertices\n\n");
 
   gsurf->num_triangles = gntris;
-  
+
   fprintf(stderr,"Copying vertices over...\n");
   gsurf->triangle_vertices = (vertex_type *)
     D_MALLOC(gvertices.count*sizeof(vertex_type));
@@ -441,13 +441,13 @@ char foostring[80];
   p.size = size;
   p.bounds = bounds;
   p.delta = size/(double)(RES*RES);
-  
+
   /* allocate hash tables and build cube polygon table: */
   p.centers = (CENTERLIST **) myD_CALLOC(HASHSIZE,sizeof(CENTERLIST *));
   p.corners = (CORNERLIST **) myD_CALLOC(HASHSIZE,sizeof(CORNERLIST *));
   p.edges =	(EDGELIST   **) myD_CALLOC(2*HASHSIZE,sizeof(EDGELIST *));
   makecubetable();
-  
+
 
   srand(1);
   /***********
@@ -468,10 +468,10 @@ char foostring[80];
 	z = atoms[i].loc.z + 2*gsurf->search_radius*(BIT(j,0) - .5);
 
 	/******
-	  
+
 	  First pass: find point on surface and do all the
 	  needed initializations.
-	  
+
 	  *******/
 	surf_started = 0;
 	if ( first_surf ){
@@ -486,24 +486,24 @@ char foostring[80];
 
 	    fprintf(stderr,"! (%d, %d) start: %lf %lf %lf\n",i,j,
 		    p.start.x,p.start.y,p.start.z);
-	  
+
 	    p.origin.x = p.start.x;
 	    p.origin.y = p.start.y;
 	    p.origin.z = p.start.z;
-	  
+
 	    /* push initial cube on stack: */
 	    p.cubes = (CUBES *) myD_CALLOC(1, sizeof(CUBES)); /* list of 1 */
 	    p.cubes->cube.i = p.cubes->cube.j = p.cubes->cube.k = 0;
 	    p.cubes->next = NULL;
-	  
+
 	    /* set corners of initial cube: */
 	    for (n = 0; n < 8; n++)
 	      p.cubes->cube.corners[n] =
 		setcorner(&p, BIT(n,2), BIT(n,1), BIT(n,0));
-	  
+
 	    p.vertices.count = p.vertices.max = 0; /* no vertices yet */
 	    p.vertices.ptr = NULL;
-	  
+
 	    setcenter(p.centers, 0, 0, 0);
 	  }
 	} else{
@@ -521,7 +521,7 @@ char foostring[80];
 	    p.cubes->cube.j = (int)((p.start.y - p.origin.y)/size);
 	    p.cubes->cube.k = (int)((p.start.z - p.origin.z)/size);
 	    p.cubes->next = NULL;
-	  
+
 	    /* slap it onto the grid */
 	    p.start.x = p.origin.x +
 	      size*(int)((p.start.x - p.origin.x)/size);
@@ -550,8 +550,8 @@ char foostring[80];
 	      }
 #endif
 	    }
-	      
-	  
+
+
 	    /* check to see if we've already done this one */
 	    if(setcenter(p.centers, p.cubes->cube.i, p.cubes->cube.j,
 			 p.cubes->cube.k) ){
@@ -569,7 +569,7 @@ char foostring[80];
 		      p.start.x,p.start.y,p.start.z);
 #endif
 	    }
-	  
+
 	  }
 	}
 	if( surf_started ){
@@ -577,8 +577,8 @@ char foostring[80];
 	  fprintf(stderr,"\tstarting at (%d %d %d)\n",p.cubes->cube.i,
 		  p.cubes->cube.j,p.cubes->cube.k);
 
-	  /* process active cubes till none left */  
-	  while (p.cubes != NULL ) {	
+	  /* process active cubes till none left */
+	  while (p.cubes != NULL ) {
 	    CUBE c;
 	    CUBES *temp = p.cubes;
 	    c = p.cubes->cube;
@@ -588,7 +588,7 @@ char foostring[80];
 	      fprintf(stderr,"(%d %d %d)",c.i,c.j,c.k);
 	    }
 #endif
-	    fprintf(stderr,".");	  
+	    fprintf(stderr,".");
 	    noabort = mode == TET?
 	      /* either decompose into tetrahedra and polygonize: */
 	      dotet(&c, LBN, LTN, RBN, LBF, &p) &&
@@ -601,7 +601,7 @@ char foostring[80];
 	    /* or polygonize the cube directly: */
 	    docube(&c, &p);
 	    if (! noabort) return "aborted";
-	  
+
 	    /* pop current cube from stack */
 	    p.cubes = p.cubes->next;
 	    D_FREE((char *) temp);

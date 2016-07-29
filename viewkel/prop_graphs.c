@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   this has got the stuff for dealing with property graphs....
 
   Created by greg Landrum June 1994
-*********/  
+*********/
 
 /********
   Recent Edit History
@@ -54,7 +54,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *                   Procedure new_prop_graph
  *
  * Arguments: filename (optional): pointer to type char
- *            
+ *
  * Returns: none
  *
  * Action: does everything to get space for and read in a new prop_graph
@@ -77,7 +77,7 @@ void new_prop_graph(char *filename)
   whichobj->prim = (prim_type *)D_CALLOC(1,sizeof(prim_type));
   if( !whichobj->prim )fatal("Can't get space for prop_graph primitive.");
   whichobj->prim->which = PROP_GRAPH;
-  
+
   whichobj->prim->prop_graph =
     (prop_graph_type *)D_CALLOC(1,sizeof(prop_graph_type));
   if( !whichobj->prim->prop_graph )
@@ -92,7 +92,7 @@ void new_prop_graph(char *filename)
 #ifndef USING_THE_MAC
   if( !filename ){
     display("Look in the xterm...");
-    
+
 #ifndef USE_READLINE
     printf("Enter the file name containing the property data: ");
     scanf("%s",file_name);
@@ -143,7 +143,7 @@ void new_prop_graph(char *filename)
       whichobj->prim->prop_graph->type = COOP_PROP;
     } else{
       whichobj->prim->prop_graph->type = DOS_PROP;
-    } 
+    }
     read_graph_data(infile,whichobj->prim->prop_graph->the_data,1,1);
     preprocess_graph_data(whichobj->prim->prop_graph->the_data);
   }
@@ -183,15 +183,15 @@ void new_prop_graph(char *filename)
     if(skipcomments(infile,instring) >= 0 ){
       upcase(instring);
       if( instring[0] == '#' && strstr(instring,"INTEGRATION") ){
-	
+
 	/* there is, get space for it, then read in the data */
 	whichobj->prim->prop_graph->the_integration =
 	  (graph_type *)D_CALLOC(1,sizeof(graph_type));
 	if( !whichobj->prim->prop_graph->the_integration )
 	  fatal("Can't get space for prop_graph->the_integration.");
-	
+
 	read_graph_data(infile,whichobj->prim->prop_graph->the_integration,1,0);
-	
+
 	/*******
 	  scale the integration data
 	  *******/
@@ -207,26 +207,26 @@ void new_prop_graph(char *filename)
 	  the_graph->min_x = 0.0;
 	  the_graph->max_x = 1.0;
 	}
-	    
+
 	preprocess_graph_data(whichobj->prim->prop_graph->the_integration);
       }
     }
-    
+
     /* find the fermi energy */
     rewind(infile);
     eof_hit = skipcomments(infile,instring);
     upcase(instring);
-    
+
     while(eof_hit >= 0 && !strstr(instring,"FERMI_ENERGY")){
       eof_hit = skipcomments(infile,instring);
       upcase(instring);
     }
-    
+
     if( eof_hit >= 0 ){
       sscanf(instring,"%s %lf",foostring,&(whichobj->prim->prop_graph->Fermi_E));
       whichobj->prim->prop_graph->show_fermi = 1;
     }
-    
+
     /* make the button window */
 #ifdef INTERACTIVE_USE
     build_prop_graph_button_window(&button_wins,whichobj->prim->prop_graph);

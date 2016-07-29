@@ -86,7 +86,7 @@ void netCDF_init_file(detail_type *details,cell_type *cell,int num_orbs,
 
   if( !details->do_netCDF )
     FATAL_BUG("init_netCDF called without CDF writing on.");
-  
+
   /* get space for the netCDF_info structure */
   details->netCDF_info = (netCDF_info_type *)my_calloc(1,sizeof(netCDF_info_type));
 
@@ -96,7 +96,7 @@ void netCDF_init_file(detail_type *details,cell_type *cell,int num_orbs,
   else{
     sprintf(outname,"%s.nCDF",details->filename);
   }
-  
+
   /* create (or overwrite) the CDF file */
   TRY_CDF(nc_create(outname,NC_CLOBBER,&fileid));
 
@@ -143,27 +143,27 @@ void netCDF_init_file(detail_type *details,cell_type *cell,int num_orbs,
   dim_array[1] = details->netCDF_info->param_len_ID;
   TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
 		     "Atomic_Parameters",NC_DOUBLE,
-		     2,(int *)dim_array,&param_var_ID));  
+		     2,(int *)dim_array,&param_var_ID));
   dim_array[0] = details->netCDF_info->num_atoms_ID;
   dim_array[1] = details->netCDF_info->space_dim_ID;
   TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
 		     "Atomic_Positions",NC_DOUBLE,
-		     2,(int *)dim_array,&pos_var_ID));  
+		     2,(int *)dim_array,&pos_var_ID));
   dim_array[0] = details->netCDF_info->num_dim_ID;
   dim_array[1] = details->netCDF_info->space_dim_ID;
   TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
 		     "Lattice_Vects",NC_DOUBLE,
-		     2,(int *)dim_array,&lattice_ID));  
+		     2,(int *)dim_array,&lattice_ID));
 
   dim_array[0] = details->netCDF_info->num_KPOINTS_ID;
   dim_array[1] = details->netCDF_info->space_dim_ID;
   TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
 		     "Kpoint_locs",NC_DOUBLE,
-		     2,(int *)dim_array,&kpoints_ID));  
+		     2,(int *)dim_array,&kpoints_ID));
   dim_array[0] = details->netCDF_info->num_KPOINTS_ID;
   TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
 		     "Kpoint_weights",NC_DOUBLE,
-		     1,(int *)dim_array,&kpoint_weights_ID));  
+		     1,(int *)dim_array,&kpoint_weights_ID));
 
   /* number of electrons */
   TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
@@ -233,7 +233,7 @@ void netCDF_init_file(detail_type *details,cell_type *cell,int num_orbs,
 			       (size_t *)dim_array,(size_t *)count_array,
 			       (double *)temp_vect));
   }
-      
+
   /* slap in the translation vectors */
   for(i=0;i<cell->dim;i++){
     itab = cell->tvects[i].begin;
@@ -274,7 +274,7 @@ void netCDF_init_file(detail_type *details,cell_type *cell,int num_orbs,
   TRY_CDF(nc_put_var1_double(details->netCDF_info->file_ID,
 			     num_electrons_ID,
 			     (size_t *)0,(double *)&cell->num_electrons));
-  
+
   /* it's safe to write the other data now */
 }
 
@@ -304,8 +304,8 @@ void netCDF_write_MOs(detail_type *details,int num_orbs,
   TRY_CDF(nc_inq_dimlen(details->netCDF_info->file_ID,
 			details->netCDF_info->num_dim_ID,
 			(size_t *)&cell_dim));
-  /**** 
-    "allocate" the variables 
+  /****
+    "allocate" the variables
   ****/
 
   /* switch to definition mode */
@@ -317,7 +317,7 @@ void netCDF_write_MOs(detail_type *details,int num_orbs,
   dim_array[2] = details->netCDF_info->num_orbs_ID;
   TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
 		     "Crystal_OrbitalsR",NC_FLOAT,
-		     3,(int *)dim_array,&orbR_ID));  
+		     3,(int *)dim_array,&orbR_ID));
   /* only write imaginary coefficients if they are required */
   if( cell_dim > 0 ){
     TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
@@ -342,9 +342,9 @@ void netCDF_write_MOs(detail_type *details,int num_orbs,
 			      (size_t *)dim_array,(size_t *)count_array,
 			      (float *)prop_info->orbsI));
   }
-  
+
 }
-     
+
 /****************************************************************************
  *
  *                   Procedure netCDF_write_Es
@@ -369,7 +369,7 @@ void netCDF_write_Es(detail_type *details,int num_orbs,
   dim_array[1] = details->netCDF_info->num_orbs_ID;
   TRY_CDF(nc_def_var(details->netCDF_info->file_ID,
 		     "Orbital_Energies",NC_FLOAT,
-		     2,(int *)dim_array,&E_var_ID));  
+		     2,(int *)dim_array,&E_var_ID));
   /* close define mode */
   TRY_CDF(nc_enddef(details->netCDF_info->file_ID));
 
@@ -380,9 +380,9 @@ void netCDF_write_Es(detail_type *details,int num_orbs,
   TRY_CDF(nc_put_vara_float(details->netCDF_info->file_ID,E_var_ID,
 			     (size_t *)dim_array,(size_t *)count_array,
 			     (float *)prop_info->energies));
-  
+
 }
-     
+
 
 
 /****************************************************************************

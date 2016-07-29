@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 * Returns: none
 *
-* Action: 
+* Action:
 *     Uses the direct lattice vectors in 'cell to calculate the
 *     corresponding reciprocal lattice.
 *
@@ -72,14 +72,14 @@ void calc_reciprocal_lattice(cell_type *cell)
 
   /* for molecules we shouldn't even be here */
   if( cell->dim < 1 ) return;
-  
+
   /* generate a copy of the direct lattice */
   for(i=0;i<cell->dim;i++){
-    tvects[i].x = cell->atoms[cell->tvects[i].end].loc.x - 
+    tvects[i].x = cell->atoms[cell->tvects[i].end].loc.x -
       cell->atoms[cell->tvects[i].begin].loc.x;
-    tvects[i].y = cell->atoms[cell->tvects[i].end].loc.y - 
+    tvects[i].y = cell->atoms[cell->tvects[i].end].loc.y -
       cell->atoms[cell->tvects[i].begin].loc.y;
-    tvects[i].z = cell->atoms[cell->tvects[i].end].loc.z - 
+    tvects[i].z = cell->atoms[cell->tvects[i].end].loc.z -
       cell->atoms[cell->tvects[i].begin].loc.z;
   }
 
@@ -98,7 +98,7 @@ void calc_reciprocal_lattice(cell_type *cell)
     generate a bogus third direct vector which is normalized and
     perpendicular to both a0 and a1:
      a2 = a0 x a1 / |a0 x a1|
-  
+
   ***********/
   if( cell->dim == 2 ){
     cross_prod(&tvects[0],&tvects[1],&tempvect);
@@ -140,7 +140,7 @@ void calc_reciprocal_lattice(cell_type *cell)
   }
 #endif
 }
-    
+
 /****************************************************************************
 *
 *                   Procedure gen_k_point_mesh
@@ -154,7 +154,7 @@ void calc_reciprocal_lattice(cell_type *cell)
 *
 * Returns: none
 *
-* Action: 
+* Action:
 *    generates a 'dim dimensional mesh of k points with 'num_per_vect along
 *    each direction.
 *    if 'include_high_symm_p is nonzero, the zone edges and center
@@ -285,8 +285,8 @@ void gen_k_point_mesh(point_type **points,int num_per_vect[3],
 	*points = p_array;
   *num_generated = num_so_far;
 }
-  
-  
+
+
 /****************************************************************************
 *
 *                   Procedure automagic_k_points
@@ -296,7 +296,7 @@ void gen_k_point_mesh(point_type **points,int num_per_vect[3],
 *
 * Returns: none
 *
-* Action: 
+* Action:
 *   Automagically generates a k-points set for 'cell
 *
 *****************************************************************************/
@@ -309,7 +309,7 @@ void automagic_k_points(detail_type *details,cell_type *cell)
   real tot_weight;
   int nonorthogonal_lattice;
 	int num_duplicates;
-	
+
   /* start by generating a reducible mesh */
   gen_k_point_mesh(&raw_points,details->points_per_axis,&num_raw_points,
 		   details->use_high_symm_p,cell->dim,details->k_offset);

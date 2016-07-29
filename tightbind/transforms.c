@@ -123,7 +123,7 @@ void scale_vector(point_type *vect,real scalar)
   vect->y *= scalar;
   vect->z *= scalar;
 }
-  
+
 /****************************************************************************
 *
 *                   Procedure cross_prod
@@ -164,7 +164,7 @@ void mult_matrices(real *mat1,real *mat2,real *result,int dim)
 
   /* start by zeroing the result */
   bzero(result,dim*dim*sizeof(real));
-  
+
   for(i=0;i<dim;i++){
     itab = i*dim;
     for(j=0;j<dim;j++){
@@ -194,7 +194,7 @@ void translate_atoms(atom_locs,pos,num_atoms)
   int num_atoms;
 {
   int i;
-  
+
   /* This is pretty simple */
   for(i=0;i<num_atoms;i++){
     atom_locs[i].x += pos.x;
@@ -219,7 +219,7 @@ void translate_atoms(atom_locs,pos,num_atoms)
 *
 *
 *  NOTE: this is written to be more or less transparent for use with homogeneous
-*    coordinates (T_MAT_DIM > 3), but you have to put in code to 
+*    coordinates (T_MAT_DIM > 3), but you have to put in code to
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
@@ -231,20 +231,20 @@ void transform_atomic_locs(atom_locs,t_mat,num_atoms)
   int atom,i,j;
   static real loc[T_MAT_DIM],new_loc[T_MAT_DIM];
 
-  
+
   for(atom=0;atom<num_atoms;atom++){
     loc[0] = atom_locs[atom].x;
     loc[1] = atom_locs[atom].y;
     loc[2] = atom_locs[atom].z;
     /* insert code for homogeneous coordinates here! */
-    
+
     for(i=0;i<T_MAT_DIM;i++){
       new_loc[i] = 0.0;
       for(j=0; j<T_MAT_DIM; j++){
 	new_loc[i] += loc[j]*t_mat[i][j];
       }
     }
-    
+
     /* copy those coordinates in */
     atom_locs[atom].x = new_loc[0];
     atom_locs[atom].y = new_loc[1];
@@ -268,7 +268,7 @@ void transform_atomic_locs(atom_locs,t_mat,num_atoms)
 *
 *
 *  NOTE: this is written to be more or less transparent for use with homogeneous
-*    coordinates (T_MAT_DIM > 3), but you have to put in code to 
+*    coordinates (T_MAT_DIM > 3), but you have to put in code to
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
@@ -276,7 +276,7 @@ void transform_one_point(point_type *the_point,real t_mat[T_MAT_DIM][T_MAT_DIM])
 {
   static real loc[T_MAT_DIM],new_loc[T_MAT_DIM];
   int i,j;
-  
+
   loc[0] = the_point->x;
   loc[1] = the_point->y;
   loc[2] = the_point->z;
@@ -288,7 +288,7 @@ void transform_one_point(point_type *the_point,real t_mat[T_MAT_DIM][T_MAT_DIM])
       new_loc[i] += loc[j]*t_mat[i][j];
     }
   }
-  
+
   /* copy those coordinates in */
   the_point->x = new_loc[0];
   the_point->y = new_loc[1];
@@ -298,7 +298,7 @@ void transform_one_point(point_type *the_point,real t_mat[T_MAT_DIM][T_MAT_DIM])
   /* that's all there is... */
 }
 
-    
+
 /****************************************************************************
 *
 *                   Procedure transform_3x3_transpose
@@ -325,20 +325,20 @@ void transform_3x3_transpose(atom_locs,t_mat,num_atoms)
   int atom,i,j;
   static real loc[3],new_loc[3];
 
-  
+
   for(atom=0;atom<num_atoms;atom++){
     loc[0] = atom_locs[atom].x;
     loc[1] = atom_locs[atom].y;
     loc[2] = atom_locs[atom].z;
     /* insert code for homogeneous coordinates here! */
-    
+
     for(i=0;i<3;i++){
       new_loc[i] = 0.0;
       for(j=0; j<3; j++){
 	new_loc[i] += loc[j]*t_mat[j][i];
       }
     }
-    
+
     /* copy those coordinates in */
     atom_locs[atom].x = new_loc[0];
     atom_locs[atom].y = new_loc[1];
@@ -362,7 +362,7 @@ void transform_3x3_transpose(atom_locs,t_mat,num_atoms)
 *  't_mat
 *
 *  NOTE: this is written to be more or less transparent for use with homogeneous
-*    coordinates (T_MAT_DIM > 3), but you have to put in code to 
+*    coordinates (T_MAT_DIM > 3), but you have to put in code to
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
@@ -374,7 +374,7 @@ void transform_p_orbs(coeffs,t_mat)
 
   for( i=0; i<T_MAT_DIM; i++ ){
     result[i] = 0.0;
-    for( j=0; j<T_MAT_DIM; j++ ){    
+    for( j=0; j<T_MAT_DIM; j++ ){
       result[i] += t_mat[i][j]*coeffs[j];
     }
   }
@@ -397,7 +397,7 @@ void transform_p_orbs(coeffs,t_mat)
 *  't_mat
 *
 *  NOTE: this is written to be more or less transparent for use with homogeneous
-*    coordinates (D_T_MAT_DIM > 3), but you have to put in code to 
+*    coordinates (D_T_MAT_DIM > 3), but you have to put in code to
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
@@ -409,7 +409,7 @@ void transform_d_orbs(coeffs,d_t_mat)
 
   bzero(result,D_T_MAT_DIM*sizeof(real));
   for( i=0; i<D_T_MAT_DIM; i++ ){
-    for( j=0; j<D_T_MAT_DIM; j++ ){    
+    for( j=0; j<D_T_MAT_DIM; j++ ){
       result[i] += d_t_mat[i][j]*coeffs[j];
     }
   }
@@ -488,21 +488,21 @@ void full_transform(atoms,COM,t_mat,num_atoms)
 {
   int atom,i,j;
   static real loc[3],new_loc[3];
-  
-  
+
+
   for(atom=0;atom<num_atoms;atom++){
     loc[0] = atoms[atom].loc.x + COM.x;
     loc[1] = atoms[atom].loc.y + COM.y;
     loc[2] = atoms[atom].loc.z + COM.z;
     /* insert code for homogeneous coordinates here! */
-    
+
     for(i=0;i<3;i++){
       new_loc[i] = 0.0;
       for(j=0; j<3; j++){
 	new_loc[i] += loc[j]*t_mat[j][i];
       }
     }
-    
+
     /* copy those coordinates in */
     atoms[atom].loc.x = new_loc[0];
     atoms[atom].loc.y = new_loc[1];
@@ -531,7 +531,7 @@ void full_transform(atoms,COM,t_mat,num_atoms)
 *         crystallographic->cartestan coordinates.
 *
 *  NOTE: this is written to be more or less transparent for use with homogeneous
-*    coordinates (T_MAT_DIM > 3), but you have to put in code to 
+*    coordinates (T_MAT_DIM > 3), but you have to put in code to
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
@@ -543,20 +543,20 @@ void transform_atoms(atoms,t_mat,num_atoms)
   int atom,i,j;
   static real loc[T_MAT_DIM],new_loc[T_MAT_DIM];
 
-  
+
   for(atom=0;atom<num_atoms;atom++){
     loc[0] = atoms[atom].loc.x;
     loc[1] = atoms[atom].loc.y;
     loc[2] = atoms[atom].loc.z;
     /* insert code for homogeneous coordinates here! */
-    
+
     for(i=0;i<T_MAT_DIM;i++){
       new_loc[i] = 0.0;
       for(j=0; j<T_MAT_DIM; j++){
 	new_loc[i] += loc[j]*t_mat[i][j];
       }
     }
-    
+
     /* copy those coordinates in */
     atoms[atom].loc.x = new_loc[0];
     atoms[atom].loc.y = new_loc[1];

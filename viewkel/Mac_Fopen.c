@@ -33,9 +33,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   Copyright 1999, Greg Landrum
 
 	this has the files for doing file opening/choosing on the Macintosh
-	
+
 	created by greg Landrum  January 22, 1996
-	
+
 *************************/
 #include "viewkel.h"
 #include "Mac_Fopen.h"
@@ -50,7 +50,7 @@ FILE *choose_mac_file(char *file_name,char action)
 	SFTypeList		type_list;
 	short num_types;
 	FILE *the_file;
-	
+
 	/* start out by using StandardGetFile to get the file name and stuff */
 	num_types = -1;
 	type_list[0] = 'YhMp';
@@ -67,14 +67,14 @@ FILE *choose_mac_file(char *file_name,char action)
 	PtoCstr((unsigned char *)file_name);
 	the_file = fopen_mac(reply.sfFile.vRefNum,reply.sfFile.parID,
 											 file_name,(char *)"r",action);
-	
+
 	return the_file;
 }
 
 
 FILE *
 fopen_mac ( short vRefNum , long parID , char * fileName , char * mode,
-						char action ) 
+						char action )
 {
 	short oldVol ;
 	short aVol ;
@@ -96,7 +96,7 @@ fopen_mac ( short vRefNum , long parID , char * fileName , char * mode,
    	} else{
    	 ret = 0;
    	}
-		
+
 		/* this doesn't seem to work the way I want it to... */
     if( action == MAC_FOPEN_OPEN_NOCD || action == MAC_FOPEN_NOOPEN_NOCD ){
    	  if ( HSetVol ( NULL, aVol , aDir ) ) {
@@ -105,7 +105,7 @@ fopen_mac ( short vRefNum , long parID , char * fileName , char * mode,
     	if ( SetVol ( NULL, oldVol ) ) {
         /* an error we can't currently handle */
     	}
-    } 
+    }
     return ret ;
 }
 

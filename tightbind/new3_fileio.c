@@ -64,7 +64,7 @@ void read_NEW3file(cell,details,infile)
   char foo_string[80];
   k_point_type *points;
   int num_k_points,max_k_points;
-  
+
   int idle;
   int max_p_DOS;
   int use_gradients,avg_props;
@@ -74,7 +74,7 @@ void read_NEW3file(cell,details,infile)
   char found;
   int i,j;
   int temp;
-  
+
   p_DOS_type *p_DOS,*temp_p_dos;
 #ifdef USING_THE_MAC
   fprintf(stderr,"That doesn't look like a bind input file.  This version\n \
@@ -116,7 +116,7 @@ void read_NEW3file(cell,details,infile)
   cell->atoms[i].symb[2] = 0;
 
   fprintf(status_file,"Read: %d atoms\n",cell->num_atoms);
-  
+
   /* more details */
   skipcomments(infile,instring,FATAL);
   sscanf(instring,"%d %d %d %d %d %d %d %d %d %d",&(cell->dim),
@@ -138,7 +138,7 @@ void read_NEW3file(cell,details,infile)
     /* first decrement the tabs since we index arrays from 0 */
     cell->tvects[j].end--;
     cell->tvects[j].begin--;
-    
+
     if(cell->tvects[j].end < cell->tvects[j].begin){
       temp = cell->tvects[j].end;
       cell->tvects[j].end = cell->tvects[j].begin;
@@ -156,9 +156,9 @@ void read_NEW3file(cell,details,infile)
   write_atom_coords(cell->atoms,cell->num_atoms,cell->using_Zmat,
 		    cell->using_xtal_coords);
   write_atom_parms(details,cell->atoms,cell->num_atoms,1);
-  
 
-  
+
+
   fprintf(status_file,"Completed parameter acquisition.\n");
 
   /* this doesn't deal with actually reading in multiple occupations, etc. */
@@ -179,7 +179,7 @@ void read_NEW3file(cell,details,infile)
     skipcomments(infile,instring,FATAL);
 
     sscanf(instring,"%d %d",&which,&(details->num_proj_DOS));
-  }    
+  }
   /*****
     add stuff for  overlap populations here
   *****/
@@ -216,14 +216,14 @@ contributions.");
       zero in C
     *******/
     p_DOS->contributions[0] = which-1;
-  }  
+  }
 
   /*******
 
     subtract the dimension of the xtal from the number of atoms in the unit cell to
     account for the atoms included to determine translation vectors
 
-  ********/    
+  ********/
   cell->num_atoms -= cell->dim;
 
   /********
@@ -244,7 +244,7 @@ contributions.");
     num_k_points = 0;
     points = (k_point_type *)calloc(max_k_points,sizeof(k_point_type));
     if(!points)fatal("Can't allocate memory for k point set.");
-    
+
     while(skipcomments(infile,instring,IGNORE)>-1){
       /* read in the K point, ignoring the printing options */
       sscanf(instring,"%s %lf %lf %lf %d %d",
@@ -253,7 +253,7 @@ contributions.");
 	     &(points[num_k_points].loc.z),
 	     &(points[num_k_points].weight),&(points[num_k_points].num_filled_bands));
       num_k_points++;
-      
+
       /* check to see if there's still enough memory */
       if( num_k_points == max_k_points ){
 	/* not enough space, reallocate the array */
@@ -264,7 +264,7 @@ contributions.");
       }
     }
     fprintf(status_file,"Read: %d k points\n",num_k_points);
-    
+
     /* set the pointer in the details structure */
     details->K_POINTS = points;
     details->num_KPOINTS = num_k_points;
@@ -283,7 +283,7 @@ contributions.");
 	   &(points[num_k_points].loc.x),&(points[num_k_points].loc.y),
 	   &(points[num_k_points].loc.z),
 	   &(points[num_k_points].weight),&(points[num_k_points].num_filled_bands));
-      
+
     details->num_KPOINTS = 1;
     details->K_POINTS = points;
   }

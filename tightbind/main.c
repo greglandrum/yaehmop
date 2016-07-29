@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   Edit History:
 
   March '98: WG
-    - print FMO-FMO COOP's to .out 
+    - print FMO-FMO COOP's to .out
 
   07.05.98 gL:
     added netCDF support.
@@ -71,7 +71,7 @@ void main()
 {
   FILE *temp_file;
   char file_name[80],err_string[240];
-char test_string[80];  
+char test_string[80];
   int zeta_converged,Hii_converged;
   real new_num_electrons;
   COOP_type *COOP_ptr;
@@ -81,13 +81,13 @@ char test_string[80];
 #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
-  
+
 	/* set up some stuff for Sioux */
 	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;	
+	SIOUXSettings.asktosaveonclose = FALSE;
 	SIOUXSettings.autocloseonquit = FALSE;
 	printf("Starting bind.\n");
-	
+
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
   	fatal("User cancelled intial file open");
@@ -105,7 +105,7 @@ char test_string[80];
     fprintf(stderr,"Usage: bind <inputfile>\n");
     exit(666);
   }
-  
+
   /* install the sig_int handler */
   signal(SIGINT,handle_sigint);
 
@@ -129,7 +129,7 @@ char test_string[80];
     fatal(err_string);
   }
   fclose(temp_file);
-  
+
   /* open the file that will be used to dump progress reports */
   strcpy(file_name,argv[1]);
   strcat(file_name,".status");
@@ -148,7 +148,7 @@ char test_string[80];
   /********
 
     read in the data
-   
+
   *********/
   read_inputfile(unit_cell,details,argv[1],&num_orbs,&orbital_lookup_table,the_file);
 
@@ -195,7 +195,7 @@ char test_string[80];
     if(details->walsh_details.num_vars != 0 ) walsh_update(unit_cell,details,0,0);
 
     automagic_k_points(details,unit_cell);
-  }    
+  }
 
   /********
 
@@ -229,7 +229,7 @@ char test_string[80];
   if( details->orbital_mapping_PRT ){
     fprintf(output_file,"\n; Orbital Mapping\n");
     for(i=0;i<num_orbs;i++){
-      
+
       map_orb_num_to_name(test_string,i,orbital_lookup_table,num_orbs,
 			  unit_cell->atoms,unit_cell->num_atoms);
       fprintf(output_file,"%d \t %s\n",i+1,test_string);
@@ -240,13 +240,13 @@ char test_string[80];
   /**********
 
     now do the calculation (loop over walsh diagram points)
-    
+
     NOTE: this loops always gets executed at least once, since we
       assume that walsh_details.num_steps has been set to 1.
- 
+
   ***********/
   for( walsh_step=0; walsh_step<details->walsh_details.num_steps; walsh_step++){
-    
+
     /* open the file that will be used for band output (if we need one) */
     if(details->band_info){
       if( details->walsh_details.num_steps > 1 )
@@ -257,7 +257,7 @@ char test_string[80];
       band_file = fopen(file_name,"w+");
       if(!band_file)fatal("Can't open band results file!");
     }
-    
+
     /* open the file that will be used for FMO output (if we need one) */
     if(details->num_FMO_frags){
       if( details->walsh_details.num_steps > 1 )
@@ -268,56 +268,56 @@ char test_string[80];
       FMO_file = fopen(file_name,"w+");
       if(!FMO_file)fatal("Can't open FMO results file!");
       /******
-	
+
 	put the header into the FMO file
-	
+
       *******/
       init_FMO_file(details,num_orbs,unit_cell->num_electrons);
     }
 
 
     /*******
-      
+
       if we are doing a walsh diagram, set up the positions now
-      
+
       *******/
     if( details->walsh_details.num_vars != 0 ){
       walsh_update(unit_cell,details,walsh_step,1);
 
       /* reset the charges in the update_zetas procedure */
       update_zetas(unit_cell,properties.net_chgs,(real)unit_cell->num_atoms*ZETA_TOL,
-		   &zeta_converged,RESET);      
+		   &zeta_converged,RESET);
     }
 
     if( details->Execution_Mode != MOLECULAR ){
       display_lattice_parms(unit_cell);
     }
-    
+
     /**********
-      
+
       generate the distance_matrix
-      
+
       ***********/
     build_distance_matrix(unit_cell,details);
-    
+
 
     /* check to see if any calculations are necessary */
     if(!(details->just_geom)){
 
       /**********
-	
+
 	loop until the zeta values converge (if we are doing either a self
 	consistent calculation or charge iteration,  otherwise this
 	just gets executed once)
-	
+
 	***********/
       zeta_converged = 0;
       Hii_converged = 0;
       while( !zeta_converged || !Hii_converged ){
 	/*************
-	  
+
 	  if we evaluate all of the overlaps once, then do it now...
-	  
+
 	  **************/
 	if( (details->Execution_Mode == FAT && details->store_R_overlaps ) ||
 	   details->Execution_Mode == MOLECULAR ){
@@ -326,21 +326,21 @@ char test_string[80];
 				 tot_overlaps,orbital_lookup_table,0);
 
 	  /***********
-	    
+
 	    if we're doing FMO, do all the work for it now...
-	    
+
 	    for standard FMO (projecting molecular orbitals) we only
 	    need to do this once.
-	    
+
 	    ***********/
 	  if( details->num_FMO_frags || (details->num_FCO_frags &&
 					 details->Execution_Mode == MOLECULAR) ){
 
 	    /******
-	      
+
 	      build the hamiltonian... this is molecular type hamiltonian, so
 	      it's built differently here when we are doing an extended system.
-	      
+
 	      *******/
 	    full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,num_orbs,
 				     orbital_lookup_table,1);
@@ -383,29 +383,29 @@ char test_string[80];
 	  R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,num_orbs,
 			      orbital_lookup_table);
 	}
-	
+
 	/***********
-	  
+
 	  time to actually do the real work, i.e. do all the K points
 	  (or just diagonalize the matrices for the molecular case).
-	  
-	  
+
+
 	  work2 comes back holding the occupation numbers.
 	  work3 has the reduced overlap matrix.
-	  
+
 	  ************/
 	loop_over_k_points(unit_cell,details,Overlap_R,Hamil_R,Overlap_K,
 			   Hamil_K,cmplx_hamil,cmplx_overlap,
 			   eigenset,work1,work2,work3,cmplx_work,
 			   &properties,
 			   avg_prop_info,num_orbs,orbital_lookup_table);
-	
-	
+
+
 	if( !details->just_matrices ){
 	  /******
-	  
+
 	  evaluate the electrostatic term for molecular optimizations
-	  
+
 	  work2 is used to pass in the occupation numbers, and
 	  work3 is filled (in the
 	  function) with the orbital occupation numbers.
@@ -416,7 +416,7 @@ char test_string[80];
 				orbital_lookup_table,&electrostatic_term,
 				&eHMO_term,
 				&total_energy,work3,properties.net_chgs);
-	
+
 	    /* display the results */
 	    fprintf(output_file,"\n; Energy Partitioning:\n");
 	    fprintf(output_file,"\t        extended Hueckel Energy: %lg eV\n",
@@ -425,7 +425,7 @@ char test_string[80];
 		    electrostatic_term);
 	    fprintf(output_file,"\t                   Total Energy: %lg eV\n",
 		    total_energy);
-	
+
 	    fprintf(stderr,"%lg %lg %lg %lg\n", unit_cell->distance_mat[1],
 		    eHMO_term,electrostatic_term,total_energy);
 	  }
@@ -441,7 +441,7 @@ char test_string[80];
 
 	    /******
 	      now determine net charges, and orbital occupations
-	    
+
 	      the AO occupations come back in work2 in case anything else needs to
 	      be done with them.
 	      *******/
@@ -451,11 +451,11 @@ char test_string[80];
 
 
 	    /******
-	    
+
 	      update the zeta values for the self-consistent procedure....
-	    
+
 	      for the moment this only works for molecular calculations.
-	    
+
 	      *******/
 	    if( details->Execution_Mode == MOLECULAR && details->vary_zeta ){
 	      update_zetas(unit_cell,properties.net_chgs,
@@ -468,10 +468,10 @@ char test_string[80];
 
 
 	    /********
-	    
+
 	      now that we have the average occupations, we can go on and
 	      do charge iteration if it is required.
-	    
+
 	      *********/
 	    if( details->do_chg_it ){
 	      update_chg_it_parms(details,unit_cell,work2,&Hii_converged,num_orbs,
@@ -490,7 +490,7 @@ char test_string[80];
 	      Hii_converged = 1;
 	    }
 
-	  
+
 	    if( Hii_converged && zeta_converged){
 	      /* write the parms used to obtain that data. */
 	      write_atom_parms(details,unit_cell->atoms,unit_cell->num_atoms,1);
@@ -502,7 +502,7 @@ char test_string[80];
 		calc_avg_OP(details,unit_cell,num_orbs,orbital_ordering,
 			    avg_prop_info,Overlap_R,properties);
 	      }
-	    
+
 #ifdef INCLUDE_NETCDF_SUPPORT
 	      if( details->do_netCDF ){
 		netCDF_init_file(details,unit_cell,num_orbs,
@@ -510,7 +510,7 @@ char test_string[80];
 		netCDF_write_Es(details,num_orbs,avg_prop_info);
 		netCDF_write_MOs(details,num_orbs,avg_prop_info);
 	      }
-#endif	    
+#endif
 	      /* Density of States */
 	      if( !details->no_total_DOS_PRT || !details->just_avgE ){
 		gen_total_DOS(details,unit_cell,num_orbs,avg_prop_info,orbital_ordering);
@@ -521,7 +521,7 @@ char test_string[80];
 				    orbital_ordering,orbital_lookup_table);
 		}
 		fprintf(output_file,"# END OF DOS\n\n");
-	      }	    
+	      }
 	      /* check to see if we need to do a COOP */
 	      if( details->the_COOPS ){
 		gen_COOP(details,unit_cell,num_orbs,avg_prop_info,Overlap_R,
@@ -529,11 +529,11 @@ char test_string[80];
 	      }
 
 	      /*************
-	      
+
 		print out the stuff that will appear at the bottom of the file.
-	      
+
 		*************/
-	    
+
 	      /* Fermi level */
 	      fprintf(output_file,"\n;  The Fermi Level was determined for %d K points based on\n",
 		      details->num_KPOINTS);
@@ -542,7 +542,7 @@ char test_string[80];
 	      fprintf(output_file,";      in the unit cell (%lf electrons total)\n",
 		      unit_cell->num_electrons*(real)details->num_KPOINTS);
 	      fprintf(output_file,"#Fermi_Energy:  %lf\n",properties.Fermi_E);
-	    
+
 	      /* print the moments if we generated them */
 	      if( details->do_moments && details->moments ){
 		fprintf(output_file,"; Moments Analysis\n");
@@ -556,7 +556,7 @@ char test_string[80];
 
 	      print_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
 			       avg_prop_info,properties,work2);
-	    
+
 	      /* deal with multiple occupations, if there are any */
 	      if( details->num_occup_AVG ){
 		new_num_electrons = unit_cell->num_electrons;
@@ -572,7 +572,7 @@ char test_string[80];
 					   &(properties.Fermi_E));
 		  calc_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
 				  avg_prop_info,&properties,work2);
-	      
+
 		  fprintf(output_file,"\n#NUM_ELECTRONS_PER_CELL: %lf\n",
 			  new_num_electrons);
 		  fprintf(output_file,"#Fermi_Energy:  %lf\n",
@@ -587,15 +587,15 @@ char test_string[80];
 		    calc_avg_FMO_occups(details,num_orbs,orbital_ordering,
 					avg_prop_info,work2);
 		  }
-		  
+
 		  /********
-		    
+
 		    now print out the average values of the COOP's that
 		    the user asked for
-		
+
 		  **********/
 		  COOP_ptr = details->the_COOPS;
-		  
+
 		  if( COOP_ptr ){
 		    fprintf(output_file,"\n; Average Values of COOP's\n");
 		  }
@@ -625,9 +625,9 @@ char test_string[80];
 		    }
 		    COOP_ptr = COOP_ptr->next_type;
 		  }
-		  
+
 		}
-		
+
 		/* to be safe, redo the original occupation stuff */
 		find_crystal_occupations(details,unit_cell->num_electrons,
 					 num_orbs,orbital_ordering,
@@ -636,21 +636,21 @@ char test_string[80];
 				avg_prop_info,&properties,work2);
 	      }
 
-	    
-	      if( !details->just_avgE && !details->num_occup_AVG ){	      
+
+	      if( !details->just_avgE && !details->num_occup_AVG ){
 		if( details->num_FMO_frags ){
 		  calc_avg_FMO_occups(details,num_orbs,orbital_ordering,
 				      avg_prop_info,work2);
 		}
-	      
+
 		/********
-		
+
 		  now print out the average values of the COOP's that
 		  the user asked for
-		
+
 		  **********/
 		COOP_ptr = details->the_COOPS;
-	  
+
 		if( COOP_ptr ){
 		  fprintf(output_file,"\n; Average Values of COOP's\n");
 		}
@@ -694,7 +694,7 @@ char test_string[80];
 	  zeta_converged = 1;
 	}
       }/* end of convergence loop */
-      
+
       /*********
 	check to see if a band structure is being done.
 	if so deal with it.
@@ -705,12 +705,12 @@ char test_string[80];
 				 Hamil_K,cmplx_hamil,cmplx_overlap,
 				 eigenset,work1,work2,work3,cmplx_work,
 				 num_orbs,orbital_lookup_table);
-	  
+
       }
-    }      
+    }
 
     /******
-      print out any important walsh results 
+      print out any important walsh results
       ******/
     if( details->walsh_details.num_vars != 0 ){
       if( details->Execution_Mode != MOLECULAR ){
@@ -731,7 +731,7 @@ char test_string[80];
   if( details->do_netCDF ){
     netCDF_close_file(details);
   }
-#endif	    
+#endif
 
   fclose(status_file);
   fclose(output_file);

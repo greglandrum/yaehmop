@@ -63,7 +63,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *   if 'reset is nonzero then the last_charge array is zeroed and no other action.
  *    is taken.
- *  
+ *
  ****************************************************************************/
 void update_zetas(cell_type *cell,real *net_chgs,real zeta_tol,int *converged,char reset)
 {
@@ -75,7 +75,7 @@ void update_zetas(cell_type *cell,real *net_chgs,real zeta_tol,int *converged,ch
   real total_delta;
   real delta_q;
   real delta;
-  
+
   if( reset ) num_calls = 0;
   num_calls++;
 
@@ -95,7 +95,7 @@ void update_zetas(cell_type *cell,real *net_chgs,real zeta_tol,int *converged,ch
 
 
   total_delta = 0.0;
-  
+
   fprintf(output_file,"\n;      ->>>>>>>> Updating zeta values based on net charges <<<<<<<-\n");
   for(i=0;i<num_atoms;i++){
     atom = &(cell->atoms[i]);

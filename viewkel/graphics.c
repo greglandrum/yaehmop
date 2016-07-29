@@ -156,7 +156,7 @@ void g_line(float x1,float y1,float x2,float y2)
 		LineTo((short)(GRAPHICS_SCALE*x2),
 		       (short)(GRAPHICS_SCALE*y2));
 	}
-#endif	
+#endif
 }
 
 /*****
@@ -165,7 +165,7 @@ void g_line(float x1,float y1,float x2,float y2)
 
   'fill_it is used to indicate whether or not the region bounded by the line
   should be filled.
-  
+
   *****/
 void g_lines(XPoint *Ipoints,point_type2D *Fpoints,
 	     int num_points,char fill_it)
@@ -242,12 +242,12 @@ void g_lines(XPoint *Ipoints,point_type2D *Fpoints,
 	 PaintRgn(theRegion);
 	 PenPat(&qd.black);
       */
-      FillRgn(theRegion,&qd.black);	
+      FillRgn(theRegion,&qd.black);
       FrameRgn(theRegion);
       DisposeRgn(theRegion);
     }
   }
-#endif	
+#endif
 
 }
 
@@ -269,9 +269,9 @@ void g_clines(XPoint *Ipoints,point_type2D *Fpoints,
 #endif
 
 /*******
-  
-  centered text 
-  
+
+  centered text
+
   ********/
 void g_center_text(float x,float y,char *string)
 {
@@ -288,7 +288,7 @@ void g_center_text(float x,float y,char *string)
     twidth = XTextWidth(big_font,string,strlen(string));
     theight = big_font->ascent;
     textloc = (int)x - twidth/2;
-    XDrawString(disp,gpix,bigtextgc,textloc,	      
+    XDrawString(disp,gpix,bigtextgc,textloc,
 		(int)y+big_font->ascent,string,strlen(string));
     if( x + twidth/2 > localmax.x )
       localmax.x = x+twidth/2;
@@ -297,7 +297,7 @@ void g_center_text(float x,float y,char *string)
     if( y+theight > localmax.y ) localmax.y = y+theight;
     if( y < localmin.y ) localmin.y = y;
   }
-#endif 
+#endif
 
 #ifdef TEK_GRAPHICS
   if( doing_tek ){
@@ -322,14 +322,14 @@ void g_center_text(float x,float y,char *string)
     DrawText(string,0,strlen(string));
   }
 #endif
-		
+
 }
 
 
 /**********
-  
-  Right Justified text 
-  
+
+  Right Justified text
+
   ***********/
 void g_right_text(float x,float y,char *string)
 {
@@ -343,7 +343,7 @@ void g_right_text(float x,float y,char *string)
 #ifdef  X_GRAPHICS
   if( doing_X ){
     textloc = (int)x - XTextWidth(big_font,string,strlen(string));
-    XDrawString(disp,gpix,bigtextgc,textloc,	      
+    XDrawString(disp,gpix,bigtextgc,textloc,
 		(int)y+big_font->ascent/2,string,strlen(string));
     if( x > localmax.x ) localmax.x = x;
     if( textloc < localmin.x ) localmin.x = x;
@@ -351,7 +351,7 @@ void g_right_text(float x,float y,char *string)
     if( y < localmin.y ) localmin.y = y;
 
   }
-#endif 
+#endif
 
 #ifdef TEK_GRAPHICS
   if( doing_tek ){
@@ -381,9 +381,9 @@ void g_right_text(float x,float y,char *string)
 
 
 /**********
-  
-  Left Justified text 
-  
+
+  Left Justified text
+
   ***********/
 void g_left_text(float x,float y,char *string)
 {
@@ -397,10 +397,10 @@ void g_left_text(float x,float y,char *string)
 #ifdef  X_GRAPHICS
   if( doing_X ){
     textloc = (int)x;
-    XDrawString(disp,gpix,bigtextgc,textloc,	      
+    XDrawString(disp,gpix,bigtextgc,textloc,
 		(int)y+big_font->ascent/2,string,strlen(string));
   }
-#endif 
+#endif
 
 #ifdef TEK_GRAPHICS
   if( doing_tek ){
@@ -423,13 +423,13 @@ void g_left_text(float x,float y,char *string)
 
 
 /************
-  
+
   Changing linestyle
 
   ************/
 void g_change_linestyle(int style)
 {
- 
+
 /*  if( curr_line_style == style ) return;*/
   curr_line_style = style;
 
@@ -464,13 +464,13 @@ void g_change_linestyle(int style)
   if( doing_Mac ){
     RGBForeColor(&(Maclinestyles[style%NUM_MAC_LINESTYLES]));
   }
-#endif	
+#endif
 }
 
 /************
-  
+
   Changing the linewidth
-  
+
   ************/
 void g_change_linewidth(float thickness)
 {
@@ -499,7 +499,7 @@ void g_change_linewidth(float thickness)
 #ifdef TEK_GRAPHICS
   if( doing_tek ){
     /****
-      
+
       I don't know how to do this in Tek (except an ugly way, which I don't
       feel like dealing with right now.)
       *****/
@@ -510,14 +510,14 @@ void g_change_linewidth(float thickness)
   if(doing_Mac){
     PenSize((short)thickness,(short)thickness);
   }
-#endif	
+#endif
 }
 
 
 /*******
-  
+
   a line which "breaks" other lines (for 3-D stuff)
-  
+
   *********/
 void g_draw_breaking_line(float x1,float y1,float x2,float y2,
 			  int width)
@@ -562,15 +562,15 @@ void g_draw_breaking_line(float x1,float y1,float x2,float y2,
   if(doing_Mac){
 
     /***************
-      
+
       this is ugly  on the mac because of the fact that
       quickdraw doesn't define line widths about the center of a line,
       but rather from the "top" of the line.  Since this is dumb and
       it would be a ton of work to get it right, the mac version won't
-      always show the self-breaking lines correctly on screen.  
-      The generated postscript will still show the breaking lines 
+      always show the self-breaking lines correctly on screen.
+      The generated postscript will still show the breaking lines
       properly.
-      
+
       ****************/
 
     /* switch to a white line */
@@ -578,7 +578,7 @@ void g_draw_breaking_line(float x1,float y1,float x2,float y2,
     the_color.green = 0xFFFF;
     the_color.blue = 0xFFFF;
     RGBForeColor(&the_color);
-		
+
     /* use the slope of the line to figure out how to draw the 2 side lines */
     slope = (y1-y2)/(x1-x2);
     slope = fabs(slope);
@@ -595,7 +595,7 @@ void g_draw_breaking_line(float x1,float y1,float x2,float y2,
       MoveTo((short)(GRAPHICS_SCALE*x1),(short)(GRAPHICS_SCALE*y1+width));
       LineTo((short)(GRAPHICS_SCALE*x2),(short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     the_color.red = 0x0000;
     the_color.green = 0x0000;
@@ -611,9 +611,9 @@ void g_draw_breaking_line(float x1,float y1,float x2,float y2,
 #endif
 }
 /*******
-  
+
   a line which "breaks" other lines (for 3-D stuff)
-  
+
   *********/
 void g_draw_stop_line(float x1,float y1,float x2,float y2,
 			  int width,float xs, float ys)
@@ -658,15 +658,15 @@ void g_draw_stop_line(float x1,float y1,float x2,float y2,
   if(doing_Mac){
 
     /***************
-      
+
       this is ugly  on the mac because of the fact that
       quickdraw doesn't define line widths about the center of a line,
       but rather from the "top" of the line.  Since this is dumb and
       it would be a ton of work to get it right, the mac version won't
-      always show the self-breaking lines correctly on screen.  
-      The generated postscript will still show the breaking lines 
+      always show the self-breaking lines correctly on screen.
+      The generated postscript will still show the breaking lines
       properly.
-      
+
       ****************/
 
     /* switch to a white line */
@@ -674,7 +674,7 @@ void g_draw_stop_line(float x1,float y1,float x2,float y2,
     the_color.green = 0xFFFF;
     the_color.blue = 0xFFFF;
     RGBForeColor(&the_color);
-		
+
     /* use the slope of the line to figure out how to draw the 2 side lines */
     slope = (y1-y2)/(x1-x2);
     slope = fabs(slope);
@@ -691,7 +691,7 @@ void g_draw_stop_line(float x1,float y1,float x2,float y2,
       MoveTo((short)(GRAPHICS_SCALE*xs),(short)(GRAPHICS_SCALE*ys+width));
       LineTo((short)(GRAPHICS_SCALE*x2),(short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     the_color.red = 0x0000;
     the_color.green = 0x0000;
@@ -710,7 +710,7 @@ void g_draw_stop_line(float x1,float y1,float x2,float y2,
 /*******
 
   a "tube" which "breaks" other lines (for 3-D stuff)
-  
+
 *********/
 void g_draw_tube_line(float x1,float y1,float x2,float y2,
 		      int width)
@@ -761,15 +761,15 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
   if(doing_Mac){
 
     /***************
-      
+
       this is ugly  on the mac because of the fact that
       quickdraw doesn't define line widths about the center of a line,
       but rather from the "top" of the line.  Since this is dumb and
       it would be a ton of work to get it right, the mac version won't
-      always show the self-breaking lines correctly on screen.  
-      The generated postscript will still show the breaking lines 
+      always show the self-breaking lines correctly on screen.
+      The generated postscript will still show the breaking lines
       properly.
-      
+
       ****************/
 
     /* switch to a white line */
@@ -777,7 +777,7 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
     the_color.green = 0xFFFF;
     the_color.blue = 0xFFFF;
     RGBForeColor(&the_color);
-		
+
     /* use the slope of the line to figure out how to draw the 2 side lines */
     slope = (y1-y2)/(x1-x2);
     slope = fabs(slope);
@@ -793,7 +793,7 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
 	     (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(OUTER_OFFSET-1)),
 	     (short)(GRAPHICS_SCALE*y2));
-    }else{  
+    }else{
       PenSize((short)width+3,(short)width+3);
       MoveTo((short)(GRAPHICS_SCALE*x1),
 	     (short)(GRAPHICS_SCALE*y1-width-(OUTER_OFFSET-1)));
@@ -804,7 +804,7 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
       LineTo((short)(GRAPHICS_SCALE*x2),
 	     (short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     the_color.red = 0x0000;
     the_color.green = 0x0000;
@@ -832,7 +832,7 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
       LineTo((short)(GRAPHICS_SCALE*x2),
 	     (short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     /* switch to a white line */
     the_color.red = 0xFFFF;
@@ -857,7 +857,7 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
 /*******
 
   a "tube" which "breaks" other lines (for 3-D stuff)
-  
+
 *********/
 void g_draw_stop_tube(float x1,float y1,float x2,float y2,
 		      int width,float xs,float ys)
@@ -897,7 +897,7 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
 	      width,x1,y1,x2,y2,xs,ys);
       break;
     }
-      
+
   }
 
 #ifdef X_GRAPHICS
@@ -926,15 +926,15 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
   if(doing_Mac){
 
     /***************
-      
+
       this is ugly  on the mac because of the fact that
       quickdraw doesn't define line widths about the center of a line,
       but rather from the "top" of the line.  Since this is dumb and
       it would be a ton of work to get it right, the mac version won't
-      always show the self-breaking lines correctly on screen.  
-      The generated postscript will still show the breaking lines 
+      always show the self-breaking lines correctly on screen.
+      The generated postscript will still show the breaking lines
       properly.
-      
+
       ****************/
 
     /* switch to a white line */
@@ -942,7 +942,7 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
     the_color.green = 0xFFFF;
     the_color.blue = 0xFFFF;
     RGBForeColor(&the_color);
-		
+
     /* use the slope of the line to figure out how to draw the 2 side lines */
     slope = (y1-y2)/(x1-x2);
     slope = fabs(slope);
@@ -958,7 +958,7 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
 	     (short)(GRAPHICS_SCALE*ys));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(OUTER_OFFSET-1)),
 	     (short)(GRAPHICS_SCALE*y2));
-    }else{  
+    }else{
       PenSize((short)width+3,(short)width+3);
       MoveTo((short)(GRAPHICS_SCALE*xs),
 	     (short)(GRAPHICS_SCALE*ys-width-(OUTER_OFFSET-1)));
@@ -969,7 +969,7 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
       LineTo((short)(GRAPHICS_SCALE*x2),
 	     (short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     the_color.red = 0x0000;
     the_color.green = 0x0000;
@@ -997,7 +997,7 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
       LineTo((short)(GRAPHICS_SCALE*x2),
 	     (short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     /* switch to a white line */
     the_color.red = 0xFFFF;
@@ -1021,9 +1021,9 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
 
 
 /*******
-  
+
   a line which "breaks" other lines (for 3-D stuff)
-  
+
   *********/
 void g_draw_dashed_breaking_line(float x1,float y1,float x2,float y2,
 			  int width,int pattern)
@@ -1074,15 +1074,15 @@ void g_draw_dashed_breaking_line(float x1,float y1,float x2,float y2,
   if(doing_Mac){
 
     /***************
-      
+
       this is ugly  on the mac because of the fact that
       quickdraw doesn't define line widths about the center of a line,
       but rather from the "top" of the line.  Since this is dumb and
       it would be a ton of work to get it right, the mac version won't
-      always show the self-breaking lines correctly on screen.  
-      The generated postscript will still show the breaking lines 
+      always show the self-breaking lines correctly on screen.
+      The generated postscript will still show the breaking lines
       properly.
-      
+
       ****************/
 
     /* switch to a white line */
@@ -1090,7 +1090,7 @@ void g_draw_dashed_breaking_line(float x1,float y1,float x2,float y2,
     the_color.green = 0xFFFF;
     the_color.blue = 0xFFFF;
     RGBForeColor(&the_color);
-		
+
     /* use the slope of the line to figure out how to draw the 2 side lines */
     slope = (y1-y2)/(x1-x2);
     slope = fabs(slope);
@@ -1107,7 +1107,7 @@ void g_draw_dashed_breaking_line(float x1,float y1,float x2,float y2,
       MoveTo((short)(GRAPHICS_SCALE*x1),(short)(GRAPHICS_SCALE*y1+width));
       LineTo((short)(GRAPHICS_SCALE*x2),(short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     the_color.red = 0x0000;
     the_color.green = 0x0000;
@@ -1126,7 +1126,7 @@ void g_draw_dashed_breaking_line(float x1,float y1,float x2,float y2,
 /*******
 
   a "tube" which "breaks" other lines (for 3-D stuff)
-  
+
 *********/
 void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
 		      int width,int pattern)
@@ -1184,15 +1184,15 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
   if(doing_Mac){
 
     /***************
-      
+
       this is ugly  on the mac because of the fact that
       quickdraw doesn't define line widths about the center of a line,
       but rather from the "top" of the line.  Since this is dumb and
       it would be a ton of work to get it right, the mac version won't
-      always show the self-breaking lines correctly on screen.  
-      The generated postscript will still show the breaking lines 
+      always show the self-breaking lines correctly on screen.
+      The generated postscript will still show the breaking lines
       properly.
-      
+
       ****************/
 
     /* switch to a white line */
@@ -1200,7 +1200,7 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
     the_color.green = 0xFFFF;
     the_color.blue = 0xFFFF;
     RGBForeColor(&the_color);
-		
+
     /* use the slope of the line to figure out how to draw the 2 side lines */
     slope = (y1-y2)/(x1-x2);
     slope = fabs(slope);
@@ -1216,7 +1216,7 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
 	     (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(OUTER_OFFSET-1)),
 	     (short)(GRAPHICS_SCALE*y2));
-    }else{  
+    }else{
       PenSize((short)width+3,(short)width+3);
       MoveTo((short)(GRAPHICS_SCALE*x1),
 	     (short)(GRAPHICS_SCALE*y1-width-(OUTER_OFFSET-1)));
@@ -1227,7 +1227,7 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
       LineTo((short)(GRAPHICS_SCALE*x2),
 	     (short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     the_color.red = 0x0000;
     the_color.green = 0x0000;
@@ -1255,7 +1255,7 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
       LineTo((short)(GRAPHICS_SCALE*x2),
 	     (short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     /* switch to a white line */
     the_color.red = 0xFFFF;
@@ -1276,9 +1276,9 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
 }
 
 /*******
-  
+
   a line which "breaks" other lines (for 3-D stuff)
-  
+
   *********/
 void g_draw_dashed_stop_line(float x1,float y1,float x2,float y2,
 			     int width,int pattern,float xs,float ys)
@@ -1329,15 +1329,15 @@ void g_draw_dashed_stop_line(float x1,float y1,float x2,float y2,
   if(doing_Mac){
 
     /***************
-      
+
       this is ugly  on the mac because of the fact that
       quickdraw doesn't define line widths about the center of a line,
       but rather from the "top" of the line.  Since this is dumb and
       it would be a ton of work to get it right, the mac version won't
-      always show the self-breaking lines correctly on screen.  
-      The generated postscript will still show the breaking lines 
+      always show the self-breaking lines correctly on screen.
+      The generated postscript will still show the breaking lines
       properly.
-      
+
       ****************/
 
     /* switch to a white line */
@@ -1345,7 +1345,7 @@ void g_draw_dashed_stop_line(float x1,float y1,float x2,float y2,
     the_color.green = 0xFFFF;
     the_color.blue = 0xFFFF;
     RGBForeColor(&the_color);
-		
+
     /* use the slope of the line to figure out how to draw the 2 side lines */
     slope = (y1-y2)/(x1-x2);
     slope = fabs(slope);
@@ -1362,7 +1362,7 @@ void g_draw_dashed_stop_line(float x1,float y1,float x2,float y2,
       MoveTo((short)(GRAPHICS_SCALE*xs),(short)(GRAPHICS_SCALE*ys+width));
       LineTo((short)(GRAPHICS_SCALE*x2),(short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     the_color.red = 0x0000;
     the_color.green = 0x0000;
@@ -1381,7 +1381,7 @@ void g_draw_dashed_stop_line(float x1,float y1,float x2,float y2,
 /*******
 
   a dashed "tube" which "breaks" other lines (for 3-D stuff)
-  
+
 *********/
 void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
 		      int width,int pattern,float xs,float ys)
@@ -1439,15 +1439,15 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
   if(doing_Mac){
 
     /***************
-      
+
       this is ugly  on the mac because of the fact that
       quickdraw doesn't define line widths about the center of a line,
       but rather from the "top" of the line.  Since this is dumb and
       it would be a ton of work to get it right, the mac version won't
-      always show the self-breaking lines correctly on screen.  
-      The generated postscript will still show the breaking lines 
+      always show the self-breaking lines correctly on screen.
+      The generated postscript will still show the breaking lines
       properly.
-      
+
       ****************/
 
     /* switch to a white line */
@@ -1455,7 +1455,7 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
     the_color.green = 0xFFFF;
     the_color.blue = 0xFFFF;
     RGBForeColor(&the_color);
-		
+
     /* use the slope of the line to figure out how to draw the 2 side lines */
     slope = (y1-y2)/(x1-x2);
     slope = fabs(slope);
@@ -1471,7 +1471,7 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
 	     (short)(GRAPHICS_SCALE*ys));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(OUTER_OFFSET-1)),
 	     (short)(GRAPHICS_SCALE*y2));
-    }else{  
+    }else{
       PenSize((short)width+3,(short)width+3);
       MoveTo((short)(GRAPHICS_SCALE*xs),
 	     (short)(GRAPHICS_SCALE*ys-width-(OUTER_OFFSET-1)));
@@ -1482,7 +1482,7 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
       LineTo((short)(GRAPHICS_SCALE*x2),
 	     (short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     the_color.red = 0x0000;
     the_color.green = 0x0000;
@@ -1510,7 +1510,7 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
       LineTo((short)(GRAPHICS_SCALE*x2),
 	     (short)(GRAPHICS_SCALE*y2+width));
     }
-			
+
 
     /* switch to a white line */
     the_color.red = 0xFFFF;
@@ -1535,7 +1535,7 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
 /*******
 
   a "tube" with "perpective scaling" which "breaks" other lines (for 3-D stuff)
-  
+
 *********/
 void  g_draw_trapezoid_bond(float P1x,float P1y,float P1z,
 			    float P2x,float P2y,float P2z,
@@ -1565,7 +1565,7 @@ void  g_draw_trapezoid_bond(float P1x,float P1y,float P1z,
   if( fabs(diffy) > 1e-2 ){
     if( fabs(diffx) > 1e-2 ){
       slope = (P1y - P2y)/(P1x - P2x);
-  
+
       inv_slope = -1.0/slope;
       prefact = 1/sqrt(inv_slope*inv_slope + 1);
       dx1 = prefact * rad1;
@@ -1591,7 +1591,7 @@ void  g_draw_trapezoid_bond(float P1x,float P1y,float P1z,
     P1b.y = P1y - rad1; P2b.y = P2y - rad2;
   }
 
-  
+
   /*************
 
 
@@ -1624,9 +1624,9 @@ void  g_draw_trapezoid_bond(float P1x,float P1y,float P1z,
 #endif
 
 /********
-  
+
   Rectangles
-  
+
   ********/
 void g_rectangle(float x,float y,float dimx,float dimy)
 {
@@ -1646,7 +1646,7 @@ void g_rectangle(float x,float y,float dimx,float dimy)
     XDrawRectangle(disp,gpix,graphgc,(int)x,(int)(y-dimy),
 		   (int)dimx,(int)dimy);
   }
-#endif 
+#endif
 
 #ifdef TEK_GRAPHICS
   if(doing_tek){
@@ -1656,32 +1656,32 @@ void g_rectangle(float x,float y,float dimx,float dimy)
     TEK_vector((unsigned int)(x),g_ymax - (unsigned int)(y-dimy));
     TEK_vector((unsigned int)x,g_ymax - (unsigned int)y);
   }
-#endif 
+#endif
 
 #ifdef MAC_GRAPHICS
   if(doing_Mac){
     the_rect.top = (short)(GRAPHICS_SCALE*(y-dimy));
     the_rect.left = (short)(GRAPHICS_SCALE*x);
     /*****
-      
-      We have to put these little 1 pixel shifts in 
+
+      We have to put these little 1 pixel shifts in
       because of the way the Mac draws rectangles.
-      
+
       ******/
     the_rect.bottom = (short)(GRAPHICS_SCALE*y)+1;
     the_rect.right = (short)(GRAPHICS_SCALE*(x+dimx))+1;
     FrameRect(&the_rect);
   }
-#endif	
+#endif
 }
 
 
 /***************
-  
+
   changing colors
-  
+
   This only affects operations that use color
-  
+
   ****************/
 void g_change_color(int color)
 {
@@ -1702,7 +1702,7 @@ void g_change_color(int color)
     fprintf(psfile,"%4.2lf SG\n",graylevel);
   }
 
-#ifdef X_GRAPHICS  
+#ifdef X_GRAPHICS
   if(doing_X){
     active_gc = &(graygc[color%NUM_COLORS]);
   }
@@ -1710,7 +1710,7 @@ void g_change_color(int color)
 
 #ifdef MAC_GRAPHICS
   if(doing_Mac){
-    the_color.red = the_color.green = the_color.blue = 
+    the_color.red = the_color.green = the_color.blue =
       (short)((float)0xFFFF*(float)color/(float)NUM_COLORS);
     RGBForeColor(&the_color);
   }
@@ -1719,9 +1719,9 @@ void g_change_color(int color)
 
 
 /***************
-  
+
   an open circle
-  
+
   ****************/
 void g_open_circle(float x,float y,float radius)
 {
@@ -1756,10 +1756,10 @@ void g_open_circle(float x,float y,float radius)
 }
 
 /***************
-  
+
   g_crossed_circle: a circle with a faked cross
    (to look 3D)
-  
+
   ****************/
 void g_crossed_circle(float x,float y,float radius)
 {
@@ -1810,9 +1810,9 @@ void g_crossed_circle(float x,float y,float radius)
 
 
 /***************
-  
+
   a filled circle
-  
+
   ****************/
 void g_filled_circle(float x,float y,float radius,float shade,float color[3],
 		     long int *Gpixel_val, long int *Cpixel_val)
@@ -1951,9 +1951,9 @@ void g_filled_circle(float x,float y,float radius,float shade,float color[3],
 }
 
 /***************
-  
+
   a filled white circle
-  
+
   ****************/
 void g_white_circle(float x,float y,float radius)
 {
@@ -1984,9 +1984,9 @@ void g_white_circle(float x,float y,float radius)
 
 
 /**************
-  
+
   A Filled polygon (convex only please)
-  
+
   ***************/
 void g_filled_polygon(XPoint *points,int num_points)
 {
@@ -2026,9 +2026,9 @@ void g_filled_polygon(XPoint *points,int num_points)
     if(firstCall){
       thePoly = OpenPoly( );	/* start recording */
       MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	     (short)(GRAPHICS_SCALE*points[0].y));	
+	     (short)(GRAPHICS_SCALE*points[0].y));
       LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	     (short)(GRAPHICS_SCALE*points[1].y));	
+	     (short)(GRAPHICS_SCALE*points[1].y));
       LineTo((short)(GRAPHICS_SCALE*points[2].x),
 	     (short)(GRAPHICS_SCALE*points[2].y));
       LineTo((short)(GRAPHICS_SCALE*points[0].x),
@@ -2049,38 +2049,38 @@ void g_filled_polygon(XPoint *points,int num_points)
       max_y = (short)(GRAPHICS_SCALE*points[0].y);
       min_y = (short)(GRAPHICS_SCALE*points[0].y);
 
-      if((short)(GRAPHICS_SCALE*points[1].x) > max_x) 
+      if((short)(GRAPHICS_SCALE*points[1].x) > max_x)
 	max_x = (short)(GRAPHICS_SCALE*points[1].x);
       else if((short)(GRAPHICS_SCALE*points[1].x) < min_x)
 	min_x = (short)(GRAPHICS_SCALE*points[1].x);
-      if((short)(GRAPHICS_SCALE*points[1].y) > max_y) 
+      if((short)(GRAPHICS_SCALE*points[1].y) > max_y)
 	max_y = (short)(GRAPHICS_SCALE*points[1].y);
       else if((short)(GRAPHICS_SCALE*points[1].y) < min_y)
 	min_y = (short)(GRAPHICS_SCALE*points[1].y);
 
-      if((short)(GRAPHICS_SCALE*points[2].x) > max_x) 
+      if((short)(GRAPHICS_SCALE*points[2].x) > max_x)
 	max_x = (short)(GRAPHICS_SCALE*points[2].x);
       else if((short)(GRAPHICS_SCALE*points[2].x) < min_x)
 	min_x = (short)(GRAPHICS_SCALE*points[2].x);
-      if((short)(GRAPHICS_SCALE*points[2].y) > max_y) 
+      if((short)(GRAPHICS_SCALE*points[2].y) > max_y)
 	max_y = (short)(GRAPHICS_SCALE*points[2].y);
       else if((short)(GRAPHICS_SCALE*points[2].y) < min_y)
 	min_y = (short)(GRAPHICS_SCALE*points[2].y);
-			
+
       (*thePoly)->polyBBox.top = min_y;
       (*thePoly)->polyBBox.bottom = max_y;
       (*thePoly)->polyBBox.left = min_x;
       (*thePoly)->polyBBox.right = max_x;
-		
-    }	
+
+    }
     PaintPoly( thePoly);	/* paint the inside */
 #endif
 #if 0
     thePoly = OpenPoly( );	/* start recording */
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );	
+	   (short)(GRAPHICS_SCALE*points[0].y) );
     LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	   (short)(GRAPHICS_SCALE*points[1].y) );	
+	   (short)(GRAPHICS_SCALE*points[1].y) );
     LineTo((short)(GRAPHICS_SCALE*points[2].x),
 	   (short)(GRAPHICS_SCALE*points[2].y) );
     ClosePoly();		/* stop recording */
@@ -2093,9 +2093,9 @@ void g_filled_polygon(XPoint *points,int num_points)
     }
     OpenRgn();
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );	
+	   (short)(GRAPHICS_SCALE*points[0].y) );
     LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	   (short)(GRAPHICS_SCALE*points[1].y) );	
+	   (short)(GRAPHICS_SCALE*points[1].y) );
     LineTo((short)(GRAPHICS_SCALE*points[2].x),
 	   (short)(GRAPHICS_SCALE*points[2].y) );
     LineTo((short)(GRAPHICS_SCALE*points[0].x),
@@ -2103,20 +2103,20 @@ void g_filled_polygon(XPoint *points,int num_points)
     CloseRgn(theRgn);		/* stop recording */
     PaintRgn( theRgn);
     /*DisposeRgn(theRgn);*/
-			
+
   }
   RGBForeColor(&(Maclinestyles[0]));
 #endif
 
-	
+
 }
 
 
 
 /**************
-  
+
   A shaded polygon (convex only please)
-  
+
 ***************/
 void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
 {
@@ -2175,7 +2175,7 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
       thecolor.green =(short)(-65000 * colorscale);
       thecolor.red =(short)(-65000 * colorscale);
     }
-#endif      
+#endif
     if(!XAllocColor(disp,colormap,&thecolor))
       error("can't allocate color.");
     xgcv.foreground = thecolor.pixel;
@@ -2192,9 +2192,9 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
     if(firstCall){
       thePoly = OpenPoly( );	/* start recording */
       MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	     (short)(GRAPHICS_SCALE*points[0].y));	
+	     (short)(GRAPHICS_SCALE*points[0].y));
       LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	     (short)(GRAPHICS_SCALE*points[1].y));	
+	     (short)(GRAPHICS_SCALE*points[1].y));
       LineTo((short)(GRAPHICS_SCALE*points[2].x),
 	     (short)(GRAPHICS_SCALE*points[2].y));
       LineTo((short)(GRAPHICS_SCALE*points[0].x),
@@ -2215,38 +2215,38 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
       max_y = (short)(GRAPHICS_SCALE*points[0].y);
       min_y = (short)(GRAPHICS_SCALE*points[0].y);
 
-      if((short)(GRAPHICS_SCALE*points[1].x) > max_x) 
+      if((short)(GRAPHICS_SCALE*points[1].x) > max_x)
 	max_x = (short)(GRAPHICS_SCALE*points[1].x);
       else if((short)(GRAPHICS_SCALE*points[1].x) < min_x)
 	min_x = (short)(GRAPHICS_SCALE*points[1].x);
-      if((short)(GRAPHICS_SCALE*points[1].y) > max_y) 
+      if((short)(GRAPHICS_SCALE*points[1].y) > max_y)
 	max_y = (short)(GRAPHICS_SCALE*points[1].y);
       else if((short)(GRAPHICS_SCALE*points[1].y) < min_y)
 	min_y = (short)(GRAPHICS_SCALE*points[1].y);
 
-      if((short)(GRAPHICS_SCALE*points[2].x) > max_x) 
+      if((short)(GRAPHICS_SCALE*points[2].x) > max_x)
 	max_x = (short)(GRAPHICS_SCALE*points[2].x);
       else if((short)(GRAPHICS_SCALE*points[2].x) < min_x)
 	min_x = (short)(GRAPHICS_SCALE*points[2].x);
-      if((short)(GRAPHICS_SCALE*points[2].y) > max_y) 
+      if((short)(GRAPHICS_SCALE*points[2].y) > max_y)
 	max_y = (short)(GRAPHICS_SCALE*points[2].y);
       else if((short)(GRAPHICS_SCALE*points[2].y) < min_y)
 	min_y = (short)(GRAPHICS_SCALE*points[2].y);
-			
+
       (*thePoly)->polyBBox.top = min_y;
       (*thePoly)->polyBBox.bottom = max_y;
       (*thePoly)->polyBBox.left = min_x;
       (*thePoly)->polyBBox.right = max_x;
-		
-    }	
+
+    }
     PaintPoly( thePoly);	/* paint the inside */
 #endif
 #if 0
     thePoly = OpenPoly( );	/* start recording */
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );	
+	   (short)(GRAPHICS_SCALE*points[0].y) );
     LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	   (short)(GRAPHICS_SCALE*points[1].y) );	
+	   (short)(GRAPHICS_SCALE*points[1].y) );
     LineTo((short)(GRAPHICS_SCALE*points[2].x),
 	   (short)(GRAPHICS_SCALE*points[2].y) );
     ClosePoly();		/* stop recording */
@@ -2259,45 +2259,45 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
     }
     OpenRgn();
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );	
+	   (short)(GRAPHICS_SCALE*points[0].y) );
     LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	   (short)(GRAPHICS_SCALE*points[1].y) );	
+	   (short)(GRAPHICS_SCALE*points[1].y) );
     LineTo((short)(GRAPHICS_SCALE*points[2].x),
 	   (short)(GRAPHICS_SCALE*points[2].y) );
     LineTo((short)(GRAPHICS_SCALE*points[0].x),
 	   (short)(GRAPHICS_SCALE*points[0].y) );
     CloseRgn(theRgn);		/* stop recording */
 	if(colorscale > 0 ){
-    the_color.red = the_color.green = the_color.blue = 
+    the_color.red = the_color.green = the_color.blue =
       (short)((float)0xFFFF*(float)colorscale);
       } else{
           the_color.red = the_color.green = the_color.blue = 0;
           }
 
-      
+
     RGBForeColor(&the_color);
 
 
     PaintRgn( theRgn);
     /*DisposeRgn(theRgn);*/
-			
+
   }
   RGBForeColor(&(Maclinestyles[0]));
 #endif
 
-	
+
 }
 
 
 /**************
-  
+
   An open polygon (convex only please)
-  
+
   for simplicities sake, these are drawn with lines.
   to make this work, 'points should be 'num_points+1
   elements long, with the first and last elements
   identical.
-  
+
   ***************/
 void g_open_polygon(XPoint *points,int num_points)
 {
@@ -2326,10 +2326,10 @@ void g_open_polygon(XPoint *points,int num_points)
 #ifdef MAC_GRAPHICS
   if( doing_Mac ){
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y));	
+	   (short)(GRAPHICS_SCALE*points[0].y));
     for(i=1;i<num_points;i++){
       LineTo((short)(GRAPHICS_SCALE*points[i].x),
-	     (short)(GRAPHICS_SCALE*points[i].y));	
+	     (short)(GRAPHICS_SCALE*points[i].y));
     }
     LineTo((short)(GRAPHICS_SCALE*points[0].x),
 	   (short)(GRAPHICS_SCALE*points[0].y));
@@ -2340,9 +2340,9 @@ void g_open_polygon(XPoint *points,int num_points)
 
 
 /**************
-  
+
   The X legend
-  
+
   ***************/
 void g_xlegend(float x,float y,char *text)
 {
@@ -2360,7 +2360,7 @@ void g_xlegend(float x,float y,char *text)
   if( doing_X ){
     textloc = (int)x - XTextWidth(big_font,text,strlen(text))/2;
     yloc = (int)y + (int)3.0*big_font->ascent;
-    XDrawString(disp,gpix,bigtextgc,textloc,	      
+    XDrawString(disp,gpix,bigtextgc,textloc,
 		yloc,text,strlen(text));
     if( yloc > localmax.y ) localmax.y = y;
   }
@@ -2387,14 +2387,14 @@ void g_xlegend(float x,float y,char *text)
 }
 
 /**************
-  
+
   The Y legend
-  
+
   ***************/
 void g_ylegend(float x,float y,char *text)
 {
   int textloc;
-  
+
   if( doing_ps ){
     fprintf(psfile,"%.1lf %.1lf M\n",x,y);
     fprintf(psfile,"-90 rotit\n");
@@ -2432,9 +2432,9 @@ void g_ylegend(float x,float y,char *text)
 
 
 /********
-  
+
   The title
-  
+
   ********/
 void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
 {
@@ -2460,7 +2460,7 @@ void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
       if( title[i][0] != 0 ){
 	yloc -= big_font->ascent;
 	xloc = (int)x - XTextWidth(big_font,title[i],strlen(title[i])/2);
-	XDrawString(disp,gpix,bigtextgc,xloc,	      
+	XDrawString(disp,gpix,bigtextgc,xloc,
 		    yloc,title[i],strlen(title[i]));
 	if(yloc < localmin.y) localmin.y = yloc;
       }
@@ -2479,7 +2479,7 @@ void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
       }
     }
   }
-#endif   
+#endif
 
 
 #ifdef MAC_GRAPHICS
@@ -2487,7 +2487,7 @@ void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
     yloc = (int)(GRAPHICS_SCALE*y);
     for(i=NUM_TITLE_LINES-1;i>=0;i--){
       if(title[i][0] != 0){
-	xloc = (int)(GRAPHICS_SCALE*x) - 
+	xloc = (int)(GRAPHICS_SCALE*x) -
 	  (int)(TextWidth(title[i],0,strlen(title[i]))/2);
 	yloc -= Mac_globals.fontSize;
 	MoveTo((short)xloc,(short)yloc);
@@ -2502,9 +2502,9 @@ void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
 
 
 /********
-  
+
   Labels
-  
+
   ********/
 void g_label(float x,float y,label_type *label)
 {
@@ -2545,7 +2545,7 @@ void g_label(float x,float y,label_type *label)
     twidth = XTextWidth(big_font,string,strlen(string));
     theight = big_font->ascent;
     textloc = x - twidth/2;
-    XDrawString(disp,gpix,bigtextgc,(int)textloc,	      
+    XDrawString(disp,gpix,bigtextgc,(int)textloc,
 		(int)y+big_font->ascent,string,strlen(string));
     if( x + twidth/2 > localmax.x )
       localmax.x = x+twidth/2;
@@ -2568,7 +2568,7 @@ void g_label(float x,float y,label_type *label)
       g_change_linestyle(0);
     }
   }
-#endif 
+#endif
 
 #ifdef TEK_GRAPHICS
   if( doing_tek ){
@@ -2593,7 +2593,7 @@ void g_label(float x,float y,label_type *label)
     DrawText(string,0,strlen(string));
   }
 #endif
-		
+
 }
 
 
@@ -2622,10 +2622,10 @@ void g_initgraphics(int xsize,int ysize)
 #ifdef MAC_GRAPHICS
   if( doing_Mac ){
     /**********
-      
+
       use the EasyApp stuff to open the windows and fire up the
       menus
-      
+
       **********/
     Mac_initgraphics();
   }
@@ -2634,14 +2634,14 @@ void g_initgraphics(int xsize,int ysize)
 
 }
 /*********
-  
+
   this clears the graphics screen
-  
+
   *********/
 void g_clear_screen(void)
 {
 
-#ifdef X_GRAPHICS  
+#ifdef X_GRAPHICS
   if( doing_X ){
     XFillRectangle(disp,gpix,blackgc,0,0,g_xmax,g_ymax);
   }
@@ -2655,26 +2655,26 @@ void g_clear_screen(void)
 #endif
 
 #ifdef MAC_GRAPHICS
-  /************* 
-    
+  /*************
+
     on the Mac, we need to do some magic to make things work.
     this is because of the fact that we're doing the drawing
     to an offscreen graphics world.
-    
+
     It's more convenient to have this definition in one
     of the Mac specific files.
-    
+
     ***************/
   if(doing_Mac){
     Mac_ClearScreen();
   }
-#endif	
+#endif
 }
 
 /*********
-  
+
   This is for double buffered drawing
-  
+
   *********/
 void g_switch_buffers(void)
 {
@@ -2696,10 +2696,10 @@ void g_switch_buffers(void)
 
 
 /*********
-  
+
   This is for putting comments in output files to make them
   easier to hand edit
-  
+
   *********/
 void g_insert_comment(char *string)
 {
