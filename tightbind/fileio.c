@@ -512,6 +512,7 @@ void fill_atomic_parms(atoms,num_atoms,infile)
       its parameters from the input file
       ********/
     else if(atoms[i].symb[0] == '*'){
+      printf("Looking for parameters for special atom in the input file...\n");
       skipcomments(infile,instring,FATAL);
       num_read = sscanf(instring,"%s %d %d %d %lf %lf %d %lf %lf %d %lf %lf %lf %lf %lf %d %lf %lf %lf %lf %lf",
                         custom_atoms[num_custom].symb,
