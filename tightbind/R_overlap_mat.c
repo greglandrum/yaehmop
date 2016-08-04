@@ -848,7 +848,7 @@ printmat(overlap,num_orbs,num_orbs,status_file,1e-10,0,details->line_width);
   }
 
 
-fprintf(stdout,".\n");
+//fprintf(stdout,".\n");
 
 
 #if 0

@@ -674,7 +674,6 @@ void fill_atomic_parms(atoms,num_atoms,infile)
         // Else, read from the default data
         else {
           strcpy(instring, defaultParms[defaultParmsInd]);
-          printf("%s\n", instring);
           if (instring == "END") {
             atEnd = true;
             break;

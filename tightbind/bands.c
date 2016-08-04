@@ -255,7 +255,7 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
     default:
       FATAL_BUG("Somehow a bogus execution mode got passed to generate_band_structure.");
     }
-fprintf(stderr,">");
+//fprintf(stderr,">");
 
     /******
       The matrix diagonalization routine destroys the overlap matrix,
@@ -315,7 +315,7 @@ fprintf(stderr,">");
     fprintf(stderr,"}");
 #endif
 
-    fprintf(stderr,"<\n");
+    //fprintf(stderr,"<\n");
     fprintf(status_file,"Error value from Diagonalization (0 is good): %d\n",diag_error);
 
 

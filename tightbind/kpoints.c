@@ -336,7 +336,7 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
         /* generate the transform matrices */
         gen_FMO_tform_matrices(details);
       }
-      fprintf(stdout,"%d >",i+1);
+      //fprintf(stdout,"%d >",i+1);
 
 #ifndef USE_LAPACK
       /******
@@ -438,7 +438,7 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       itype = 1;
       if( details->just_avgE ){
         jobz = 'N';
-        fprintf(stdout,".");
+        //fprintf(stdout,".");
       } else{
         jobz = 'V';
       }
@@ -470,7 +470,7 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       }
 #endif
 
-      fprintf(stdout,"<\n");
+      //fprintf(stdout,"<\n");
       fprintf(status_file,"Error value from Diagonalization (0 is good): %d\n",
               diag_error);
       fflush(status_file);
