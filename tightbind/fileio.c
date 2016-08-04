@@ -70,6 +70,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define EHT_PARM_FILE "eht_parms.dat"
 #endif
 
+// Include the default data in case we need it
+#include "eht_parms.h"
+
+#include "stdbool.h" // standard booleans
+
 /* hopefully this will be way more than enough */
 #define MAX_CUSTOM_ATOMS 40
 atom_type custom_atoms[MAX_CUSTOM_ATOMS];
@@ -464,7 +469,7 @@ void fill_atomic_parms(atoms,num_atoms,infile)
   if(!parmfile){
     safe_strcpy(err_string,"Can't open parameter file: ");
     strcat(err_string,parm_file_name);
-    strcat(err_string," continuing anyway <watch out!>.");
+    strcat(err_string," using default data in eht_parms.h...");
     error(err_string);
   }
 #else
@@ -653,102 +658,129 @@ void fill_atomic_parms(atoms,num_atoms,infile)
       /******
         look for the parameters in the param file if it exists
         *******/
-      if (parmfile) {
+      if (parmfile)
         rewind(parmfile);
 
-        while(!found && skipcomments(parmfile,instring,IGNORE)>=0 ){
-          /* compare two characters and see if this is the right atom */
-          sscanf(instring,"%s",tstring);
-          upcase(tstring);
-          while(!strncmp(atoms[i].symb,tstring,2)){
-            /* it is... read out the data */
-            sscanf(instring,"%s %d %d %d %d %s %lf %lf %lf %lf %lf",
-                   tstring,&atnum,&nval,&nzeta,&nquant,ang,&Hii,&exp1,&exp2,&c1,&c2);
-
-            atoms[i].at_number = atnum;
-            atoms[i].num_valence = nval;
-            /* figure out which type of orbital this is */
-            switch(ang[0]){
-            case 's':
-            case 'S':
-              if( Hii != 0.0 )
-                atoms[i].ns = nquant;
-              else atoms[i].ns = 0;
-
-              atoms[i].exp_s = exp1;
-              atoms[i].coul_s = Hii;
-              break;
-            case 'p':
-            case 'P':
-              if( Hii != 0.0 )
-                atoms[i].np = nquant;
-              else atoms[i].np = 0;
-              atoms[i].exp_p = exp1;
-              atoms[i].coul_p = Hii;
-              break;
-            case 'd':
-            case 'D':
-              if( Hii != 0.0 )
-                atoms[i].nd = nquant;
-              else atoms[i].nd = 0;
-              atoms[i].exp_d = exp1;
-              atoms[i].coul_d = Hii;
-              atoms[i].coeff_d1 = c1;
-              if( nzeta == 2 ){
-                atoms[i].exp_d2 = exp2;
-                atoms[i].coeff_d2 = c2;
-
-                /*******
-                  this is some kind of wierd coefficient adjustment business that
-                  they do in the original source... I'm not sure why...
-                  ******/
-                temp = 4.0*(exp1*exp2/pow(exp1+exp2,2.0));
-                temp = pow(temp,(real)nquant+.5);
-
-                temp = sqrt(c1*c1+c2*c2+2*temp*c1*c2);
-                temp = 1.0/temp;
-
-                atoms[i].coeff_d1 *= temp;
-                atoms[i].coeff_d2 *= temp;
-              }
-              break;
-            case 'f':
-            case 'F':
-              if( Hii != 0.0 )
-                atoms[i].nf = nquant;
-              else atoms[i].nf = 0;
-              atoms[i].exp_f = exp1;
-              atoms[i].coul_f = Hii;
-              atoms[i].coeff_f1 = c1;
-              if( nzeta == 2 ){
-                atoms[i].exp_f2 = exp2;
-                atoms[i].coeff_f2 = c2;
-
-                /*******
-                  this is some kind of wierd coefficient adjustment business that
-                  they do in the original source... I'm not sure why...
-                  ******/
-                temp = 4.0*(exp1*exp2/pow(exp1+exp2,2.0));
-                temp = pow(temp,(real)nquant+.5);
-
-                temp = sqrt(c1*c1+c2*c2+2*temp*c1*c2);
-                temp = 1.0/temp;
-
-                atoms[i].coeff_f1 *= temp;
-                atoms[i].coeff_f2 *= temp;
-              }
-              break;
-            }
-            /********
-              now read in the next line to make sure that we have all the oribtals
-              for this atom.
-              ********/
-            skipcomments(parmfile,instring,IGNORE);
-            sscanf(instring,"%s",tstring);
-            found = 1;
+      bool atEnd = false;
+      size_t defaultParmsInd = 0;
+      while(!found && !atEnd) {
+        // If the parm file exists, read from that
+        if (parmfile) {
+          if (skipcomments(parmfile,instring,IGNORE) == -1) {
+            atEnd = true;
+            break;
           }
         }
+        // Else, read from the default data
+        else {
+          strcpy(instring, defaultParms[defaultParmsInd]);
+          printf("%s\n", instring);
+          if (instring == "END") {
+            atEnd = true;
+            break;
+          }
+          ++defaultParmsInd;
+        }
+
+        /* compare two characters and see if this is the right atom */
+        sscanf(instring,"%s",tstring);
+        upcase(tstring);
+        while(!strncmp(atoms[i].symb,tstring,2)){
+          /* it is... read out the data */
+          sscanf(instring,"%s %d %d %d %d %s %lf %lf %lf %lf %lf",
+                 tstring,&atnum,&nval,&nzeta,&nquant,ang,&Hii,&exp1,&exp2,&c1,&c2);
+
+          atoms[i].at_number = atnum;
+          atoms[i].num_valence = nval;
+          /* figure out which type of orbital this is */
+          switch(ang[0]){
+          case 's':
+          case 'S':
+            if( Hii != 0.0 )
+              atoms[i].ns = nquant;
+            else atoms[i].ns = 0;
+
+            atoms[i].exp_s = exp1;
+            atoms[i].coul_s = Hii;
+            break;
+          case 'p':
+          case 'P':
+            if( Hii != 0.0 )
+              atoms[i].np = nquant;
+            else atoms[i].np = 0;
+            atoms[i].exp_p = exp1;
+            atoms[i].coul_p = Hii;
+            break;
+          case 'd':
+          case 'D':
+            if( Hii != 0.0 )
+              atoms[i].nd = nquant;
+            else atoms[i].nd = 0;
+            atoms[i].exp_d = exp1;
+            atoms[i].coul_d = Hii;
+            atoms[i].coeff_d1 = c1;
+            if( nzeta == 2 ){
+              atoms[i].exp_d2 = exp2;
+              atoms[i].coeff_d2 = c2;
+
+              /*******
+                this is some kind of wierd coefficient adjustment business that
+                they do in the original source... I'm not sure why...
+                ******/
+              temp = 4.0*(exp1*exp2/pow(exp1+exp2,2.0));
+              temp = pow(temp,(real)nquant+.5);
+
+              temp = sqrt(c1*c1+c2*c2+2*temp*c1*c2);
+              temp = 1.0/temp;
+
+              atoms[i].coeff_d1 *= temp;
+              atoms[i].coeff_d2 *= temp;
+            }
+            break;
+          case 'f':
+          case 'F':
+            if( Hii != 0.0 )
+              atoms[i].nf = nquant;
+            else atoms[i].nf = 0;
+            atoms[i].exp_f = exp1;
+            atoms[i].coul_f = Hii;
+            atoms[i].coeff_f1 = c1;
+            if( nzeta == 2 ){
+              atoms[i].exp_f2 = exp2;
+              atoms[i].coeff_f2 = c2;
+
+              /*******
+                this is some kind of wierd coefficient adjustment business that
+                they do in the original source... I'm not sure why...
+                ******/
+              temp = 4.0*(exp1*exp2/pow(exp1+exp2,2.0));
+              temp = pow(temp,(real)nquant+.5);
+
+              temp = sqrt(c1*c1+c2*c2+2*temp*c1*c2);
+              temp = 1.0/temp;
+
+              atoms[i].coeff_f1 *= temp;
+              atoms[i].coeff_f2 *= temp;
+            }
+            break;
+          }
+          /********
+            now read in the next line to make sure that we have all the oribtals
+            for this atom.
+            ********/
+          if (parmfile)
+            skipcomments(parmfile,instring,IGNORE);
+          else {
+            // Read next line from default data
+            strcpy(instring, defaultParms[defaultParmsInd]);
+            ++defaultParmsInd;
+          }
+
+          sscanf(instring,"%s",tstring);
+          found = 1;
+        }
       }
+
       if(!found){
         fprintf(stderr,"Can't find parameters for atom: %s\n",atoms[i].symb);
         fatal("Parameter acquisition failure :-(");
