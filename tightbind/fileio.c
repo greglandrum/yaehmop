@@ -1514,11 +1514,17 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
   real begin_walsh,end_walsh;
 
 
+  // If we are using stdin, don't open the input file
+  if (strcmp(name, "stdin") == 0) {
+    infile = stdin;
+  }
   /* open the input file */
-  if( !the_file ){
-          infile = fopen(name,"r");
-  } else{
-          infile = the_file;
+  else {
+    if( !the_file ){
+            infile = fopen(name,"r");
+    } else{
+            infile = the_file;
+    }
   }
 
   /* make sure that it opened */

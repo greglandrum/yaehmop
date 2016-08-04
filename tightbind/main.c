@@ -53,6 +53,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ***/
 
 #include "bind.h"
+
+// For booleans
+#include "stdbool.h"
+
 FILE *COHP_file;
 const char greetings[]="Welcome to the 10th Anniversary edition of YAeHMOP!\n";
 
@@ -78,6 +82,7 @@ char test_string[80];
   int i;
   FILE *the_file=0;
   int walsh_step;
+  bool use_stdin_stdout = false;
 #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
@@ -103,8 +108,12 @@ char test_string[80];
   /* make sure the program was called with the right arguments */
   if( argc < 2){
     fprintf(stderr,"Usage: bind <inputfile>\n");
-    exit(666);
+    exit(-1);
   }
+
+  // If the argument is --use_stdin_stdout, use stdin and stdout! Makes sense...
+  if (strcmp(argv[1], "--use_stdin_stdout") == 0)
+    use_stdin_stdout = true;
 
   /* install the sig_int handler */
   signal(SIGINT,handle_sigint);
@@ -122,24 +131,39 @@ char test_string[80];
   details = (detail_type *)calloc(1,sizeof(detail_type));
   if(!unit_cell || !details) fatal("Can't allocate initial memory.");
 
-  /* check to see if we can open the input file */
-  temp_file = fopen(argv[1],"r");
-  if( !temp_file ){
-    sprintf(err_string,"Can't open input file: %s",argv[1]);
-    fatal(err_string);
+  if (!use_stdin_stdout) {
+    /* check to see if we can open the input file */
+    temp_file = fopen(argv[1],"r");
+    if( !temp_file ){
+      sprintf(err_string,"Can't open input file: %s",argv[1]);
+      fatal(err_string);
+    }
+    fclose(temp_file);
   }
-  fclose(temp_file);
 
-  /* open the file that will be used to dump progress reports */
-  strcpy(file_name,argv[1]);
-  strcat(file_name,".status");
-  status_file = fopen(file_name,"w+");
+  // If we are using stdin and stdout, then write all status to stdout
+  if (use_stdin_stdout) {
+    status_file = stdout;
+  }
+  else {
+    /* open the file that will be used to dump progress reports */
+    strcpy(file_name,argv[1]);
+    strcat(file_name,".status");
+    status_file = fopen(file_name,"w+");
+  }
   if(!status_file)fatal("Can't open status file!");
 
-  /* open the file that will be used for results */
-  strcpy(file_name,argv[1]);
-  strcat(file_name,".out");
-  output_file = fopen(file_name,"w+");
+  // If we are using stdin and stdout, then write all output to stdout
+  if (use_stdin_stdout) {
+    output_file = stdout;
+  }
+  else {
+    /* open the file that will be used for results */
+    strcpy(file_name,argv[1]);
+    strcat(file_name,".out");
+    output_file = fopen(file_name,"w+");
+  }
+
   if(!output_file)fatal("Can't open results file!");
   fprintf(output_file,"#BIND_OUTPUT version: %s\n\n",VERSION_STRING);
 
@@ -150,16 +174,26 @@ char test_string[80];
     read in the data
 
   *********/
-  read_inputfile(unit_cell,details,argv[1],&num_orbs,&orbital_lookup_table,the_file);
+  char* fileName = argv[1];
+  if (use_stdin_stdout)
+    fileName = "stdin";
+  read_inputfile(unit_cell,details,fileName,&num_orbs,&orbital_lookup_table,the_file);
 
   /* copy the file name into the details structure */
   strcpy(details->filename,argv[1]);
 
   /* open the file that will be used for walsh output (if we need one) */
   if(details->walsh_details.num_vars != 0){
-    strcpy(file_name,argv[1]);
-    strcat(file_name,".walsh");
-    walsh_file = fopen(file_name,"w+");
+    // If we are using stdin and stdout, then write all output to stdout
+    if (use_stdin_stdout) {
+      walsh_file = stdout;
+    }
+    else {
+      /* open the file that will be used for results */
+      strcpy(file_name,argv[1]);
+      strcat(file_name,".walsh");
+      walsh_file = fopen(file_name,"w+");
+    }
     if(!walsh_file)fatal("Can't open Walsh results file!");
   }
 
@@ -253,8 +287,16 @@ char test_string[80];
         sprintf(file_name,"%s.step%d.band",argv[1],walsh_step+1);
       else
         sprintf(file_name,"%s.band",argv[1]);
-      if( band_file ) fclose(band_file);
-      band_file = fopen(file_name,"w+");
+      // If we are using stdin and stdout, just use that for the band file
+      if (use_stdin_stdout) {
+        band_file = stdout;
+        // Let's write the name of the file at the top of this part
+        fprintf(stdout, "%s\n", file_name);
+      }
+      else {
+        if( band_file ) fclose(band_file);
+        band_file = fopen(file_name,"w+");
+      }
       if(!band_file)fatal("Can't open band results file!");
     }
 
@@ -264,8 +306,17 @@ char test_string[80];
         sprintf(file_name,"%s.step%d.FMO",argv[1],walsh_step+1);
       else
         sprintf(file_name,"%s.FMO",argv[1]);
-      if(FMO_file) fclose(FMO_file);
-      FMO_file = fopen(file_name,"w+");
+
+      // If we are using stdin and stdout, just use that for the FMO file
+      if (use_stdin_stdout) {
+        FMO_file = stdout;
+        // Let's write the name of the file at the top of this part
+        fprintf(stdout, "%s\n", file_name);
+      }
+      else {
+        if(FMO_file) fclose(FMO_file);
+        FMO_file = fopen(file_name,"w+");
+      }
       if(!FMO_file)fatal("Can't open FMO results file!");
       /******
 
@@ -733,7 +784,9 @@ char test_string[80];
   }
 #endif
 
-  fclose(status_file);
-  fclose(output_file);
+  if (!use_stdin_stdout) {
+    fclose(status_file);
+    fclose(output_file);
+  }
   exit(0);
 }
