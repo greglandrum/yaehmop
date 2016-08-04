@@ -561,7 +561,7 @@ char test_string[80];
               if( details->num_occup_AVG ){
                 new_num_electrons = unit_cell->num_electrons;
                 fprintf(output_file,
-                        "\n;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+                        "\n;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
                 fprintf(output_file,"\n# ALTERNATE OCCUPATION ANALYSIS\n");
                 fprintf(output_file,"%d Alternate Occupations were done\n",
                         details->num_occup_AVG);

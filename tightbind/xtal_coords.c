@@ -130,7 +130,7 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
 
     fprintf(output_file,"# Positions of atoms from crystal coordinates\n");
     for(i=0;i<cell->num_raw_atoms;i++){
-      fprintf(output_file,"% 4d % 4s % 8.4lf % 8.4lf % 8.4lf\n",
+      fprintf(output_file,"%4d %4s %8.4lf %8.4lf %8.4lf\n",
               i+1,cell->atoms[i].symb,cell->atoms[i].loc.x,
               cell->atoms[i].loc.y,cell->atoms[i].loc.z);
     }

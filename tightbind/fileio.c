@@ -218,11 +218,11 @@ void write_atom_coords(atom_type *atoms,int num_atoms,
   for(i=0;i<num_atoms;i++){
     /* write the parameters */
     if( !using_Zmat ){
-      fprintf(output_file,"% 4d % 4s % -8.6f % -8.6f % -8.6f\n",
+      fprintf(output_file,"%4d %4s %-8.6f %-8.6f %-8.6f\n",
               i+1,atoms[i].symb,atoms[i].loc.x,atoms[i].loc.y,atoms[i].loc.z);
     }
     else{
-      fprintf(output_file,"% 4d % 4s % 4d % -8.6f % 4d % -8.6f % 4d % 8.6f\n",
+      fprintf(output_file,"%4d %4s %4d %-8.6f %4d %-8.6f %4d %8.6f\n",
               i+1,atoms[i].symb,
               atoms[i].Zmat_loc.ref1+1,atoms[i].Zmat_loc.bond_length,
               atoms[i].Zmat_loc.ref2+1,atoms[i].Zmat_loc.alpha,
@@ -2032,8 +2032,8 @@ done.\n");
                          }
 
         fprintf(status_file,"An automatic k-point mesh (%dx%dx%d) will be used.\n",
-                &(details->points_per_axis[0]),&(details->points_per_axis[1]),
-                &(details->points_per_axis[2]));
+                details->points_per_axis[0],details->points_per_axis[1],
+                details->points_per_axis[2]);
       }
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"HIGH SYMM")){
@@ -2374,7 +2374,7 @@ calculation.\n");
         /* read in the special points */
         for(i=0;i<band_info->num_special_points;i++){
           skipcomments(infile,instring,FATAL);
-          sscanf(instring,"%s %lf %lf %lf",&band_info->special_points[i].name,
+          sscanf(instring,"%s %lf %lf %lf",band_info->special_points[i].name,
                  &band_info->special_points[i].loc.x,
                  &band_info->special_points[i].loc.y,
                  &band_info->special_points[i].loc.z);
