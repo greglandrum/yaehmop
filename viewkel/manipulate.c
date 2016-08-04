@@ -204,13 +204,13 @@ void instantiate( object_type *object, char do_labels )
 
   ********/
   if( object->prim && (object->prim->which == MOLECULE
-		       || object->prim->which == MO_SURF)){
+                       || object->prim->which == MO_SURF)){
     /* update the current matrix */
     pushmatrix(0);
 
     /* undo the translation */
     translate(object->trans.x/20.0,-object->trans.y/20.0,
-	      object->trans.z/20.0);
+              object->trans.z/20.0);
 
     /* the scaling */
     scale(object->scale.x,object->scale.y,object->scale.z);

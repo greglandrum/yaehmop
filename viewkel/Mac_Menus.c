@@ -96,8 +96,8 @@ void UpdateViewkelMenus(WindowPtr macWindow)
   int i;
   MenuHandle theModeMenu;
 
-	EasyDisableMenu(g.fileMenu);
-	EnableItem(g.fileMenu,kQuitItem);
+        EasyDisableMenu(g.fileMenu);
+        EnableItem(g.fileMenu,kQuitItem);
 
   theModeMenu=GetMenuHandle(MODE_MENU_ID);
 
@@ -123,7 +123,7 @@ void UpdateViewkelMenus(WindowPtr macWindow)
   /* check (or not) the fill proj's item */
   CheckItem(theModeMenu,MODE_FILL_ITEM_ID,(Boolean)fill_projections);
 
-	UpdateViewkelObjectMenus(macWindow);
+        UpdateViewkelObjectMenus(macWindow);
 }
 
 
@@ -147,62 +147,62 @@ void UpdateViewkelMenus(WindowPtr macWindow)
  ****************************************************************************/
 void UpdateViewkelObjectMenus(WindowPtr macWindow)
 {
-	char pstring[255];
-	button_win_type *button_win;
-	button_type *button;
+        char pstring[255];
+        button_win_type *button_win;
+        button_type *button;
 
-	/* loop over all of the button_wins and their children */
-	button_win = button_wins;
-	while(button_win){
-		button = button_win->button_list;
-		while(button){
-			/* start by setting the text for this button */
-			strcpy(pstring,button->string);
-			CtoPstr(pstring);
-			SetItem(button_win->theMenu,button->itemID,(unsigned char *)pstring);
+        /* loop over all of the button_wins and their children */
+        button_win = button_wins;
+        while(button_win){
+                button = button_win->button_list;
+                while(button){
+                        /* start by setting the text for this button */
+                        strcpy(pstring,button->string);
+                        CtoPstr(pstring);
+                        SetItem(button_win->theMenu,button->itemID,(unsigned char *)pstring);
 
-			/* now make sure that the buttons are properly displayed */
-			switch(button->type){
-			case TOGGLE:
-				CheckItem(button_win->theMenu,button->itemID,
-									(Boolean)(*button->guts.boolean));
-				break;
-			case CURVETOGGLE:
-				CheckItem(button_win->theMenu,button->itemID,
-									(Boolean)(*button->guts.boolean));
-				break;
+                        /* now make sure that the buttons are properly displayed */
+                        switch(button->type){
+                        case TOGGLE:
+                                CheckItem(button_win->theMenu,button->itemID,
+                                                                        (Boolean)(*button->guts.boolean));
+                                break;
+                        case CURVETOGGLE:
+                                CheckItem(button_win->theMenu,button->itemID,
+                                                                        (Boolean)(*button->guts.boolean));
+                                break;
 
-			}
-			button = button->next;
-		}
+                        }
+                        button = button->next;
+                }
 
-		/* update the children if there are any */
-		if( button_win->child ){
-				button = button_win->child->button_list;
-		while(button){
-			/* start by setting the text for this button */
-			strcpy(pstring,button->string);
-			CtoPstr(pstring);
-			SetItem(button_win->child->theMenu,button->itemID,(unsigned char *)pstring);
+                /* update the children if there are any */
+                if( button_win->child ){
+                                button = button_win->child->button_list;
+                while(button){
+                        /* start by setting the text for this button */
+                        strcpy(pstring,button->string);
+                        CtoPstr(pstring);
+                        SetItem(button_win->child->theMenu,button->itemID,(unsigned char *)pstring);
 
-			/* now make sure that the buttons are properly displayed */
-			switch(button->type){
-			case TOGGLE:
-				CheckItem(button_win->child->theMenu,button->itemID,
-									(Boolean)(*button->guts.boolean));
-				break;
-			case CURVETOGGLE:
-				CheckItem(button_win->child->theMenu,button->itemID,
-									(Boolean)(*button->guts.boolean));
-				break;
+                        /* now make sure that the buttons are properly displayed */
+                        switch(button->type){
+                        case TOGGLE:
+                                CheckItem(button_win->child->theMenu,button->itemID,
+                                                                        (Boolean)(*button->guts.boolean));
+                                break;
+                        case CURVETOGGLE:
+                                CheckItem(button_win->child->theMenu,button->itemID,
+                                                                        (Boolean)(*button->guts.boolean));
+                                break;
 
-			}
-			button = button->next;
-		}
-		}
+                        }
+                        button = button->next;
+                }
+                }
 
-		button_win = button_win->next;
-	}
+                button_win = button_win->next;
+        }
 }
 
 
@@ -221,9 +221,9 @@ Boolean ViewkelMenuDispatch(WindowPtr macWindow, long menuChoice)
       read_data_submenu_hook(menuItem);
       handled = true;
       break;
-	  case ACTION_MENU_ID:
-	    action_menu_hook(menuItem);
-	    break;
+          case ACTION_MENU_ID:
+            action_menu_hook(menuItem);
+            break;
     case MODE_MENU_ID:
       mode_menu_hook(menuItem);
       handled = true;
@@ -232,7 +232,7 @@ Boolean ViewkelMenuDispatch(WindowPtr macWindow, long menuChoice)
       handled = ViewkelObjectMenuDispatch(menuID,menuItem);
       break;
     }
- 	return handled;
+         return handled;
 }
 
 /***************
@@ -243,19 +243,19 @@ Boolean ViewkelMenuDispatch(WindowPtr macWindow, long menuChoice)
 void action_menu_hook(short menuItem)
 {
 
-	switch(menuItem){
-	case PURGE_ITEM_ID:
-	 clearall();
-	 break;
-	case PRINT_ITEM_ID:
-		do_ps_output();
-		break;
-	case CLEAR_LABEL_ITEM_ID:
-		clear_labels();
-		break;
-	default:
-		break;
-	}
+        switch(menuItem){
+        case PURGE_ITEM_ID:
+         clearall();
+         break;
+        case PRINT_ITEM_ID:
+                do_ps_output();
+                break;
+        case CLEAR_LABEL_ITEM_ID:
+                clear_labels();
+                break;
+        default:
+                break;
+        }
 
 }
 
@@ -278,16 +278,16 @@ void read_data_submenu_hook(short menuItem)
     new_cont_plot(NULL);
     break;
   case READ_FMO_ITEM_ID:
-  	new_FMO_diagram(NULL);
-  	break;
+          new_FMO_diagram(NULL);
+          break;
   case READ_WALSH_ITEM_ID:
-  	new_walsh_graph(0);
-  	break;
+          new_walsh_graph(0);
+          break;
   case READ_MOLEC_ITEM_ID:
-  	new_molecule(NULL);
-  	break;
-	case READ_MO_ITEM_ID:
-		new_MO_surface(NULL);
+          new_molecule(NULL);
+          break;
+        case READ_MO_ITEM_ID:
+                new_MO_surface(NULL);
   default:
     break;
   }
@@ -318,9 +318,9 @@ void mode_menu_hook(short menuItem)
   case MODE_SCALE_ITEM_ID:
     mainmode = SCALE;
     break;
-	case MODE_FILL_ITEM_ID:
-		fill_projections = !fill_projections;
-		break;
+        case MODE_FILL_ITEM_ID:
+                fill_projections = !fill_projections;
+                break;
   default:
     break;
   }
@@ -329,80 +329,80 @@ void mode_menu_hook(short menuItem)
 
 /*******************************************
 
-	ViewkelObjectMenuDispatch
+        ViewkelObjectMenuDispatch
 
-	Arguments: menuID, menuItem: shorts
-	Returns: Boolean
+        Arguments: menuID, menuItem: shorts
+        Returns: Boolean
 
-	This tracks through the menus and deals with calling the
-		appropriate function if the user has selected
-		an item in an ObjectMenu
+        This tracks through the menus and deals with calling the
+                appropriate function if the user has selected
+                an item in an ObjectMenu
 
 ********************************************/
 Boolean ViewkelObjectMenuDispatch(short menuID, short menuItem)
 {
   Boolean handled=0;
-	button_win_type *button_win;
-	button_type *button;
-	int *mode_ptr;
+        button_win_type *button_win;
+        button_type *button;
+        int *mode_ptr;
 
-	/* first find the appropriate button_win */
-	button_win = button_wins;
-	while(button_win && !handled){
-		if(button_win->menuID == menuID){
-			/* find the item */
-			button = button_win->button_list;
-			while(button && !handled){
-				if(button->itemID == menuItem) handled = 1;
-				else button = button->next;
-			}
-		}
-		if(button_win->child && button_win->child->menuID == menuID){
-			/* find the item */
-			button = button_win->child->button_list;
-			while(button && !handled){
-				if(button->itemID == menuItem) handled = 1;
-				else button = button->next;
-			}
-		}
+        /* first find the appropriate button_win */
+        button_win = button_wins;
+        while(button_win && !handled){
+                if(button_win->menuID == menuID){
+                        /* find the item */
+                        button = button_win->button_list;
+                        while(button && !handled){
+                                if(button->itemID == menuItem) handled = 1;
+                                else button = button->next;
+                        }
+                }
+                if(button_win->child && button_win->child->menuID == menuID){
+                        /* find the item */
+                        button = button_win->child->button_list;
+                        while(button && !handled){
+                                if(button->itemID == menuItem) handled = 1;
+                                else button = button->next;
+                        }
+                }
 
-		if( !handled ){
-			button_win = button_win->next;
-		}
-	}
+                if( !handled ){
+                        button_win = button_win->next;
+                }
+        }
 
-	if( handled ){
+        if( handled ){
       switch(button->type){
       case FLOATPARM:
-				readfloatparm(button->string,button->guts.floatparm);
-				break;
+                                readfloatparm(button->string,button->guts.floatparm);
+                                break;
       case INTPARM:
-				readintparm(button->string,button->guts.intparm);
-				break;
+                                readintparm(button->string,button->guts.intparm);
+                                break;
       case STRINGPARM:
-				readstringparm(button->string,button->guts.stringparm.lines);
-				break;
+                                readstringparm(button->string,button->guts.stringparm.lines);
+                                break;
       case MULTISTRINGPARM:
-				readmultistringparm(button->string,button->guts.stringparm.num_lines,
-		      								  button->guts.stringparm.lines);
-				break;
+                                readmultistringparm(button->string,button->guts.stringparm.num_lines,
+                                                                                        button->guts.stringparm.lines);
+                                break;
       case TOGGLE:
-				*(button->guts.boolean) = !*(button->guts.boolean);
-			break;
+                                *(button->guts.boolean) = !*(button->guts.boolean);
+                        break;
       case CURVETOGGLE:
-			  *(button->guts.curve.boolean) = !*(button->guts.boolean);
-				break;
+                          *(button->guts.curve.boolean) = !*(button->guts.boolean);
+                                break;
       case FUNCTION:
-				(button->guts.function.func)(button->guts.function.num_args,
-				   												   button->guts.function.args);
-				break;
+                                (button->guts.function.func)(button->guts.function.num_args,
+                                                                                                                                      button->guts.function.args);
+                                break;
       case MODE:
-				mode_ptr = button->guts.mode.controlling_variable;
-				*mode_ptr = (*mode_ptr+1) % button->guts.mode.num_modes;
-				break;
+                                mode_ptr = button->guts.mode.controlling_variable;
+                                *mode_ptr = (*mode_ptr+1) % button->guts.mode.num_modes;
+                                break;
       }
-	}
+        }
 
-	return handled;
+        return handled;
 }
 

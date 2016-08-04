@@ -1,6 +1,6 @@
 /* diag.f -- translated by f2c (version 19950602).
    You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+        -lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
@@ -13,10 +13,10 @@
 
 extern int cchol_(integer *n, integer *nd, doublereal *a, integer *fail);
 extern int ctred2_(integer *n, integer *nd, doublereal *a, doublereal *b,
-					doublereal *d,doublereal *e,doublereal *f);
+                                        doublereal *d,doublereal *e,doublereal *f);
 
 extern int ctql2_(integer *n, integer *nd, doublereal *d, doublereal *e,
-					doublereal *f,doublereal *a,doublereal *b,integer *fail);
+                                        doublereal *f,doublereal *a,doublereal *b,integer *fail);
 
 
 /* Subroutine */ int cchol_(n, nd, a, fail)
@@ -86,49 +86,49 @@ integer *fail;
 
 /*     TEST FOR POSITIVE DEFINITNESS */
 
-	if (a[i + i * a_dim1] <= 0.) {
-	    return 0;
-	}
+        if (a[i + i * a_dim1] <= 0.) {
+            return 0;
+        }
 
 /*      COMPUTE COLUMN I */
 
-	a[i + i * a_dim1] = (double)sqrt((double)a[i + i * a_dim1]);
-	if (i == *n) {
-	    goto L13;
-	}
-	ia = i + 1;
-	i__2 = *n;
-	for (j = ia; j <= i__2; ++j) {
-	    a[j + i * a_dim1] /= a[i + i * a_dim1];
+        a[i + i * a_dim1] = (double)sqrt((double)a[i + i * a_dim1]);
+        if (i == *n) {
+            goto L13;
+        }
+        ia = i + 1;
+        i__2 = *n;
+        for (j = ia; j <= i__2; ++j) {
+            a[j + i * a_dim1] /= a[i + i * a_dim1];
 /* L10: */
-	    a[i + j * a_dim1] /= a[i + i * a_dim1];
-	}
+            a[i + j * a_dim1] /= a[i + i * a_dim1];
+        }
 
 /*     REDUCE REMAINING COLUMNS */
 
-	i__2 = *n;
-	for (k = ia; k <= i__2; ++k) {
-	    a[k + k * a_dim1] = a[k + k * a_dim1] - a[k + i * a_dim1] * a[k +
-		    i * a_dim1] - a[i + k * a_dim1] * a[i + k * a_dim1];
-	    if (k == *n) {
-		goto L12;
-	    }
-	    ka = k + 1;
-	    i__3 = *n;
-	    for (j = ka; j <= i__3; ++j) {
-		a[j + k * a_dim1] = a[j + k * a_dim1] - a[j + i * a_dim1] * a[
-			k + i * a_dim1] - a[i + j * a_dim1] * a[i + k *
-			a_dim1];
+        i__2 = *n;
+        for (k = ia; k <= i__2; ++k) {
+            a[k + k * a_dim1] = a[k + k * a_dim1] - a[k + i * a_dim1] * a[k +
+                    i * a_dim1] - a[i + k * a_dim1] * a[i + k * a_dim1];
+            if (k == *n) {
+                goto L12;
+            }
+            ka = k + 1;
+            i__3 = *n;
+            for (j = ka; j <= i__3; ++j) {
+                a[j + k * a_dim1] = a[j + k * a_dim1] - a[j + i * a_dim1] * a[
+                        k + i * a_dim1] - a[i + j * a_dim1] * a[i + k *
+                        a_dim1];
 /* L11: */
-		a[k + j * a_dim1] = a[k + j * a_dim1] - a[i + j * a_dim1] * a[
-			k + i * a_dim1] + a[j + i * a_dim1] * a[i + k *
-			a_dim1];
-	    }
+                a[k + j * a_dim1] = a[k + j * a_dim1] - a[i + j * a_dim1] * a[
+                        k + i * a_dim1] + a[j + i * a_dim1] * a[i + k *
+                        a_dim1];
+            }
 L12:
-	    ;
-	}
+            ;
+        }
 L13:
-	;
+        ;
     }
     *fail = 0;
     return 0;
@@ -199,137 +199,137 @@ doublereal *a, *b, *d, *e, *f;
     chep = 1.3877787807814457e-17;
     d[1] = a[a_dim1 + 1];
     if (*n == 1) {
-	goto L31;
+        goto L31;
     }
 
 /* MAIN K LOOP */
 
     i__1 = *n;
     for (k = 2; k <= i__1; ++k) {
-	l = k - 1;
+        l = k - 1;
 
 /*     COMPUTE NORM */
 
-	all = 0.;
-	i__2 = *n;
-	for (i = k; i <= i__2; ++i) {
+        all = 0.;
+        i__2 = *n;
+        for (i = k; i <= i__2; ++i) {
 /* L10: */
-	    all = all + a[i + l * a_dim1] * a[i + l * a_dim1] + a[l + i *
-		    a_dim1] * a[l + i * a_dim1];
-	}
-	all = (double)sqrt((double)all);
+            all = all + a[i + l * a_dim1] * a[i + l * a_dim1] + a[l + i *
+                    a_dim1] * a[l + i * a_dim1];
+        }
+        all = (double)sqrt((double)all);
 
 /*     COMPUTE CONSTANTS */
 
-	c = 1.;
-	s = 0.;
-	r = (double)sqrt((double)(a[k + l * a_dim1] * a[k + l * a_dim1] + a[l + k * a_dim1] *
-		a[l + k * a_dim1]));
-	if (abs(r) < 1e-50) {
-	    r = 0.;
-	}
-	if (r == 0.) {
-	    goto L11;
-	}
-	c = a[k + l * a_dim1] / r;
-	s = a[l + k * a_dim1] / r;
+        c = 1.;
+        s = 0.;
+        r = (double)sqrt((double)(a[k + l * a_dim1] * a[k + l * a_dim1] + a[l + k * a_dim1] *
+                a[l + k * a_dim1]));
+        if (abs(r) < 1e-50) {
+            r = 0.;
+        }
+        if (r == 0.) {
+            goto L11;
+        }
+        c = a[k + l * a_dim1] / r;
+        s = a[l + k * a_dim1] / r;
 L11:
-	alr = all * c;
-	ali = all * s;
-	a[l + l * a_dim1] = 0.;
+        alr = all * c;
+        ali = all * s;
+        a[l + l * a_dim1] = 0.;
 
 /*     TEST FOR SUPERFLUOUS TRANSFORMATION */
 
-	sm = all * (all + r);
-	if (abs(sm) < 1e-50) {
-	    sm = 0.;
-	}
-	if (sm == 0.) {
-	    goto L20;
-	}
-	g = 1. / sm;
-	a[l + l * a_dim1] = g;
+        sm = all * (all + r);
+        if (abs(sm) < 1e-50) {
+            sm = 0.;
+        }
+        if (sm == 0.) {
+            goto L20;
+        }
+        g = 1. / sm;
+        a[l + l * a_dim1] = g;
 
-	a[k + l * a_dim1] += alr;
-	a[l + k * a_dim1] += ali;
+        a[k + l * a_dim1] += alr;
+        a[l + k * a_dim1] += ali;
 
 /*     NOW COMPUTE U=A*W */
 /*     AND STORE INTO (E,F) */
 
-	t = 0.;
-	i__2 = *n;
-	for (i = k; i <= i__2; ++i) {
-	    c = a[i + i * a_dim1] * a[i + l * a_dim1];
-	    s = a[i + i * a_dim1] * a[l + i * a_dim1];
-	    if (i == k) {
-		goto L13;
-	    }
-	    ia = i - 1;
-	    i__3 = ia;
-	    for (j = k; j <= i__3; ++j) {
-		c = c + a[i + j * a_dim1] * a[j + l * a_dim1] - a[j + i *
-			a_dim1] * a[l + j * a_dim1];
+        t = 0.;
+        i__2 = *n;
+        for (i = k; i <= i__2; ++i) {
+            c = a[i + i * a_dim1] * a[i + l * a_dim1];
+            s = a[i + i * a_dim1] * a[l + i * a_dim1];
+            if (i == k) {
+                goto L13;
+            }
+            ia = i - 1;
+            i__3 = ia;
+            for (j = k; j <= i__3; ++j) {
+                c = c + a[i + j * a_dim1] * a[j + l * a_dim1] - a[j + i *
+                        a_dim1] * a[l + j * a_dim1];
 /* L12: */
-		s = s + a[i + j * a_dim1] * a[l + j * a_dim1] + a[j + i *
-			a_dim1] * a[j + l * a_dim1];
-	    }
+                s = s + a[i + j * a_dim1] * a[l + j * a_dim1] + a[j + i *
+                        a_dim1] * a[j + l * a_dim1];
+            }
 L13:
-	    if (i == *n) {
-		goto L15;
-	    }
-	    ia = i + 1;
-	    i__3 = *n;
-	    for (j = ia; j <= i__3; ++j) {
-		c = c + a[j + i * a_dim1] * a[j + l * a_dim1] + a[i + j *
-			a_dim1] * a[l + j * a_dim1];
+            if (i == *n) {
+                goto L15;
+            }
+            ia = i + 1;
+            i__3 = *n;
+            for (j = ia; j <= i__3; ++j) {
+                c = c + a[j + i * a_dim1] * a[j + l * a_dim1] + a[i + j *
+                        a_dim1] * a[l + j * a_dim1];
 /* L14: */
-		s = s + a[j + i * a_dim1] * a[l + j * a_dim1] - a[i + j *
-			a_dim1] * a[j + l * a_dim1];
-	    }
+                s = s + a[j + i * a_dim1] * a[l + j * a_dim1] - a[i + j *
+                        a_dim1] * a[j + l * a_dim1];
+            }
 L15:
-	    e[i] = g * c;
-	    f[i] = g * s;
+            e[i] = g * c;
+            f[i] = g * s;
 /* L16: */
-	    t = t + a[i + l * a_dim1] * c + a[l + i * a_dim1] * s;
-	}
-	t *= g * g;
+            t = t + a[i + l * a_dim1] * c + a[l + i * a_dim1] * s;
+        }
+        t *= g * g;
 
 /*    TRANSFORM  MATRIX */
 
-	i__2 = *n;
-	for (i = k; i <= i__2; ++i) {
-	    a[i + i * a_dim1] = a[i + i * a_dim1] - (a[i + l * a_dim1] * e[i]
-		    + a[l + i * a_dim1] * f[i]) * 2. + t * (a[i + l * a_dim1]
-		    * a[i + l * a_dim1] + a[l + i * a_dim1] * a[l + i *
-		    a_dim1]);
-	    if (i == k) {
-		goto L18;
-	    }
-	    ia = i - 1;
-	    i__3 = ia;
-	    for (j = k; j <= i__3; ++j) {
-		a[i + j * a_dim1] = a[i + j * a_dim1] - a[i + l * a_dim1] * e[
-			j] - a[l + i * a_dim1] * f[j] - a[j + l * a_dim1] * e[
-			i] - a[l + j * a_dim1] * f[i] + t * (a[i + l * a_dim1]
-			 * a[j + l * a_dim1] + a[l + i * a_dim1] * a[l + j *
-			a_dim1]);
-		a[j + i * a_dim1] = a[j + i * a_dim1] - a[l + i * a_dim1] * e[
-			j] + a[i + l * a_dim1] * f[j] + a[l + j * a_dim1] * e[
-			i] - a[j + l * a_dim1] * f[i] + t * (a[l + i * a_dim1]
-			 * a[j + l * a_dim1] - a[i + l * a_dim1] * a[l + j *
-			a_dim1]);
+        i__2 = *n;
+        for (i = k; i <= i__2; ++i) {
+            a[i + i * a_dim1] = a[i + i * a_dim1] - (a[i + l * a_dim1] * e[i]
+                    + a[l + i * a_dim1] * f[i]) * 2. + t * (a[i + l * a_dim1]
+                    * a[i + l * a_dim1] + a[l + i * a_dim1] * a[l + i *
+                    a_dim1]);
+            if (i == k) {
+                goto L18;
+            }
+            ia = i - 1;
+            i__3 = ia;
+            for (j = k; j <= i__3; ++j) {
+                a[i + j * a_dim1] = a[i + j * a_dim1] - a[i + l * a_dim1] * e[
+                        j] - a[l + i * a_dim1] * f[j] - a[j + l * a_dim1] * e[
+                        i] - a[l + j * a_dim1] * f[i] + t * (a[i + l * a_dim1]
+                         * a[j + l * a_dim1] + a[l + i * a_dim1] * a[l + j *
+                        a_dim1]);
+                a[j + i * a_dim1] = a[j + i * a_dim1] - a[l + i * a_dim1] * e[
+                        j] + a[i + l * a_dim1] * f[j] + a[l + j * a_dim1] * e[
+                        i] - a[j + l * a_dim1] * f[i] + t * (a[l + i * a_dim1]
+                         * a[j + l * a_dim1] - a[i + l * a_dim1] * a[l + j *
+                        a_dim1]);
 /* L17: */
-	    }
+            }
 L18:
-	    ;
-	}
+            ;
+        }
 
 /*     STORE DIAGONAL AND CODIAGONAL ELEMENTS */
 
 L20:
-	d[k] = a[k + k * a_dim1];
-	e[k] = -alr;
-	f[k] = -ali;
+        d[k] = a[k + k * a_dim1];
+        e[k] = -alr;
+        f[k] = -ali;
 /* L30: */
     }
 
@@ -339,62 +339,62 @@ L31:
     a[*n + *n * a_dim1] = 1.;
     b[*n + *n * b_dim1] = 0.;
     if (*n == 1) {
-	return 0;
+        return 0;
     }
     i__1 = *n;
     for (kk = 2; kk <= i__1; ++kk) {
-	k = *n - kk + 2;
-	l = k - 1;
+        k = *n - kk + 2;
+        l = k - 1;
 
 /*     SKIP TRANSFORMATION IF UNIT */
 
-	if ((d__1 = a[l + l * a_dim1], abs(d__1)) < 1e-50) {
-	    a[l + l * a_dim1] = 0.;
-	}
-	if (a[l + l * a_dim1] == 0.) {
-	    goto L36;
-	}
+        if ((d__1 = a[l + l * a_dim1], abs(d__1)) < 1e-50) {
+            a[l + l * a_dim1] = 0.;
+        }
+        if (a[l + l * a_dim1] == 0.) {
+            goto L36;
+        }
 
 /*     COMPUTE PRODUCT */
 
-	i__2 = *n;
-	for (j = k; j <= i__2; ++j) {
-	    c = 0.;
-	    s = 0.;
-	    i__3 = *n;
-	    for (i = k; i <= i__3; ++i) {
-		c = c + a[i + l * a_dim1] * a[i + j * a_dim1] + a[l + i *
-			a_dim1] * b[i + j * b_dim1];
+        i__2 = *n;
+        for (j = k; j <= i__2; ++j) {
+            c = 0.;
+            s = 0.;
+            i__3 = *n;
+            for (i = k; i <= i__3; ++i) {
+                c = c + a[i + l * a_dim1] * a[i + j * a_dim1] + a[l + i *
+                        a_dim1] * b[i + j * b_dim1];
 /* L33: */
-		s = s + a[i + l * a_dim1] * b[i + j * b_dim1] - a[l + i *
-			a_dim1] * a[i + j * a_dim1];
-	    }
-	    c *= a[l + l * a_dim1];
-	    s *= a[l + l * a_dim1];
-	    i__3 = *n;
-	    for (i = k; i <= i__3; ++i) {
-		a[i + j * a_dim1] = a[i + j * a_dim1] - c * a[i + l * a_dim1]
-			+ s * a[l + i * a_dim1];
+                s = s + a[i + l * a_dim1] * b[i + j * b_dim1] - a[l + i *
+                        a_dim1] * a[i + j * a_dim1];
+            }
+            c *= a[l + l * a_dim1];
+            s *= a[l + l * a_dim1];
+            i__3 = *n;
+            for (i = k; i <= i__3; ++i) {
+                a[i + j * a_dim1] = a[i + j * a_dim1] - c * a[i + l * a_dim1]
+                        + s * a[l + i * a_dim1];
 /* L34: */
-		b[i + j * b_dim1] = b[i + j * b_dim1] - c * a[l + i * a_dim1]
-			- s * a[i + l * a_dim1];
-	    }
+                b[i + j * b_dim1] = b[i + j * b_dim1] - c * a[l + i * a_dim1]
+                        - s * a[i + l * a_dim1];
+            }
 /* L35: */
-	}
+        }
 
 /*     MAKE NEW LINE */
 
 L36:
-	i__2 = *n;
-	for (i = k; i <= i__2; ++i) {
-	    a[i + l * a_dim1] = 0.;
-	    a[l + i * a_dim1] = 0.;
-	    b[i + l * b_dim1] = 0.;
+        i__2 = *n;
+        for (i = k; i <= i__2; ++i) {
+            a[i + l * a_dim1] = 0.;
+            a[l + i * a_dim1] = 0.;
+            b[i + l * b_dim1] = 0.;
 /* L37: */
-	    b[l + i * b_dim1] = 0.;
-	}
-	a[l + l * a_dim1] = 1.;
-	b[l + l * b_dim1] = 0.;
+            b[l + i * b_dim1] = 0.;
+        }
+        a[l + l * a_dim1] = 1.;
+        b[l + l * b_dim1] = 0.;
 /* L40: */
     }
     return 0;
@@ -410,7 +410,7 @@ integer *fail;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-	double d_sign(double *,double *);
+        double d_sign(double *,double *);
 
     /* Local variables */
      doublereal chep, c, g, h;
@@ -486,41 +486,41 @@ integer *fail;
 /*     TO FIRST LOCATION */
 
     if (*n == 1) {
-	goto L12;
+        goto L12;
     }
     i__1 = *n;
     for (k = 2; k <= i__1; ++k) {
-	r = (double)sqrt((double)(e[k] * e[k] + f[k] * f[k]));
-	if (abs(r) < 1e-50) {
-	    r = 0.;
-	}
-	if (r == 0.) {
-	    goto L11;
-	}
-	c = e[k] / r;
-	s = f[k] / r;
+        r = (double)sqrt((double)(e[k] * e[k] + f[k] * f[k]));
+        if (abs(r) < 1e-50) {
+            r = 0.;
+        }
+        if (r == 0.) {
+            goto L11;
+        }
+        c = e[k] / r;
+        s = f[k] / r;
 
 /*     ACCUMULATE ROTATION */
 
-	i__2 = *n;
-	for (i = 1; i <= i__2; ++i) {
-	    p = a[i + k * a_dim1] * c - b[i + k * b_dim1] * s;
-	    b[i + k * b_dim1] = a[i + k * a_dim1] * s + b[i + k * b_dim1] * c;
+        i__2 = *n;
+        for (i = 1; i <= i__2; ++i) {
+            p = a[i + k * a_dim1] * c - b[i + k * b_dim1] * s;
+            b[i + k * b_dim1] = a[i + k * a_dim1] * s + b[i + k * b_dim1] * c;
 /* L10: */
-	    a[i + k * a_dim1] = p;
-	}
+            a[i + k * a_dim1] = p;
+        }
 
 /*     TRANSFORM NEXT E */
 
-	if (k == *n) {
-	    goto L11;
-	}
-	l = k + 1;
-	p = e[l] * c - f[l] * s;
-	f[l] = e[l] * s + f[l] * c;
-	e[l] = p;
+        if (k == *n) {
+            goto L11;
+        }
+        l = k + 1;
+        p = e[l] * c - f[l] * s;
+        f[l] = e[l] * s + f[l] * c;
+        e[l] = p;
 L11:
-	e[k - 1] = r;
+        e[k - 1] = r;
     }
 L12:
     e[*n] = 0.;
@@ -535,108 +535,108 @@ L12:
 
     i__1 = *n;
     for (l = 1; l <= i__1; ++l) {
-	j = 0;
-	h = chep * ((d__1 = d[l], abs(d__1)) + (d__2 = e[l], abs(d__2)));
-	if (bb < h) {
-	    bb = h;
-	}
+        j = 0;
+        h = chep * ((d__1 = d[l], abs(d__1)) + (d__2 = e[l], abs(d__2)));
+        if (bb < h) {
+            bb = h;
+        }
 
 /*     LOOK FOR SMALL SUBDIAGONAL ELEMENT */
 
-	i__2 = *n;
-	for (m = l; m <= i__2; ++m) {
-	    if ((d__1 = e[m], abs(d__1)) <= bb) {
-		goto L21;
-	    }
+        i__2 = *n;
+        for (m = l; m <= i__2; ++m) {
+            if ((d__1 = e[m], abs(d__1)) <= bb) {
+                goto L21;
+            }
 /* L20: */
-	}
+        }
 L21:
-	if (m == l) {
-	    goto L31;
-	}
+        if (m == l) {
+            goto L31;
+        }
 
 /*     NEXT ITERATION */
 
 L24:
-	if (j == 30) {
-	    return 0;
-	}
-	++j;
+        if (j == 30) {
+            return 0;
+        }
+        ++j;
 
 /*     FORM SHIFT */
 
-	p = (d[l + 1] - d[l]) / (e[l] * 2.);
-	r = (double)sqrt((double)(p * p + 1.));
-	h = d[l] - e[l] / (p + d_sign(&r, &p));
+        p = (d[l + 1] - d[l]) / (e[l] * 2.);
+        r = (double)sqrt((double)(p * p + 1.));
+        h = d[l] - e[l] / (p + d_sign(&r, &p));
 
-	i__2 = *n;
-	for (i = l; i <= i__2; ++i) {
+        i__2 = *n;
+        for (i = l; i <= i__2; ++i) {
 /* L25: */
-	    d[i] -= h;
-	}
-	ff += h;
+            d[i] -= h;
+        }
+        ff += h;
 
 /*     QL TRANSFORMATION */
 
-	p = d[m];
-	c = 1.;
-	s = 0.;
-	ma = m - 1;
+        p = d[m];
+        c = 1.;
+        s = 0.;
+        ma = m - 1;
 
-	i__2 = ma;
-	for (ia = l; ia <= i__2; ++ia) {
-	    i = ma - ia + l;
-	    i1 = i + 1;
-	    g = c * e[i];
-	    h = c * p;
-	    if (abs(p) < (d__1 = e[i], abs(d__1))) {
-		goto L26;
-	    }
+        i__2 = ma;
+        for (ia = l; ia <= i__2; ++ia) {
+            i = ma - ia + l;
+            i1 = i + 1;
+            g = c * e[i];
+            h = c * p;
+            if (abs(p) < (d__1 = e[i], abs(d__1))) {
+                goto L26;
+            }
 
-	    c = e[i] / p;
-	    r = (double)sqrt((double)(c * c + 1.));
-	    e[i1] = s * p * r;
-	    s = c / r;
-	    c = 1. / r;
-	    goto L27;
+            c = e[i] / p;
+            r = (double)sqrt((double)(c * c + 1.));
+            e[i1] = s * p * r;
+            s = c / r;
+            c = 1. / r;
+            goto L27;
 
 L26:
-	    c = p / e[i];
-	    r = (double)sqrt((double)(c * c + 1.));
-	    e[i1] = s * e[i] * r;
-	    s = 1. / r;
-	    c /= r;
+            c = p / e[i];
+            r = (double)sqrt((double)(c * c + 1.));
+            e[i1] = s * e[i] * r;
+            s = 1. / r;
+            c /= r;
 
 L27:
-	    p = c * d[i] - s * g;
-	    d[i1] = h + s * (c * g + s * d[i]);
+            p = c * d[i] - s * g;
+            d[i1] = h + s * (c * g + s * d[i]);
 
 /*     FORM VECTOR */
 
-	    i__3 = *n;
-	    for (k = 1; k <= i__3; ++k) {
-		hr = a[k + i1 * a_dim1];
-		hi = b[k + i1 * b_dim1];
-		a[k + i1 * a_dim1] = s * a[k + i * a_dim1] + c * hr;
-		b[k + i1 * b_dim1] = s * b[k + i * b_dim1] + c * hi;
-		a[k + i * a_dim1] = c * a[k + i * a_dim1] - s * hr;
+            i__3 = *n;
+            for (k = 1; k <= i__3; ++k) {
+                hr = a[k + i1 * a_dim1];
+                hi = b[k + i1 * b_dim1];
+                a[k + i1 * a_dim1] = s * a[k + i * a_dim1] + c * hr;
+                b[k + i1 * b_dim1] = s * b[k + i * b_dim1] + c * hi;
+                a[k + i * a_dim1] = c * a[k + i * a_dim1] - s * hr;
 /* L28: */
-		b[k + i * b_dim1] = c * b[k + i * b_dim1] - s * hi;
-	    }
+                b[k + i * b_dim1] = c * b[k + i * b_dim1] - s * hi;
+            }
 
 /* L30: */
-	}
+        }
 
-	e[l] = s * p;
-	d[l] = c * p;
-	if ((d__1 = e[l], abs(d__1)) > bb) {
-	    goto L24;
-	}
+        e[l] = s * p;
+        d[l] = c * p;
+        if ((d__1 = e[l], abs(d__1)) > bb) {
+            goto L24;
+        }
 
 /*     ROOT FOUND */
 
 L31:
-	d[l] += ff;
+        d[l] += ff;
 /* L32: */
     }
 
@@ -644,36 +644,36 @@ L31:
 
     i__1 = *n;
     for (i = 1; i <= i__1; ++i) {
-	k = i;
-	i__2 = *n;
-	for (j = i; j <= i__2; ++j) {
-	    if (d[j] < d[k]) {
-		k = j;
-	    }
+        k = i;
+        i__2 = *n;
+        for (j = i; j <= i__2; ++j) {
+            if (d[j] < d[k]) {
+                k = j;
+            }
 /* L40: */
-	}
+        }
 
 
-	if (k == i) {
-	    goto L42;
-	}
-	p = d[i];
-	d[i] = d[k];
-	d[k] = p;
+        if (k == i) {
+            goto L42;
+        }
+        p = d[i];
+        d[i] = d[k];
+        d[k] = p;
 
-	i__2 = *n;
-	for (j = 1; j <= i__2; ++j) {
-	    p = a[j + i * a_dim1];
-	    a[j + i * a_dim1] = a[j + k * a_dim1];
-	    a[j + k * a_dim1] = p;
+        i__2 = *n;
+        for (j = 1; j <= i__2; ++j) {
+            p = a[j + i * a_dim1];
+            a[j + i * a_dim1] = a[j + k * a_dim1];
+            a[j + k * a_dim1] = p;
 
-	    p = b[j + i * b_dim1];
-	    b[j + i * b_dim1] = b[j + k * b_dim1];
+            p = b[j + i * b_dim1];
+            b[j + i * b_dim1] = b[j + k * b_dim1];
 /* L41: */
-	    b[j + k * b_dim1] = p;
-	}
+            b[j + k * b_dim1] = p;
+        }
 L42:
-	;
+        ;
     }
     *fail = 0;
     return 0;

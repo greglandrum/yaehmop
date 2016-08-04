@@ -83,8 +83,8 @@ float calc_R0(float c1,float r1,float c2,float r2)
  *
  ****************************************************************************/
 void bond_length_to_bond_valence(atom_type *atom1,atom_type *atom2,
-				 float length,float *R0_val,
-				 float *valence)
+                                 float length,float *R0_val,
+                                 float *valence)
 {
 
   /* do we need to calculate R0? */

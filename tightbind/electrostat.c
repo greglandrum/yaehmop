@@ -202,11 +202,11 @@ void AO_occupations(cell,num_orbs,OP_mat,orbital_lookup_table,accum)
     if( atom->ns != 0 ){
       /* sweep down */
       for(j=orb_tab;j<num_orbs;j++){
-	accum[orbs_so_far] += .5*OP_mat[j*num_orbs + orb_tab];
+        accum[orbs_so_far] += .5*OP_mat[j*num_orbs + orb_tab];
       }
       /* sweep across */
       for(j=0;j<=orb_tab;j++){
-	accum[orbs_so_far] += .5*OP_mat[orb_tab*num_orbs + j];
+        accum[orbs_so_far] += .5*OP_mat[orb_tab*num_orbs + j];
       }
 fprintf(stderr,"Atom %d s orbital occupation: %lg\n",i,accum[orbs_so_far]);
       orbs_so_far++;
@@ -214,12 +214,12 @@ fprintf(stderr,"Atom %d s orbital occupation: %lg\n",i,accum[orbs_so_far]);
 
     if( atom->np != 0 ){
       for(j=orb_tab + BEGIN_P;j <= orb_tab + END_P;j++){
-	for( k=j;k<num_orbs;k++){
-	  accum[orbs_so_far] += .5*OP_mat[k*num_orbs+j];
-	}
-	for( k=0;k<=j;k++){
-	  accum[orbs_so_far] += .5*OP_mat[j*num_orbs+k];
-	}
+        for( k=j;k<num_orbs;k++){
+          accum[orbs_so_far] += .5*OP_mat[k*num_orbs+j];
+        }
+        for( k=0;k<=j;k++){
+          accum[orbs_so_far] += .5*OP_mat[j*num_orbs+k];
+        }
       }
 
 fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
@@ -227,12 +227,12 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
     }
     if( atom->nd != 0 ){
       for(j=orb_tab + BEGIN_D;j <= orb_tab + END_D;j++){
-	for(k=j;k<num_orbs;k++){
-	  accum[orbs_so_far] += .5*OP_mat[k*num_orbs+j];
-	}
-	for(k=0;k<=j;k++){
-	  accum[orbs_so_far] += .5*OP_mat[k*num_orbs+j];
-	}
+        for(k=j;k<num_orbs;k++){
+          accum[orbs_so_far] += .5*OP_mat[k*num_orbs+j];
+        }
+        for(k=0;k<=j;k++){
+          accum[orbs_so_far] += .5*OP_mat[k*num_orbs+j];
+        }
       }
       orbs_so_far++;
     }
@@ -261,24 +261,24 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
       electrons_left = atom->num_valence;
 
       if( atom->ns ){
-	if( electrons_left >= 2.0 ){
-	  free_atom_occups[orbs_so_far++] = 2.0;
-	  electrons_left -= 2.0;
-	}
-	else{
-	  free_atom_occups[orbs_so_far++] = electrons_left;
-	  electrons_left = 0.0;
-	}
+        if( electrons_left >= 2.0 ){
+          free_atom_occups[orbs_so_far++] = 2.0;
+          electrons_left -= 2.0;
+        }
+        else{
+          free_atom_occups[orbs_so_far++] = electrons_left;
+          electrons_left = 0.0;
+        }
       }
       if( atom->np ){
-	if( electrons_left >= 6.0 ){
-	  free_atom_occups[orbs_so_far++] = 6.0;
-	  electrons_left -= 6.0;
-	}
-	else{
-	  free_atom_occups[orbs_so_far++] = electrons_left;
-	  electrons_left = 0.0;
-	}
+        if( electrons_left >= 6.0 ){
+          free_atom_occups[orbs_so_far++] = 6.0;
+          electrons_left -= 6.0;
+        }
+        else{
+          free_atom_occups[orbs_so_far++] = electrons_left;
+          electrons_left = 0.0;
+        }
       }
     }
   }
@@ -321,7 +321,7 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
  *
  ****************************************************************************/
 void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_lookup_table,
-			 electrostat_term,eHMO_term,total_E,accum,net_chgs)
+                         electrostat_term,eHMO_term,total_E,accum,net_chgs)
   cell_type *cell;
   int num_orbs;
   int *orbital_lookup_table;
@@ -384,12 +384,12 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
     atomic_energy[i] = 0.0;
     if( atomA->ns != 0 ){
       if(electrons_left > 1){
-	atomic_energy[i] += atomA->coul_s * 2.0;
-	electrons_left -= 2;
+        atomic_energy[i] += atomA->coul_s * 2.0;
+        electrons_left -= 2;
       }
       else{
-	atomic_energy[i] += atomA->coul_s;
-	electrons_left = 0;
+        atomic_energy[i] += atomA->coul_s;
+        electrons_left = 0;
       }
     }
     if( atomA->np != 0 ){
@@ -420,99 +420,99 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
       atomB = &(cell->atoms[numB]);
 
       /************
-	This isn't set up particularly efficiently...
-	if this ever becomes a bottleneck, the code is easily improved.
+        This isn't set up particularly efficiently...
+        if this ever becomes a bottleneck, the code is easily improved.
       *************/
 
 
       /*******
-	get the distance from the symmetric distance matrix and convert it to bohrs...
-	(this reference assumes that numA < numB)
+        get the distance from the symmetric distance matrix and convert it to bohrs...
+        (this reference assumes that numA < numB)
       ********/
       R = cell->distance_mat[ numB*(numB+1)/2 + numA ]/BOHR;
 
       /******
 
-	evaluate the electrostatic term due to center A
+        evaluate the electrostatic term due to center A
 
       *******/
       rhoA_term = 0.0;
       orbs_so_far = orbital_lookup_table[numA];
       if( atomA->ns != 0){
-	zeta = atomA->exp_s;
-	n = atomA->ns;
-	p_sum = 0;
-	for(p=1; p <= 2*n; p++){
-	  p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
-	}
-	p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
+        zeta = atomA->exp_s;
+        n = atomA->ns;
+        p_sum = 0;
+        for(p=1; p <= 2*n; p++){
+          p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
+        }
+        p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
 
-	rhoA_term += accum[orbs_so_far] * (1/R - p_sum);
-	orbs_so_far++;
+        rhoA_term += accum[orbs_so_far] * (1/R - p_sum);
+        orbs_so_far++;
       }
       if( atomA->np != 0){
-	zeta = atomA->exp_p;
-	n = atomA->np;
-	p_sum = 0;
-	for(p=1; p <= 2*n; p++){
-	  p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
-	}
-	p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
+        zeta = atomA->exp_p;
+        n = atomA->np;
+        p_sum = 0;
+        for(p=1; p <= 2*n; p++){
+          p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
+        }
+        p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
 
-	rhoA_term += accum[orbs_so_far] * (1/R - p_sum);
-	orbs_so_far++;
+        rhoA_term += accum[orbs_so_far] * (1/R - p_sum);
+        orbs_so_far++;
       }
       if( atomA->nd != 0){
-	/********
-	  d orbitals don't work yet, since I haven't gotten around to figuring out
-	  how to deal with double zeta wave functions yet.
-	  ********/
-	error("You can't optimize structures with d orbitals yet... sorry.");
+        /********
+          d orbitals don't work yet, since I haven't gotten around to figuring out
+          how to deal with double zeta wave functions yet.
+          ********/
+        error("You can't optimize structures with d orbitals yet... sorry.");
       }
 
       /******
-	evaluate the term due to center B
+        evaluate the term due to center B
       *******/
       rhoB_term = 0.0;
       orbs_so_far = orbital_lookup_table[numB];
       if( atomB->ns != 0){
-	zeta = atomB->exp_s;
-	n = atomB->ns;
-	p_sum = 0;
-	for(p=1; p <= 2*n; p++){
-	  p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
-	}
-	p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
+        zeta = atomB->exp_s;
+        n = atomB->ns;
+        p_sum = 0;
+        for(p=1; p <= 2*n; p++){
+          p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
+        }
+        p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
 
-	rhoB_term += accum[orbs_so_far] * (1/R - p_sum);
-	orbs_so_far++;
+        rhoB_term += accum[orbs_so_far] * (1/R - p_sum);
+        orbs_so_far++;
       }
       if( atomB->np != 0){
-	zeta = atomB->exp_p;
-	n = atomB->np;
-	p_sum = 0;
-	for(p=1; p <= 2*n; p++){
-	  p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
-	}
-	p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
+        zeta = atomB->exp_p;
+        n = atomB->np;
+        p_sum = 0;
+        for(p=1; p <= 2*n; p++){
+          p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
+        }
+        p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
 
-	rhoB_term += accum[orbs_so_far] * (1/R - p_sum);
-	orbs_so_far++;
+        rhoB_term += accum[orbs_so_far] * (1/R - p_sum);
+        orbs_so_far++;
       }
       if( atomB->nd != 0){
-	/********
-	  d orbitals don't work yet, since I haven't gotten around to figuring out
-	  how to deal with double zeta wave functions yet.
-	  ********/
-	error("You can't optimize structures with d orbitals yet... sorry.");
+        /********
+          d orbitals don't work yet, since I haven't gotten around to figuring out
+          how to deal with double zeta wave functions yet.
+          ********/
+        error("You can't optimize structures with d orbitals yet... sorry.");
       }
 
       /*********
-	figure out the nuclear charges...
+        figure out the nuclear charges...
 
-	This uses Slater's rules i.e. each electron in the next shell in shields for .8,
-	anything farther in shields for 1. We're not taking the valence orbitals
-	into account here (they come into play in the rho terms calculated above).
+        This uses Slater's rules i.e. each electron in the next shell in shields for .8,
+        anything farther in shields for 1. We're not taking the valence orbitals
+        into account here (they come into play in the rho terms calculated above).
       *********/
       ZA = atomA->num_valence;
       ZB = atomB->num_valence;
@@ -520,51 +520,51 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
       /* things are wierd for d orbitals (and they aren't implemented yet anyway) */
 #if 0
       if( atomA->nd == 0 ){
-	/********
-	  we can use the quantum number of the s and p orbitals to figure out the number
-	  of electrons in the next shell in.
-	  *********/
+        /********
+          we can use the quantum number of the s and p orbitals to figure out the number
+          of electrons in the next shell in.
+          *********/
 #define MULTI .15
-	switch(atomA->ns){
-	case 2:
-	  ZA += NEXT_SHELL_IN * 2;
-	  break;
-	case 3:
-	  ZA += NEXT_SHELL_IN * 6;
-	  break;
-	case 4:
-	  ZA += NEXT_SHELL_IN * 16;
-	  break;
-	}
+        switch(atomA->ns){
+        case 2:
+          ZA += NEXT_SHELL_IN * 2;
+          break;
+        case 3:
+          ZA += NEXT_SHELL_IN * 6;
+          break;
+        case 4:
+          ZA += NEXT_SHELL_IN * 16;
+          break;
+        }
       }
 
 
       if( atomB->nd == 0 ){
-	/********
-	  we can use the quantum number of the s and p orbitals to figure out the number
-	  of electrons in the next shell in.
-	  *********/
-	switch(atomB->ns){
-	case 2:
-	  ZB += NEXT_SHELL_IN * 2;
-	  break;
-	case 3:
-	  ZB += NEXT_SHELL_IN * 6;
-	  break;
-	case 4:
-	  ZB += NEXT_SHELL_IN * 16;
-	  break;
-	}
+        /********
+          we can use the quantum number of the s and p orbitals to figure out the number
+          of electrons in the next shell in.
+          *********/
+        switch(atomB->ns){
+        case 2:
+          ZB += NEXT_SHELL_IN * 2;
+          break;
+        case 3:
+          ZB += NEXT_SHELL_IN * 6;
+          break;
+        case 4:
+          ZB += NEXT_SHELL_IN * 16;
+          break;
+        }
       }
 #endif
 
       /*******
-	now do the total electrostatic energy (this distance needs to be in bohr).
+        now do the total electrostatic energy (this distance needs to be in bohr).
       *******/
 
       electro_accum = ZA*ZB/R;
       fprintf(stderr, "Za:  %lf Zb: %lf  R: %lf  ZaZb/R: %lf Za*rhoB: %lf Zb*rhoA %lf\n",
-	      ZA,ZB,R,electro_accum,ZA*rhoB_term,ZB*rhoA_term);
+              ZA,ZB,R,electro_accum,ZA*rhoB_term,ZB*rhoA_term);
 
       electro_accum -= .5*(ZA*rhoB_term + ZB*rhoA_term);
 

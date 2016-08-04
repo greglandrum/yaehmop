@@ -138,8 +138,8 @@ void general_read(char *filename)
 
   /*****
 
-	okay, grab the first non-blank, non-comment line
-	and work with that to see what kind of file we've
+        okay, grab the first non-blank, non-comment line
+        and work with that to see what kind of file we've
     got.  This is relying on matching to strings which
     may not be in files produced by older versions of
     bind or the utilities, so there is an extra bit at
@@ -150,7 +150,7 @@ void general_read(char *filename)
   skipcomments(infile,instring);
   upcase(instring);
   if( strstr(instring,"#BIND_OUTPUT") ||
-	     strstr(instring,"MOVIE-FILE")) {
+             strstr(instring,"MOVIE-FILE")) {
     printf("%s looks like a molecule file.\n",file_name);
     fclose(infile);
     new_molecule(file_name);
@@ -177,12 +177,12 @@ void general_read(char *filename)
     fclose(infile);
     new_cont_plot(file_name);
   } else if(strstr(instring,"#DOS DATA") || strstr(instring,"# DOS DATA") ||
-	    strstr(instring,"#COOP DATA")){
+            strstr(instring,"#COOP DATA")){
     printf("%s looks like a property file.\n",file_name);
     fclose(infile);
     new_prop_graph(file_name);
   } else if(strstr(instring,"#BAND_DATA") ||strstr(instring,"#BAND DATA") ||
-	    strstr(instring,"#FATBANDS")){
+            strstr(instring,"#FATBANDS")){
     printf("%s looks like a band file.\n",file_name);
     fclose(infile);
     new_band_graph(file_name);
@@ -191,7 +191,7 @@ void general_read(char *filename)
     fclose(infile);
     new_walsh_graph(file_name);
   } else if(strstr(instring,"#FMO RESULTS") ||
-	    strstr(instring,"# FMO RESULTS") ){
+            strstr(instring,"# FMO RESULTS") ){
     printf("%s looks like an FMO file.\n",file_name);
     fclose(infile);
     new_FMO_diagram(file_name);
@@ -248,8 +248,8 @@ void general_read(char *filename)
 #endif
       scanf("%d",&choice);
       if( choice > num_choices ){
-	printf("Invalid choice, try again.\n");
-	choice = 0;
+        printf("Invalid choice, try again.\n");
+        choice = 0;
       }
     }
     switch(choice){
@@ -328,18 +328,18 @@ void save_bands( FILE *vfig_file,prim_type *prim,object_type *obj )
     fprintf(vfig_file,"\n");
   }
   fprintf(vfig_file,"DO_X_TICS: %d\nDO_Y_TICS: %d\nDO_TITLE: %d\n",
-	  the_data->do_x_tics,the_data->do_y_tics,the_data->do_title);
+          the_data->do_x_tics,the_data->do_y_tics,the_data->do_title);
   fprintf(vfig_file,"STYLES:\n");
   fprintf(vfig_file,"\t%d\n",the_data->styles[0]);
 
   fprintf(vfig_file,"MIN_X: %lf\nMAX_X: %lf\nMAX_Y: %lf\nMIN_Y: %lf\n",
-	  the_data->min_x,the_data->max_x,the_data->max_y,the_data->min_y);
+          the_data->min_x,the_data->max_x,the_data->max_y,the_data->min_y);
   fprintf(vfig_file,"TIC_SEP_X: %lf\nNUM_TICS_X: %d\nTIC_START_X: %lf\n",
-	  the_data->tic_sep_x,(int)the_data->num_tics_x,the_data->tic_start_x);
+          the_data->tic_sep_x,(int)the_data->num_tics_x,the_data->tic_start_x);
   fprintf(vfig_file,"TIC_SEP_Y: %lf\nNUM_TICS_Y: %d\nTIC_START_Y: %lf\n",
-	  the_data->tic_sep_y,(int)the_data->num_tics_y,the_data->tic_start_y);
+          the_data->tic_sep_y,(int)the_data->num_tics_y,the_data->tic_start_y);
   fprintf(vfig_file,"SHOW_FERMI: %d\nFERMI_E: %lf\n",the_graph->show_fermi,
-	  the_graph->Fermi_E);
+          the_graph->Fermi_E);
 
 }
 
@@ -373,8 +373,8 @@ int save_bin_molecule(molec_type *molec)
   }
 
 #define TRY_WRITE(_a_,_b_,_c_) {num_written=write(_a_,_b_,_c_);\
-		if(num_written!=_c_){error("wrong size written");\
-				     unlink(filename);return(-2);}}
+                if(num_written!=_c_){error("wrong size written");\
+                                     unlink(filename);return(-2);}}
   TRY_WRITE(outfile,RECOG_STRING,strlen(RECOG_STRING));
   TRY_WRITE(outfile,molec,sizeof(molec_type));
   size=molec->num_atoms*molec->num_frames*sizeof(atom_type);
@@ -425,8 +425,8 @@ int read_bin_molecule(molec_type *molec)
   }
 
 #define TRY_READ(_a_,_b_,_c_) {num_written=read(_a_,_b_,_c_);\
-		if(num_written!=_c_){error("wrong size written");\
-				     unlink(filename);return(-2);}}
+                if(num_written!=_c_){error("wrong size written");\
+                                     unlink(filename);return(-2);}}
   TRY_READ(infile,instring,strlen(RECOG_STRING));
   if(strcmp(instring,RECOG_STRING)){
     error("Recognition string does not match.  Mabye the file is corrupted.");
@@ -599,7 +599,7 @@ void save_graph( FILE *vfig_file,prim_type *prim,object_type *obj )
     fprintf(vfig_file,"\n");
   }
   fprintf(vfig_file,"DO_X_TICS: %d\nDO_Y_TICS: %d\nDO_TITLE: %d\n",
-	  the_graph->do_x_tics,the_graph->do_y_tics,the_graph->do_title);
+          the_graph->do_x_tics,the_graph->do_y_tics,the_graph->do_title);
   fprintf(vfig_file,"CURVES:\n");
   for(i=0;i<the_graph->num_curves;i++){
     fprintf(vfig_file,"\t%d\n",the_graph->curves_to_display[i]);
@@ -609,11 +609,11 @@ void save_graph( FILE *vfig_file,prim_type *prim,object_type *obj )
     fprintf(vfig_file,"\t%d\n",the_graph->styles[i]);
   }
   fprintf(vfig_file,"MIN_X: %lf\nMAX_X: %lf\nMAX_Y: %lf\nMIN_Y: %lf\n",
-	  the_graph->min_x,the_graph->max_x,the_graph->max_y,the_graph->min_y);
+          the_graph->min_x,the_graph->max_x,the_graph->max_y,the_graph->min_y);
   fprintf(vfig_file,"TIC_SEP_X: %lf\nNUM_TICS_X: %d\nTIC_START_X: %lf\n",
-	  the_graph->tic_sep_x,(int)the_graph->num_tics_x,the_graph->tic_start_x);
+          the_graph->tic_sep_x,(int)the_graph->num_tics_x,the_graph->tic_start_x);
   fprintf(vfig_file,"TIC_SEP_Y: %lf\nNUM_TICS_Y: %d\nTIC_START_Y: %lf\n",
-	  the_graph->tic_sep_y,(int)the_graph->num_tics_y,the_graph->tic_start_y);
+          the_graph->tic_sep_y,(int)the_graph->num_tics_y,the_graph->tic_start_y);
 }
 
 
@@ -727,18 +727,18 @@ void save_prop_graph( FILE *vfig_file,prim_type *prim,object_type *obj )
   }
   fprintf(vfig_file,"INTEGS_FOR_TICS: %d\n",prop_graph->integs_for_tics);
   fprintf(vfig_file,"MIN_X: %lf\nMAX_X: %lf\nMAX_Y: %lf\nMIN_Y: %lf\n",
-	  prop_graph->min_x,prop_graph->max_x,prop_graph->max_y,prop_graph->min_y);
+          prop_graph->min_x,prop_graph->max_x,prop_graph->max_y,prop_graph->min_y);
   fprintf(vfig_file,"DO_X_TICS: %d\nDO_Y_TICS: %d\nDO_TITLE: %d\n",
-	  the_graph->do_x_tics,the_graph->do_y_tics,the_graph->do_title);
+          the_graph->do_x_tics,the_graph->do_y_tics,the_graph->do_title);
 
   fprintf(vfig_file,"TIC_SEP_X: %lf\nNUM_TICS_X: %d\nTIC_START_X: %lf\n",
-	  the_graph->tic_sep_x,(int)the_graph->num_tics_x,the_graph->tic_start_x);
+          the_graph->tic_sep_x,(int)the_graph->num_tics_x,the_graph->tic_start_x);
   fprintf(vfig_file,"TIC_SEP_Y: %lf\nNUM_TICS_Y: %d\nTIC_START_Y: %lf\n",
-	  the_graph->tic_sep_y,(int)the_graph->num_tics_y,the_graph->tic_start_y);
+          the_graph->tic_sep_y,(int)the_graph->num_tics_y,the_graph->tic_start_y);
 
   fprintf(vfig_file,"PROP_TYPE: %d\n",prop_graph->type);
   fprintf(vfig_file,"SHOW_FERMI: %d\nFERMI_E: %lf\n",prop_graph->show_fermi,
-	  prop_graph->Fermi_E);
+          prop_graph->Fermi_E);
 }
 
 
@@ -795,13 +795,13 @@ void save_prim( FILE *vfig_file,prim_type *prim,object_type *obj )
   }
 
   fprintf(vfig_file,"CENT: %lf %lf %lf\n",
-	  obj->cent.x,obj->cent.y,obj->cent.z);
+          obj->cent.x,obj->cent.y,obj->cent.z);
   fprintf(vfig_file,"TRANS: %lf %lf %lf\n",
-	  obj->trans.x,obj->trans.y,obj->trans.z);
+          obj->trans.x,obj->trans.y,obj->trans.z);
   fprintf(vfig_file,"SCALE: %lf %lf %lf\n",
-	  obj->scale.x,obj->scale.y,obj->scale.z);
+          obj->scale.x,obj->scale.y,obj->scale.z);
   fprintf(vfig_file,"ROT: %lf %lf %lf\n",
-	  obj->rot.x,obj->rot.y,obj->rot.z);
+          obj->rot.x,obj->rot.y,obj->rot.z);
 
   fprintf(vfig_file,"END_OBJECT\n");
 }
@@ -950,16 +950,16 @@ int read_molec_object(FILE *vfig_file,char *filename)
       the_molec->numbers_on = temp;
     } else if(strstr(keyword,"CENT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->cent.x,
-	     &whichobj->cent.y,&whichobj->cent.z);
+             &whichobj->cent.y,&whichobj->cent.z);
     } else if(strstr(keyword,"TRANS")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->trans.x,
-	     &whichobj->trans.y,&whichobj->trans.z);
+             &whichobj->trans.y,&whichobj->trans.z);
     } else if(strstr(keyword,"SCALE")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->scale.x,
-	     &whichobj->scale.y,&whichobj->scale.z);
+             &whichobj->scale.y,&whichobj->scale.z);
     } else if(strstr(keyword,"ROT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->rot.x,
-	     &whichobj->rot.y,&whichobj->rot.z);
+             &whichobj->rot.y,&whichobj->rot.z);
     } else{
       fprintf(stderr,"Unrecognized keyword: %s\n",keyword);
     }
@@ -1078,16 +1078,16 @@ int read_MO_surf_object(FILE *vfig_file,char *filename)
       the_molec->numbers_on = temp;
     } else if(strstr(keyword,"CENT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->cent.x,
-	     &whichobj->cent.y,&whichobj->cent.z);
+             &whichobj->cent.y,&whichobj->cent.z);
     } else if(strstr(keyword,"TRANS")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->trans.x,
-	     &whichobj->trans.y,&whichobj->trans.z);
+             &whichobj->trans.y,&whichobj->trans.z);
     } else if(strstr(keyword,"SCALE")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->scale.x,
-	     &whichobj->scale.y,&whichobj->scale.z);
+             &whichobj->scale.y,&whichobj->scale.z);
     } else if(strstr(keyword,"ROT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->rot.x,
-	     &whichobj->rot.y,&whichobj->rot.z);
+             &whichobj->rot.y,&whichobj->rot.z);
     } else{
       fprintf(stderr,"Unrecognized keyword: %s\n",keyword);
     }
@@ -1168,34 +1168,34 @@ int read_graph_object(FILE *vfig_file,char *filename)
       sscanf(instring,"%s %lf",keyword,&the_graph->num_tics_y);
     } else if( strstr(keyword,"TITLE") ){
       for(i=0;i<NUM_TITLE_LINES;i++){
-	fgets(instring,MAX_STR_LEN,vfig_file);
-	instring[strlen(instring)-1] = 0;
-	strcpy(the_graph->title[i],instring);
+        fgets(instring,MAX_STR_LEN,vfig_file);
+        instring[strlen(instring)-1] = 0;
+        strcpy(the_graph->title[i],instring);
       }
     } else if( strstr(keyword,"CURVES") ){
       for(i=0;i<the_graph->num_curves;i++){
-	skipcomments(vfig_file,instring);
-	sscanf(instring,"%d",&temp);
-	the_graph->curves_to_display[i] = temp;
+        skipcomments(vfig_file,instring);
+        sscanf(instring,"%d",&temp);
+        the_graph->curves_to_display[i] = temp;
       }
     } else if( strstr(keyword,"STYLES") ){
       for(i=0;i<the_graph->num_curves;i++){
-	skipcomments(vfig_file,instring);
-	sscanf(instring,"%d",&temp);
-	the_graph->styles[i] = temp;
+        skipcomments(vfig_file,instring);
+        sscanf(instring,"%d",&temp);
+        the_graph->styles[i] = temp;
       }
     } else if(strstr(keyword,"CENT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->cent.x,
-	     &whichobj->cent.y,&whichobj->cent.z);
+             &whichobj->cent.y,&whichobj->cent.z);
     } else if(strstr(keyword,"TRANS")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->trans.x,
-	     &whichobj->trans.y,&whichobj->trans.z);
+             &whichobj->trans.y,&whichobj->trans.z);
     } else if(strstr(keyword,"SCALE")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->scale.x,
-	     &whichobj->scale.y,&whichobj->scale.z);
+             &whichobj->scale.y,&whichobj->scale.z);
     } else if(strstr(keyword,"ROT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->rot.x,
-	     &whichobj->rot.y,&whichobj->rot.z);
+             &whichobj->rot.y,&whichobj->rot.z);
     } else{
       fprintf(stderr,"Unrecognized keyword: %s\n",keyword);
     }
@@ -1295,26 +1295,26 @@ int read_band_object(FILE *vfig_file,char *filename)
       sscanf(instring,"%s %lf",keyword,&the_graph->Fermi_E);
     } else if( strstr(keyword,"TITLE") ){
       for(i=0;i<NUM_TITLE_LINES;i++){
-	fgets(instring,MAX_STR_LEN,vfig_file);
-	instring[strlen(instring)-1] = 0;
-	strcpy(the_data->title[i],instring);
+        fgets(instring,MAX_STR_LEN,vfig_file);
+        instring[strlen(instring)-1] = 0;
+        strcpy(the_data->title[i],instring);
       }
     } else if( strstr(keyword,"STYLES") ){
-	skipcomments(vfig_file,instring);
-	sscanf(instring,"%d",&temp);
-	the_data->styles[0] = temp;
+        skipcomments(vfig_file,instring);
+        sscanf(instring,"%d",&temp);
+        the_data->styles[0] = temp;
     } else if(strstr(keyword,"CENT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->cent.x,
-	     &whichobj->cent.y,&whichobj->cent.z);
+             &whichobj->cent.y,&whichobj->cent.z);
     } else if(strstr(keyword,"TRANS")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->trans.x,
-	     &whichobj->trans.y,&whichobj->trans.z);
+             &whichobj->trans.y,&whichobj->trans.z);
     } else if(strstr(keyword,"SCALE")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->scale.x,
-	     &whichobj->scale.y,&whichobj->scale.z);
+             &whichobj->scale.y,&whichobj->scale.z);
     } else if(strstr(keyword,"ROT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->rot.x,
-	     &whichobj->rot.y,&whichobj->rot.z);
+             &whichobj->rot.y,&whichobj->rot.z);
     } else{
       fprintf(stderr,"Unrecognized keyword: %s\n",keyword);
     }
@@ -1406,15 +1406,15 @@ int read_FMO_object(FILE *vfig_file,char *filename)
       sscanf(instring,"%s %lf",keyword,&the_graph->num_tics_y);
     } else if( strstr(keyword,"TITLE") ){
       for(i=0;i<NUM_TITLE_LINES;i++){
-	fgets(instring,MAX_STR_LEN,vfig_file);
-	instring[strlen(instring)-1] = 0;
-	strcpy(the_graph->title[i],instring);
+        fgets(instring,MAX_STR_LEN,vfig_file);
+        instring[strlen(instring)-1] = 0;
+        strcpy(the_graph->title[i],instring);
       }
     } else if( strstr(keyword,"LABELS") ){
       for(i=0;i<the_graph->num_frags;i++){
-	fgets(instring,MAX_STR_LEN,vfig_file);
-	instring[strlen(instring)-1] = 0;
-	strcpy(the_graph->frags[i].label,instring);
+        fgets(instring,MAX_STR_LEN,vfig_file);
+        instring[strlen(instring)-1] = 0;
+        strcpy(the_graph->frags[i].label,instring);
       }
     } else if( strstr(keyword,"LABEL") ){
       fgets(instring,MAX_STR_LEN,vfig_file);
@@ -1422,16 +1422,16 @@ int read_FMO_object(FILE *vfig_file,char *filename)
       strcpy(the_graph->label,instring);
     } else if(strstr(keyword,"CENT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->cent.x,
-	     &whichobj->cent.y,&whichobj->cent.z);
+             &whichobj->cent.y,&whichobj->cent.z);
     } else if(strstr(keyword,"TRANS")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->trans.x,
-	     &whichobj->trans.y,&whichobj->trans.z);
+             &whichobj->trans.y,&whichobj->trans.z);
     } else if(strstr(keyword,"SCALE")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->scale.x,
-	     &whichobj->scale.y,&whichobj->scale.z);
+             &whichobj->scale.y,&whichobj->scale.z);
     } else if(strstr(keyword,"ROT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->rot.x,
-	     &whichobj->rot.y,&whichobj->rot.z);
+             &whichobj->rot.y,&whichobj->rot.z);
     } else{
       fprintf(stderr,"Unrecognized keyword: %s\n",keyword);
     }
@@ -1528,56 +1528,56 @@ int read_prop_graph_object(FILE *vfig_file,char *filename)
       sscanf(instring,"%s %lf",keyword,&the_graph->Fermi_E);
     } else if( strstr(keyword,"TITLE") ){
       for(i=0;i<NUM_TITLE_LINES;i++){
-	fgets(instring,MAX_STR_LEN,vfig_file);
-	instring[strlen(instring)-1] = 0;
-	strcpy(the_data->title[i],instring);
+        fgets(instring,MAX_STR_LEN,vfig_file);
+        instring[strlen(instring)-1] = 0;
+        strcpy(the_data->title[i],instring);
       }
     } else if( strstr(keyword,"INTEG_CURVES") ){
       if(the_integration){
-	for(i=0;i<the_data->num_curves;i++){
-	  skipcomments(vfig_file,instring);
-	  sscanf(instring,"%d",&temp);
-	  the_integration->curves_to_display[i] = temp;
-	}
+        for(i=0;i<the_data->num_curves;i++){
+          skipcomments(vfig_file,instring);
+          sscanf(instring,"%d",&temp);
+          the_integration->curves_to_display[i] = temp;
+        }
       }
     } else if( strstr(keyword,"INTEG_STYLES") ){
       for(i=0;i<the_data->num_curves;i++){
-	if( the_integration ){
-	  skipcomments(vfig_file,instring);
-	  sscanf(instring,"%d",&temp);
-	  the_integration->styles[i] = temp;
-	}
+        if( the_integration ){
+          skipcomments(vfig_file,instring);
+          sscanf(instring,"%d",&temp);
+          the_integration->styles[i] = temp;
+        }
       }
     }else if( strstr(keyword,"CURVES") ){
       for(i=0;i<the_data->num_curves;i++){
-	skipcomments(vfig_file,instring);
-	sscanf(instring,"%d",&temp);
-	the_data->curves_to_display[i] = temp;
+        skipcomments(vfig_file,instring);
+        sscanf(instring,"%d",&temp);
+        the_data->curves_to_display[i] = temp;
       }
     } else if( strstr(keyword,"STYLES") ){
       for(i=0;i<the_data->num_curves;i++){
-	skipcomments(vfig_file,instring);
-	sscanf(instring,"%d",&temp);
-	the_data->styles[i] = temp;
+        skipcomments(vfig_file,instring);
+        sscanf(instring,"%d",&temp);
+        the_data->styles[i] = temp;
       }
     } else if( strstr(keyword,"FILLS") ){
       for(i=0;i<the_data->num_curves;i++){
-	skipcomments(vfig_file,instring);
-	sscanf(instring,"%d",&temp);
-	the_data->fills[i] = temp;
+        skipcomments(vfig_file,instring);
+        sscanf(instring,"%d",&temp);
+        the_data->fills[i] = temp;
       }
     } else if(strstr(keyword,"CENT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->cent.x,
-	     &whichobj->cent.y,&whichobj->cent.z);
+             &whichobj->cent.y,&whichobj->cent.z);
     } else if(strstr(keyword,"TRANS")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->trans.x,
-	     &whichobj->trans.y,&whichobj->trans.z);
+             &whichobj->trans.y,&whichobj->trans.z);
     } else if(strstr(keyword,"SCALE")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->scale.x,
-	     &whichobj->scale.y,&whichobj->scale.z);
+             &whichobj->scale.y,&whichobj->scale.z);
     } else if(strstr(keyword,"ROT")){
       sscanf(instring,"%s %lf %lf %lf",keyword,&whichobj->rot.x,
-	     &whichobj->rot.y,&whichobj->rot.z);
+             &whichobj->rot.y,&whichobj->rot.z);
     } else{
       fprintf(stderr,"Unrecognized keyword: %s\n",keyword);
     }
@@ -1617,21 +1617,21 @@ int read_object(FILE *vfig_file)
     sscanf(instring,"%s %s\n",keyword,foostring);
     if( strstr(keyword,"TYPE:") ){
       if(strstr(foostring,"MOLECULE"))
-	object_type = MOLECULE;
+        object_type = MOLECULE;
       else if(strstr(foostring,"MO_SURF"))
-	object_type = MO_SURF;
+        object_type = MO_SURF;
       else if(strstr(foostring,"PROPERTY_GRAPH"))
-	object_type = PROP_GRAPH;
+        object_type = PROP_GRAPH;
       else if(strstr(foostring,"BAND_GRAPH"))
-	object_type = BAND_GRAPH;
+        object_type = BAND_GRAPH;
       /* this case must be near the bottom */
       else if(strstr(foostring,"GRAPH"))
-	object_type = GRAPH;
+        object_type = GRAPH;
       else if(strstr(foostring,"FMO"))
-	object_type = FMO_DIAGRAM;
+        object_type = FMO_DIAGRAM;
       else{
-	error("Unrecognized object type hit in read_object.");
-	success = -1;
+        error("Unrecognized object type hit in read_object.");
+        success = -1;
       }
     }else{
       error("The first field in an object must be the type");
@@ -1640,14 +1640,14 @@ int read_object(FILE *vfig_file)
 
     if(success >= 0 && read_error >= 0 ){
       if( skipcomments(vfig_file,instring) >= 0){
-	if( strstr(instring,"FILENAME:") ){
-	  sscanf(instring,"%s %s",keyword,filename);
-	}else{
-	  error("The second field in an object must be the filename");
-	  success = -1;
-	}
+        if( strstr(instring,"FILENAME:") ){
+          sscanf(instring,"%s %s",keyword,filename);
+        }else{
+          error("The second field in an object must be the filename");
+          success = -1;
+        }
       } else{
-	read_error = -1;
+        read_error = -1;
       }
     }
   }
@@ -1749,7 +1749,7 @@ void read_all(char *file_name)
       sscanf(instring,"%s %d",foostring,&PS_options.bond_type);
     else if(strstr(keyword,"BEGIN_OBJECT")){
       if( read_object(vfig_file) >= 0 ){
-	num_read++;
+        num_read++;
       }
     }
   }
@@ -1836,7 +1836,7 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
   fprintf(rayfile,"        reflect 0.1 \n");
   fprintf(rayfile,"        transp 0.3 \n");
   fprintf(rayfile,"surface s2\n");
-  fprintf(rayfile,"  	ambient 0.15 0.15 0.15 \n");
+  fprintf(rayfile,"          ambient 0.15 0.15 0.15 \n");
   fprintf(rayfile,"        diffuse 0.25 0.25 0.25 \n");
   fprintf(rayfile,"        specular 0.05 0.05 0.05  \n");
   fprintf(rayfile,"        specpow 3  \n");
@@ -1867,24 +1867,24 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
     for(i=0;i<num_atoms;i++){
       found = 0;
       for(j=0;j<num_unique;j++){
-	if( !strcmp(unique_atoms[j].type,molec->atoms[i].type) ){
-	  found = 1;
-	}
+        if( !strcmp(unique_atoms[j].type,molec->atoms[i].type) ){
+          found = 1;
+        }
       }
       if( ! found ){
-	safe_strcpy(unique_atoms[num_unique].type,molec->atoms[i].type);
-	if( !strstr(unique_atoms[num_unique].type,"&") ){
-	  fprintf(rayfile,"surface %ssurf\n",unique_atoms[num_unique].type);
-	}
-	else{
-	  fprintf(rayfile,"surface Dummysurf\n");
-	}
-	fprintf(rayfile,"        ambient 0.35 0.15 0.15\n");
-	fprintf(rayfile,"        diffuse 0.65 0.15 0.15\n");
-	fprintf(rayfile,"        specular 0.6 0.6 0.6 \n");
-	fprintf(rayfile,"        specpow 3 \n");
-	fprintf(rayfile,"        reflect 0.3 \n");
-	num_unique++;
+        safe_strcpy(unique_atoms[num_unique].type,molec->atoms[i].type);
+        if( !strstr(unique_atoms[num_unique].type,"&") ){
+          fprintf(rayfile,"surface %ssurf\n",unique_atoms[num_unique].type);
+        }
+        else{
+          fprintf(rayfile,"surface Dummysurf\n");
+        }
+        fprintf(rayfile,"        ambient 0.35 0.15 0.15\n");
+        fprintf(rayfile,"        diffuse 0.65 0.15 0.15\n");
+        fprintf(rayfile,"        specular 0.6 0.6 0.6 \n");
+        fprintf(rayfile,"        specpow 3 \n");
+        fprintf(rayfile,"        reflect 0.3 \n");
+        num_unique++;
       }
     }
   }
@@ -1913,22 +1913,22 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
       vertices = surf->triangle_vertices;
       num_triangles = surf->num_triangles;
       for(i=0;i<num_triangles;i++,objects_so_far++){
-	triangle = &(triangles[i]);
-	v1 = &vertices[triangle->vertices[0]];
-	v2 = &vertices[triangle->vertices[1]];
-	v3 = &vertices[triangle->vertices[2]];
+        triangle = &(triangles[i]);
+        v1 = &vertices[triangle->vertices[0]];
+        v2 = &vertices[triangle->vertices[1]];
+        v3 = &vertices[triangle->vertices[2]];
 
-	if( triangle->color ){
-	  fprintf(rayfile,"triangle s1 %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf\n",
-		  v1->position.x,v1->position.y,v1->position.z,
-		  v2->position.x,v2->position.y,v2->position.z,
-		  v3->position.x,v3->position.y,v3->position.z);
-	}else{
-	  fprintf(rayfile,"triangle s2 %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf\n",
-		  v1->position.x,v1->position.y,v1->position.z,
-		  v2->position.x,v2->position.y,v2->position.z,
-		  v3->position.x,v3->position.y,v3->position.z);
-	}
+        if( triangle->color ){
+          fprintf(rayfile,"triangle s1 %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf\n",
+                  v1->position.x,v1->position.y,v1->position.z,
+                  v2->position.x,v2->position.y,v2->position.z,
+                  v3->position.x,v3->position.y,v3->position.z);
+        }else{
+          fprintf(rayfile,"triangle s2 %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf\n",
+                  v1->position.x,v1->position.y,v1->position.z,
+                  v2->position.x,v2->position.y,v2->position.z,
+                  v3->position.x,v3->position.y,v3->position.z);
+        }
 
       }
 
@@ -1959,28 +1959,28 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
     for(i=0;i<num_atoms;i++){
       atom = &(atoms[i]);
       if( !atom->exclude && (molec->hydrogens_on ||
-			     atom->type[0] != 'H' || atom->type[1] != 0) &&
-	 (molec->dummies_on || atom->type[0] != '&') ){
-	if( !strstr(atom->type,"&") ){
-	  fprintf(rayfile,"sphere %ssurf %4.2lf %4.2lf %4.2lf %4.2lf\n",
-		  atom->type,
-		  atom->rad*.5*molec->rad_mult,atom->loc.x,atom->loc.y,atom->loc.z);
-	}
-	else{
-	  fprintf(rayfile,"sphere Dummysurf %4.2lf %4.2lf %4.2lf %4.2lf\n",
-		  atom->rad*.5*molec->rad_mult,atom->loc.x,atom->loc.y,atom->loc.z);
-	}
-	if( (molec->draw_connectors && atom->num_lines_out) ){
-	  for(j=0;j<atom->num_lines_out;j++){
-	    if( atom->linesto[j] < i ){
-	      atom2 = &(atoms[atom->linesto[j]]);
-	      fprintf(rayfile,"/* %s - %s */\n",atom->type,atom2->type);
-	      fprintf(rayfile,"cylinder cylsurf 0.075 %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf\n",
-		      atom->loc.x,atom->loc.y,atom->loc.z,
-		      atom2->loc.x,atom2->loc.y,atom2->loc.z);
-	    }
-	  }
-	}
+                             atom->type[0] != 'H' || atom->type[1] != 0) &&
+         (molec->dummies_on || atom->type[0] != '&') ){
+        if( !strstr(atom->type,"&") ){
+          fprintf(rayfile,"sphere %ssurf %4.2lf %4.2lf %4.2lf %4.2lf\n",
+                  atom->type,
+                  atom->rad*.5*molec->rad_mult,atom->loc.x,atom->loc.y,atom->loc.z);
+        }
+        else{
+          fprintf(rayfile,"sphere Dummysurf %4.2lf %4.2lf %4.2lf %4.2lf\n",
+                  atom->rad*.5*molec->rad_mult,atom->loc.x,atom->loc.y,atom->loc.z);
+        }
+        if( (molec->draw_connectors && atom->num_lines_out) ){
+          for(j=0;j<atom->num_lines_out;j++){
+            if( atom->linesto[j] < i ){
+              atom2 = &(atoms[atom->linesto[j]]);
+              fprintf(rayfile,"/* %s - %s */\n",atom->type,atom2->type);
+              fprintf(rayfile,"cylinder cylsurf 0.075 %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf %4.2lf\n",
+                      atom->loc.x,atom->loc.y,atom->loc.z,
+                      atom2->loc.x,atom2->loc.y,atom2->loc.z);
+            }
+          }
+        }
       }
     }
     fprintf(rayfile,"end\n");
@@ -1991,7 +1991,7 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
 
     fprintf(rayfile,"scale %4.2lf %4.2lf %4.2lf\n",obj->scale.x,obj->scale.y,obj->scale.z);
     fprintf(rayfile,"translate %4.2lf %4.2lf %4.2lf\n",obj->trans.x/20.0,obj->trans.y/20.0,
-	    obj->trans.z/20.0);
+            obj->trans.z/20.0);
   }
 
   fclose(rayfile);
@@ -2109,7 +2109,7 @@ void dump_VRML(prim_type *prim,object_type *obj)
     strcpy(instring,"10 10 -10");
     readstringparm("translation of this object",stringarr);
     sscanf(instring,"%lf %lf %lf",&translation.x,&translation.y,
-	   &translation.z);
+           &translation.z);
   } else{
     i=0;
     while(VRML_header[i] != 0){
@@ -2136,40 +2136,40 @@ void dump_VRML(prim_type *prim,object_type *obj)
     for(i=0;i<num_atoms;i++){
       found = 0;
       for(j=0;j<num_unique;j++){
-	if( !strcmp(unique_atoms[j].type,molec->atoms[i].type) ){
-	  found = 1;
-	}
+        if( !strcmp(unique_atoms[j].type,molec->atoms[i].type) ){
+          found = 1;
+        }
       }
       if( ! found ){
-	safe_strcpy(unique_atoms[num_unique].type,molec->atoms[i].type);
-	if( !strstr(unique_atoms[num_unique].type,"&") ){
-	  fprintf(outfile,"PROTO %sball [ field SFFloat MyRadius %5.4lf\n",
-		  unique_atoms[num_unique].type,
-		  0.5*molec->atoms[i].rad*molec->rad_mult);
-	  sprintf(outstring,"color of atom type: %s",
-		  unique_atoms[num_unique].type);
-	  strcpy(instring,(char *)"0.6 0.6 0.6");
-	  readstringparm(outstring,stringarr);
-	  sscanf(instring,"%lf %lf %lf",&color.x,&color.y,&color.z);
-	  if( color.x < 0 ) color.x = 0;
-	  if( color.x > 1 ) color.x = 1;
-	  if( color.y < 0 ) color.y = 0;
-	  if( color.y > 1 ) color.y = 1;
-	  if( color.z < 0 ) color.z = 0;
-	  if( color.z > 1 ) color.z = 1;
-	  fprintf(outfile,
-		  "       field SFColor MyColor %4.2lf %4.2lf %4.2lf]\n",
-		  color.x,color.y,color.z);
-	}
-	else{
-	  fprintf(outfile,"PROTO Dummyball [ field SFFloat MyRadius 0.1\n");
-	  fprintf(outfile,"       field SFColor MyColor 0.6 0.6 0.6]\n");
-	}
-	fprintf(outfile,"{Shape {\n");
-	fprintf(outfile,"geometry Sphere { radius IS MyRadius }\n");
-	fprintf(outfile,"appearance Appearance {\n");
-	fprintf(outfile,"material Material {diffuseColor IS MyColor}}}}\n");
-	num_unique++;
+        safe_strcpy(unique_atoms[num_unique].type,molec->atoms[i].type);
+        if( !strstr(unique_atoms[num_unique].type,"&") ){
+          fprintf(outfile,"PROTO %sball [ field SFFloat MyRadius %5.4lf\n",
+                  unique_atoms[num_unique].type,
+                  0.5*molec->atoms[i].rad*molec->rad_mult);
+          sprintf(outstring,"color of atom type: %s",
+                  unique_atoms[num_unique].type);
+          strcpy(instring,(char *)"0.6 0.6 0.6");
+          readstringparm(outstring,stringarr);
+          sscanf(instring,"%lf %lf %lf",&color.x,&color.y,&color.z);
+          if( color.x < 0 ) color.x = 0;
+          if( color.x > 1 ) color.x = 1;
+          if( color.y < 0 ) color.y = 0;
+          if( color.y > 1 ) color.y = 1;
+          if( color.z < 0 ) color.z = 0;
+          if( color.z > 1 ) color.z = 1;
+          fprintf(outfile,
+                  "       field SFColor MyColor %4.2lf %4.2lf %4.2lf]\n",
+                  color.x,color.y,color.z);
+        }
+        else{
+          fprintf(outfile,"PROTO Dummyball [ field SFFloat MyRadius 0.1\n");
+          fprintf(outfile,"       field SFColor MyColor 0.6 0.6 0.6]\n");
+        }
+        fprintf(outfile,"{Shape {\n");
+        fprintf(outfile,"geometry Sphere { radius IS MyRadius }\n");
+        fprintf(outfile,"appearance Appearance {\n");
+        fprintf(outfile,"material Material {diffuseColor IS MyColor}}}}\n");
+        num_unique++;
       }
     }
   }
@@ -2190,8 +2190,8 @@ void dump_VRML(prim_type *prim,object_type *obj)
   } else{
     printf("Adding objects to VRML file\n");
     fprintf(outfile,
-	    "Transform {translation %4.2lf %4.2lf %4.2lf children [\n",
-	    translation.x,translation.y,translation.z);
+            "Transform {translation %4.2lf %4.2lf %4.2lf children [\n",
+            translation.x,translation.y,translation.z);
   }
 
   if( use_LOD ){
@@ -2227,56 +2227,56 @@ void dump_VRML(prim_type *prim,object_type *obj)
     for(i=0;i<num_atoms;i++){
       atom = &(atoms[i]);
       if( !atom->exclude && (molec->hydrogens_on ||
-			     atom->type[0] != 'H' || atom->type[1] != 0) &&
-	 (molec->dummies_on || atom->type[0] != '&') ){
-	fprintf(outfile,
-		"Transform { translation %4.2lf %4.2lf %4.2lf children[\n",
-		atom->loc.x,atom->loc.y,atom->loc.z);
-	if( !strstr(atom->type,"&") ){
-	  fprintf(outfile,"%sball {}",atom->type);
-	}
-	else{
-	  fprintf(outfile,"Dummyball{}\n");
-	}
-	fprintf(outfile,"]}\n");
-	if( (molec->draw_connectors && atom->num_lines_out) ){
-	  for(j=0;j<atom->num_lines_out;j++){
-	    if( atom->linesto[j] < i ){
-	      atom2 = &(atoms[atom->linesto[j]]);
-	      the_line = find_the_line(atom->num,atom2->num,molec);
-	      if(!the_line) FATAL_BUG("whoa!  cant't find the line.");
-	      if( !the_line->custom || the_line->drawn ){
-		angles_from_bond_vect(&(atom->loc),&(atom2->loc),
-				      &theta_y,&theta_z,&len);
-		fprintf(outfile,"# /* %s - %s */\n",atom->type,atom2->type);
-		fprintf(outfile,
-			"Transform { translation %5.4lf %5.4lf %5.4lf \n",
-			atom->loc.x,atom->loc.y,atom->loc.z);
-		fprintf(outfile,
-			"\trotation 0 1 0 %4.2lf children[\n",
-			-theta_y);
-		fprintf(outfile,
-			"Transform { rotation 0 0 1 %4.2lf children[\n",
-			-theta_z);
-		innerlen = len - 0.5*molec->rad_mult*(atom->rad+atom2->rad);
-		fprintf(outfile,
-			"Transform { translation 0 %5.4lf 0 children[\n",
-			innerlen / 2.0 + 0.5*molec->rad_mult*atom->rad);
-		fprintf(outfile,
-			"diffcyl {MyHeight %5.4lf} ]}  ]}  ]}\n",
-			innerlen);
-	      }
-	    }
-	  }
-	}
+                             atom->type[0] != 'H' || atom->type[1] != 0) &&
+         (molec->dummies_on || atom->type[0] != '&') ){
+        fprintf(outfile,
+                "Transform { translation %4.2lf %4.2lf %4.2lf children[\n",
+                atom->loc.x,atom->loc.y,atom->loc.z);
+        if( !strstr(atom->type,"&") ){
+          fprintf(outfile,"%sball {}",atom->type);
+        }
+        else{
+          fprintf(outfile,"Dummyball{}\n");
+        }
+        fprintf(outfile,"]}\n");
+        if( (molec->draw_connectors && atom->num_lines_out) ){
+          for(j=0;j<atom->num_lines_out;j++){
+            if( atom->linesto[j] < i ){
+              atom2 = &(atoms[atom->linesto[j]]);
+              the_line = find_the_line(atom->num,atom2->num,molec);
+              if(!the_line) FATAL_BUG("whoa!  cant't find the line.");
+              if( !the_line->custom || the_line->drawn ){
+                angles_from_bond_vect(&(atom->loc),&(atom2->loc),
+                                      &theta_y,&theta_z,&len);
+                fprintf(outfile,"# /* %s - %s */\n",atom->type,atom2->type);
+                fprintf(outfile,
+                        "Transform { translation %5.4lf %5.4lf %5.4lf \n",
+                        atom->loc.x,atom->loc.y,atom->loc.z);
+                fprintf(outfile,
+                        "\trotation 0 1 0 %4.2lf children[\n",
+                        -theta_y);
+                fprintf(outfile,
+                        "Transform { rotation 0 0 1 %4.2lf children[\n",
+                        -theta_z);
+                innerlen = len - 0.5*molec->rad_mult*(atom->rad+atom2->rad);
+                fprintf(outfile,
+                        "Transform { translation 0 %5.4lf 0 children[\n",
+                        innerlen / 2.0 + 0.5*molec->rad_mult*atom->rad);
+                fprintf(outfile,
+                        "diffcyl {MyHeight %5.4lf} ]}  ]}  ]}\n",
+                        innerlen);
+              }
+            }
+          }
+        }
       }
     }
   }
 
   fprintf(outfile,"Transform { translation 5. 0. 0. children[\n");
   fprintf(outfile,
-	  " Billboard { children[Shape{geometry Text {string \"%s\"}}]}]}\n",
-	  label);
+          " Billboard { children[Shape{geometry Text {string \"%s\"}}]}]}\n",
+          label);
 
   if( do_axes ){
     fprintf(outfile,"Transform {translation -5 0 0 children[axes{}]}\n");
@@ -2285,9 +2285,9 @@ void dump_VRML(prim_type *prim,object_type *obj)
   if( use_LOD ){
     fprintf(outfile,"]}\n");
     fprintf(outfile,"Transform{ translation %4.2lf %4.2lf %4.2lf children [\n",
-	    translation.x,translation.y,translation.z);
+            translation.x,translation.y,translation.z);
     fprintf(outfile,"Shape{ geometry Text {string \"%s\"}}]}\n",
-	    label);
+            label);
     fprintf(outfile,"]}\n");
   }
   if( !new_file ){

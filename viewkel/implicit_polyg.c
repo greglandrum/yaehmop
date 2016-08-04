@@ -34,118 +34,118 @@
 #include <signal.h>
 
 
-#define TET	0  /* use tetrahedral decomposition */
-#define NOTET	1  /* no tetrahedral decomposition  */
+#define TET        0  /* use tetrahedral decomposition */
+#define NOTET        1  /* no tetrahedral decomposition  */
 
-#define RES	10 /* # converge iterations    */
+#define RES        10 /* # converge iterations    */
 
-#define L	0  /* left direction:	-x, -i */
-#define R	1  /* right direction:	+x, +i */
-#define B	2  /* bottom direction: -y, -j */
-#define T	3  /* top direction:	+y, +j */
-#define N	4  /* near direction:	-z, -k */
-#define F	5  /* far direction:	+z, +k */
-#define LBN	0  /* left bottom near corner  */
-#define LBF	1  /* left bottom far corner   */
-#define LTN	2  /* left top near corner     */
-#define LTF	3  /* left top far corner      */
-#define RBN	4  /* right bottom near corner */
-#define RBF	5  /* right bottom far corner  */
-#define RTN	6  /* right top near corner    */
-#define RTF	7  /* right top far corner     */
+#define L        0  /* left direction:        -x, -i */
+#define R        1  /* right direction:        +x, +i */
+#define B        2  /* bottom direction: -y, -j */
+#define T        3  /* top direction:        +y, +j */
+#define N        4  /* near direction:        -z, -k */
+#define F        5  /* far direction:        +z, +k */
+#define LBN        0  /* left bottom near corner  */
+#define LBF        1  /* left bottom far corner   */
+#define LTN        2  /* left top near corner     */
+#define LTF        3  /* left top far corner      */
+#define RBN        4  /* right bottom near corner */
+#define RBF        5  /* right bottom far corner  */
+#define RTN        6  /* right top near corner    */
+#define RTF        7  /* right top far corner     */
 
 /* the LBN corner of cube (i, j, k), corresponds with location
  * (start.x+(i-.5)*size, start.y+(j-.5)*size, start.z+(k-.5)*size) */
 
-#define RAND()	    ((rand()&32767)/32767.)    /* random number between 0 and 1 */
-#define HASHBIT	    (5)
+#define RAND()            ((rand()&32767)/32767.)    /* random number between 0 and 1 */
+#define HASHBIT            (5)
 #define HASHSIZE    (size_t)(1<<(3*HASHBIT))   /* hash table size (32768) */
-#define MASK	    ((1<<HASHBIT)-1)
+#define MASK            ((1<<HASHBIT)-1)
 #define HASH(i,j,k) ((((((i)&MASK)<<HASHBIT)|((j)&MASK))<<HASHBIT)|((k)&MASK))
 #define BIT(i, bit) (((i)>>(bit))&1)
 #define FLIP(i,bit) ((i)^1<<(bit)) /* flip the given bit of i */
 
 
-typedef struct test {		   /* test the function for a signed value */
-    point_type p;			   /* location of test */
-    double value;		   /* function value at p */
-    int ok;			   /* if value is of correct sign */
+typedef struct test {                   /* test the function for a signed value */
+    point_type p;                           /* location of test */
+    double value;                   /* function value at p */
+    int ok;                           /* if value is of correct sign */
 } TEST;
 
 #if 0
-typedef struct vertex {		   /* surface vertex */
-    point_type position, normal;	   /* position and surface normal */
+typedef struct vertex {                   /* surface vertex */
+    point_type position, normal;           /* position and surface normal */
 } VERTEX;
 #endif
 
-typedef struct vertices {	   /* list of vertices in polygonization */
-    int count, max;		   /* # vertices, max # allowed */
-    vertex_type *ptr;		   /* dynamically allocated */
+typedef struct vertices {           /* list of vertices in polygonization */
+    int count, max;                   /* # vertices, max # allowed */
+    vertex_type *ptr;                   /* dynamically allocated */
 } VERTICES;
 
-typedef struct corner {		   /* corner of a cube */
-    int i, j, k;		   /* (i, j, k) is index within lattice */
-    double x, y, z, value;	   /* location and function value */
+typedef struct corner {                   /* corner of a cube */
+    int i, j, k;                   /* (i, j, k) is index within lattice */
+    double x, y, z, value;           /* location and function value */
 } CORNER;
 
-typedef struct cube {		   /* partitioning cell (cube) */
-    int i, j, k;		   /* lattice location of cube */
-    CORNER *corners[8];		   /* eight corners */
+typedef struct cube {                   /* partitioning cell (cube) */
+    int i, j, k;                   /* lattice location of cube */
+    CORNER *corners[8];                   /* eight corners */
 } CUBE;
 
-typedef struct cubes {		   /* linked list of cubes acting as stack */
-    CUBE cube;			   /* a single cube */
-    struct cubes *next;		   /* remaining elements */
+typedef struct cubes {                   /* linked list of cubes acting as stack */
+    CUBE cube;                           /* a single cube */
+    struct cubes *next;                   /* remaining elements */
 } CUBES;
 
-typedef struct centerlist {	   /* list of cube locations */
-    int i, j, k;		   /* cube location */
-    struct centerlist *next;	   /* remaining elements */
+typedef struct centerlist {           /* list of cube locations */
+    int i, j, k;                   /* cube location */
+    struct centerlist *next;           /* remaining elements */
 } CENTERLIST;
 
-typedef struct cornerlist {	   /* list of corners */
-    int i, j, k;		   /* corner id */
-    double value;		   /* corner value */
-    struct cornerlist *next;	   /* remaining elements */
+typedef struct cornerlist {           /* list of corners */
+    int i, j, k;                   /* corner id */
+    double value;                   /* corner value */
+    struct cornerlist *next;           /* remaining elements */
 } CORNERLIST;
 
-typedef struct edgelist {	   /* list of edges */
-    int i1, j1, k1, i2, j2, k2;	   /* edge corner ids */
-    int vid;			   /* vertex id */
-    struct edgelist *next;	   /* remaining elements */
+typedef struct edgelist {           /* list of edges */
+    int i1, j1, k1, i2, j2, k2;           /* edge corner ids */
+    int vid;                           /* vertex id */
+    struct edgelist *next;           /* remaining elements */
 } EDGELIST;
 
-typedef struct intlist {	   /* list of integers */
-    int i;			   /* an integer */
-    struct intlist *next;	   /* remaining elements */
+typedef struct intlist {           /* list of integers */
+    int i;                           /* an integer */
+    struct intlist *next;           /* remaining elements */
 } INTLIST;
 
-typedef struct intlists {	   /* list of list of integers */
-    INTLIST *list;		   /* a list of integers */
-    struct intlists *next;	   /* remaining elements */
+typedef struct intlists {           /* list of list of integers */
+    INTLIST *list;                   /* a list of integers */
+    struct intlists *next;           /* remaining elements */
 } INTLISTS;
 
-typedef struct process {	   /* parameters, function, storage */
+typedef struct process {           /* parameters, function, storage */
   /* implicit surface function */
     double (*function) PROTO((double,double,double));
     /* triangle output function */
     int (*triproc) PROTO((int,int,int,VERTICES));
 
-    double size, delta;		   /* cube size, normal delta */
-    int bounds;			   /* cube range within lattice */
-    point_type start;		   /* start point on surface */
-    point_type origin;		   /* origin of the coordinate system */
-    CUBES *cubes;		   /* active cubes */
-    VERTICES vertices;		   /* surface vertices */
-    CENTERLIST **centers;	   /* cube center hash table */
-    CORNERLIST **corners;	   /* corner value hash table */
-    EDGELIST **edges;		   /* edge and vertex id hash table */
+    double size, delta;                   /* cube size, normal delta */
+    int bounds;                           /* cube range within lattice */
+    point_type start;                   /* start point on surface */
+    point_type origin;                   /* origin of the coordinate system */
+    CUBES *cubes;                   /* active cubes */
+    VERTICES vertices;                   /* surface vertices */
+    CENTERLIST **centers;           /* cube center hash table */
+    CORNERLIST **corners;           /* corner value hash table */
+    EDGELIST **edges;                   /* edge and vertex id hash table */
 } PROCESS;
 
 char *myD_CALLOC();
 
 
-int gntris;	     /* global needed by application */
+int gntris;             /* global needed by application */
 int gmaxtris;        /* global needed by application */
 VERTICES gvertices;  /* global needed by application */
 
@@ -166,10 +166,10 @@ VERTICES gvertices;  /* global needed by application */
 int triangle PROTO((int, int, int, VERTICES));
 double happy_helper_function PROTO((double,double,double));
 char *polygonize PROTO((double (*)(),double,int,
-				int (*)(), int,
-				atom_type *,int));
+                                int (*)(), int,
+                                atom_type *,int));
 void testface PROTO((int, int, int, CUBE *,int,
-			    int,int,int,int,PROCESS *));
+                            int,int,int,int,PROCESS *));
 CORNER *setcorner PROTO((PROCESS *,int,int,int));
 CORNER *checkcorner PROTO((PROCESS *,int,int,int));
 TEST find PROTO((int,PROCESS *,double,double,double));
@@ -181,14 +181,14 @@ void makecubetable  PROTO((void));
 char *myD_CALLOC  PROTO((int,int));
 int setcenter PROTO((CENTERLIST **,int,int,int));
 void setedge PROTO((EDGELIST **,int,int,int,int,int,
-			   int,int));
+                           int,int));
 int getedge  PROTO((EDGELIST **,int,int,int,int,
-			   int,int));
+                           int,int));
 int vertid  PROTO((CORNER *, CORNER *, PROCESS *));
 void addtovertices  PROTO((VERTICES *vertices,vertex_type v));
 void vnormal  PROTO((point_type *point,PROCESS *p,point_type *v));
 void converge  PROTO((point_type *p1, point_type *p2, double v,
-			     double (*function)(),point_type *p));
+                             double (*function)(),point_type *p));
 
 
 char abort_it=0;
@@ -248,42 +248,42 @@ int triangle (int i1, int i2, int i3, VERTICES vertices)
 #if 0
       /********
 
-	well, we can't cut this guy for phase reasons, what about
-	 the possibility that it's degenerate?
+        well, we can't cut this guy for phase reasons, what about
+         the possibility that it's degenerate?
 
       *********/
       is_degen = 0;
 
       /* start by looking for 2 degen points */
       if(V3SquaredLength(V3Sub(v1,v2,&temp_v)) <= 0.005 ||
-	 V3SquaredLength(V3Sub(v1,v3,&temp_v)) <= 0.005 ||
-	 V3SquaredLength(V3Sub(v2,v3,&temp_v)) <= 0.005 ) is_degen = 1;
+         V3SquaredLength(V3Sub(v1,v3,&temp_v)) <= 0.005 ||
+         V3SquaredLength(V3Sub(v2,v3,&temp_v)) <= 0.005 ) is_degen = 1;
       else /* what about the edges being parallel? */
-	if( V3SquaredLength(V3Cross(V3Sub(v1,v2,&temp_v),V3Sub(v1,v3,&temp_v),
-				    &temp_v)) <= 0.005 )
-	  is_degen = 1;
+        if( V3SquaredLength(V3Cross(V3Sub(v1,v2,&temp_v),V3Sub(v1,v3,&temp_v),
+                                    &temp_v)) <= 0.005 )
+          is_degen = 1;
 
 
       if( !is_degen ){
 #endif
-	gsurf->triangles[gntris].vertices[0] = i1;
-	gsurf->triangles[gntris].vertices[1] = i2;
-	gsurf->triangles[gntris].vertices[2] = i3;
-	gsurf->triangles[gntris].color = sign1;
-	gntris++;
-	if( gntris == gmaxtris ){
-	  gmaxtris += 512;
-	  gsurf->triangles =
-	    (triangle_type *)
-	      D_REALLOC(gsurf->triangles,
-		      gmaxtris*sizeof(triangle_type));
-	  if( !gsurf->triangles )
-	    fatal("Can't D_REALLOC triangles.");
-	}
+        gsurf->triangles[gntris].vertices[0] = i1;
+        gsurf->triangles[gntris].vertices[1] = i2;
+        gsurf->triangles[gntris].vertices[2] = i3;
+        gsurf->triangles[gntris].color = sign1;
+        gntris++;
+        if( gntris == gmaxtris ){
+          gmaxtris += 512;
+          gsurf->triangles =
+            (triangle_type *)
+              D_REALLOC(gsurf->triangles,
+                      gmaxtris*sizeof(triangle_type));
+          if( !gsurf->triangles )
+            fatal("Can't D_REALLOC triangles.");
+        }
 #if 0
       } else {
-	num_degen++;
-	fprintf(stderr,"Degen Tri %d culled\n", num_degen);
+        num_degen++;
+        fprintf(stderr,"Degen Tri %d culled\n", num_degen);
       }
 #endif
     }
@@ -346,8 +346,8 @@ void construct_MO_isosurface(int num_args,char **MO_surf_ptr)
   signal(SIGINT,trap_sigint);
 
   if ((err = polygonize(happy_helper_function, step_size, gsurf->num_steps,
-			triangle, NOTET,
-			gsurf->molec->atoms,gsurf->molec->num_atoms))
+                        triangle, NOTET,
+                        gsurf->molec->atoms,gsurf->molec->num_atoms))
       != NULL) {
     fprintf(stderr, "error from triangulation: %s\n", err);
     return;
@@ -366,7 +366,7 @@ void construct_MO_isosurface(int num_args,char **MO_surf_ptr)
     vertex_type v;
     v = gvertices.ptr[i];
     memcpy((char *)&(gsurf->triangle_vertices[i]),(char *)&v,
-	  sizeof(vertex_type));
+          sizeof(vertex_type));
   }
 
   fprintf(stderr,"Finding centers\n");
@@ -391,30 +391,30 @@ void construct_MO_isosurface(int num_args,char **MO_surf_ptr)
 
 /* polygonize: polygonize the implicit surface function
  *   arguments are:
- *	 double function (x, y, z)
- *		 double x, y, z (an arbitrary 3D point)
- *	     the implicit surface function
- *	     return negative for inside, positive for outside
- *	 double size
- *	     width of the partitioning cube
- *	 int bounds
- *	     max. range of cubes (+/- on the three axes) from first cube
- *	 double x, y, z
- *	     coordinates of a starting point on or near the surface
- *	     may be defaulted to 0., 0., 0.
- *	 int triproc (i1, i2, i3, vertices)
- *		 int i1, i2, i3 (indices into the vertex array)
- *		 VERTICES vertices (the vertex array, indexed from 0)
- *	     called for each triangle
- *	     the triangle coordinates are (for i = i1, i2, i3):
- *		 vertices.ptr[i].position.x, .y, and .z
- *	     vertices are ccw when viewed from the out (positive) side
- *		 in a left-handed coordinate system
- *	     vertex normals point outwards
- *	     return 1 to continue, 0 to abort
- *	 int mode
- *	     TET: decompose cube and polygonize six tetrahedra
- *	     NOTET: polygonize cube directly
+ *         double function (x, y, z)
+ *                 double x, y, z (an arbitrary 3D point)
+ *             the implicit surface function
+ *             return negative for inside, positive for outside
+ *         double size
+ *             width of the partitioning cube
+ *         int bounds
+ *             max. range of cubes (+/- on the three axes) from first cube
+ *         double x, y, z
+ *             coordinates of a starting point on or near the surface
+ *             may be defaulted to 0., 0., 0.
+ *         int triproc (i1, i2, i3, vertices)
+ *                 int i1, i2, i3 (indices into the vertex array)
+ *                 VERTICES vertices (the vertex array, indexed from 0)
+ *             called for each triangle
+ *             the triangle coordinates are (for i = i1, i2, i3):
+ *                 vertices.ptr[i].position.x, .y, and .z
+ *             vertices are ccw when viewed from the out (positive) side
+ *                 in a left-handed coordinate system
+ *             vertex normals point outwards
+ *             return 1 to continue, 0 to abort
+ *         int mode
+ *             TET: decompose cube and polygonize six tetrahedra
+ *             NOTET: polygonize cube directly
  *  atom_type *atoms
  *  int       num_atoms
  *             These are used to pick starting points to make
@@ -424,8 +424,8 @@ void construct_MO_isosurface(int num_args,char **MO_surf_ptr)
  */
 
 char *polygonize (double (*function)(), double size, int bounds,
-		  int (*triproc)(), int mode,
-		  atom_type *atoms, int num_atoms)
+                  int (*triproc)(), int mode,
+                  atom_type *atoms, int num_atoms)
 {
   PROCESS p;
   int n, noabort;
@@ -445,7 +445,7 @@ char foostring[80];
   /* allocate hash tables and build cube polygon table: */
   p.centers = (CENTERLIST **) myD_CALLOC(HASHSIZE,sizeof(CENTERLIST *));
   p.corners = (CORNERLIST **) myD_CALLOC(HASHSIZE,sizeof(CORNERLIST *));
-  p.edges =	(EDGELIST   **) myD_CALLOC(2*HASHSIZE,sizeof(EDGELIST *));
+  p.edges =        (EDGELIST   **) myD_CALLOC(2*HASHSIZE,sizeof(EDGELIST *));
   makecubetable();
 
 
@@ -462,159 +462,159 @@ char foostring[80];
   for(i=0;i<num_atoms;i++){
     if( !gcenters[i].exclude ){
       for(j=0;j<8;j++){
-	if( abort_it ) return("Half assed surface");
-	x = atoms[i].loc.x + 2*gsurf->search_radius*(BIT(j,2) - .5);
-	y = atoms[i].loc.y + 2*gsurf->search_radius*(BIT(j,1) - .5);
-	z = atoms[i].loc.z + 2*gsurf->search_radius*(BIT(j,0) - .5);
+        if( abort_it ) return("Half assed surface");
+        x = atoms[i].loc.x + 2*gsurf->search_radius*(BIT(j,2) - .5);
+        y = atoms[i].loc.y + 2*gsurf->search_radius*(BIT(j,1) - .5);
+        z = atoms[i].loc.z + 2*gsurf->search_radius*(BIT(j,0) - .5);
 
-	/******
+        /******
 
-	  First pass: find point on surface and do all the
-	  needed initializations.
+          First pass: find point on surface and do all the
+          needed initializations.
 
-	  *******/
-	surf_started = 0;
-	if ( first_surf ){
-	  in = find(1, &p, x, y, z);
-	  out = find(0, &p, x, y, z);
-	  if (!in.ok || !out.ok){
-	    fprintf(stderr,"No initial point i: %d j: %d\n",i,j);
-	  }else{
-	    surf_started = 1;
-	    first_surf = 0;
-	    converge(&in.p, &out.p, in.value, p.function, &p.start);
+          *******/
+        surf_started = 0;
+        if ( first_surf ){
+          in = find(1, &p, x, y, z);
+          out = find(0, &p, x, y, z);
+          if (!in.ok || !out.ok){
+            fprintf(stderr,"No initial point i: %d j: %d\n",i,j);
+          }else{
+            surf_started = 1;
+            first_surf = 0;
+            converge(&in.p, &out.p, in.value, p.function, &p.start);
 
-	    fprintf(stderr,"! (%d, %d) start: %lf %lf %lf\n",i,j,
-		    p.start.x,p.start.y,p.start.z);
+            fprintf(stderr,"! (%d, %d) start: %lf %lf %lf\n",i,j,
+                    p.start.x,p.start.y,p.start.z);
 
-	    p.origin.x = p.start.x;
-	    p.origin.y = p.start.y;
-	    p.origin.z = p.start.z;
+            p.origin.x = p.start.x;
+            p.origin.y = p.start.y;
+            p.origin.z = p.start.z;
 
-	    /* push initial cube on stack: */
-	    p.cubes = (CUBES *) myD_CALLOC(1, sizeof(CUBES)); /* list of 1 */
-	    p.cubes->cube.i = p.cubes->cube.j = p.cubes->cube.k = 0;
-	    p.cubes->next = NULL;
+            /* push initial cube on stack: */
+            p.cubes = (CUBES *) myD_CALLOC(1, sizeof(CUBES)); /* list of 1 */
+            p.cubes->cube.i = p.cubes->cube.j = p.cubes->cube.k = 0;
+            p.cubes->next = NULL;
 
-	    /* set corners of initial cube: */
-	    for (n = 0; n < 8; n++)
-	      p.cubes->cube.corners[n] =
-		setcorner(&p, BIT(n,2), BIT(n,1), BIT(n,0));
+            /* set corners of initial cube: */
+            for (n = 0; n < 8; n++)
+              p.cubes->cube.corners[n] =
+                setcorner(&p, BIT(n,2), BIT(n,1), BIT(n,0));
 
-	    p.vertices.count = p.vertices.max = 0; /* no vertices yet */
-	    p.vertices.ptr = NULL;
+            p.vertices.count = p.vertices.max = 0; /* no vertices yet */
+            p.vertices.ptr = NULL;
 
-	    setcenter(p.centers, 0, 0, 0);
-	  }
-	} else{
-	  in = find(1, &p, x, y, z);
-	  out = find(0, &p, x, y, z);
-	  if (!in.ok || !out.ok){
-	    fprintf(stderr,"No surface point i: %d j: %d\n",i,j);
-	  }else{
-	    converge(&in.p, &out.p, in.value, p.function, &p.start);
+            setcenter(p.centers, 0, 0, 0);
+          }
+        } else{
+          in = find(1, &p, x, y, z);
+          out = find(0, &p, x, y, z);
+          if (!in.ok || !out.ok){
+            fprintf(stderr,"No surface point i: %d j: %d\n",i,j);
+          }else{
+            converge(&in.p, &out.p, in.value, p.function, &p.start);
 
-	    surf_started = 1;
-	    /* push initial cube on stack: */
-	    p.cubes = (CUBES *) myD_CALLOC(1, sizeof(CUBES)); /* list of 1 */
-	    p.cubes->cube.i = (int)((p.start.x - p.origin.x)/size);
-	    p.cubes->cube.j = (int)((p.start.y - p.origin.y)/size);
-	    p.cubes->cube.k = (int)((p.start.z - p.origin.z)/size);
-	    p.cubes->next = NULL;
+            surf_started = 1;
+            /* push initial cube on stack: */
+            p.cubes = (CUBES *) myD_CALLOC(1, sizeof(CUBES)); /* list of 1 */
+            p.cubes->cube.i = (int)((p.start.x - p.origin.x)/size);
+            p.cubes->cube.j = (int)((p.start.y - p.origin.y)/size);
+            p.cubes->cube.k = (int)((p.start.z - p.origin.z)/size);
+            p.cubes->next = NULL;
 
-	    /* slap it onto the grid */
-	    p.start.x = p.origin.x +
-	      size*(int)((p.start.x - p.origin.x)/size);
-	    p.start.y = p.origin.y +
-	      size*(int)((p.start.y - p.origin.y)/size);
-	    p.start.z = p.origin.z +
-	      size*(int)((p.start.z - p.origin.z)/size);
+            /* slap it onto the grid */
+            p.start.x = p.origin.x +
+              size*(int)((p.start.x - p.origin.x)/size);
+            p.start.y = p.origin.y +
+              size*(int)((p.start.y - p.origin.y)/size);
+            p.start.z = p.origin.z +
+              size*(int)((p.start.z - p.origin.z)/size);
 
-	    /* set corners of initial cube: */
-	    for (n = 0; n < 8; n++){
-	      p.cubes->cube.corners[n] =
-		setcorner(&p, p.cubes->cube.i+BIT(n,2),
-			  p.cubes->cube.j+BIT(n,1),
-			  p.cubes->cube.k+BIT(n,0));
+            /* set corners of initial cube: */
+            for (n = 0; n < 8; n++){
+              p.cubes->cube.corners[n] =
+                setcorner(&p, p.cubes->cube.i+BIT(n,2),
+                          p.cubes->cube.j+BIT(n,1),
+                          p.cubes->cube.k+BIT(n,0));
 #if 0
-	      /* check to see if this corner has been hit already */
-	      if(p.cubes->cube.corners[n] == 0){
-		/* free the cube we just started */
-		surf_started = 0;
-		D_FREE(p.cubes);
-		n = 8;
-		p.cubes = NULL;
-		fprintf(stderr,
-			"Preprocess of Atom %d Corner: %d hit an old corner\n",
-			i,j);
-	      }
+              /* check to see if this corner has been hit already */
+              if(p.cubes->cube.corners[n] == 0){
+                /* free the cube we just started */
+                surf_started = 0;
+                D_FREE(p.cubes);
+                n = 8;
+                p.cubes = NULL;
+                fprintf(stderr,
+                        "Preprocess of Atom %d Corner: %d hit an old corner\n",
+                        i,j);
+              }
 #endif
-	    }
+            }
 
 
-	    /* check to see if we've already done this one */
-	    if(setcenter(p.centers, p.cubes->cube.i, p.cubes->cube.j,
-			 p.cubes->cube.k) ){
-	      surf_started = 0;
-	      /* free the cube we just started */
-	      D_FREE(p.cubes);
-	      p.cubes = NULL;
-	      fprintf(stderr,
-		      "Preprocess of Atom %d Corner: %d hit an old point\n",i,j);
-	    }
-	    else{
-	      surf_started = 1;
+            /* check to see if we've already done this one */
+            if(setcenter(p.centers, p.cubes->cube.i, p.cubes->cube.j,
+                         p.cubes->cube.k) ){
+              surf_started = 0;
+              /* free the cube we just started */
+              D_FREE(p.cubes);
+              p.cubes = NULL;
+              fprintf(stderr,
+                      "Preprocess of Atom %d Corner: %d hit an old point\n",i,j);
+            }
+            else{
+              surf_started = 1;
 #ifdef PRINT_ALL_KINDS_OF_SHIT
-	      fprintf(stderr,"(%d, %d) start: %lf %lf %lf\n",i,j,
-		      p.start.x,p.start.y,p.start.z);
+              fprintf(stderr,"(%d, %d) start: %lf %lf %lf\n",i,j,
+                      p.start.x,p.start.y,p.start.z);
 #endif
-	    }
+            }
 
-	  }
-	}
-	if( surf_started ){
-	  fprintf(stderr,"Processing Atom %d Corner: %d\n",i,j);
-	  fprintf(stderr,"\tstarting at (%d %d %d)\n",p.cubes->cube.i,
-		  p.cubes->cube.j,p.cubes->cube.k);
+          }
+        }
+        if( surf_started ){
+          fprintf(stderr,"Processing Atom %d Corner: %d\n",i,j);
+          fprintf(stderr,"\tstarting at (%d %d %d)\n",p.cubes->cube.i,
+                  p.cubes->cube.j,p.cubes->cube.k);
 
-	  /* process active cubes till none left */
-	  while (p.cubes != NULL ) {
-	    CUBE c;
-	    CUBES *temp = p.cubes;
-	    c = p.cubes->cube;
+          /* process active cubes till none left */
+          while (p.cubes != NULL ) {
+            CUBE c;
+            CUBES *temp = p.cubes;
+            c = p.cubes->cube;
 #ifdef PRINT_ALL_KINDS_OF_SHIT
-	    if( i || j ){
+            if( i || j ){
 
-	      fprintf(stderr,"(%d %d %d)",c.i,c.j,c.k);
-	    }
+              fprintf(stderr,"(%d %d %d)",c.i,c.j,c.k);
+            }
 #endif
-	    fprintf(stderr,".");
-	    noabort = mode == TET?
-	      /* either decompose into tetrahedra and polygonize: */
-	      dotet(&c, LBN, LTN, RBN, LBF, &p) &&
-		dotet(&c, RTN, LTN, LBF, RBN, &p) &&
-		  dotet(&c, RTN, LTN, LTF, LBF, &p) &&
-		    dotet(&c, RTN, RBN, LBF, RBF, &p) &&
-		      dotet(&c, RTN, LBF, LTF, RBF, &p) &&
-			dotet(&c, RTN, LTF, RTF, RBF, &p)
-			  :
-	    /* or polygonize the cube directly: */
-	    docube(&c, &p);
-	    if (! noabort) return "aborted";
+            fprintf(stderr,".");
+            noabort = mode == TET?
+              /* either decompose into tetrahedra and polygonize: */
+              dotet(&c, LBN, LTN, RBN, LBF, &p) &&
+                dotet(&c, RTN, LTN, LBF, RBN, &p) &&
+                  dotet(&c, RTN, LTN, LTF, LBF, &p) &&
+                    dotet(&c, RTN, RBN, LBF, RBF, &p) &&
+                      dotet(&c, RTN, LBF, LTF, RBF, &p) &&
+                        dotet(&c, RTN, LTF, RTF, RBF, &p)
+                          :
+            /* or polygonize the cube directly: */
+            docube(&c, &p);
+            if (! noabort) return "aborted";
 
-	    /* pop current cube from stack */
-	    p.cubes = p.cubes->next;
-	    D_FREE((char *) temp);
-	    /* test six face directions, maybe add to stack: */
-	    testface(c.i-1, c.j, c.k, &c, L, LBN, LBF, LTN, LTF, &p);
-	    testface(c.i+1, c.j, c.k, &c, R, RBN, RBF, RTN, RTF, &p);
-	    testface(c.i, c.j-1, c.k, &c, B, LBN, LBF, RBN, RBF, &p);
-	    testface(c.i, c.j+1, c.k, &c, T, LTN, LTF, RTN, RTF, &p);
-	    testface(c.i, c.j, c.k-1, &c, N, LBN, LTN, RBN, RTN, &p);
-	    testface(c.i, c.j, c.k+1, &c, F, LBF, LTF, RBF, RTF, &p);
-	  }
-	  fprintf(stderr,"\n\t\tnum_verts: %d\n",gvertices.count);
-	}
+            /* pop current cube from stack */
+            p.cubes = p.cubes->next;
+            D_FREE((char *) temp);
+            /* test six face directions, maybe add to stack: */
+            testface(c.i-1, c.j, c.k, &c, L, LBN, LBF, LTN, LTF, &p);
+            testface(c.i+1, c.j, c.k, &c, R, RBN, RBF, RTN, RTF, &p);
+            testface(c.i, c.j-1, c.k, &c, B, LBN, LBF, RBN, RBF, &p);
+            testface(c.i, c.j+1, c.k, &c, T, LTN, LTF, RTN, RTF, &p);
+            testface(c.i, c.j, c.k-1, &c, N, LBN, LTN, RBN, RTN, &p);
+            testface(c.i, c.j, c.k+1, &c, F, LBF, LTF, RBF, RTF, &p);
+          }
+          fprintf(stderr,"\n\t\tnum_verts: %d\n",gvertices.count);
+        }
       }
     }
   }
@@ -628,7 +628,7 @@ char foostring[80];
  * and add new cube to cube stack */
 
 void testface(int i, int j, int k, CUBE *old, int face,
-	       int c1, int c2, int c3, int c4, PROCESS *p)
+               int c1, int c2, int c3, int c4, PROCESS *p)
 {
   CUBE new;
   CUBES *oldcubes = p->cubes;
@@ -731,7 +731,7 @@ TEST find (int sign,PROCESS *p,double x,double y,double z)
     test.p.z = z+range*(RAND()-0.5);
     test.value = p->function(test.p.x, test.p.y, test.p.z);
     if (sign == (test.value > 0.0)) return test;
-    range = range*1.0005;	/* slowly expand search outwards */
+    range = range*1.0005;        /* slowly expand search outwards */
   }
   test.ok = 0;
   return test;
@@ -765,18 +765,18 @@ int dotet (CUBE *cube,int c1,int c2,int c3,int c4,PROCESS *p)
   if (cpos != dpos) e6 = vertid(c, d, p);
   /* 14 productive tetrahedral cases (0000 and 1111 do not yield polygons */
   switch (index) {
-  case 1:	 return p->triproc(e5, e6, e3, p->vertices);
-  case 2:	 return p->triproc(e2, e6, e4, p->vertices);
-  case 3:	 return p->triproc(e3, e5, e4, p->vertices) &&
+  case 1:         return p->triproc(e5, e6, e3, p->vertices);
+  case 2:         return p->triproc(e2, e6, e4, p->vertices);
+  case 3:         return p->triproc(e3, e5, e4, p->vertices) &&
     p->triproc(e3, e4, e2, p->vertices);
-  case 4:	 return p->triproc(e1, e4, e5, p->vertices);
-  case 5:	 return p->triproc(e3, e1, e4, p->vertices) &&
+  case 4:         return p->triproc(e1, e4, e5, p->vertices);
+  case 5:         return p->triproc(e3, e1, e4, p->vertices) &&
     p->triproc(e3, e4, e6, p->vertices);
-  case 6:	 return p->triproc(e1, e2, e6, p->vertices) &&
+  case 6:         return p->triproc(e1, e2, e6, p->vertices) &&
     p->triproc(e1, e6, e5, p->vertices);
-  case 7:	 return p->triproc(e1, e2, e3, p->vertices);
-  case 8:	 return p->triproc(e1, e3, e2, p->vertices);
-  case 9:	 return p->triproc(e1, e5, e6, p->vertices) &&
+  case 7:         return p->triproc(e1, e2, e3, p->vertices);
+  case 8:         return p->triproc(e1, e3, e2, p->vertices);
+  case 9:         return p->triproc(e1, e5, e6, p->vertices) &&
     p->triproc(e1, e6, e2, p->vertices);
   case 10: return p->triproc(e1, e3, e6, p->vertices) &&
     p->triproc(e1, e6, e4, p->vertices);
@@ -793,25 +793,25 @@ int dotet (CUBE *cube,int c1,int c2,int c3,int c4,PROCESS *p)
 /**** Cubical Polygonization (optional) ****/
 
 
-#define LB	0  /* left bottom edge	*/
-#define LT	1  /* left top edge	*/
-#define LN	2  /* left near edge	*/
-#define LF	3  /* left far edge	*/
-#define RB	4  /* right bottom edge */
-#define RT	5  /* right top edge	*/
-#define RN	6  /* right near edge	*/
-#define RF	7  /* right far edge	*/
-#define BN	8  /* bottom near edge	*/
-#define BF	9  /* bottom far edge	*/
-#define TN	10 /* top near edge	*/
-#define TF	11 /* top far edge	*/
+#define LB        0  /* left bottom edge        */
+#define LT        1  /* left top edge        */
+#define LN        2  /* left near edge        */
+#define LF        3  /* left far edge        */
+#define RB        4  /* right bottom edge */
+#define RT        5  /* right top edge        */
+#define RN        6  /* right near edge        */
+#define RF        7  /* right far edge        */
+#define BN        8  /* bottom near edge        */
+#define BF        9  /* bottom far edge        */
+#define TN        10 /* top near edge        */
+#define TF        11 /* top far edge        */
 
 static INTLISTS *cubetable[256];
 
-/*			edge: LB, LT, LN, LF, RB, RT, RN, RF, BN, BF, TN, TF */
-static int corner1[12]	   = {LBN,LTN,LBN,LBF,RBN,RTN,RBN,RBF,LBN,LBF,LTN,LTF};
-static int corner2[12]	   = {LBF,LTF,LTN,LTF,RBF,RTF,RTN,RTF,RBN,RBF,RTN,RTF};
-static int leftface[12]	   = {B,  L,  L,  F,  R,  T,  N,  R,  N,  B,  T,  F};
+/*                        edge: LB, LT, LN, LF, RB, RT, RN, RF, BN, BF, TN, TF */
+static int corner1[12]           = {LBN,LTN,LBN,LBF,RBN,RTN,RBN,RBF,LBN,LBF,LTN,LTF};
+static int corner2[12]           = {LBF,LTF,LTN,LTF,RBF,RTF,RTN,RTF,RBN,RBF,RTN,RTF};
+static int leftface[12]           = {B,  L,  L,  F,  R,  T,  N,  R,  N,  B,  T,  F};
 /* face on left when going corner1 to corner2 */
 static int rightface[12]   = {L,  T,  N,  L,  B,  R,  R,  F,  B,  F,  N,  T};
 /* face on right when going corner1 to corner2 */
@@ -880,26 +880,26 @@ void makecubetable (void)
     for (c = 0; c < 8; c++) pos[c] = BIT(i, c);
     for (e = 0; e < 12; e++)
       if (!done[e] && (pos[corner1[e]] != pos[corner2[e]])) {
-	INTLIST *ints = 0;
-	INTLISTS *lists = (INTLISTS *) myD_CALLOC(1, sizeof(INTLISTS));
-	int start = e, edge = e;
-	/* get face that is to right of edge from pos to neg corner: */
-	int face = pos[corner1[e]]? rightface[e] : leftface[e];
-	while (1) {
-	  edge = nextcwedge(edge, face);
-	  done[edge] = 1;
-	  if (pos[corner1[edge]] != pos[corner2[edge]]) {
-	    INTLIST *tmp = ints;
-	    ints = (INTLIST *) myD_CALLOC(1, sizeof(INTLIST));
-	    ints->i = edge;
-	    ints->next = tmp;	/* add edge to head of list */
-	    if (edge == start) break;
-	    face = otherface(edge, face);
-	  }
-	}
-	lists->list = ints;	/* add ints to head of table entry */
-	lists->next = cubetable[i];
-	cubetable[i] = lists;
+        INTLIST *ints = 0;
+        INTLISTS *lists = (INTLISTS *) myD_CALLOC(1, sizeof(INTLISTS));
+        int start = e, edge = e;
+        /* get face that is to right of edge from pos to neg corner: */
+        int face = pos[corner1[e]]? rightface[e] : leftface[e];
+        while (1) {
+          edge = nextcwedge(edge, face);
+          done[edge] = 1;
+          if (pos[corner1[edge]] != pos[corner2[edge]]) {
+            INTLIST *tmp = ints;
+            ints = (INTLIST *) myD_CALLOC(1, sizeof(INTLIST));
+            ints->i = edge;
+            ints->next = tmp;        /* add edge to head of list */
+            if (edge == start) break;
+            face = otherface(edge, face);
+          }
+        }
+        lists->list = ints;        /* add ints to head of table entry */
+        lists->next = cubetable[i];
+        cubetable[i] = lists;
       }
   }
 }
@@ -938,7 +938,7 @@ int setcenter(CENTERLIST **table,int i,int j,int k)
 /* setedge: set vertex id for edge */
 
 void setedge (EDGELIST **table,int i1,int j1,int k1,int i2,int j2,
-	      int k2,int vid)
+              int k2,int vid)
 {
   unsigned int index;
   EDGELIST *new;
@@ -958,7 +958,7 @@ void setedge (EDGELIST **table,int i1,int j1,int k1,int i2,int j2,
 /* getedge: return vertex id for edge; return -1 if not set */
 
 int getedge (EDGELIST **table,int i1,int j1,int k1,int i2,
-	     int j2,int k2)
+             int j2,int k2)
 {
   EDGELIST *q;
   if (i1>i2 || (i1==i2 && (j1>j2 || (j1==j2 && k1>k2)))) {
@@ -967,7 +967,7 @@ int getedge (EDGELIST **table,int i1,int j1,int k1,int i2,
   q = table[HASH(i1, j1, k1)+HASH(i2, j2, k2)];
   for (; q != NULL; q = q->next)
     if (q->i1 == i1 && q->j1 == j1 && q->k1 == k1 &&
-	q->i2 == i2 && q->j2 == j2 && q->k2 == k2)
+        q->i2 == i2 && q->j2 == j2 && q->k2 == k2)
       return q->vid;
   return -1;
 }
@@ -985,7 +985,7 @@ int vertid (CORNER *c1, CORNER *c2, PROCESS *p)
   vertex_type v;
   point_type a, b;
   int vid = getedge(p->edges, c1->i, c1->j, c1->k, c2->i, c2->j, c2->k);
-  if (vid != -1) return vid;	/* previously computed */
+  if (vid != -1) return vid;        /* previously computed */
   a.x = c1->x; a.y = c1->y; a.z = c1->z;
   b.x = c2->x; b.y = c2->y; b.z = c2->z;
   converge(&a, &b, c1->value, p->function, &v.position); /* position */
@@ -1030,8 +1030,8 @@ void vnormal (point_type *point,PROCESS *p,point_type *v)
 /* converge: from two points of differing sign, converge to zero crossing */
 
 void converge (point_type *p1, point_type *p2, double v,
-	       double (*function) PROTO((double,double,double)),
-	       point_type *p)
+               double (*function) PROTO((double,double,double)),
+               point_type *p)
 {
   int i = 0;
   point_type pos, neg;
@@ -1049,7 +1049,7 @@ void converge (point_type *p1, point_type *p2, double v,
     p->z = 0.5*(pos.z + neg.z);
     if (i++ == RES) return;
     if ((function(p->x, p->y, p->z)) > 0.0)
-	{pos.x = p->x; pos.y = p->y; pos.z = p->z;}
+        {pos.x = p->x; pos.y = p->y; pos.z = p->z;}
     else {neg.x = p->x; neg.y = p->y; neg.z = p->z;}
   }
 }

@@ -112,9 +112,9 @@ XGCValues xgcv;
 #define NUM_MAC_LINESTYLES 4
 RGBColor Maclinestyles[NUM_MAC_LINESTYLES] =
        {{0x0000,0x0000,0x0000},
-	    {0xFFFF,0x0000,0x0000},
-	    {0x0000,0xFFFF,0x0000},
-	    {0x0000,0x0000,0xFFFF}};
+            {0xFFFF,0x0000,0x0000},
+            {0x0000,0xFFFF,0x0000},
+            {0x0000,0x0000,0xFFFF}};
 #endif
 
 
@@ -133,7 +133,7 @@ void g_line(float x1,float y1,float x2,float y2)
 
   if( doing_ps ){
     fprintf(psfile,"%lf %lf M %lf %lf L SNP\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
   }
 
 #ifdef X_GRAPHICS
@@ -150,12 +150,12 @@ void g_line(float x1,float y1,float x2,float y2)
 #endif
 
 #ifdef MAC_GRAPHICS
-	if(doing_Mac){
-		MoveTo((short)(GRAPHICS_SCALE*x1),
-		       (short)(GRAPHICS_SCALE*y1));
-		LineTo((short)(GRAPHICS_SCALE*x2),
-		       (short)(GRAPHICS_SCALE*y2));
-	}
+        if(doing_Mac){
+                MoveTo((short)(GRAPHICS_SCALE*x1),
+                       (short)(GRAPHICS_SCALE*y1));
+                LineTo((short)(GRAPHICS_SCALE*x2),
+                       (short)(GRAPHICS_SCALE*y2));
+        }
 #endif
 }
 
@@ -168,7 +168,7 @@ void g_line(float x1,float y1,float x2,float y2)
 
   *****/
 void g_lines(XPoint *Ipoints,point_type2D *Fpoints,
-	     int num_points,char fill_it)
+             int num_points,char fill_it)
 {
   int i;
 #ifdef MAC_GRAPHICS
@@ -182,11 +182,11 @@ void g_lines(XPoint *Ipoints,point_type2D *Fpoints,
 #if 0
       /* this is a space saving check to avoid overly long paths */
       if( i>num_points-1 ||
-	 !((Fpoints[i].x == Fpoints[i-1].x &&
-	    Fpoints[i].x == Fpoints[i+1].x) ||
-	   (Fpoints[i].y == Fpoints[i-1].y &&
-	    Fpoints[i].y == Fpoints[i+1].y) ) ){
-	fprintf(psfile,"%lf %lf L\n",Fpoints[i].x,Fpoints[i].y);
+         !((Fpoints[i].x == Fpoints[i-1].x &&
+            Fpoints[i].x == Fpoints[i+1].x) ||
+           (Fpoints[i].y == Fpoints[i-1].y &&
+            Fpoints[i].y == Fpoints[i+1].y) ) ){
+        fprintf(psfile,"%lf %lf L\n",Fpoints[i].x,Fpoints[i].y);
       }
 #endif
       fprintf(psfile,"%6.2lf %6.2lf L\n",Fpoints[i].x,Fpoints[i].y);
@@ -204,7 +204,7 @@ void g_lines(XPoint *Ipoints,point_type2D *Fpoints,
   if( doing_X ){
     if( fill_it ){
       XFillPolygon(disp,gpix,graygc[1],Ipoints,num_points,Complex,
-		   CoordModeOrigin);
+                   CoordModeOrigin);
     }
     XDrawLines(disp,gpix,graphgc,Ipoints,num_points,CoordModeOrigin);
 
@@ -226,21 +226,21 @@ void g_lines(XPoint *Ipoints,point_type2D *Fpoints,
       theRegion = NewRgn();
     }
     MoveTo((short)(GRAPHICS_SCALE*Ipoints[0].x),
-	   (short)(GRAPHICS_SCALE*Ipoints[0].y));
+           (short)(GRAPHICS_SCALE*Ipoints[0].y));
     for(i=1;i<num_points;i++){
       LineTo((short)(GRAPHICS_SCALE*Ipoints[i].x),
-	     (short)(GRAPHICS_SCALE*Ipoints[i].y));
+             (short)(GRAPHICS_SCALE*Ipoints[i].y));
     }
 
     if(fill_it){
       LineTo((short)(GRAPHICS_SCALE*Ipoints[0].x),
-	     (short)(GRAPHICS_SCALE*Ipoints[0].y));
+             (short)(GRAPHICS_SCALE*Ipoints[0].y));
 
       CloseRgn(theRegion);
       /*
-	 PenPat(&qd.gray);
-	 PaintRgn(theRegion);
-	 PenPat(&qd.black);
+         PenPat(&qd.gray);
+         PaintRgn(theRegion);
+         PenPat(&qd.black);
       */
       FillRgn(theRegion,&qd.black);
       FrameRgn(theRegion);
@@ -253,7 +253,7 @@ void g_lines(XPoint *Ipoints,point_type2D *Fpoints,
 
 #ifdef DEBUG_HIDDEN_LINE
 void g_clines(XPoint *Ipoints,point_type2D *Fpoints,
-	      int num_points,char fill_it)
+              int num_points,char fill_it)
 {
   int i;
 #ifdef MAC_GRAPHICS
@@ -289,7 +289,7 @@ void g_center_text(float x,float y,char *string)
     theight = big_font->ascent;
     textloc = (int)x - twidth/2;
     XDrawString(disp,gpix,bigtextgc,textloc,
-		(int)y+big_font->ascent,string,strlen(string));
+                (int)y+big_font->ascent,string,strlen(string));
     if( x + twidth/2 > localmax.x )
       localmax.x = x+twidth/2;
     if( x - twidth/2 < localmin.x )
@@ -318,7 +318,7 @@ void g_center_text(float x,float y,char *string)
     textloc = (int)(GRAPHICS_SCALE*x) -
       (int)(TextWidth(string,0,strlen(string))/2);
     MoveTo((short)textloc,(short)(GRAPHICS_SCALE*y +
-				  Mac_globals.fontSize));
+                                  Mac_globals.fontSize));
     DrawText(string,0,strlen(string));
   }
 #endif
@@ -344,7 +344,7 @@ void g_right_text(float x,float y,char *string)
   if( doing_X ){
     textloc = (int)x - XTextWidth(big_font,string,strlen(string));
     XDrawString(disp,gpix,bigtextgc,textloc,
-		(int)y+big_font->ascent/2,string,strlen(string));
+                (int)y+big_font->ascent/2,string,strlen(string));
     if( x > localmax.x ) localmax.x = x;
     if( textloc < localmin.x ) localmin.x = x;
     if( y > localmax.y ) localmax.y = y;
@@ -371,7 +371,7 @@ void g_right_text(float x,float y,char *string)
     textloc = (int)(GRAPHICS_SCALE*x) -
       (int)TextWidth(string,0,strlen(string));
     MoveTo((short)textloc,(short)(GRAPHICS_SCALE*y +
-				  Mac_globals.fontSize/2));
+                                  Mac_globals.fontSize/2));
     DrawText(string,0,strlen(string));
   }
 #endif
@@ -398,7 +398,7 @@ void g_left_text(float x,float y,char *string)
   if( doing_X ){
     textloc = (int)x;
     XDrawString(disp,gpix,bigtextgc,textloc,
-		(int)y+big_font->ascent/2,string,strlen(string));
+                (int)y+big_font->ascent/2,string,strlen(string));
   }
 #endif
 
@@ -412,7 +412,7 @@ void g_left_text(float x,float y,char *string)
   if(doing_Mac){
     textloc = (int)(GRAPHICS_SCALE*x);
     MoveTo((short)textloc,(short)(GRAPHICS_SCALE*y +
-				  Mac_globals.fontSize/2));
+                                  Mac_globals.fontSize/2));
     DrawText(string,0,strlen(string));
   }
 #endif
@@ -436,20 +436,20 @@ void g_change_linestyle(int style)
   if( doing_ps ){
     fprintf(psfile,"stroke newpath\n");
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[style%NUM_PS_LINESTYLES]);
+            PSlinestyles[style%NUM_PS_LINESTYLES]);
   }
 
 #ifdef X_GRAPHICS
   if( doing_X ){
     if( style%NUM_X_LINESTYLES){
       XSetDashes(disp,graphgc,0,Xlinestyles[style%NUM_X_LINESTYLES],
-		 Xstylelengths[style%NUM_X_LINESTYLES]);
+                 Xstylelengths[style%NUM_X_LINESTYLES]);
       XSetLineAttributes( disp, graphgc, 1, LineOnOffDash,
-			 CapRound, JoinRound);
+                         CapRound, JoinRound);
     }
     else{
       XSetLineAttributes( disp, graphgc, 0, LineSolid,
-			 CapRound, JoinRound);
+                         CapRound, JoinRound);
     }
   }
 #endif
@@ -488,10 +488,10 @@ void g_change_linewidth(float thickness)
   if( doing_X ){
     if( thickness != 1 ){
       XSetLineAttributes( disp, graphgc, (short)thickness, LineSolid,
-			 CapRound, JoinRound);
+                         CapRound, JoinRound);
     }else{
       XSetLineAttributes( disp, graphgc, (short)0, LineSolid,
-			 CapRound, JoinRound);
+                         CapRound, JoinRound);
     }
   }
 #endif
@@ -520,7 +520,7 @@ void g_change_linewidth(float thickness)
 
   *********/
 void g_draw_breaking_line(float x1,float y1,float x2,float y2,
-			  int width)
+                          int width)
 {
 #ifdef MAC_GRAPHICS
   RGBColor the_color;
@@ -532,21 +532,21 @@ void g_draw_breaking_line(float x1,float y1,float x2,float y2,
   if( doing_ps ){
     fprintf(psfile,"%d setlinewidth 1 setgray\n",width+4);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%d setlinewidth 0 setgray\n",width);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
   }
 
 #ifdef X_GRAPHICS
   if( doing_X ){
 
     XSetLineAttributes( disp, widegc, width+4, LineSolid,
-		       CapNotLast, JoinRound);
+                       CapNotLast, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)x1,(short)y1,
-	      (short)x2,(short)y2);
+              (short)x2,(short)y2);
     XSetLineAttributes( disp, graphgc, width, LineSolid,
-		       CapRound, JoinRound);
+                       CapRound, JoinRound);
     XDrawLine(disp,gpix,graphgc,(short)x1,(short)y1,(short)x2,(short)y2);
 
   }
@@ -616,7 +616,7 @@ void g_draw_breaking_line(float x1,float y1,float x2,float y2,
 
   *********/
 void g_draw_stop_line(float x1,float y1,float x2,float y2,
-			  int width,float xs, float ys)
+                          int width,float xs, float ys)
 {
 #ifdef MAC_GRAPHICS
   RGBColor the_color;
@@ -628,21 +628,21 @@ void g_draw_stop_line(float x1,float y1,float x2,float y2,
   if( doing_ps ){
     fprintf(psfile,"%d setlinewidth 1 setgray 0 setlinecap\n",width+4);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    xs,ys,x2,y2);
+            xs,ys,x2,y2);
     fprintf(psfile,"%d setlinewidth 0 setgray 1 setlinecap\n",width);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
   }
 
 #ifdef X_GRAPHICS
   if( doing_X ){
 
     XSetLineAttributes( disp, widegc, width+4, LineSolid,
-		       CapNotLast, JoinRound);
+                       CapNotLast, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)xs,(short)ys,
-	      (short)x2,(short)y2);
+              (short)x2,(short)y2);
     XSetLineAttributes( disp, graphgc, width, LineSolid,
-		       CapRound, JoinRound);
+                       CapRound, JoinRound);
     XDrawLine(disp,gpix,graphgc,(short)x1,(short)y1,(short)x2,(short)y2);
 
   }
@@ -713,7 +713,7 @@ void g_draw_stop_line(float x1,float y1,float x2,float y2,
 
 *********/
 void g_draw_tube_line(float x1,float y1,float x2,float y2,
-		      int width)
+                      int width)
 {
 #ifdef MAC_GRAPHICS
   RGBColor the_color;
@@ -726,22 +726,22 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
   if( doing_ps ){
     fprintf(psfile,"%d setlinewidth 1 setgray 0 setlinecap\n",width+8);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%d setlinewidth 0 setgray 1 setlinecap\n",width+4);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%d setlinewidth 1 setgray 1 setlinecap\n",width);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke 0 setlinecap\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
   }
 
 #ifdef X_GRAPHICS
   if( doing_X ){
     XSetLineAttributes( disp, widegc, width+8, LineSolid,
-		       CapNotLast, JoinRound);
+                       CapNotLast, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)x1,(short)y1,(short)x2,(short)y2);
     XSetLineAttributes( disp, graphgc, width+4, LineSolid,
-		       CapRound,JoinRound);
+                       CapRound,JoinRound);
     XDrawLine(disp,gpix,graphgc,(short)x1,(short)y1,(short)x2,(short)y2);
     XSetLineAttributes( disp, widegc, width, LineSolid, CapRound, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)x1,(short)y1,(short)x2,(short)y2);
@@ -786,23 +786,23 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
     if( slope >= 1){
       PenSize((short)width+OUTER_OFFSET,(short)width+OUTER_OFFSET);
       MoveTo((short)(GRAPHICS_SCALE*x1+width),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2+width),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
       MoveTo((short)(GRAPHICS_SCALE*x1-width-(OUTER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(OUTER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
     }else{
       PenSize((short)width+3,(short)width+3);
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1-width-(OUTER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y1-width-(OUTER_OFFSET-1)));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2-width-(OUTER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y2-width-(OUTER_OFFSET-1)));
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1+width));
+             (short)(GRAPHICS_SCALE*y1+width));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2+width));
+             (short)(GRAPHICS_SCALE*y2+width));
     }
 
 
@@ -814,23 +814,23 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
     if( slope >= 1){
       PenSize((short)width+INNER_OFFSET,(short)width+INNER_OFFSET);
       MoveTo((short)(GRAPHICS_SCALE*x1+width),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2+width),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
       MoveTo((short)(GRAPHICS_SCALE*x1-width-(INNER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(INNER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
     }else{
       PenSize((short)width+2,(short)width+2);
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1-width-(INNER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y1-width-(INNER_OFFSET-1)));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2-width-(INNER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y2-width-(INNER_OFFSET-1)));
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1+width));
+             (short)(GRAPHICS_SCALE*y1+width));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2+width));
+             (short)(GRAPHICS_SCALE*y2+width));
     }
 
 
@@ -860,7 +860,7 @@ void g_draw_tube_line(float x1,float y1,float x2,float y2,
 
 *********/
 void g_draw_stop_tube(float x1,float y1,float x2,float y2,
-		      int width,float xs,float ys)
+                      int width,float xs,float ys)
 {
 #ifdef MAC_GRAPHICS
   RGBColor the_color;
@@ -874,27 +874,27 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
 #if 0
     fprintf(psfile,"%d setlinewidth 1 setgray 0 setlinecap\n",width+8);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    xs,ys,x2,y2);
+            xs,ys,x2,y2);
     fprintf(psfile,"%d setlinewidth 0 setgray 1 setlinecap\n",width+4);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%d setlinewidth 1 setgray 1 setlinecap\n",width);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke 0 setlinecap\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
 #endif
     switch(PS_options.bond_type){
     case BOND_PLAIN:
       fprintf(psfile,"[%lf %d %lf %lf %lf %lf %lf %lf] stoptube\n",
-	      (float)1.0,width,x1,y1,x2,y2,xs,ys);
+              (float)1.0,width,x1,y1,x2,y2,xs,ys);
       break;
     case BOND_SHADE:
       fprintf(psfile,"[%lf %d %lf %lf %lf %lf %lf %lf] stoptube\n",
-	      (float)PS_options.bond_shade,width,x1,y1,x2,y2,xs,ys);
+              (float)PS_options.bond_shade,width,x1,y1,x2,y2,xs,ys);
       break;
     case BOND_CSHADE:
       fprintf(psfile,"[%.4lf %.4lf %.4lf %d %lf %lf %lf %lf %lf %lf] Cstoptube\n",
-	      PS_options.bond_color[0],PS_options.bond_color[1],PS_options.bond_color[2],
-	      width,x1,y1,x2,y2,xs,ys);
+              PS_options.bond_color[0],PS_options.bond_color[1],PS_options.bond_color[2],
+              width,x1,y1,x2,y2,xs,ys);
       break;
     }
 
@@ -903,10 +903,10 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
 #ifdef X_GRAPHICS
   if( doing_X ){
     XSetLineAttributes( disp, widegc, width+8, LineSolid,
-		       CapNotLast, JoinRound);
+                       CapNotLast, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)xs,(short)ys,(short)x2,(short)y2);
     XSetLineAttributes( disp, graphgc, width+4, LineSolid,
-		       CapRound,JoinRound);
+                       CapRound,JoinRound);
     XDrawLine(disp,gpix,graphgc,(short)x1,(short)y1,(short)x2,(short)y2);
     XSetLineAttributes( disp, widegc, width, LineSolid, CapRound, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)x1,(short)y1,(short)x2,(short)y2);
@@ -951,23 +951,23 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
     if( slope >= 1){
       PenSize((short)width+OUTER_OFFSET,(short)width+OUTER_OFFSET);
       MoveTo((short)(GRAPHICS_SCALE*xs+width),
-	     (short)(GRAPHICS_SCALE*ys));
+             (short)(GRAPHICS_SCALE*ys));
       LineTo((short)(GRAPHICS_SCALE*x2+width),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
       MoveTo((short)(GRAPHICS_SCALE*xs-width-(OUTER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*ys));
+             (short)(GRAPHICS_SCALE*ys));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(OUTER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
     }else{
       PenSize((short)width+3,(short)width+3);
       MoveTo((short)(GRAPHICS_SCALE*xs),
-	     (short)(GRAPHICS_SCALE*ys-width-(OUTER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*ys-width-(OUTER_OFFSET-1)));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2-width-(OUTER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y2-width-(OUTER_OFFSET-1)));
       MoveTo((short)(GRAPHICS_SCALE*xs),
-	     (short)(GRAPHICS_SCALE*ys+width));
+             (short)(GRAPHICS_SCALE*ys+width));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2+width));
+             (short)(GRAPHICS_SCALE*y2+width));
     }
 
 
@@ -979,23 +979,23 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
     if( slope >= 1){
       PenSize((short)width+INNER_OFFSET,(short)width+INNER_OFFSET);
       MoveTo((short)(GRAPHICS_SCALE*x1+width),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2+width),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
       MoveTo((short)(GRAPHICS_SCALE*x1-width-(INNER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(INNER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
     }else{
       PenSize((short)width+2,(short)width+2);
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1-width-(INNER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y1-width-(INNER_OFFSET-1)));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2-width-(INNER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y2-width-(INNER_OFFSET-1)));
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1+width));
+             (short)(GRAPHICS_SCALE*y1+width));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2+width));
+             (short)(GRAPHICS_SCALE*y2+width));
     }
 
 
@@ -1026,7 +1026,7 @@ void g_draw_stop_tube(float x1,float y1,float x2,float y2,
 
   *********/
 void g_draw_dashed_breaking_line(float x1,float y1,float x2,float y2,
-			  int width,int pattern)
+                          int width,int pattern)
 {
 #ifdef MAC_GRAPHICS
   RGBColor the_color;
@@ -1038,27 +1038,27 @@ void g_draw_dashed_breaking_line(float x1,float y1,float x2,float y2,
   if( doing_ps ){
     fprintf(psfile,"%d setlinewidth 1 setgray\n",width+4);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%d setlinewidth 0 setgray\n",width);
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[pattern%NUM_PS_LINESTYLES]);
+            PSlinestyles[pattern%NUM_PS_LINESTYLES]);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[0]);
+            PSlinestyles[0]);
   }
 
 #ifdef X_GRAPHICS
   if( doing_X ){
 
     XSetLineAttributes( disp, widegc, width+4, LineSolid,
-		       CapNotLast, JoinRound);
+                       CapNotLast, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)x1,(short)y1,
-	      (short)x2,(short)y2);
+              (short)x2,(short)y2);
     XSetDashes(disp,graphgc,0,Xlinestyles[pattern%NUM_X_LINESTYLES],
-	       Xstylelengths[pattern%NUM_X_LINESTYLES]);
+               Xstylelengths[pattern%NUM_X_LINESTYLES]);
     XSetLineAttributes( disp, graphgc, width, LineOnOffDash,
-			CapRound, JoinRound);
+                        CapRound, JoinRound);
     XDrawLine(disp,gpix,graphgc,(short)x1,(short)y1,(short)x2,(short)y2);
 
   }
@@ -1129,7 +1129,7 @@ void g_draw_dashed_breaking_line(float x1,float y1,float x2,float y2,
 
 *********/
 void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
-		      int width,int pattern)
+                      int width,int pattern)
 {
 #ifdef MAC_GRAPHICS
   RGBColor the_color;
@@ -1142,30 +1142,30 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
   if( doing_ps ){
     fprintf(psfile,"%d setlinewidth 1 setgray 0 setlinecap\n",width+8);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%d setlinewidth 0 setgray 1 setlinecap\n",width+4);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%d setlinewidth 1 setgray 1 setlinecap\n",width);
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[pattern%NUM_PS_LINESTYLES]);
+            PSlinestyles[pattern%NUM_PS_LINESTYLES]);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke 0 setlinecap\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[0]);
+            PSlinestyles[0]);
   }
 
 #ifdef X_GRAPHICS
   if( doing_X ){
     XSetLineAttributes( disp, widegc, width+8, LineSolid,
-		       CapNotLast, JoinRound);
+                       CapNotLast, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)x1,(short)y1,(short)x2,(short)y2);
     XSetLineAttributes( disp, graphgc, width+4, LineSolid,
-		       CapRound,JoinRound);
+                       CapRound,JoinRound);
     XDrawLine(disp,gpix,graphgc,(short)x1,(short)y1,(short)x2,(short)y2);
 
     XSetDashes(disp,graphgc,0,Xlinestyles[pattern%NUM_X_LINESTYLES],
-	       Xstylelengths[pattern%NUM_X_LINESTYLES]);
+               Xstylelengths[pattern%NUM_X_LINESTYLES]);
     XSetLineAttributes( disp, widegc, width, LineOnOffDash, CapRound, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)x1,(short)y1,(short)x2,(short)y2);
 
@@ -1209,23 +1209,23 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
     if( slope >= 1){
       PenSize((short)width+OUTER_OFFSET,(short)width+OUTER_OFFSET);
       MoveTo((short)(GRAPHICS_SCALE*x1+width),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2+width),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
       MoveTo((short)(GRAPHICS_SCALE*x1-width-(OUTER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(OUTER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
     }else{
       PenSize((short)width+3,(short)width+3);
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1-width-(OUTER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y1-width-(OUTER_OFFSET-1)));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2-width-(OUTER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y2-width-(OUTER_OFFSET-1)));
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1+width));
+             (short)(GRAPHICS_SCALE*y1+width));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2+width));
+             (short)(GRAPHICS_SCALE*y2+width));
     }
 
 
@@ -1237,23 +1237,23 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
     if( slope >= 1){
       PenSize((short)width+INNER_OFFSET,(short)width+INNER_OFFSET);
       MoveTo((short)(GRAPHICS_SCALE*x1+width),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2+width),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
       MoveTo((short)(GRAPHICS_SCALE*x1-width-(INNER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(INNER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
     }else{
       PenSize((short)width+2,(short)width+2);
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1-width-(INNER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y1-width-(INNER_OFFSET-1)));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2-width-(INNER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y2-width-(INNER_OFFSET-1)));
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1+width));
+             (short)(GRAPHICS_SCALE*y1+width));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2+width));
+             (short)(GRAPHICS_SCALE*y2+width));
     }
 
 
@@ -1281,7 +1281,7 @@ void g_draw_dashed_tube_line(float x1,float y1,float x2,float y2,
 
   *********/
 void g_draw_dashed_stop_line(float x1,float y1,float x2,float y2,
-			     int width,int pattern,float xs,float ys)
+                             int width,int pattern,float xs,float ys)
 {
 #ifdef MAC_GRAPHICS
   RGBColor the_color;
@@ -1293,27 +1293,27 @@ void g_draw_dashed_stop_line(float x1,float y1,float x2,float y2,
   if( doing_ps ){
     fprintf(psfile,"%d setlinewidth 1 setgray\n",width+4);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    xs,ys,x2,y2);
+            xs,ys,x2,y2);
     fprintf(psfile,"%d setlinewidth 0 setgray\n",width);
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[pattern%NUM_PS_LINESTYLES]);
+            PSlinestyles[pattern%NUM_PS_LINESTYLES]);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[0]);
+            PSlinestyles[0]);
   }
 
 #ifdef X_GRAPHICS
   if( doing_X ){
 
     XSetLineAttributes( disp, widegc, width+4, LineSolid,
-		       CapNotLast, JoinRound);
+                       CapNotLast, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)xs,(short)ys,
-	      (short)x2,(short)y2);
+              (short)x2,(short)y2);
     XSetDashes(disp,graphgc,0,Xlinestyles[pattern%NUM_X_LINESTYLES],
-	       Xstylelengths[pattern%NUM_X_LINESTYLES]);
+               Xstylelengths[pattern%NUM_X_LINESTYLES]);
     XSetLineAttributes( disp, graphgc, width, LineOnOffDash,
-			CapRound, JoinRound);
+                        CapRound, JoinRound);
     XDrawLine(disp,gpix,graphgc,(short)x1,(short)y1,(short)x2,(short)y2);
 
   }
@@ -1384,7 +1384,7 @@ void g_draw_dashed_stop_line(float x1,float y1,float x2,float y2,
 
 *********/
 void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
-		      int width,int pattern,float xs,float ys)
+                      int width,int pattern,float xs,float ys)
 {
 #ifdef MAC_GRAPHICS
   RGBColor the_color;
@@ -1397,30 +1397,30 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
   if( doing_ps ){
     fprintf(psfile,"%d setlinewidth 1 setgray 0 setlinecap\n",width+8);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    xs,ys,x2,y2);
+            xs,ys,x2,y2);
     fprintf(psfile,"%d setlinewidth 0 setgray 1 setlinecap\n",width+4);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%d setlinewidth 1 setgray 1 setlinecap\n",width);
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[pattern%NUM_PS_LINESTYLES]);
+            PSlinestyles[pattern%NUM_PS_LINESTYLES]);
     fprintf(psfile,"%lf %lf M %lf %lf L stroke 0 setlinecap\n",
-	    x1,y1,x2,y2);
+            x1,y1,x2,y2);
     fprintf(psfile,"%s centerdash\n",
-	    PSlinestyles[0]);
+            PSlinestyles[0]);
   }
 
 #ifdef X_GRAPHICS
   if( doing_X ){
     XSetLineAttributes( disp, widegc, width+8, LineSolid,
-		       CapNotLast, JoinRound);
+                       CapNotLast, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)xs,(short)ys,(short)x2,(short)y2);
     XSetLineAttributes( disp, graphgc, width+4, LineSolid,
-		       CapRound,JoinRound);
+                       CapRound,JoinRound);
     XDrawLine(disp,gpix,graphgc,(short)x1,(short)y1,(short)x2,(short)y2);
 
     XSetDashes(disp,graphgc,0,Xlinestyles[pattern%NUM_X_LINESTYLES],
-	       Xstylelengths[pattern%NUM_X_LINESTYLES]);
+               Xstylelengths[pattern%NUM_X_LINESTYLES]);
     XSetLineAttributes( disp, widegc, width, LineOnOffDash, CapRound, JoinRound);
     XDrawLine(disp,gpix,widegc,(short)x1,(short)y1,(short)x2,(short)y2);
 
@@ -1464,23 +1464,23 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
     if( slope >= 1){
       PenSize((short)width+OUTER_OFFSET,(short)width+OUTER_OFFSET);
       MoveTo((short)(GRAPHICS_SCALE*xs+width),
-	     (short)(GRAPHICS_SCALE*ys));
+             (short)(GRAPHICS_SCALE*ys));
       LineTo((short)(GRAPHICS_SCALE*x2+width),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
       MoveTo((short)(GRAPHICS_SCALE*xs-width-(OUTER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*ys));
+             (short)(GRAPHICS_SCALE*ys));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(OUTER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
     }else{
       PenSize((short)width+3,(short)width+3);
       MoveTo((short)(GRAPHICS_SCALE*xs),
-	     (short)(GRAPHICS_SCALE*ys-width-(OUTER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*ys-width-(OUTER_OFFSET-1)));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2-width-(OUTER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y2-width-(OUTER_OFFSET-1)));
       MoveTo((short)(GRAPHICS_SCALE*xs),
-	     (short)(GRAPHICS_SCALE*ys+width));
+             (short)(GRAPHICS_SCALE*ys+width));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2+width));
+             (short)(GRAPHICS_SCALE*y2+width));
     }
 
 
@@ -1492,23 +1492,23 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
     if( slope >= 1){
       PenSize((short)width+INNER_OFFSET,(short)width+INNER_OFFSET);
       MoveTo((short)(GRAPHICS_SCALE*x1+width),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2+width),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
       MoveTo((short)(GRAPHICS_SCALE*x1-width-(INNER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y1));
+             (short)(GRAPHICS_SCALE*y1));
       LineTo((short)(GRAPHICS_SCALE*x2-width-(INNER_OFFSET-1)),
-	     (short)(GRAPHICS_SCALE*y2));
+             (short)(GRAPHICS_SCALE*y2));
     }else{
       PenSize((short)width+2,(short)width+2);
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1-width-(INNER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y1-width-(INNER_OFFSET-1)));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2-width-(INNER_OFFSET-1)));
+             (short)(GRAPHICS_SCALE*y2-width-(INNER_OFFSET-1)));
       MoveTo((short)(GRAPHICS_SCALE*x1),
-	     (short)(GRAPHICS_SCALE*y1+width));
+             (short)(GRAPHICS_SCALE*y1+width));
       LineTo((short)(GRAPHICS_SCALE*x2),
-	     (short)(GRAPHICS_SCALE*y2+width));
+             (short)(GRAPHICS_SCALE*y2+width));
     }
 
 
@@ -1538,9 +1538,9 @@ void g_draw_dashed_stop_tube(float x1,float y1,float x2,float y2,
 
 *********/
 void  g_draw_trapezoid_bond(float P1x,float P1y,float P1z,
-			    float P2x,float P2y,float P2z,
-			    float bond_rad,float radius1,float radius2,
-			    int width)
+                            float P2x,float P2y,float P2z,
+                            float bond_rad,float radius1,float radius2,
+                            int width)
 {
   float diffx,diffy;
   float dx1,dx2,dy1,dy2,slope,inv_slope;
@@ -1605,16 +1605,16 @@ void  g_draw_trapezoid_bond(float P1x,float P1y,float P1z,
   if(doing_ps){
     fprintf(psfile,"1 setgray\n");
     fprintf(psfile,"%lf %lf %lf 0 360 arc fill stroke\n",
-	    P1x,P1y,rad1);
+            P1x,P1y,rad1);
     fprintf(psfile,"%lf %lf %lf 0 360 arc fill stroke\n",
-	    P2x,P2y,rad2);
+            P2x,P2y,rad2);
   }
 #ifdef X_GRAPHICS
   if( doing_X ){
     XFillArc(disp,gpix,*active_gc,(int)(P1x-rad1),(int)(P1y-rad1),
-	     2*(int)rad1,2*(int)rad1,0,23040);
+             2*(int)rad1,2*(int)rad1,0,23040);
     XFillArc(disp,gpix,*active_gc,(int)(P2x-rad2),(int)(P2y-rad2),
-	     2*(int)rad2,2*(int)rad2,0,23040);
+             2*(int)rad2,2*(int)rad2,0,23040);
   }
 #endif
   g_draw_breaking_line(P1t.x,P1t.y,P2t.x,P2t.y,width);
@@ -1635,16 +1635,16 @@ void g_rectangle(float x,float y,float dimx,float dimy)
 #endif
   if( doing_ps ){
     fprintf(psfile,"%lf %lf M %lf %lf L %lf %lf L\n",
-	    x,y,x+dimx,y,x+dimx,y-dimy);
+            x,y,x+dimx,y,x+dimx,y-dimy);
     fprintf(psfile,"%lf %lf L %lf %lf L\n",
-	    x,y-dimy,x,y);
+            x,y-dimy,x,y);
     fprintf(psfile,"stroke\n");
   }
 
 #ifdef X_GRAPHICS
   if(doing_X){
     XDrawRectangle(disp,gpix,graphgc,(int)x,(int)(y-dimy),
-		   (int)dimx,(int)dimy);
+                   (int)dimx,(int)dimy);
   }
 #endif
 
@@ -1732,14 +1732,14 @@ void g_open_circle(float x,float y,float radius)
   if(doing_ps){
     fprintf(psfile,"arcwid setlinewidth\n");
     fprintf(psfile,"SNP %lf %lf %lf 0 360 arc stroke\n",
-	    x,y,radius);
+            x,y,radius);
   }
 
 
 #ifdef X_GRAPHICS
   if( doing_X ){
     XDrawArc(disp,gpix,graphgc,(int)(x-radius),(int)(y-radius),
-	     2*(int)radius,2*(int)radius,0,23040);
+             2*(int)radius,2*(int)radius,0,23040);
   }
 #endif
 #ifdef MAC_GRAPHICS
@@ -1775,12 +1775,12 @@ void g_crossed_circle(float x,float y,float radius)
 #ifdef X_GRAPHICS
   if( doing_X ){
     XDrawArc(disp,gpix,graphgc,(int)(x-radius),(int)(y-radius),
-	     2*(int)radius,2*(int)radius,0,23040);
+             2*(int)radius,2*(int)radius,0,23040);
 
     XDrawArc(disp,gpix,graphgc,(int)(x-radius),(int)(y-0.5*radius),
-	     2*(int)radius,(int)radius,0,-180*64);
+             2*(int)radius,(int)radius,0,-180*64);
     XDrawArc(disp,gpix,graphgc,(int)(x-0.5*radius),(int)(y-radius),
-	     (int)radius,2*(int)radius,90*64,180*64);
+             (int)radius,2*(int)radius,90*64,180*64);
   }
 #endif
 #ifdef MAC_GRAPHICS
@@ -1815,7 +1815,7 @@ void g_crossed_circle(float x,float y,float radius)
 
   ****************/
 void g_filled_circle(float x,float y,float radius,float shade,float color[3],
-		     long int *Gpixel_val, long int *Cpixel_val)
+                     long int *Gpixel_val, long int *Cpixel_val)
 {
   int i;
   float cur_rad,xoffset,yoffset;
@@ -1826,22 +1826,22 @@ void g_filled_circle(float x,float y,float radius,float shade,float color[3],
     switch(PS_options.atom_sphere_type){
     case ATOM_PLAIN_FILL:
       fprintf(psfile,"SNP %lf %lf %lf 0 360 arc fill stroke\n",
-	      x,y,radius);
+              x,y,radius);
       break;
     case ATOM_SHADE_FILL:
       fprintf(psfile,"[%4.4lf %lf %lf %lf] shadecirc\n",
-	      shade,x,y,radius);
+              shade,x,y,radius);
       break;
     case ATOM_COLOR_FILL:
       fprintf(psfile,"%4.4lf %4.4lf %4.4lf setrgbcolor\n",
-	      color[0],color[1],color[2]);
+              color[0],color[1],color[2]);
       fprintf(psfile,"SNP %lf %lf %lf 0 360 arc fill stroke\n",
-	      x,y,radius);
+              x,y,radius);
       fprintf(psfile,"0 0 0 setrgbcolor\n");
       break;
     case ATOM_CSHADE_FILL:
       fprintf(psfile,"[%4.4lf %4.4lf %4.4lf %lf %lf %lf] Cshadecirc\n",
-	      color[0],color[1],color[2],x,y,radius);
+              color[0],color[1],color[2],x,y,radius);
       break;
     }
   }
@@ -1851,90 +1851,90 @@ void g_filled_circle(float x,float y,float radius,float shade,float color[3],
     switch(PS_options.atom_sphere_type){
     case ATOM_SHADE_FILL:
       if( need_colormap ){
-	colormap = DefaultColormap(disp,screen);
-	need_colormap = 0;
+        colormap = DefaultColormap(disp,screen);
+        need_colormap = 0;
       }
       if( Gpixel_val[0] == -1 || refresh_all_colormaps ){
-	for(i=0;i<NUM_X_SHADES;i++){
-	  thecolor.red = (short)(65000*(shade+(1-shade)*i/NUM_X_SHADES));
-	  thecolor.green = (short)(65000*(shade+(1-shade)*i/NUM_X_SHADES));
-	  thecolor.blue = (short)(65000*(shade+(1-shade)*i/NUM_X_SHADES));
-	  if(!XAllocColor(disp,colormap,&thecolor))
-	    error("can't allocate color.");
-	  Gpixel_val[i] = thecolor.pixel;
-	}
+        for(i=0;i<NUM_X_SHADES;i++){
+          thecolor.red = (short)(65000*(shade+(1-shade)*i/NUM_X_SHADES));
+          thecolor.green = (short)(65000*(shade+(1-shade)*i/NUM_X_SHADES));
+          thecolor.blue = (short)(65000*(shade+(1-shade)*i/NUM_X_SHADES));
+          if(!XAllocColor(disp,colormap,&thecolor))
+            error("can't allocate color.");
+          Gpixel_val[i] = thecolor.pixel;
+        }
       }
       for(i=0;i<NUM_X_SHADES;i++){
-	cur_rad = radius * (1 - (float)i*.08);
-	xoffset = x - cur_rad * (1+(float)i*0.05);
-	yoffset = y - cur_rad * (1- (float)i*0.05);
-	xgcv.foreground = Gpixel_val[i];
-	XChangeGC(disp,colorgc,GCForeground,&xgcv);
-	XFillArc(disp,gpix,colorgc,(int)(xoffset),(int)(yoffset),
-		 2*(int)cur_rad,2*(int)cur_rad,0,23040);
+        cur_rad = radius * (1 - (float)i*.08);
+        xoffset = x - cur_rad * (1+(float)i*0.05);
+        yoffset = y - cur_rad * (1- (float)i*0.05);
+        xgcv.foreground = Gpixel_val[i];
+        XChangeGC(disp,colorgc,GCForeground,&xgcv);
+        XFillArc(disp,gpix,colorgc,(int)(xoffset),(int)(yoffset),
+                 2*(int)cur_rad,2*(int)cur_rad,0,23040);
       }
       break;
 
     case ATOM_COLOR_FILL:
       if( need_colormap ){
-	colormap = DefaultColormap(disp,screen);
-	need_colormap = 0;
+        colormap = DefaultColormap(disp,screen);
+        need_colormap = 0;
       }
       if( Cpixel_val[0]== -1 || refresh_all_colormaps ){
-	for(i=0;i<NUM_X_SHADES;i++){
-	  thecolor.red = (short)(65000*(color[0]+
-					(1-color[0])*i/NUM_X_SHADES));
-	  thecolor.green = (short)(65000*(color[1]+
-					(1-color[1])*i/NUM_X_SHADES));
-	  thecolor.blue = (short)(65000*(color[2]+
-					(1-color[2])*i/NUM_X_SHADES));
-	  if(!XAllocColor(disp,colormap,&thecolor))
-	    error("can't allocate color.");
-	  Cpixel_val[i] = thecolor.pixel;
-	}
+        for(i=0;i<NUM_X_SHADES;i++){
+          thecolor.red = (short)(65000*(color[0]+
+                                        (1-color[0])*i/NUM_X_SHADES));
+          thecolor.green = (short)(65000*(color[1]+
+                                        (1-color[1])*i/NUM_X_SHADES));
+          thecolor.blue = (short)(65000*(color[2]+
+                                        (1-color[2])*i/NUM_X_SHADES));
+          if(!XAllocColor(disp,colormap,&thecolor))
+            error("can't allocate color.");
+          Cpixel_val[i] = thecolor.pixel;
+        }
       }
       xgcv.foreground = Cpixel_val[0];
       XChangeGC(disp,colorgc,GCForeground,&xgcv);
       XFillArc(disp,gpix,colorgc,(int)(x-radius),(int)(y-radius),
-	       2*(int)radius,2*(int)radius,0,23040);
+               2*(int)radius,2*(int)radius,0,23040);
       break;
     case ATOM_CSHADE_FILL:
       if( need_colormap ){
-	colormap = DefaultColormap(disp,screen);
-	need_colormap = 0;
+        colormap = DefaultColormap(disp,screen);
+        need_colormap = 0;
       }
       if( *Cpixel_val== -1 || refresh_all_colormaps ){
-	for(i=0;i<NUM_X_SHADES;i++){
-	  thecolor.red = (short)(65000*(color[0]+
-					(1-color[0])*i/NUM_X_SHADES));
-	  thecolor.green = (short)(65000*(color[1]+
-					(1-color[1])*i/NUM_X_SHADES));
-	  thecolor.blue = (short)(65000*(color[2]+
-					(1-color[2])*i/NUM_X_SHADES));
-	  if(!XAllocColor(disp,colormap,&thecolor))
-	    error("can't allocate color.");
-	  Cpixel_val[i] = thecolor.pixel;
-	}
+        for(i=0;i<NUM_X_SHADES;i++){
+          thecolor.red = (short)(65000*(color[0]+
+                                        (1-color[0])*i/NUM_X_SHADES));
+          thecolor.green = (short)(65000*(color[1]+
+                                        (1-color[1])*i/NUM_X_SHADES));
+          thecolor.blue = (short)(65000*(color[2]+
+                                        (1-color[2])*i/NUM_X_SHADES));
+          if(!XAllocColor(disp,colormap,&thecolor))
+            error("can't allocate color.");
+          Cpixel_val[i] = thecolor.pixel;
+        }
       }
       for(i=0;i<NUM_X_SHADES;i++){
-	cur_rad = radius * (1 - (float)i*.08);
-	xoffset = x - cur_rad * (1+(float)i*0.05);
-	yoffset = y - cur_rad * (1- (float)i*0.05);
-	xgcv.foreground = Cpixel_val[i];
-	XChangeGC(disp,colorgc,GCForeground,&xgcv);
-	XFillArc(disp,gpix,colorgc,(int)(xoffset),(int)(yoffset),
-		 2*(int)cur_rad,2*(int)cur_rad,0,23040);
+        cur_rad = radius * (1 - (float)i*.08);
+        xoffset = x - cur_rad * (1+(float)i*0.05);
+        yoffset = y - cur_rad * (1- (float)i*0.05);
+        xgcv.foreground = Cpixel_val[i];
+        XChangeGC(disp,colorgc,GCForeground,&xgcv);
+        XFillArc(disp,gpix,colorgc,(int)(xoffset),(int)(yoffset),
+                 2*(int)cur_rad,2*(int)cur_rad,0,23040);
       }
       break;
 
     default:
       XFillArc(disp,gpix,*active_gc,(int)(x-radius),(int)(y-radius),
-	       2*(int)radius,2*(int)radius,0,23040);
+               2*(int)radius,2*(int)radius,0,23040);
       break;
     }
 #else
     XFillArc(disp,gpix,*active_gc,(int)(x-radius),(int)(y-radius),
-	     2*(int)radius,2*(int)radius,0,23040);
+             2*(int)radius,2*(int)radius,0,23040);
 #endif
   }
 #endif
@@ -1962,12 +1962,12 @@ void g_white_circle(float x,float y,float radius)
 #endif
   if(doing_ps){
     fprintf(psfile,"SNP 1 SG %lf %lf %lf 0 360 arc fill stroke\n",
-	    x,y,radius);
+            x,y,radius);
   }
 #ifdef X_GRAPHICS
   if( doing_X ){
     XFillArc(disp,gpix,widegc,(int)(x-radius),(int)(y-radius),
-	     2*(int)radius,2*(int)radius,0,23040);
+             2*(int)radius,2*(int)radius,0,23040);
   }
 #endif
 #ifdef MAC_GRAPHICS
@@ -1992,7 +1992,7 @@ void g_filled_polygon(XPoint *points,int num_points)
 {
   int i;
 #ifdef MAC_GRAPHICS
-  static PolyHandle	thePoly;
+  static PolyHandle        thePoly;
   static RgnHandle theRgn;
   static char firstCall = 1;
   short max_x,min_x,max_y,min_y;
@@ -2001,12 +2001,12 @@ void g_filled_polygon(XPoint *points,int num_points)
   if( doing_ps ){
     if( num_points == 3 ){
       fprintf(psfile,"%d %d %d %d %d %d %d %d fT\n",
-	      points[0].x,points[0].y,points[1].x,points[1].y,
-	      points[2].x,points[2].y,points[0].x,points[0].y);
+              points[0].x,points[0].y,points[1].x,points[1].y,
+              points[2].x,points[2].y,points[0].x,points[0].y);
     } else{
       fprintf(psfile,"%d %d M ",points[0].x,points[0].y);
       for(i=1;i<num_points;i++){
-	fprintf(psfile,"%d %d L ",points[i].x,points[i].y);
+        fprintf(psfile,"%d %d L ",points[i].x,points[i].y);
       }
       fprintf(psfile,"%d %d L fill stroke\n",points[0].x,points[0].y);
     }
@@ -2015,7 +2015,7 @@ void g_filled_polygon(XPoint *points,int num_points)
 #ifdef X_GRAPHICS
   if( doing_X ){
     XFillPolygon(disp,gpix,*active_gc,points,num_points,
-		 Convex,CoordModeOrigin);
+                 Convex,CoordModeOrigin);
   }
 #endif
 
@@ -2024,16 +2024,16 @@ void g_filled_polygon(XPoint *points,int num_points)
 #if 0
     if(num_points > 3) return;
     if(firstCall){
-      thePoly = OpenPoly( );	/* start recording */
+      thePoly = OpenPoly( );        /* start recording */
       MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	     (short)(GRAPHICS_SCALE*points[0].y));
+             (short)(GRAPHICS_SCALE*points[0].y));
       LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	     (short)(GRAPHICS_SCALE*points[1].y));
+             (short)(GRAPHICS_SCALE*points[1].y));
       LineTo((short)(GRAPHICS_SCALE*points[2].x),
-	     (short)(GRAPHICS_SCALE*points[2].y));
+             (short)(GRAPHICS_SCALE*points[2].y));
       LineTo((short)(GRAPHICS_SCALE*points[0].x),
-	     (short)(GRAPHICS_SCALE*points[0].y));
-      ClosePoly();		/* stop recording */
+             (short)(GRAPHICS_SCALE*points[0].y));
+      ClosePoly();                /* stop recording */
       firstCall = 0;
     }else{
       /* just directly fill the polyPoints array in the poly record */
@@ -2050,22 +2050,22 @@ void g_filled_polygon(XPoint *points,int num_points)
       min_y = (short)(GRAPHICS_SCALE*points[0].y);
 
       if((short)(GRAPHICS_SCALE*points[1].x) > max_x)
-	max_x = (short)(GRAPHICS_SCALE*points[1].x);
+        max_x = (short)(GRAPHICS_SCALE*points[1].x);
       else if((short)(GRAPHICS_SCALE*points[1].x) < min_x)
-	min_x = (short)(GRAPHICS_SCALE*points[1].x);
+        min_x = (short)(GRAPHICS_SCALE*points[1].x);
       if((short)(GRAPHICS_SCALE*points[1].y) > max_y)
-	max_y = (short)(GRAPHICS_SCALE*points[1].y);
+        max_y = (short)(GRAPHICS_SCALE*points[1].y);
       else if((short)(GRAPHICS_SCALE*points[1].y) < min_y)
-	min_y = (short)(GRAPHICS_SCALE*points[1].y);
+        min_y = (short)(GRAPHICS_SCALE*points[1].y);
 
       if((short)(GRAPHICS_SCALE*points[2].x) > max_x)
-	max_x = (short)(GRAPHICS_SCALE*points[2].x);
+        max_x = (short)(GRAPHICS_SCALE*points[2].x);
       else if((short)(GRAPHICS_SCALE*points[2].x) < min_x)
-	min_x = (short)(GRAPHICS_SCALE*points[2].x);
+        min_x = (short)(GRAPHICS_SCALE*points[2].x);
       if((short)(GRAPHICS_SCALE*points[2].y) > max_y)
-	max_y = (short)(GRAPHICS_SCALE*points[2].y);
+        max_y = (short)(GRAPHICS_SCALE*points[2].y);
       else if((short)(GRAPHICS_SCALE*points[2].y) < min_y)
-	min_y = (short)(GRAPHICS_SCALE*points[2].y);
+        min_y = (short)(GRAPHICS_SCALE*points[2].y);
 
       (*thePoly)->polyBBox.top = min_y;
       (*thePoly)->polyBBox.bottom = max_y;
@@ -2073,17 +2073,17 @@ void g_filled_polygon(XPoint *points,int num_points)
       (*thePoly)->polyBBox.right = max_x;
 
     }
-    PaintPoly( thePoly);	/* paint the inside */
+    PaintPoly( thePoly);        /* paint the inside */
 #endif
 #if 0
-    thePoly = OpenPoly( );	/* start recording */
+    thePoly = OpenPoly( );        /* start recording */
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );
+           (short)(GRAPHICS_SCALE*points[0].y) );
     LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	   (short)(GRAPHICS_SCALE*points[1].y) );
+           (short)(GRAPHICS_SCALE*points[1].y) );
     LineTo((short)(GRAPHICS_SCALE*points[2].x),
-	   (short)(GRAPHICS_SCALE*points[2].y) );
-    ClosePoly();		/* stop recording */
+           (short)(GRAPHICS_SCALE*points[2].y) );
+    ClosePoly();                /* stop recording */
     PaintPoly( thePoly);
     KillPoly(thePoly);
 #endif
@@ -2093,14 +2093,14 @@ void g_filled_polygon(XPoint *points,int num_points)
     }
     OpenRgn();
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );
+           (short)(GRAPHICS_SCALE*points[0].y) );
     LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	   (short)(GRAPHICS_SCALE*points[1].y) );
+           (short)(GRAPHICS_SCALE*points[1].y) );
     LineTo((short)(GRAPHICS_SCALE*points[2].x),
-	   (short)(GRAPHICS_SCALE*points[2].y) );
+           (short)(GRAPHICS_SCALE*points[2].y) );
     LineTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );
-    CloseRgn(theRgn);		/* stop recording */
+           (short)(GRAPHICS_SCALE*points[0].y) );
+    CloseRgn(theRgn);                /* stop recording */
     PaintRgn( theRgn);
     /*DisposeRgn(theRgn);*/
 
@@ -2122,7 +2122,7 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
 {
   int i;
 #ifdef MAC_GRAPHICS
-  static PolyHandle	thePoly;
+  static PolyHandle        thePoly;
   static RgnHandle theRgn;
   static char firstCall = 1;
   short max_x,min_x,max_y,min_y;
@@ -2140,14 +2140,14 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
   if( doing_ps && colorscale >= 0){
     if( num_points == 3 ){
       fprintf(psfile,"%f SNG %d %d %d %d %d %d %d %d fT\n",
-	      colorscale,
-	      points[0].x,points[0].y,points[1].x,points[1].y,
-	      points[2].x,points[2].y,points[0].x,points[0].y);
+              colorscale,
+              points[0].x,points[0].y,points[1].x,points[1].y,
+              points[2].x,points[2].y,points[0].x,points[0].y);
     }else{
       fprintf(psfile,"%f SNG %d %d M ",colorscale,
-	      points[0].x,points[0].y);
+              points[0].x,points[0].y);
       for(i=1;i<num_points;i++){
-	fprintf(psfile,"%d %d L ",points[i].x,points[i].y);
+        fprintf(psfile,"%d %d L ",points[i].x,points[i].y);
       }
       fprintf(psfile,"%d %d L fill stroke\n",points[0].x,points[0].y);
     }
@@ -2181,7 +2181,7 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
     xgcv.foreground = thecolor.pixel;
     XChangeGC(disp,colorgc,GCForeground,&xgcv);
     XFillPolygon(disp,gpix,colorgc,points,num_points,
-		 Convex,CoordModeOrigin);
+                 Convex,CoordModeOrigin);
   }
 #endif
 
@@ -2190,16 +2190,16 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
 #if 0
     if(num_points > 3)return;
     if(firstCall){
-      thePoly = OpenPoly( );	/* start recording */
+      thePoly = OpenPoly( );        /* start recording */
       MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	     (short)(GRAPHICS_SCALE*points[0].y));
+             (short)(GRAPHICS_SCALE*points[0].y));
       LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	     (short)(GRAPHICS_SCALE*points[1].y));
+             (short)(GRAPHICS_SCALE*points[1].y));
       LineTo((short)(GRAPHICS_SCALE*points[2].x),
-	     (short)(GRAPHICS_SCALE*points[2].y));
+             (short)(GRAPHICS_SCALE*points[2].y));
       LineTo((short)(GRAPHICS_SCALE*points[0].x),
-	     (short)(GRAPHICS_SCALE*points[0].y));
-      ClosePoly();		/* stop recording */
+             (short)(GRAPHICS_SCALE*points[0].y));
+      ClosePoly();                /* stop recording */
       firstCall = 0;
     }else{
       /* just directly fill the polyPoints array in the poly record */
@@ -2216,22 +2216,22 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
       min_y = (short)(GRAPHICS_SCALE*points[0].y);
 
       if((short)(GRAPHICS_SCALE*points[1].x) > max_x)
-	max_x = (short)(GRAPHICS_SCALE*points[1].x);
+        max_x = (short)(GRAPHICS_SCALE*points[1].x);
       else if((short)(GRAPHICS_SCALE*points[1].x) < min_x)
-	min_x = (short)(GRAPHICS_SCALE*points[1].x);
+        min_x = (short)(GRAPHICS_SCALE*points[1].x);
       if((short)(GRAPHICS_SCALE*points[1].y) > max_y)
-	max_y = (short)(GRAPHICS_SCALE*points[1].y);
+        max_y = (short)(GRAPHICS_SCALE*points[1].y);
       else if((short)(GRAPHICS_SCALE*points[1].y) < min_y)
-	min_y = (short)(GRAPHICS_SCALE*points[1].y);
+        min_y = (short)(GRAPHICS_SCALE*points[1].y);
 
       if((short)(GRAPHICS_SCALE*points[2].x) > max_x)
-	max_x = (short)(GRAPHICS_SCALE*points[2].x);
+        max_x = (short)(GRAPHICS_SCALE*points[2].x);
       else if((short)(GRAPHICS_SCALE*points[2].x) < min_x)
-	min_x = (short)(GRAPHICS_SCALE*points[2].x);
+        min_x = (short)(GRAPHICS_SCALE*points[2].x);
       if((short)(GRAPHICS_SCALE*points[2].y) > max_y)
-	max_y = (short)(GRAPHICS_SCALE*points[2].y);
+        max_y = (short)(GRAPHICS_SCALE*points[2].y);
       else if((short)(GRAPHICS_SCALE*points[2].y) < min_y)
-	min_y = (short)(GRAPHICS_SCALE*points[2].y);
+        min_y = (short)(GRAPHICS_SCALE*points[2].y);
 
       (*thePoly)->polyBBox.top = min_y;
       (*thePoly)->polyBBox.bottom = max_y;
@@ -2239,17 +2239,17 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
       (*thePoly)->polyBBox.right = max_x;
 
     }
-    PaintPoly( thePoly);	/* paint the inside */
+    PaintPoly( thePoly);        /* paint the inside */
 #endif
 #if 0
-    thePoly = OpenPoly( );	/* start recording */
+    thePoly = OpenPoly( );        /* start recording */
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );
+           (short)(GRAPHICS_SCALE*points[0].y) );
     LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	   (short)(GRAPHICS_SCALE*points[1].y) );
+           (short)(GRAPHICS_SCALE*points[1].y) );
     LineTo((short)(GRAPHICS_SCALE*points[2].x),
-	   (short)(GRAPHICS_SCALE*points[2].y) );
-    ClosePoly();		/* stop recording */
+           (short)(GRAPHICS_SCALE*points[2].y) );
+    ClosePoly();                /* stop recording */
     PaintPoly( thePoly);
     KillPoly(thePoly);
 #endif
@@ -2259,15 +2259,15 @@ void g_shaded_polygon(XPoint *points,int num_points,point_type *normal)
     }
     OpenRgn();
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );
+           (short)(GRAPHICS_SCALE*points[0].y) );
     LineTo((short)(GRAPHICS_SCALE*points[1].x),
-	   (short)(GRAPHICS_SCALE*points[1].y) );
+           (short)(GRAPHICS_SCALE*points[1].y) );
     LineTo((short)(GRAPHICS_SCALE*points[2].x),
-	   (short)(GRAPHICS_SCALE*points[2].y) );
+           (short)(GRAPHICS_SCALE*points[2].y) );
     LineTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y) );
-    CloseRgn(theRgn);		/* stop recording */
-	if(colorscale > 0 ){
+           (short)(GRAPHICS_SCALE*points[0].y) );
+    CloseRgn(theRgn);                /* stop recording */
+        if(colorscale > 0 ){
     the_color.red = the_color.green = the_color.blue =
       (short)((float)0xFFFF*(float)colorscale);
       } else{
@@ -2306,12 +2306,12 @@ void g_open_polygon(XPoint *points,int num_points)
   if( doing_ps ){
     if( num_points == 3 ){
       fprintf(psfile,"%d %d %d %d %d %d %d %d dT\n",
-	      points[0].x,points[0].y,points[1].x,points[1].y,
-	      points[2].x,points[2].y,points[3].x,points[3].y);
+              points[0].x,points[0].y,points[1].x,points[1].y,
+              points[2].x,points[2].y,points[3].x,points[3].y);
     } else{
       fprintf(psfile,"%d %d M ",points[0].x,points[0].y);
       for(i=1;i<num_points;i++){
-	fprintf(psfile,"%d %d L ",points[i].x,points[i].y);
+        fprintf(psfile,"%d %d L ",points[i].x,points[i].y);
       }
       fprintf(psfile,"%d %d L stroke\n",points[0].x,points[0].y);
     }
@@ -2326,13 +2326,13 @@ void g_open_polygon(XPoint *points,int num_points)
 #ifdef MAC_GRAPHICS
   if( doing_Mac ){
     MoveTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y));
+           (short)(GRAPHICS_SCALE*points[0].y));
     for(i=1;i<num_points;i++){
       LineTo((short)(GRAPHICS_SCALE*points[i].x),
-	     (short)(GRAPHICS_SCALE*points[i].y));
+             (short)(GRAPHICS_SCALE*points[i].y));
     }
     LineTo((short)(GRAPHICS_SCALE*points[0].x),
-	   (short)(GRAPHICS_SCALE*points[0].y));
+           (short)(GRAPHICS_SCALE*points[0].y));
   }
 #endif
 }
@@ -2361,7 +2361,7 @@ void g_xlegend(float x,float y,char *text)
     textloc = (int)x - XTextWidth(big_font,text,strlen(text))/2;
     yloc = (int)y + (int)3.0*big_font->ascent;
     XDrawString(disp,gpix,bigtextgc,textloc,
-		yloc,text,strlen(text));
+                yloc,text,strlen(text));
     if( yloc > localmax.y ) localmax.y = y;
   }
 #endif
@@ -2379,7 +2379,7 @@ void g_xlegend(float x,float y,char *text)
     textloc = (int)(GRAPHICS_SCALE*x) -
       (int)(TextWidth(text,0,strlen(text))/2);
     MoveTo((short)textloc,(short)(GRAPHICS_SCALE*y +
-				  3*Mac_globals.fontSize));
+                                  3*Mac_globals.fontSize));
     DrawText(text,0,strlen(text));
   }
 #endif
@@ -2422,7 +2422,7 @@ void g_ylegend(float x,float y,char *text)
     textloc = (int)(GRAPHICS_SCALE*x) -
       (int)(TextWidth(text,0,strlen(text)));
     MoveTo((short)textloc,(short)(GRAPHICS_SCALE*y +
-				  Mac_globals.fontSize));
+                                  Mac_globals.fontSize));
     DrawText(text,0,strlen(text));
   }
 #endif
@@ -2445,10 +2445,10 @@ void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
     lineshown = 0;
     for(i=NUM_TITLE_LINES-1;i>=0;i--){
       if( title[i][0] != 0 ){
-	lineshown++;
-	fprintf(psfile,"%.1lf %.1lf 1.8 textsize mul %.1lf mul sub M\n",
-		x,y,(float)lineshown);
-	ENHPS_put_text((int)x,(int)y,title[i],CENTER_JUST);
+        lineshown++;
+        fprintf(psfile,"%.1lf %.1lf 1.8 textsize mul %.1lf mul sub M\n",
+                x,y,(float)lineshown);
+        ENHPS_put_text((int)x,(int)y,title[i],CENTER_JUST);
       }
     }
   }
@@ -2458,11 +2458,11 @@ void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
     yloc = (int)y;
     for(i=NUM_TITLE_LINES-1;i>=0;i--){
       if( title[i][0] != 0 ){
-	yloc -= big_font->ascent;
-	xloc = (int)x - XTextWidth(big_font,title[i],strlen(title[i])/2);
-	XDrawString(disp,gpix,bigtextgc,xloc,
-		    yloc,title[i],strlen(title[i]));
-	if(yloc < localmin.y) localmin.y = yloc;
+        yloc -= big_font->ascent;
+        xloc = (int)x - XTextWidth(big_font,title[i],strlen(title[i])/2);
+        XDrawString(disp,gpix,bigtextgc,xloc,
+                    yloc,title[i],strlen(title[i]));
+        if(yloc < localmin.y) localmin.y = yloc;
       }
     }
   }
@@ -2473,9 +2473,9 @@ void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
     yloc = (int)y;
     for(i=NUM_TITLE_LINES-1;i>=0;i--){
       if( title[i][0] != 0 ){
-	yloc -= TEK_VCHAR;
-	TEK_center_text((unsigned int)x,g_ymax -
-			(unsigned int)yloc,title[i]);
+        yloc -= TEK_VCHAR;
+        TEK_center_text((unsigned int)x,g_ymax -
+                        (unsigned int)yloc,title[i]);
       }
     }
   }
@@ -2487,12 +2487,12 @@ void g_title(float x,float y,char title[NUM_TITLE_LINES][NORMAL_STR_LEN])
     yloc = (int)(GRAPHICS_SCALE*y);
     for(i=NUM_TITLE_LINES-1;i>=0;i--){
       if(title[i][0] != 0){
-	xloc = (int)(GRAPHICS_SCALE*x) -
-	  (int)(TextWidth(title[i],0,strlen(title[i]))/2);
-	yloc -= Mac_globals.fontSize;
-	MoveTo((short)xloc,(short)yloc);
-	DrawText(title[i],0,strlen(title[i]));
-	if(yloc < localmin.y) localmin.y = yloc;
+        xloc = (int)(GRAPHICS_SCALE*x) -
+          (int)(TextWidth(title[i],0,strlen(title[i]))/2);
+        yloc -= Mac_globals.fontSize;
+        MoveTo((short)xloc,(short)yloc);
+        DrawText(title[i],0,strlen(title[i]));
+        if(yloc < localmin.y) localmin.y = yloc;
       }
     }
   }
@@ -2522,18 +2522,18 @@ void g_label(float x,float y,label_type *label)
     if( label->show_lines ){
       g_change_linestyle(1);
       for(i=0;i<label->num_atoms_labelled;i++){
-	xp1 = x;
-	yp1 = y;
-	xp2 = label->atoms_to_label[i]->screen_loc.x;
-	yp2 = label->atoms_to_label[i]->screen_loc.y;
-	if( yp2 > yp1 ){
-	  fprintf(psfile,"%.1lf %.1lf M %.1f %.1lf L SNP\n",
-		  xp1,yp1,xp2,yp2);
-	} else{
-	  fprintf(psfile,
-		  "%.1lf %.1lf textsize -1 thesize div mul add M %.1f %.1lf L SNP\n",
-		  xp1,yp1,xp2,yp2);
-	}
+        xp1 = x;
+        yp1 = y;
+        xp2 = label->atoms_to_label[i]->screen_loc.x;
+        yp2 = label->atoms_to_label[i]->screen_loc.y;
+        if( yp2 > yp1 ){
+          fprintf(psfile,"%.1lf %.1lf M %.1f %.1lf L SNP\n",
+                  xp1,yp1,xp2,yp2);
+        } else{
+          fprintf(psfile,
+                  "%.1lf %.1lf textsize -1 thesize div mul add M %.1f %.1lf L SNP\n",
+                  xp1,yp1,xp2,yp2);
+        }
       }
       g_change_linestyle(0);
     }
@@ -2546,7 +2546,7 @@ void g_label(float x,float y,label_type *label)
     theight = big_font->ascent;
     textloc = x - twidth/2;
     XDrawString(disp,gpix,bigtextgc,(int)textloc,
-		(int)y+big_font->ascent,string,strlen(string));
+                (int)y+big_font->ascent,string,strlen(string));
     if( x + twidth/2 > localmax.x )
       localmax.x = x+twidth/2;
     if( x - twidth/2 < localmin.x )
@@ -2557,13 +2557,13 @@ void g_label(float x,float y,label_type *label)
     if( label->show_lines ){
       g_change_linestyle(1);
       for(i=0;i<label->num_atoms_labelled;i++){
-	xp1 = x;
-	yp1 = y;
-	xp2 = label->atoms_to_label[i]->screen_loc.x;
-	yp2 = label->atoms_to_label[i]->screen_loc.y;
-	if( yp2 > yp1 ) yp1 = localmax.y;
-	XDrawLine(disp,gpix,graphgc,(short)xp1,(short)yp1,
-		  (short)xp2,(short)yp2);
+        xp1 = x;
+        yp1 = y;
+        xp2 = label->atoms_to_label[i]->screen_loc.x;
+        yp2 = label->atoms_to_label[i]->screen_loc.y;
+        if( yp2 > yp1 ) yp1 = localmax.y;
+        XDrawLine(disp,gpix,graphgc,(short)xp1,(short)yp1,
+                  (short)xp2,(short)yp2);
       }
       g_change_linestyle(0);
     }
@@ -2589,7 +2589,7 @@ void g_label(float x,float y,label_type *label)
     textloc = (int)(GRAPHICS_SCALE*x) -
       (int)(TextWidth(string,0,strlen(string))/2);
     MoveTo((short)textloc,(short)(GRAPHICS_SCALE*y +
-				  Mac_globals.fontSize));
+                                  Mac_globals.fontSize));
     DrawText(string,0,strlen(string));
   }
 #endif

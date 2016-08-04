@@ -71,7 +71,7 @@ struct {
 *
 ****************************************************************************/
 void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
-	 l1,l2,nn,atoms)
+         l1,l2,nn,atoms)
   real *sigma,*pi,*delta,*phi,dist;
   int which1,which2,q_num1,q_num2,l1,l2,nn;
   atom_type *atoms;
@@ -147,13 +147,13 @@ fprintf(stderr,"MOV: (i,j,dist) %d %d %lf\n",which1,which2,dist);
 
   /* call the routine to evaluate the A & B functions */
   abfns(A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,
-	&q_num2,&max);
+        &q_num2,&max);
 
   /* I don't know what nn is yet, but I'll figure it out eventually */
   for(i=0;i<nn;i++){
     m = i;
     lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,
-	   &dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
+           &dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
   }
 
 
@@ -178,7 +178,7 @@ fprintf(stderr,"sigma,pi: %6.4lf %6.4lf\n",*sigma,*pi);
     for(i=0;i<nn;i++){
       m = i;
       lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,
-	     &dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
+             &dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
     }
 
     /* add in the contributions we have found thus far */
@@ -199,7 +199,7 @@ fprintf(stderr,"COEFFS: %lf %lf \n",coeff1,coeff2);
     for(i=0;i<nn;i++){
       m = i;
       lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,
-	     &dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
+             &dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
     }
 
     /* add in the contributions we have found thus far */
@@ -219,9 +219,9 @@ fprintf(stderr,"COEFFS: %lf %lf \n",coeff1,coeff2);
       abfns(A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
 
       for(i=0;i<nn;i++){
-	m = i;
-	lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,
-	       &dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
+        m = i;
+        lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,
+               &dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
       }
 
       /* add in the contributions we have found thus far */

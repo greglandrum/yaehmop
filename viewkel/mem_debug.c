@@ -115,7 +115,7 @@ char *d_malloc(int size,char *filename,int linenum){
     records = new_record;
 #ifdef GAG_ME_WITH_VERBOSITY
     printf("\tmalloc from line\t %d of file\t %s of\t %d bytes ok.\t(%0xd)\n",
-	   linenum,filename,size,temp_ptr);
+           linenum,filename,size,temp_ptr);
 #endif
   }
 
@@ -148,7 +148,7 @@ char *d_calloc(int num,int size,char *filename,int linenum){
     records = new_record;
 #ifdef GAG_ME_WITH_VERBOSITY
     printf("\tcalloc from line\t %d of file\t %s of\t %d bytes ok.\t(%0xd)\n",
-	   linenum,filename,size*num,temp_ptr);
+           linenum,filename,size*num,temp_ptr);
 #endif
 
   }
@@ -169,7 +169,7 @@ void d_crawl()
   record = records;
   while(record){
     printf("\t%0xd: line %d, file %s, size %d\n",record->address,
-	   record->loc_line,record->loc_file,record->size);
+           record->loc_line,record->loc_file,record->size);
     record = record->next;
   }
 }
@@ -205,7 +205,7 @@ void d_free(char *address,char *filename,int linenum){
   free(record->address);
 #ifdef GAG_ME_WITH_VERBOSITY
     printf("\tfree from line\t %d of file\t %s of\t %d bytes ok.\t(%0xd)\n",
-	   record->loc_line,record->loc_file,record->size,address);
+           record->loc_line,record->loc_file,record->size,address);
 #endif
   free(record);
   num_allocated--;
@@ -236,7 +236,7 @@ char *d_realloc(char *address,int size,char *filename,int linenum){
     strncpy(record->loc_file,filename,240);
 #ifdef GAG_ME_WITH_VERBOSITY
     printf("\trealloc from line\t %d of file\t %s of\t %d bytes ok.\t(%0xd)\n",
-	   linenum,filename,size,temp_ptr);
+           linenum,filename,size,temp_ptr);
 #endif
 
   }
@@ -258,7 +258,7 @@ void d_check_core(){
     printf("\td_check_core: %d leaks present. Argh!\n",num_allocated);
     while(record){
       printf("\t\t%d) Line %d of file %s.  Size: %d\n",num_leaks+1,
-	     record->loc_line,record->loc_file,record->size);
+             record->loc_line,record->loc_file,record->size);
       num_leaks++;
       record = record->next;
     }

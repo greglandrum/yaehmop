@@ -62,17 +62,17 @@ void main()
   int argc;
   char argv[4][80];
 
-	/* set up some stuff for Sioux */
-	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;
-	SIOUXSettings.autocloseonquit = FALSE;
-	printf("Starting cooperate.\n");
+        /* set up some stuff for Sioux */
+        //SIOUXSettings.standalone = FALSE;
+        SIOUXSettings.asktosaveonclose = FALSE;
+        SIOUXSettings.autocloseonquit = FALSE;
+        printf("Starting cooperate.\n");
 
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
-  	fatal("User cancelled intial file open");
+          fatal("User cancelled intial file open");
   } else{
-  	argc = 2;
+          argc = 2;
   }
 
   /* get the command line arguments */
@@ -151,11 +151,11 @@ void main()
     for(j=0;j<i;j++){
       num_so_far = i*num_atoms + j;
       if( dist_mat[num_so_far] >= min_dist &&
-	 dist_mat[num_so_far] <= max_dist ){
-	dist_array[num_in_array].atom1 = i;
-	dist_array[num_in_array].atom2 = j;
-	dist_array[num_in_array].dist = (real)dist_mat[num_so_far];
-	num_in_array++;
+         dist_mat[num_so_far] <= max_dist ){
+        dist_array[num_in_array].atom1 = i;
+        dist_array[num_in_array].atom2 = j;
+        dist_array[num_in_array].dist = (real)dist_mat[num_so_far];
+        num_in_array++;
       }
     }
   }
@@ -168,26 +168,26 @@ void main()
     if(read_err > 0){
 
       for(i=0;i<num_atoms;i++){
-	for(j=0;j<=i;j++){
-	  num_so_far = i*num_atoms + j;
-	  if( dist_mat[num_so_far] >= min_dist &&
-	     dist_mat[num_so_far] <= max_dist ){
-	    dist_array[num_in_array].atom1 = i;
-	    dist_array[num_in_array].atom2 = j;
-	    dist_array[num_in_array].dist = (real)dist_mat[num_so_far];
-	    dist_array[num_in_array].cell.x = cell_spec.x;
-	    dist_array[num_in_array].cell.y = cell_spec.y;
-	    dist_array[num_in_array].cell.z = cell_spec.z;
-	    num_in_array++;
-	    if( num_in_array == max_in_array ){
-	      max_in_array += num_atoms;
-	      dist_array =
-		(dist_type *)realloc((char *)dist_array,
-				     max_in_array*sizeof(dist_type));
-	      if( !dist_array ) fatal("Can't realloc dist_array");
-	    }
-	  }
-	}
+        for(j=0;j<=i;j++){
+          num_so_far = i*num_atoms + j;
+          if( dist_mat[num_so_far] >= min_dist &&
+             dist_mat[num_so_far] <= max_dist ){
+            dist_array[num_in_array].atom1 = i;
+            dist_array[num_in_array].atom2 = j;
+            dist_array[num_in_array].dist = (real)dist_mat[num_so_far];
+            dist_array[num_in_array].cell.x = cell_spec.x;
+            dist_array[num_in_array].cell.y = cell_spec.y;
+            dist_array[num_in_array].cell.z = cell_spec.z;
+            num_in_array++;
+            if( num_in_array == max_in_array ){
+              max_in_array += num_atoms;
+              dist_array =
+                (dist_type *)realloc((char *)dist_array,
+                                     max_in_array*sizeof(dist_type));
+              if( !dist_array ) fatal("Can't realloc dist_array");
+            }
+          }
+        }
       }
       read_err = read(infile,(const char *)&cell_spec,sizeof(cell_spec_type));
     }
@@ -211,17 +211,17 @@ void main()
     if( !(dummies[dist_array[i].atom2]) && !(dummies[dist_array[i].atom1]) ){
       /**********
 
-	check to see if we need to change "types"  i.e. if the distance
-	difference is greater than dist_tol
+        check to see if we need to change "types"  i.e. if the distance
+        difference is greater than dist_tol
 
-	***********/
+        ***********/
       if( fabs(dist_array[i].dist - curr_dist) > dist_tol ){
-	curr_type++;
-	curr_dist = dist_array[i].dist;
+        curr_type++;
+        curr_dist = dist_array[i].dist;
       }
       printf("Atom XXX%d   %d %d    %d %d %d \t; %f\n",curr_type,dist_array[i].atom1+1,
-	     dist_array[i].atom2+1,dist_array[i].cell.x,dist_array[i].cell.y,
-	     dist_array[i].cell.z,dist_array[i].dist);
+             dist_array[i].atom2+1,dist_array[i].cell.x,dist_array[i].cell.y,
+             dist_array[i].cell.z,dist_array[i].dist);
     }
 
   }

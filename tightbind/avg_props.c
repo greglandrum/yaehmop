@@ -72,7 +72,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
-		     properties,AO_occups)
+                     properties,AO_occups)
   detail_type *details;
   cell_type *cell;
   int num_orbs;
@@ -119,8 +119,8 @@ void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
       MO = orbital_ordering[i].MO;
       chg_mat_ptr = &(avg_prop_info[kpoint].chg_mat[MO*num_orbs]);
       for(j=0;j<num_orbs;j++){
-	AO_occups[j] += (real)chg_mat_ptr[j] * orbital_ordering[i].occup *
-	  details->K_POINTS[kpoint].weight;
+        AO_occups[j] += (real)chg_mat_ptr[j] * orbital_ordering[i].occup *
+          details->K_POINTS[kpoint].weight;
       }
     }
     i++;
@@ -153,14 +153,14 @@ void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   fprintf(output_file,"Num Electrons: %lf\n",accum);
 
   fprintf(output_file,"tot_num_K: %lf tot_K_weight: %lf\n",
-	  tot_num_K,tot_K_weight);
+          tot_num_K,tot_K_weight);
 #endif
   accum = accum*num_occup_bands/(tot_num_K*details->num_KPOINTS);
 
 #ifdef DEBUG
   fprintf(output_file,"num_filled: ");
   for(i=0;i<num_orbs;i++) fprintf(output_file,"%d ",
-				  (int)details->K_POINTS[i].num_filled_bands);
+                                  (int)details->K_POINTS[i].num_filled_bands);
   fprintf(output_file,"\n");
   fprintf(output_file,"Num Electrons (post): %lf\n",accum);
 #endif
@@ -192,7 +192,7 @@ void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
  *
  ****************************************************************************/
 void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
-		     properties,AO_occups)
+                     properties,AO_occups)
   detail_type *details;
   cell_type *cell;
   int num_orbs;
@@ -224,51 +224,51 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
       find_atoms_orbs(num_orbs,cell->num_atoms,i,orbital_lookup_table,&begin,&end);
 
       /*******
-	if this isn't a dummy atom, then loop over its orbitals and print out their
-	occupations
-	*******/
+        if this isn't a dummy atom, then loop over its orbitals and print out their
+        occupations
+        *******/
       if( begin != -1 && end != -1 ){
-	atom = &(cell->atoms[i]);
-	j = begin;
-	fprintf(output_file,"%d %s ",i+1,atom->symb);
+        atom = &(cell->atoms[i]);
+        j = begin;
+        fprintf(output_file,"%d %s ",i+1,atom->symb);
 
-	if( atom->ns != 0 ){
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j]);
-	  j++;
-	}
-	else fprintf(output_file,"% -6.4lf ",0.0);
-	if( atom->np != 0 ){
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	}
-	else{
-	  fprintf(output_file,"% -6.4lf ",0.0);
-	  fprintf(output_file,"% -6.4lf ",0.0);
-	  fprintf(output_file,"% -6.4lf ",0.0);
-	}
-	if( atom->nd != 0 ){
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	  fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	}
-	else{
-	  fprintf(output_file,"% -6.4lf ",0.0);
-	  fprintf(output_file,"% -6.4lf ",0.0);
-	  fprintf(output_file,"% -6.4lf ",0.0);
-	  fprintf(output_file,"% -6.4lf ",0.0);
-	  fprintf(output_file,"% -6.4lf ",0.0);
-	}
-	fprintf(output_file,"\n");
+        if( atom->ns != 0 ){
+          fprintf(output_file,"% -6.4lf ",AO_occups[j]);
+          j++;
+        }
+        else fprintf(output_file,"% -6.4lf ",0.0);
+        if( atom->np != 0 ){
+          fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+          fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+          fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+        }
+        else{
+          fprintf(output_file,"% -6.4lf ",0.0);
+          fprintf(output_file,"% -6.4lf ",0.0);
+          fprintf(output_file,"% -6.4lf ",0.0);
+        }
+        if( atom->nd != 0 ){
+          fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+          fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+          fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+          fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+          fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+        }
+        else{
+          fprintf(output_file,"% -6.4lf ",0.0);
+          fprintf(output_file,"% -6.4lf ",0.0);
+          fprintf(output_file,"% -6.4lf ",0.0);
+          fprintf(output_file,"% -6.4lf ",0.0);
+          fprintf(output_file,"% -6.4lf ",0.0);
+        }
+        fprintf(output_file,"\n");
 
-	/* figure out the net charge */
-	properties.net_chgs[i] = atom->num_valence;
-	for(j=begin;j<end;j++){
-	  properties.net_chgs[i] -= AO_occups[j];
-	  total_electrons += AO_occups[j];
-	}
+        /* figure out the net charge */
+        properties.net_chgs[i] = atom->num_valence;
+        for(j=begin;j<end;j++){
+          properties.net_chgs[i] -= AO_occups[j];
+          total_electrons += AO_occups[j];
+        }
       }
     }
 
@@ -276,7 +276,7 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
 
     for(i=0; i<cell->num_atoms; i++){
       if(cell->atoms[i].nf){
-	f_occup_print =1;
+        f_occup_print =1;
       }
     }
     if( !details->just_avgE && f_occup_print ){
@@ -285,28 +285,28 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
       /* loop over atoms and find atoms with f orbitals */
 
       for( i=0; i<cell->num_atoms; i++){
-	if(cell->atoms[i].nf){
-	  find_atoms_orbs(num_orbs,cell->num_atoms,i,orbital_lookup_table,&begin,&end);
+        if(cell->atoms[i].nf){
+          find_atoms_orbs(num_orbs,cell->num_atoms,i,orbital_lookup_table,&begin,&end);
 
-	  /* check for dummy atom */
+          /* check for dummy atom */
 
-	  if(begin != -1 && end != -1){
-	    atom = &(cell->atoms[i]);
-	    j=begin+BEGIN_F;
-	    fprintf(output_file,"%d %s ", i+1, atom->symb);
-	    fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	    fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	    fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
-	    fprintf(output_file,"% -8.4lf ",AO_occups[j++]);
-	    fprintf(output_file,"% -11.4lf ",AO_occups[j++]);
-	    fprintf(output_file,"% -11.4lf ",AO_occups[j++]);
-	    fprintf(output_file,"% -12.4lf ",AO_occups[j++]);
-	    fprintf(output_file,"\n");
+          if(begin != -1 && end != -1){
+            atom = &(cell->atoms[i]);
+            j=begin+BEGIN_F;
+            fprintf(output_file,"%d %s ", i+1, atom->symb);
+            fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+            fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+            fprintf(output_file,"% -6.4lf ",AO_occups[j++]);
+            fprintf(output_file,"% -8.4lf ",AO_occups[j++]);
+            fprintf(output_file,"% -11.4lf ",AO_occups[j++]);
+            fprintf(output_file,"% -11.4lf ",AO_occups[j++]);
+            fprintf(output_file,"% -12.4lf ",AO_occups[j++]);
+            fprintf(output_file,"\n");
 
-	    /* no need to work out any more net atomic charges !!! */
+            /* no need to work out any more net atomic charges !!! */
 
-	  }
-	}
+          }
+        }
       }
     }
 
@@ -343,7 +343,7 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
  *
  ****************************************************************************/
 void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
-			 FMO_occups)
+                         FMO_occups)
   detail_type *details;
   int num_orbs;
   K_orb_ptr_type *orbital_ordering;
@@ -390,7 +390,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
     contrib = 0.0;
     for(j=0;j<num_orbs;j++){
       FMO_occups[j] += (real)chg_mat_ptr[j] * orbital_ordering[i].occup *
-	details->K_POINTS[kpoint].weight;
+        details->K_POINTS[kpoint].weight;
     }
     i++;
   }
@@ -436,7 +436,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
 
   for(i=0;i<details->num_FMO_frags;i++){
     fprintf(output_file,"%d % -6.4lf\n",i+1,
-	    details->FMO_frags[i].num_electrons-details->FMO_props->net_chgs[i]);
+            details->FMO_frags[i].num_electrons-details->FMO_props->net_chgs[i]);
 
   }
 
@@ -467,7 +467,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
  *
  ****************************************************************************/
 void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
-		     overlapR,properties)
+                     overlapR,properties)
   detail_type *details;
   cell_type *cell;
   int num_orbs;
@@ -517,24 +517,24 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
 
     for(j=0;j<num_orbs;j++){
       for( k=j;k<num_orbs;k++){
-	/*****
-	  within the unit cell there's no need to accumulate an imaginary
-	  contribution to the overlap population,
-	  *****/
-	accum = ((real)MO_ptr[j] * MO_ptr[k] +
-		 (real)MO_ptrI[j] * MO_ptrI[k]) /
-		   ((real)MULTIPLIER*(real)MULTIPLIER);
-	if(j != k){
-	  properties.OP_mat[j*num_orbs+k] +=
-	    (2.0*orbital_ordering[i].occup*details->K_POINTS[kpoint].weight*
-	      accum*HERMETIAN_R(overlap,j,k));
+        /*****
+          within the unit cell there's no need to accumulate an imaginary
+          contribution to the overlap population,
+          *****/
+        accum = ((real)MO_ptr[j] * MO_ptr[k] +
+                 (real)MO_ptrI[j] * MO_ptrI[k]) /
+                   ((real)MULTIPLIER*(real)MULTIPLIER);
+        if(j != k){
+          properties.OP_mat[j*num_orbs+k] +=
+            (2.0*orbital_ordering[i].occup*details->K_POINTS[kpoint].weight*
+              accum*HERMETIAN_R(overlap,j,k));
 
-	}
-	else{
-	  properties.OP_mat[j*num_orbs+k] +=
-	    (orbital_ordering[i].occup*details->K_POINTS[kpoint].weight*
-	      accum*HERMETIAN_R(overlap,j,k));
-	}
+        }
+        else{
+          properties.OP_mat[j*num_orbs+k] +=
+            (orbital_ordering[i].occup*details->K_POINTS[kpoint].weight*
+              accum*HERMETIAN_R(overlap,j,k));
+        }
       }
     }
     i++;
@@ -556,7 +556,7 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   for(i=0;i<num_orbs;i++){
     for(j=i;j<num_orbs;j++){
       properties.OP_mat[i*num_orbs+j] = properties.OP_mat[i*num_orbs+j] *
-	num_occup_bands / (tot_num_K*details->num_KPOINTS);
+        num_occup_bands / (tot_num_K*details->num_KPOINTS);
       properties.OP_mat[j*num_orbs+i] = properties.OP_mat[i*num_orbs+j];
       num_electrons += properties.OP_mat[i*num_orbs+j];
     }
@@ -575,26 +575,26 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
 
       /* do the cross terms first */
       for( j=0; j<i; j++){
-	find_atoms_orbs(num_orbs,cell->num_atoms,j,orbital_lookup_table,&begin2,&end2);
-	if( begin2 != -1 && end2 != -1 ){
-	  accum = 0.0;
-	  for( k=begin1; k<end1; k++ ){
-	    for( l=begin2; l<end2; l++){
-	      accum += properties.OP_mat[k*num_orbs+l];
-	    }
-	  }
-	  /*********
-	    store the element....
-	    treat the matrix as a symmetrical matrix (see notes.outl for the format)
+        find_atoms_orbs(num_orbs,cell->num_atoms,j,orbital_lookup_table,&begin2,&end2);
+        if( begin2 != -1 && end2 != -1 ){
+          accum = 0.0;
+          for( k=begin1; k<end1; k++ ){
+            for( l=begin2; l<end2; l++){
+              accum += properties.OP_mat[k*num_orbs+l];
+            }
+          }
+          /*********
+            store the element....
+            treat the matrix as a symmetrical matrix (see notes.outl for the format)
           **********/
-	  properties.ROP_mat[num_elements++] = accum;
-	}
+          properties.ROP_mat[num_elements++] = accum;
+        }
       }
 
       /* now add up the diagonal elements which arise from this atom */
       accum = 0.0;
       for(j=begin1; j<end1; j++ ){
-	accum += properties.OP_mat[j*num_orbs+j];
+        accum += properties.OP_mat[j*num_orbs+j];
       }
       properties.ROP_mat[num_elements++] = accum;
     }
@@ -603,15 +603,15 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   /* print out the matrices */
   if( details->avg_OP_mat_PRT ){
     fprintf(output_file,
-	    "\n; Average Mulliken Overlap Population Matrix W/in the Unit Cell.\n");
+            "\n; Average Mulliken Overlap Population Matrix W/in the Unit Cell.\n");
     printmat(properties.OP_mat,num_orbs,num_orbs,output_file,1e-05,0,details->line_width);
   }
 
   if( details->avg_ROP_mat_PRT ){
   fprintf(output_file,
-	  "\n; Average Reduced Mulliken Overlap Population Matrix W/in the Unit Cell.\n");
+          "\n; Average Reduced Mulliken Overlap Population Matrix W/in the Unit Cell.\n");
   print_sym_mat(properties.ROP_mat,cell->num_atoms,cell->num_atoms,output_file,
-		(char *)0,(char *)0,details->line_width);
+                (char *)0,(char *)0,details->line_width);
   }
   fprintf(output_file,"\n");
 
@@ -638,7 +638,7 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
  *
  ****************************************************************************/
 void find_crystal_occupations(details,electrons_per_cell,num_orbs,
-			      orbital_ordering,Fermi_E)
+                              orbital_ordering,Fermi_E)
   detail_type *details;
   real electrons_per_cell;
   int num_orbs;
@@ -696,13 +696,13 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
   last_occup = i-1;
   end_degen = i;
   while( end_degen < tot_orbs && fabs((real)*(orbital_ordering[last_occup].energy) -
-	      (real)*(orbital_ordering[end_degen].energy)) < DEGEN_TOL ){
+              (real)*(orbital_ordering[end_degen].energy)) < DEGEN_TOL ){
     end_degen++;
   }
 
   begin_degen = last_occup - 1;
   while( begin_degen > -1 && fabs((real)*(orbital_ordering[last_occup].energy) -
-	      (real)*(orbital_ordering[begin_degen].energy)) < DEGEN_TOL){
+              (real)*(orbital_ordering[begin_degen].energy)) < DEGEN_TOL){
     begin_degen--;
   }
   /* we went one step too far, so increment begin_degen */
@@ -711,12 +711,12 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
   num_degen_levels = end_degen-begin_degen;
   if( num_degen_levels > 1){
     fprintf(output_file,"; >>>>> The HOCO was found to be %d-fold degenerate.\n",
-	    num_degen_levels);
+            num_degen_levels);
 
     /********
       now adjust the occupation numbers for the degenerate orbitals
         do this by finding the number of electrons in degenerate levels and
-	then distributing them equally amongst those levels.
+        then distributing them equally amongst those levels.
     ******/
     num_degen_electrons = 0;
     for(i=begin_degen;i<end_degen;i++){
@@ -774,7 +774,7 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
  *
  ****************************************************************************/
 void store_avg_prop_info(details,which_k,eigenset,overlap,num_orbs,
-			 chg_mat,avg_prop_info)
+                         chg_mat,avg_prop_info)
   detail_type *details;
   int which_k;
   eigenset_type eigenset;
@@ -803,24 +803,24 @@ void store_avg_prop_info(details,which_k,eigenset,overlap,num_orbs,
   for( i=0; i<num_orbs; i++){
     if( !details->just_avgE &&
        (details->num_proj_DOS || details->the_COOPS ||
-	!details->no_total_DOS_PRT || details->num_FMO_frags) ){
+        !details->no_total_DOS_PRT || details->num_FMO_frags) ){
       itab = i*num_orbs;
       for( j=0; j<num_orbs; j++){
-	if( details->Execution_Mode != THIN ){
-	  temp_ptr->orbs[itab+j] = (float)EIGENVECT_R(eigenset,i,j);
-	  temp_ptr->orbsI[itab+j] = (float)EIGENVECT_I(eigenset,i,j);
-	  temp_ptr->chg_mat[itab+j] = (float)chg_mat[itab+j];
+        if( details->Execution_Mode != THIN ){
+          temp_ptr->orbs[itab+j] = (float)EIGENVECT_R(eigenset,i,j);
+          temp_ptr->orbsI[itab+j] = (float)EIGENVECT_I(eigenset,i,j);
+          temp_ptr->chg_mat[itab+j] = (float)chg_mat[itab+j];
 
-	  /* do the FMO stuff if we need to */
-	  if( details->num_FMO_frags ){
-	    temp_ptr->FMO_orbs[itab+j] = (float)EIGENVECT_R(details->FMO_props->eigenset,i,j);
-	    temp_ptr->FMO_orbsI[itab+j] = (float)EIGENVECT_I(details->FMO_props->eigenset,i,j);
-	    temp_ptr->FMO_chg_mat[itab+j] = (float)details->FMO_props->chg_mat[itab+j];
-	  }
-	}
-	else{
-	  fatal("THIN mode properties calculations not implemented yet.");
-	}
+          /* do the FMO stuff if we need to */
+          if( details->num_FMO_frags ){
+            temp_ptr->FMO_orbs[itab+j] = (float)EIGENVECT_R(details->FMO_props->eigenset,i,j);
+            temp_ptr->FMO_orbsI[itab+j] = (float)EIGENVECT_I(details->FMO_props->eigenset,i,j);
+            temp_ptr->FMO_chg_mat[itab+j] = (float)details->FMO_props->chg_mat[itab+j];
+          }
+        }
+        else{
+          fatal("THIN mode properties calculations not implemented yet.");
+        }
       }
     }
     temp_ptr->energies[i] = (float)EIGENVAL(eigenset,i);
@@ -901,11 +901,11 @@ void sort_avg_prop_info(details,num_orbs,avg_prop_info,orbital_ordering)
       orbital_ordering[num_so_far].Kpoint = i;
       orbital_ordering[num_so_far].MO = j;
       if( details->Execution_Mode != THIN ){
-	orbital_ordering[num_so_far].energy =
-	  &(avg_prop_info[i].energies[j]);
+        orbital_ordering[num_so_far].energy =
+          &(avg_prop_info[i].energies[j]);
       }
       else{
-	fatal("THIN mode properties calculations aren't implemented yet.");
+        fatal("THIN mode properties calculations aren't implemented yet.");
       }
       num_so_far++;
     }
@@ -917,7 +917,7 @@ void sort_avg_prop_info(details,num_orbs,avg_prop_info,orbital_ordering)
 
   *********/
   qsort((void *)orbital_ordering,num_elements,sizeof(K_orb_ptr_type),
-	sort_energies_helper);
+        sort_energies_helper);
 
   /* that's all we have to do here. */
 }

@@ -90,13 +90,13 @@ void check_a_cell(atoms,vect,num_atoms,closest_nn_contact,descriptor)
 
       /* is the distance within the tolerance? */
       if( dist <= min_squared ){
-	fprintf(output_file,"Atom: %d  Atom: %d in cell %s  Distance %6.4lf A\n",i+1,j+1,
-		descriptor,sqrt(dist));
+        fprintf(output_file,"Atom: %d  Atom: %d in cell %s  Distance %6.4lf A\n",i+1,j+1,
+                descriptor,sqrt(dist));
       }
 
       /* check to see if this is close enough to trigger a warning */
       if( dist < TOO_SHORT && atoms[i].at_number > 0 && atoms[j].at_number > 0){
-	fprintf(stderr,"!!! Warning !!! Distance between atoms %d and %d in cell %s\
+        fprintf(stderr,"!!! Warning !!! Distance between atoms %d and %d in cell %s\
 (%6.4lf A) is suspicious.\n",i+1,j+1,descriptor,dist);
       }
     }
@@ -273,7 +273,7 @@ void build_distance_matrix(cell,details)
   ********/
   if( !cell->distance_mat ){
     cell->distance_mat = (real *)calloc((num_atoms*num_atoms)/2+num_atoms,
-					 sizeof(real));
+                                         sizeof(real));
     if(!cell->distance_mat) fatal("Can't allocate distance matrix.");
   }
 
@@ -290,7 +290,7 @@ void build_distance_matrix(cell,details)
 
       /* check to see if the distance is too short */
       if( dist < TOO_SHORT && cell->atoms[i].at_number > 0 && cell->atoms[j].at_number > 0){
-	fprintf(stderr,"!!! Warning !!! Distance between atoms %d and %d (%f A) \
+        fprintf(stderr,"!!! Warning !!! Distance between atoms %d and %d (%f A) \
 is suspicious.\n",i+1,j+1,dist);
       }
       if( dist > max_dist ) max_dist = dist;
@@ -308,12 +308,12 @@ is suspicious.\n",i+1,j+1,dist);
 
   if( details->distance_mat_PRT ){
     print_sym_mat(cell->distance_mat,num_atoms,num_atoms,output_file,
-		  "\n\n;****** DISTANCE MATRIX *********",symbols,details->line_width);
+                  "\n\n;****** DISTANCE MATRIX *********",symbols,details->line_width);
 
     /* check close contacts to nearest neighbors */
     if( cell->dim > 0 ){
       fprintf(output_file,"# Inter-Cell distances less than %6.4lf Angstroms:\n",
-	      details->close_nn_contact);
+              details->close_nn_contact);
       check_nn_contacts(cell,details);
 
     }
@@ -357,28 +357,28 @@ void display_lattice_parms(cell)
   fprintf(output_file,"#Dimensionality: %d\n",cell->dim);
   fprintf(output_file,"#Lattice Vectors\n");
   fprintf(output_file,"(a) %lf %lf %lf\n",
-	  cell->atoms[cell->tvects[0].end].loc.x-cell->atoms[cell->tvects[0].begin].loc.x,
-	  cell->atoms[cell->tvects[0].end].loc.y-cell->atoms[cell->tvects[0].begin].loc.y,
-	  cell->atoms[cell->tvects[0].end].loc.z-cell->atoms[cell->tvects[0].begin].loc.z);
+          cell->atoms[cell->tvects[0].end].loc.x-cell->atoms[cell->tvects[0].begin].loc.x,
+          cell->atoms[cell->tvects[0].end].loc.y-cell->atoms[cell->tvects[0].begin].loc.y,
+          cell->atoms[cell->tvects[0].end].loc.z-cell->atoms[cell->tvects[0].begin].loc.z);
 
   if( cell->dim > 1 ){
     fprintf(output_file,"(b) %lf %lf %lf\n",
-	    cell->atoms[cell->tvects[1].end].loc.x-
-	    cell->atoms[cell->tvects[1].begin].loc.x,
-	    cell->atoms[cell->tvects[1].end].loc.y-
-	    cell->atoms[cell->tvects[1].begin].loc.y,
-	    cell->atoms[cell->tvects[1].end].loc.z-
-	    cell->atoms[cell->tvects[1].begin].loc.z);
+            cell->atoms[cell->tvects[1].end].loc.x-
+            cell->atoms[cell->tvects[1].begin].loc.x,
+            cell->atoms[cell->tvects[1].end].loc.y-
+            cell->atoms[cell->tvects[1].begin].loc.y,
+            cell->atoms[cell->tvects[1].end].loc.z-
+            cell->atoms[cell->tvects[1].begin].loc.z);
 
   }
   if( cell->dim > 2 ){
     fprintf(output_file,"(c) %lf %lf %lf\n",
-	    cell->atoms[cell->tvects[2].end].loc.x-
-	    cell->atoms[cell->tvects[2].begin].loc.x,
-	    cell->atoms[cell->tvects[2].end].loc.y-
-	    cell->atoms[cell->tvects[2].begin].loc.y,
-	    cell->atoms[cell->tvects[2].end].loc.z-
-	    cell->atoms[cell->tvects[2].begin].loc.z);
+            cell->atoms[cell->tvects[2].end].loc.x-
+            cell->atoms[cell->tvects[2].begin].loc.x,
+            cell->atoms[cell->tvects[2].end].loc.y-
+            cell->atoms[cell->tvects[2].begin].loc.y,
+            cell->atoms[cell->tvects[2].end].loc.z-
+            cell->atoms[cell->tvects[2].begin].loc.z);
   }
   if( cell->dim >= 1 ){
     calc_reciprocal_lattice(cell);
@@ -409,7 +409,7 @@ void display_lattice_parms(cell)
 *
 *****************************************************************************/
 void fill_distance_matrix(cell_type *cell,int num_atoms,float *dist_mat,
-			  point_type *vect)
+                          point_type *vect)
 {
   int num_so_far;
   point_type temp;
@@ -420,11 +420,11 @@ void fill_distance_matrix(cell_type *cell,int num_atoms,float *dist_mat,
   for(i=0;i<num_atoms;i++){
     for(j=0;j<num_atoms;j++){
       temp.x = cell->atoms[i].loc.x -
-	(cell->atoms[j].loc.x+vect->x);
+        (cell->atoms[j].loc.x+vect->x);
       temp.y = cell->atoms[i].loc.y -
-	(cell->atoms[j].loc.y+vect->y);
+        (cell->atoms[j].loc.y+vect->y);
       temp.z = cell->atoms[i].loc.z -
-	(cell->atoms[j].loc.z+vect->z);
+        (cell->atoms[j].loc.z+vect->z);
 
       dist = sqrt(temp.x*temp.x + temp.y*temp.y + temp.z*temp.z);
 
@@ -543,7 +543,7 @@ void dump_distance_mats(cell,details)
     cell_vect.x=1;cell_vect.y=0;cell_vect.z=0;
     write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
     write(matfile,(const char *)dist_mat,
-	  num_atoms*num_atoms*sizeof(float));
+          num_atoms*num_atoms*sizeof(float));
 
     if( cell->dim != 1 ){
       /* 1 1 0 */
@@ -554,7 +554,7 @@ void dump_distance_mats(cell,details)
       cell_vect.x=1;cell_vect.y=1;cell_vect.z=0;
       write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
       write(matfile,(const char *)dist_mat,
-	    num_atoms*num_atoms*sizeof(float));
+            num_atoms*num_atoms*sizeof(float));
 
       /* 0 1 0 */
       vect.x = cell_dim[1].x;
@@ -564,7 +564,7 @@ void dump_distance_mats(cell,details)
       cell_vect.x=0;cell_vect.y=1;cell_vect.z=0;
       write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
       write(matfile,(const char *)dist_mat,
-	    num_atoms*num_atoms*sizeof(float));
+            num_atoms*num_atoms*sizeof(float));
 
       /* -1 1 0 */
       vect.x = -cell_dim[0].x + cell_dim[1].x;
@@ -574,100 +574,100 @@ void dump_distance_mats(cell,details)
       cell_vect.x=-1;cell_vect.y=1;cell_vect.z=0;
       write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
       write(matfile,(const char *)dist_mat,
-	    num_atoms*num_atoms*sizeof(float));
+            num_atoms*num_atoms*sizeof(float));
 
       if( cell->dim != 2 ){
-	/* 0 0 1 */
-	vect.x = cell_dim[2].x;
-	vect.y = cell_dim[2].y;
-	vect.z = cell_dim[2].z;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=0;cell_vect.y=0;cell_vect.z=1;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
+        /* 0 0 1 */
+        vect.x = cell_dim[2].x;
+        vect.y = cell_dim[2].y;
+        vect.z = cell_dim[2].z;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=0;cell_vect.y=0;cell_vect.z=1;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
 
-	/* 1 1 1 */
-	vect.x = cell_dim[0].x + cell_dim[1].x + cell_dim[2].x;
-	vect.y = cell_dim[0].y + cell_dim[1].y + cell_dim[2].y;
-	vect.z = cell_dim[0].z + cell_dim[1].z + cell_dim[2].z;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=1;cell_vect.y=1;cell_vect.z=1;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
-
-
-	/* 0 1 1 */
-	vect.x = cell_dim[1].x + cell_dim[2].x;
-	vect.y = cell_dim[1].y + cell_dim[2].y;
-	vect.z = cell_dim[1].z + cell_dim[2].z;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=0;cell_vect.y=1;cell_vect.z=1;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
-
-	/* -1 1 0 */
-	vect.x = -cell_dim[0].x + cell_dim[1].x + cell_dim[2].x;
-	vect.y = -cell_dim[0].y + cell_dim[1].y + cell_dim[2].x;
-	vect.z = -cell_dim[0].z + cell_dim[1].z + cell_dim[2].x;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=-1;cell_vect.y=1;cell_vect.z=0;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
-
-	/* 1 0 1 */
-	vect.x = cell_dim[0].x + cell_dim[2].x;
-	vect.y = cell_dim[0].y + cell_dim[2].y;
-	vect.z = cell_dim[0].z + cell_dim[2].z;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=1;cell_vect.y=0;cell_vect.z=1;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
-
-	/* -1 0 1 */
-	vect.x = -cell_dim[0].x + cell_dim[2].x;
-	vect.y = -cell_dim[0].y + cell_dim[2].y;
-	vect.z = -cell_dim[0].z + cell_dim[2].z;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=-1;cell_vect.y=0;cell_vect.z=1;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
-
-	/* 1 -1 1 */
-	vect.x = cell_dim[0].x - cell_dim[1].x + cell_dim[2].x;
-	vect.y = cell_dim[0].y - cell_dim[1].y + cell_dim[2].y;
-	vect.z = cell_dim[0].z - cell_dim[1].z + cell_dim[2].z;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=1;cell_vect.y=-1;cell_vect.z=1;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
-
-	/* 0 -1 1 */
-	vect.x = -cell_dim[1].x + cell_dim[2].x;
-	vect.y = -cell_dim[1].y + cell_dim[2].y;
-	vect.z = -cell_dim[1].z + cell_dim[2].z;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=0;cell_vect.y=-1;cell_vect.z=1;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
+        /* 1 1 1 */
+        vect.x = cell_dim[0].x + cell_dim[1].x + cell_dim[2].x;
+        vect.y = cell_dim[0].y + cell_dim[1].y + cell_dim[2].y;
+        vect.z = cell_dim[0].z + cell_dim[1].z + cell_dim[2].z;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=1;cell_vect.y=1;cell_vect.z=1;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
 
 
-	/* -1 -1 0 */
-	vect.x = -cell_dim[0].x - cell_dim[1].x + cell_dim[2].x;
-	vect.y = -cell_dim[0].y - cell_dim[1].y + cell_dim[2].x;
-	vect.z = -cell_dim[0].z - cell_dim[1].z + cell_dim[2].x;
-	fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
-	cell_vect.x=-1;cell_vect.y=-1;cell_vect.z=0;
-	write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
-	write(matfile,(const char *)dist_mat,
-	      num_atoms*num_atoms*sizeof(float));
+        /* 0 1 1 */
+        vect.x = cell_dim[1].x + cell_dim[2].x;
+        vect.y = cell_dim[1].y + cell_dim[2].y;
+        vect.z = cell_dim[1].z + cell_dim[2].z;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=0;cell_vect.y=1;cell_vect.z=1;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
+
+        /* -1 1 0 */
+        vect.x = -cell_dim[0].x + cell_dim[1].x + cell_dim[2].x;
+        vect.y = -cell_dim[0].y + cell_dim[1].y + cell_dim[2].x;
+        vect.z = -cell_dim[0].z + cell_dim[1].z + cell_dim[2].x;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=-1;cell_vect.y=1;cell_vect.z=0;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
+
+        /* 1 0 1 */
+        vect.x = cell_dim[0].x + cell_dim[2].x;
+        vect.y = cell_dim[0].y + cell_dim[2].y;
+        vect.z = cell_dim[0].z + cell_dim[2].z;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=1;cell_vect.y=0;cell_vect.z=1;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
+
+        /* -1 0 1 */
+        vect.x = -cell_dim[0].x + cell_dim[2].x;
+        vect.y = -cell_dim[0].y + cell_dim[2].y;
+        vect.z = -cell_dim[0].z + cell_dim[2].z;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=-1;cell_vect.y=0;cell_vect.z=1;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
+
+        /* 1 -1 1 */
+        vect.x = cell_dim[0].x - cell_dim[1].x + cell_dim[2].x;
+        vect.y = cell_dim[0].y - cell_dim[1].y + cell_dim[2].y;
+        vect.z = cell_dim[0].z - cell_dim[1].z + cell_dim[2].z;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=1;cell_vect.y=-1;cell_vect.z=1;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
+
+        /* 0 -1 1 */
+        vect.x = -cell_dim[1].x + cell_dim[2].x;
+        vect.y = -cell_dim[1].y + cell_dim[2].y;
+        vect.z = -cell_dim[1].z + cell_dim[2].z;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=0;cell_vect.y=-1;cell_vect.z=1;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
+
+
+        /* -1 -1 0 */
+        vect.x = -cell_dim[0].x - cell_dim[1].x + cell_dim[2].x;
+        vect.y = -cell_dim[0].y - cell_dim[1].y + cell_dim[2].x;
+        vect.z = -cell_dim[0].z - cell_dim[1].z + cell_dim[2].x;
+        fill_distance_matrix(cell,num_atoms,dist_mat,&vect);
+        cell_vect.x=-1;cell_vect.y=-1;cell_vect.z=0;
+        write(matfile,(const char *)(&cell_vect),sizeof(cell_spec_type));
+        write(matfile,(const char *)dist_mat,
+              num_atoms*num_atoms*sizeof(float));
 
       }
     }

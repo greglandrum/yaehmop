@@ -18,13 +18,13 @@
   */
 /*****************************************************************/
 
-#include	"EasyApp.h"
+#include        "EasyApp.h"
 #include "viewkel.h"
 #include "Mac_defines.h"
 #include "Mac_protos.h"
 
 /* define a single instance of our global variables */
-EasyGlobal			g;
+EasyGlobal                        g;
 
 /****************************************************************
   Mac_initgraphics
@@ -35,13 +35,13 @@ EasyGlobal			g;
   See hooks.c for an explanation of what hooks are and how they're used.
 
   The tasks performed by Mac_initgraphics() include
-  ¥	set up application memory
-  ¥	initialize the Mac Toolbox
-  ¥	examines the operating environement for features
-  ¥	sets up cursors for use in the application
-  ¥	sets up the menu bar
-  ¥	installs operating system callback routines (handlers)
-  ¥	calls the event loop
+  ¥        set up application memory
+  ¥        initialize the Mac Toolbox
+  ¥        examines the operating environement for features
+  ¥        sets up cursors for use in the application
+  ¥        sets up the menu bar
+  ¥        installs operating system callback routines (handlers)
+  ¥        calls the event loop
 
   Requires: a Macintosh computer
   Receives: nothing
@@ -50,13 +50,13 @@ EasyGlobal			g;
   */
 void Mac_initgraphics (void)
 {
-  OSErr		error;
+  OSErr                error;
 
 
-  /* 	Set up application heap (memory) and initialize the Toolbox.	 */
-  MaxApplZone();						/* take all the memory we can */
-  EasyGetMoreMasters(kNumberMasters);	/* allocate master pointer blocks */
-  InitToolboxHook();					/* initialize the Toolbox */
+  /*         Set up application heap (memory) and initialize the Toolbox.         */
+  MaxApplZone();                                                /* take all the memory we can */
+  EasyGetMoreMasters(kNumberMasters);        /* allocate master pointer blocks */
+  InitToolboxHook();                                        /* initialize the Toolbox */
 
 
   /*
@@ -66,8 +66,8 @@ void Mac_initgraphics (void)
   error = EasyInitErrorDialog();
   if (error)
       {
-	fatal("Can't open error Dialog\n");
-	return;	/* g.error dialog set to NIL, we can't display error */
+        fatal("Can't open error Dialog\n");
+        return;        /* g.error dialog set to NIL, we can't display error */
       }
 
   /*
@@ -79,27 +79,27 @@ void Mac_initgraphics (void)
   error = CheckEnvironmentHook();
   if (error)
       {
-	ShowErrorHook(error);
-	return;
+        ShowErrorHook(error);
+        return;
       }
 
   /* set up the rest of the application globals */
   error = InitAppHook();
   if (error)
       {
-	ShowErrorHook(error);
-	if(error != kNoPrinterError) /* no printer not fatal */
-	    {
-	      return;
-	    }
+        ShowErrorHook(error);
+        if(error != kNoPrinterError) /* no printer not fatal */
+            {
+              return;
+            }
       }
 
   /* Set up any cursors you want to use in the application. */
   error = LoadCursorsHook();
   if (error)
       {
-	ShowErrorHook(error);
-	return;
+        ShowErrorHook(error);
+        return;
       }
 
   /* set up the menus for the application */
@@ -111,16 +111,16 @@ void Mac_initgraphics (void)
   error = EasySetupMenus();
   if (error)
       {
-	ShowErrorHook(error);
-	return;
+        ShowErrorHook(error);
+        return;
       }
 
   /* install Apple event handlers */
   error = InstallAEHandlersHook();
   if (error)
       {
-	ShowErrorHook(error);
-	return;
+        ShowErrorHook(error);
+        return;
       }
 
 
@@ -139,14 +139,14 @@ void Mac_initgraphics (void)
 
 
   /* let's do it */
-  EasyEventLoop();	/* where all the real fun happens */
+  EasyEventLoop();        /* where all the real fun happens */
 
   /* let's shut it down */
   error = ShutdownHook();
 
   if (error)
-      {	/* display error dialog with correct message before we die or quit */
-	ShowErrorHook(error);
+      {        /* display error dialog with correct message before we die or quit */
+        ShowErrorHook(error);
       }
 
   /* we're all done */

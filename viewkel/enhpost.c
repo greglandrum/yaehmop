@@ -15,8 +15,8 @@
     Changes include:
       -removal of rotated text support
         This was taken out for user interface issues....
-	 as soon as those are worked out, putting the rotated
-	 text back in would be a damn good idea.
+         as soon as those are worked out, putting the rotated
+         text back in would be a damn good idea.
       -ANSI'ification of the code, including prototypes in
          "prototypes.h"
 
@@ -41,7 +41,7 @@
  * This file is included by ../term.c.
  *
  * This terminal driver supports:
- *     enhpost		Enhanced PostScript
+ *     enhpost                Enhanced PostScript
  * It is an extension to the postscript terminal driver and depends on
  * that being included (in ../term.c) before this is included.
  *
@@ -101,8 +101,8 @@
 
 #include "viewkel.h"
 
-#define PS_XOFF	50	/* page offset in pts */
-#define PS_YOFF	50
+#define PS_XOFF        50        /* page offset in pts */
+#define PS_YOFF        50
 
 #define PS_XMAX 7200
 #define PS_YMAX 5040
@@ -123,7 +123,7 @@ char *ENHPS_header[] = {
 "/hpt2 hpt 2 mul def\n",
 
 /* For MFshow and MFwidth the tos is an array with the string and font info:  */
-/*	[<fontname (a string)> <fontsize> <vertical offset> <width significant?> <text string>]  */
+/*        [<fontname (a string)> <fontsize> <vertical offset> <width significant?> <text string>]  */
 
 "/MFshow {{dup dup 0 get findfont exch 1 get scalefont setfont\n",
 "     [ currentpoint ] exch dup 2 get 0 exch rmoveto dup 4 get show dup\n",
@@ -295,8 +295,8 @@ NULL};
 
 /* added by Matt Heffron <heffron@falstaff.css.beckman.com> */
 struct ENHPS_FontName {
-	char *name;
-	struct ENHPS_FontName *next;
+        char *name;
+        struct ENHPS_FontName *next;
 } *ENHPS_DocFonts = NULL;
 
 char ps_font[120];
@@ -308,7 +308,7 @@ char *ENHPS_RememberFont(char *fname)
 
   for (fnp=ENHPS_DocFonts; fnp && strcmp(fnp->name, fname); fnp = fnp->next);
   if (fnp)
-    return fnp->name;	/* we must have found it in the list */
+    return fnp->name;        /* we must have found it in the list */
 
   fnp = (struct ENHPS_FontName *)D_MALLOC(sizeof(struct ENHPS_FontName));
   if( !fnp ) fatal("Can't get fnp memory");
@@ -371,24 +371,24 @@ static float ENHps_max_height, ENHps_min_height;
 
 
 char *ENHPS_recurse(char *p,char brace, char *fontname,
-			   float fontsize, float base, char widthflag)
+                           float fontsize, float base, char widthflag)
 {
 
   /* close a postscript string if it has been opened */
 #define ENHPS_FLUSH      \
-{	if (ENHps_opened_string)  \
-    {	fputs(")]\n", psfile);   \
+{        if (ENHps_opened_string)  \
+    {        fputs(")]\n", psfile);   \
       ENHps_opened_string = FALSE; \
 }                         \
 }
 
-#define ENHPS_OPEN	\
-{	if (!ENHps_opened_string) \
+#define ENHPS_OPEN        \
+{        if (!ENHps_opened_string) \
     { fprintf(psfile, "[(%s) %.1f %.1f %s (",  \
-	      fontname, fontsize, base, \
-	      widthflag ? "true" : "false");  \
-		ENHps_opened_string = TRUE; \
-}	\
+              fontname, fontsize, base, \
+              widthflag ? "true" : "false");  \
+                ENHps_opened_string = TRUE; \
+}        \
 }
 
   ENHPS_DEBUG(("RECURSE WITH [%p] %s, %d %s %.1f %.1f %d\n", p, p, brace, fontname, fontsize, base, widthflag))
@@ -397,181 +397,181 @@ char *ENHPS_recurse(char *p,char brace, char *fontname,
     ENHPS_FLUSH
 
       if (base + fontsize > ENHps_max_height)
-	  {	ENHps_max_height = base + fontsize;
-		ENHPS_DEBUG(("Setting max height to %.1f\n", ENHps_max_height));
-	      }
+          {        ENHps_max_height = base + fontsize;
+                ENHPS_DEBUG(("Setting max height to %.1f\n", ENHps_max_height));
+              }
 
   if (base < ENHps_min_height)
-      {	ENHps_min_height = base;
-	ENHPS_DEBUG(("Setting min height to %.1f\n", ENHps_min_height));
+      {        ENHps_min_height = base;
+        ENHPS_DEBUG(("Setting min height to %.1f\n", ENHps_min_height));
       }
 
   for ( ; *p; ++p)
-      {	float shift;
-	float f=0;		/* used for getting new font size */
-	char *localfontname, ch;
+      {        float shift;
+        float f=0;                /* used for getting new font size */
+        char *localfontname, ch;
 
-	/*{{{  look for 'special' characters - process then 'continue'*/
-	switch (*p)
-	    {
-	    case '}'  :
-	      /*{{{  deal with it*/
-	      if (brace)
-		return (p);
+        /*{{{  look for 'special' characters - process then 'continue'*/
+        switch (*p)
+            {
+            case '}'  :
+              /*{{{  deal with it*/
+              if (brace)
+                return (p);
 
-	      fprintf(stderr, "enhpost printer driver - spurious }\n");
-	      break;
-	      /*}}}*/
+              fprintf(stderr, "enhpost printer driver - spurious }\n");
+              break;
+              /*}}}*/
 
-	    case '_'  :
-	    case '^'  :
-	      /*{{{  deal with super/sub script*/
+            case '_'  :
+            case '^'  :
+              /*{{{  deal with super/sub script*/
 
-	      shift = (*p == '^') ? 0.5 : -0.3;
+              shift = (*p == '^') ? 0.5 : -0.3;
 
-	      ENHPS_FLUSH
+              ENHPS_FLUSH
 
-		p = ENHPS_recurse(p+1, FALSE, fontname, fontsize*0.8, base+shift*fontsize, widthflag);
+                p = ENHPS_recurse(p+1, FALSE, fontname, fontsize*0.8, base+shift*fontsize, widthflag);
 
-	      break;
-	      /*}}}*/
+              break;
+              /*}}}*/
 
-	    case '{'  :
-	      /*{{{  recurse (possibly with a new font) */
-	      ENHPS_DEBUG(("Dealing with {\n"))
+            case '{'  :
+              /*{{{  recurse (possibly with a new font) */
+              ENHPS_DEBUG(("Dealing with {\n"))
 
-		if (*++p == '/')
-		    {		/* then parse a fontname, optional fontsize */
-		      while (*++p == ' ');
-		      localfontname = p;
-		      while ((ch = *p) > ' ' && ch != '=')
-			++p;
-		      if (ch == '=')
-			  {
-			    *p++ = '\0';
-			    /*{{{  get optional font size*/
-			    ENHPS_DEBUG(("Calling strtod(%s) ...", p))
-			      f = (float)strtod(p, &p);
-			    ENHPS_DEBUG(("Retured %.1f and %s\n", f, p))
+                if (*++p == '/')
+                    {                /* then parse a fontname, optional fontsize */
+                      while (*++p == ' ');
+                      localfontname = p;
+                      while ((ch = *p) > ' ' && ch != '=')
+                        ++p;
+                      if (ch == '=')
+                          {
+                            *p++ = '\0';
+                            /*{{{  get optional font size*/
+                            ENHPS_DEBUG(("Calling strtod(%s) ...", p))
+                              f = (float)strtod(p, &p);
+                            ENHPS_DEBUG(("Retured %.1f and %s\n", f, p))
 
-			      if (f)
-				f *= PS_SC; /* remember the scaling */
-			      else
-				f = fontsize;
+                              if (f)
+                                f *= PS_SC; /* remember the scaling */
+                              else
+                                f = fontsize;
 
-			    ENHPS_DEBUG(("Font size %.1f\n", f))
-			      /*}}}*/
-			  }
-		      else
-			  {
-			    *p++ = '\0';
-			    f = fontsize;
-			  }
+                            ENHPS_DEBUG(("Font size %.1f\n", f))
+                              /*}}}*/
+                          }
+                      else
+                          {
+                            *p++ = '\0';
+                            f = fontsize;
+                          }
 
-		      while (*p == ' ')
-			++p;
-		      if (*localfontname)
-			localfontname = ENHPS_RememberFont(localfontname);
-		      else
-			localfontname = fontname;
-		    }
-		else
-		    {
-		      localfontname = fontname;
-		      f = fontsize;
-		    }
-	      /*}}}*/
+                      while (*p == ' ')
+                        ++p;
+                      if (*localfontname)
+                        localfontname = ENHPS_RememberFont(localfontname);
+                      else
+                        localfontname = fontname;
+                    }
+                else
+                    {
+                      localfontname = fontname;
+                      f = fontsize;
+                    }
+              /*}}}*/
 
-	      ENHPS_DEBUG(("Before recursing, we are at [%p] %s\n", p, p))
+              ENHPS_DEBUG(("Before recursing, we are at [%p] %s\n", p, p))
 
-		p = ENHPS_recurse(p, TRUE, localfontname, f, base, widthflag);
+                p = ENHPS_recurse(p, TRUE, localfontname, f, base, widthflag);
 
-	      ENHPS_DEBUG(("BACK WITH %s\n", p));
+              ENHPS_DEBUG(("BACK WITH %s\n", p));
 
-	      ENHPS_FLUSH
+              ENHPS_FLUSH
 
-		break;
-	      /*}}}*/
+                break;
+              /*}}}*/
 
-	    case '@' :
-	      /*{{{  phantom box - prints next 'char', then restores currentpoint */
+            case '@' :
+              /*{{{  phantom box - prints next 'char', then restores currentpoint */
 
-	      ENHPS_FLUSH
+              ENHPS_FLUSH
 
-		p = ENHPS_recurse(++p, FALSE, fontname, fontsize, base, FALSE);
+                p = ENHPS_recurse(++p, FALSE, fontname, fontsize, base, FALSE);
 
-	      break;
-	      /*}}}*/
+              break;
+              /*}}}*/
 
-	    case '('  :
-	    case ')'  :
-	      /*{{{  an escape and print it */
-	      /* special cases */
-	      ENHPS_OPEN
-		fputc('\\', psfile);
-	      fputc(*p, psfile);
-	      break;
-	      /*}}}*/
+            case '('  :
+            case ')'  :
+              /*{{{  an escape and print it */
+              /* special cases */
+              ENHPS_OPEN
+                fputc('\\', psfile);
+              fputc(*p, psfile);
+              break;
+              /*}}}*/
 
-	    case '\\'  :
-	      /*{{{  is it an escape */
-	      /* special cases */
+            case '\\'  :
+              /*{{{  is it an escape */
+              /* special cases */
 
-	      if (p[1]=='\\' || p[1]=='(' || p[1]==')')
-		  {
-		    ENHPS_OPEN
-		      fputc('\\', psfile);
-		  }
-	      else if ((ch = p[1]) >= '0' && ch <= '7')
-		  {
-		    /* up to 3 octal digits */
-		    ENHPS_OPEN
-		      fputc('\\', psfile);
-		    fputc(ch, psfile);
-		    ++p;
-		    if ((ch = p[1]) >= '0' && ch <= '7')
-			{
-			  fputc(ch, psfile);
-			  ++p;
-			  if ((ch = p[1]) >= '0' && ch <= '7')
-			      {
-				fputc(ch, psfile);
-				++p;
-			      }
-			}
-		    break;
-		  }
-	      else if ((ch = p[1]) == 'A' && p[2] == 'A'){
-		/* it was \AA, put in an Angstrom symbol */
-		ENHPS_OPEN
-		fputs("\\305",psfile);
-		p+=3;
-	      }
+              if (p[1]=='\\' || p[1]=='(' || p[1]==')')
+                  {
+                    ENHPS_OPEN
+                      fputc('\\', psfile);
+                  }
+              else if ((ch = p[1]) >= '0' && ch <= '7')
+                  {
+                    /* up to 3 octal digits */
+                    ENHPS_OPEN
+                      fputc('\\', psfile);
+                    fputc(ch, psfile);
+                    ++p;
+                    if ((ch = p[1]) >= '0' && ch <= '7')
+                        {
+                          fputc(ch, psfile);
+                          ++p;
+                          if ((ch = p[1]) >= '0' && ch <= '7')
+                              {
+                                fputc(ch, psfile);
+                                ++p;
+                              }
+                        }
+                    break;
+                  }
+              else if ((ch = p[1]) == 'A' && p[2] == 'A'){
+                /* it was \AA, put in an Angstrom symbol */
+                ENHPS_OPEN
+                fputs("\\305",psfile);
+                p+=3;
+              }
 
-	      ++p;
-	      /* just go and print it (fall into the 'default' case) */
+              ++p;
+              /* just go and print it (fall into the 'default' case) */
 
-	      /*}}}*/
-	    default:
-	      /*{{{  print it */
-	      ENHPS_OPEN
+              /*}}}*/
+            default:
+              /*{{{  print it */
+              ENHPS_OPEN
 
-		fputc(*p, psfile);
+                fputc(*p, psfile);
 
-	      /*}}}*/
+              /*}}}*/
 
-	    }
-	/*}}}*/
+            }
+        /*}}}*/
 
-	/* like TeX, we only do one character in a recursion, unless it's
-	 * in braces
-	 */
+        /* like TeX, we only do one character in a recursion, unless it's
+         * in braces
+         */
 
-	if (!brace)
-	    {
-	      ENHPS_FLUSH
-		return(p);	/* the ++p in the outer copy will increment us */
-	    }
+        if (!brace)
+            {
+              ENHPS_FLUSH
+                return(p);        /* the ++p in the outer copy will increment us */
+            }
 
       }
   ENHPS_FLUSH
@@ -597,8 +597,8 @@ int ENHPS_put_text(unsigned int x, unsigned int y,char *str,
   ENHps_min_height = 1000;
 
   while (*(str = ENHPS_recurse(str, TRUE, ps_font,
-			       (float)PS_options.fontsize,
-			       (float)0.0, TRUE)));
+                               (float)PS_options.fontsize,
+                               (float)0.0, TRUE)));
 
   ENHps_max_height += ENHps_min_height;
 
@@ -607,11 +607,11 @@ int ENHPS_put_text(unsigned int x, unsigned int y,char *str,
   switch(horiz_justify)
       {
       case LEFT_JUST : fprintf(psfile, "Lshow\n");
-	break;
+        break;
       case CENTER_JUST : fprintf(psfile, "Cshow\n");
-	break;
+        break;
       case RIGHT_JUST : fprintf(psfile, "Rshow\n");
-	break;
+        break;
       }
 
 }
@@ -715,7 +715,7 @@ void do_ps_output(void)
     bby2 *= -8.5*72.0*PS_options.printscale/(float)g_xmax;
     /* now increase its size by 10% in each direction */
     printf("box: %6.2lf %6.2lf %6.2lf %6.2lf\n",
-	   bbx1,bby1,bbx2,bby2);
+           bbx1,bby1,bbx2,bby2);
     bbx1 -= .1*fabs(bbx2-bbx1);
     bbx2 += .1*fabs(bbx2-bbx1);
     bby1 -= .1*fabs(bby2-bby1);
@@ -728,7 +728,7 @@ void do_ps_output(void)
   fprintf(psfile,"%%%%Creator: Viewkel\n");
   fprintf(psfile,"%%%%Pages: 1\n");
   fprintf(psfile,"%%%%BoundingBox: %6.2lf %6.2lf %6.2lf %6.2lf\n",
-	  bbx1,bby1,bbx2,bby2);
+          bbx1,bby1,bbx2,bby2);
   fprintf(psfile,"%%%%EndComments\n\n");
 
 
@@ -888,25 +888,25 @@ void do_ps_output(void)
   fprintf(psfile,"/%s findfont\n",PS_options.fontname);
   fprintf(psfile,"dup length dict begin\n");
   fprintf(psfile,"{1 index /FID ne {def} {pop pop} ifelse} forall\n");
-  fprintf(psfile,"	/Encoding ISOLatin1Encoding def\n");
+  fprintf(psfile,"        /Encoding ISOLatin1Encoding def\n");
 
 
 
-  fprintf(psfile,"	  currentdict\n");
+  fprintf(psfile,"          currentdict\n");
   fprintf(psfile,"end\n");
   fprintf(psfile,"/%s exch definefont pop\n",PS_options.fontname);
 
 
   fprintf(psfile,"/textsize %lf def\n",PS_options.fontsize);
   fprintf(psfile,
-	  "/normalfont {/%s findfont textsize scalefont setfont} def\n",
-	  PS_options.fontname);
+          "/normalfont {/%s findfont textsize scalefont setfont} def\n",
+          PS_options.fontname);
   fprintf(psfile,
-	  "/symbolfont {/Symbol findfont textsize scalefont setfont} def\n");
+          "/symbolfont {/Symbol findfont textsize scalefont setfont} def\n");
 
   fprintf(psfile,"normalfont\n");
   fprintf(psfile,"/thesize %lf def\n",
-	  8.5*72.0*PS_options.printscale/(float)g_xmax);
+          8.5*72.0*PS_options.printscale/(float)g_xmax);
   fprintf(psfile,"/scaleit {thesize -1 thesize mul scale} def\n");
   fprintf(psfile,"/iscaleit {1 thesize div -1 thesize div scale} def\n");
   fprintf(psfile,"/rotit {currentpoint gsave translate rotate 0 0 moveto} def\n");
@@ -1002,7 +1002,7 @@ void do_ps_output(void)
     stringarr[0] = colorstring;
     readstringparm("bond color (RGB triple)",stringarr);
     sscanf(colorstring,"%lf %lf %lf",&PS_options.bond_color[0],
-	   &PS_options.bond_color[1],&PS_options.bond_color[2]);
+           &PS_options.bond_color[1],&PS_options.bond_color[2]);
     if( PS_options.bond_color[0] < 0 ) PS_options.bond_color[0] = 0;
     if( PS_options.bond_color[0] > 1 ) PS_options.bond_color[0] = 1;
     if( PS_options.bond_color[1] < 0 ) PS_options.bond_color[1] = 0;

@@ -70,8 +70,8 @@ char **argv;
 #endif
 #ifdef MAC_GRAPHICS
 /****
-	 set up stuff so that we can use SIOUX to handle console i/o but
-	 we can still open our own windows and menus.  fun fun.
+         set up stuff so that we can use SIOUX to handle console i/o but
+         we can still open our own windows and menus.  fun fun.
 *****/
 SIOUXSettings.standalone = FALSE;
 SIOUXSettings.setupmenus = FALSE;
@@ -107,35 +107,35 @@ SIOUXSettings.asktosaveonclose = FALSE;
     ****/
     for( i = 1; i<argc; i++){
       if(!strncmp(argv[i],"-gr",3)){
-	global_read_on = 0;
+        global_read_on = 0;
       } else if(!strncmp(argv[i],"-g",2)){
-	fprintf(stderr,"New size!\n");
-	if( argc < i+2 ){
-	  fprintf(stderr, "You tease, give me a real size!\n");
-	  xsize = 0;
-	  ysize = 0;
-	}
-	else{
-	  sscanf(argv[i+1],"%d", &xsize);
-	  sscanf(argv[i+2],"%d", &ysize);
-	  i+=2;
-	}
+        fprintf(stderr,"New size!\n");
+        if( argc < i+2 ){
+          fprintf(stderr, "You tease, give me a real size!\n");
+          xsize = 0;
+          ysize = 0;
+        }
+        else{
+          sscanf(argv[i+1],"%d", &xsize);
+          sscanf(argv[i+2],"%d", &ysize);
+          i+=2;
+        }
       } else if( !strncmp(argv[i],"-t",2) ){
-	doing_X = 0;
-	doing_tek = 1;
+        doing_X = 0;
+        doing_tek = 1;
       } else if( !strncmp(argv[i],"-b",2) ){
-	useButtons=0;
+        useButtons=0;
       }
       else if (!strncmp(argv[i],"-f",2) ){
-	fileName = argv[i+1];
-	i++;
+        fileName = argv[i+1];
+        i++;
       }
     }
   }
 #endif
 
 #ifdef MAC_GRAPHICS
-	doing_Mac = 1;
+        doing_Mac = 1;
 #endif
   ident = (matrix_type *)D_CALLOC(1,sizeof(matrix_type));
   mainortho = (matrix_type *)D_CALLOC(1,sizeof(matrix_type));

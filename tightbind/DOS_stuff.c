@@ -135,12 +135,12 @@ void gen_total_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering)
     if( j < tot_num_orbs ){
       diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
       while(fabs(diff) < DOS_DEGEN_TOL && j<tot_num_orbs){
-	num_at_this_E += details->K_POINTS[orbital_ordering[j].Kpoint].weight;
-	j++;
+        num_at_this_E += details->K_POINTS[orbital_ordering[j].Kpoint].weight;
+        j++;
 
-	if( j < tot_num_orbs ){
-	  diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
-	}
+        if( j < tot_num_orbs ){
+          diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
+        }
       }
     }
 
@@ -148,10 +148,10 @@ void gen_total_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering)
     /* write out the result */
 #ifdef FS_TEST
     fprintf(output_file,"%lf %lf  ; %d\n",(real)num_at_this_E/tot_K_weight,
-	    this_E,orbital_ordering[i].Kpoint);
+            this_E,orbital_ordering[i].Kpoint);
 #else
     fprintf(output_file,"%lf %lf\n",(real)num_at_this_E/tot_K_weight,
-	    this_E);
+            this_E);
 #endif
     if( weights && energies ){
       weights[num_entries] = num_at_this_E/tot_K_weight;
@@ -186,7 +186,7 @@ void gen_total_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering)
       /* reference to the first moment */
       diff = energies[i]-details->moments[1];
       for(j=2;j<=details->num_moments;j++){
-	details->moments[j] += weights[i]*pow(diff,(double)j);
+        details->moments[j] += weights[i]*pow(diff,(double)j);
       }
     }
     /* normalize them */
@@ -280,7 +280,7 @@ real FMO_contribution(num_orbs,kpoint,MO,avg_prop_info,which_FMO)
  *
  ****************************************************************************/
 real atom_contribution(num_orbs,num_atoms,kpoint,MO,avg_prop_info,which_atom,
-			orbital_lookup_table)
+                        orbital_lookup_table)
   int num_orbs,num_atoms,kpoint,MO;
   avg_prop_info_type *avg_prop_info;
   int which_atom,*orbital_lookup_table;
@@ -294,7 +294,7 @@ real atom_contribution(num_orbs,num_atoms,kpoint,MO,avg_prop_info,which_atom,
 
   /* find this atom's orbitals */
   find_atoms_orbs(num_orbs,num_atoms,which_atom,orbital_lookup_table,
-		  &atom_begin,&atom_end);
+                  &atom_begin,&atom_end);
   contrib = 0.0;
 
   if( atom_begin >= 0 ){
@@ -325,7 +325,7 @@ real atom_contribution(num_orbs,num_atoms,kpoint,MO,avg_prop_info,which_atom,
  *
  ****************************************************************************/
 void gen_projected_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering,
-		       orbital_lookup_table)
+                       orbital_lookup_table)
   detail_type *details;
   cell_type *cell;
   int num_orbs;
@@ -356,36 +356,36 @@ void gen_projected_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering,
     switch(details->proj_DOS[k].type){
     case P_DOS_ORB:
       fprintf(output_file,"%lf states are present.\n",
-	      details->proj_DOS[k].weight_sum * 2.0);
+              details->proj_DOS[k].weight_sum * 2.0);
       fprintf(output_file,"ORBITAL ");
       for(j = 0; j<details->proj_DOS[k].num_contributions; j++){
-	fprintf(output_file,"%d %lf,",details->proj_DOS[k].contributions[j]+1,
-		details->proj_DOS[k].weights[j]);
+        fprintf(output_file,"%d %lf,",details->proj_DOS[k].contributions[j]+1,
+                details->proj_DOS[k].weights[j]);
       }
       break;
     case P_DOS_ATOM:
       num_states = 0;
       for (j=0; j<details->proj_DOS[k].num_contributions; j++){
-	find_atoms_orbs(num_orbs,cell->num_atoms,
-			details->proj_DOS[k].contributions[j],
-			orbital_lookup_table,&begin,&end);
-	num_states += details->proj_DOS[k].weights[j]*(end - begin);
+        find_atoms_orbs(num_orbs,cell->num_atoms,
+                        details->proj_DOS[k].contributions[j],
+                        orbital_lookup_table,&begin,&end);
+        num_states += details->proj_DOS[k].weights[j]*(end - begin);
       }
       fprintf(output_file,"%lf states are present.\n",(real)num_states * 2.0);
       fprintf(output_file,"ATOM ");
       for(j = 0; j<details->proj_DOS[k].num_contributions; j++){
-	fprintf(output_file,"%d %lf,",details->proj_DOS[k].contributions[j]+1,
-		details->proj_DOS[k].weights[j]);
+        fprintf(output_file,"%d %lf,",details->proj_DOS[k].contributions[j]+1,
+                details->proj_DOS[k].weights[j]);
       }
       break;
     case P_DOS_FMO:
       num_states=1;
       fprintf(output_file,"%lf states are present.\n",
-	      details->proj_DOS[k].weight_sum * num_states * 2);
+              details->proj_DOS[k].weight_sum * num_states * 2);
       fprintf(output_file,"FMO ");
       for(j = 0; j<details->proj_DOS[k].num_contributions; j++){
-	fprintf(output_file,"%d %lf,",details->proj_DOS[k].contributions[j]+1,
-		details->proj_DOS[k].weights[j]);
+        fprintf(output_file,"%d %lf,",details->proj_DOS[k].contributions[j]+1,
+                details->proj_DOS[k].weights[j]);
       }
       break;
     }
@@ -397,34 +397,34 @@ void gen_projected_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering,
       /* now figure out the contribution of whatever is being projected out */
       num_at_this_E = 0.0;
       for( l=0; l<details->proj_DOS[k].num_contributions; l++){
-	switch(details->proj_DOS[k].type){
-	case P_DOS_ORB:
-	  num_at_this_E += details->proj_DOS[k].weights[l] *
-	    orb_contribution(num_orbs,orbital_ordering[i].Kpoint,
-			     orbital_ordering[i].MO,
-			     avg_prop_info,
-			     details->proj_DOS[k].contributions[l]);
-	  break;
-	case P_DOS_ATOM:
-	  num_at_this_E += details->proj_DOS[k].weights[l] *
-	    atom_contribution(num_orbs,cell->num_atoms,
-			      orbital_ordering[i].Kpoint,
-			      orbital_ordering[i].MO,
-			      avg_prop_info,
-			      details->proj_DOS[k].contributions[l],
-			      orbital_lookup_table);
-	  break;
-	case P_DOS_FMO:
-	  num_at_this_E += details->proj_DOS[k].weights[l] *
-	    FMO_contribution(num_orbs,
-			      orbital_ordering[i].Kpoint,
-			      orbital_ordering[i].MO,
-			      avg_prop_info,
-			      details->proj_DOS[k].contributions[l]);
-	  break;
-	default:
-	  FATAL_BUG("Invalid projection type in gen_proj_DOS.");
-	}
+        switch(details->proj_DOS[k].type){
+        case P_DOS_ORB:
+          num_at_this_E += details->proj_DOS[k].weights[l] *
+            orb_contribution(num_orbs,orbital_ordering[i].Kpoint,
+                             orbital_ordering[i].MO,
+                             avg_prop_info,
+                             details->proj_DOS[k].contributions[l]);
+          break;
+        case P_DOS_ATOM:
+          num_at_this_E += details->proj_DOS[k].weights[l] *
+            atom_contribution(num_orbs,cell->num_atoms,
+                              orbital_ordering[i].Kpoint,
+                              orbital_ordering[i].MO,
+                              avg_prop_info,
+                              details->proj_DOS[k].contributions[l],
+                              orbital_lookup_table);
+          break;
+        case P_DOS_FMO:
+          num_at_this_E += details->proj_DOS[k].weights[l] *
+            FMO_contribution(num_orbs,
+                              orbital_ordering[i].Kpoint,
+                              orbital_ordering[i].MO,
+                              avg_prop_info,
+                              details->proj_DOS[k].contributions[l]);
+          break;
+        default:
+          FATAL_BUG("Invalid projection type in gen_proj_DOS.");
+        }
       }
 
       /* multiply by the total DOS weighting */
@@ -434,54 +434,54 @@ void gen_projected_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering,
       j=i+1;
 
       /*******
-	just add up all of the contributions to the total DOS that fall
-	within DOS_DEGEN_TOL of each other...
-	********/
+        just add up all of the contributions to the total DOS that fall
+        within DOS_DEGEN_TOL of each other...
+        ********/
       if( j < tot_num_orbs ){
-	diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
-	while(fabs(diff) < DOS_DEGEN_TOL && j<tot_num_orbs){
+        diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
+        while(fabs(diff) < DOS_DEGEN_TOL && j<tot_num_orbs){
 
-	  accum = 0.0;
-	  for( l=0; l<details->proj_DOS[k].num_contributions; l++){
-	    switch(details->proj_DOS[k].type){
-	    case P_DOS_ORB:
-	      accum += details->proj_DOS[k].weights[l] *
-		orb_contribution(num_orbs,orbital_ordering[j].Kpoint,
-				 orbital_ordering[j].MO,
-				 avg_prop_info,
-				 details->proj_DOS[k].contributions[l]);
-	      break;
-	    case P_DOS_ATOM:
-	      accum += details->proj_DOS[k].weights[l] *
-		atom_contribution(num_orbs,cell->num_atoms,
-				  orbital_ordering[j].Kpoint,
-				  orbital_ordering[j].MO,
-				  avg_prop_info,
-				  details->proj_DOS[k].contributions[l],
-				  orbital_lookup_table);
-	      break;
-	    case P_DOS_FMO:
-	      accum += details->proj_DOS[k].weights[l] *
-		FMO_contribution(num_orbs,
-				 orbital_ordering[j].Kpoint,
-				 orbital_ordering[j].MO,
-				 avg_prop_info,
-				 details->proj_DOS[k].contributions[l]);
-	      break;
+          accum = 0.0;
+          for( l=0; l<details->proj_DOS[k].num_contributions; l++){
+            switch(details->proj_DOS[k].type){
+            case P_DOS_ORB:
+              accum += details->proj_DOS[k].weights[l] *
+                orb_contribution(num_orbs,orbital_ordering[j].Kpoint,
+                                 orbital_ordering[j].MO,
+                                 avg_prop_info,
+                                 details->proj_DOS[k].contributions[l]);
+              break;
+            case P_DOS_ATOM:
+              accum += details->proj_DOS[k].weights[l] *
+                atom_contribution(num_orbs,cell->num_atoms,
+                                  orbital_ordering[j].Kpoint,
+                                  orbital_ordering[j].MO,
+                                  avg_prop_info,
+                                  details->proj_DOS[k].contributions[l],
+                                  orbital_lookup_table);
+              break;
+            case P_DOS_FMO:
+              accum += details->proj_DOS[k].weights[l] *
+                FMO_contribution(num_orbs,
+                                 orbital_ordering[j].Kpoint,
+                                 orbital_ordering[j].MO,
+                                 avg_prop_info,
+                                 details->proj_DOS[k].contributions[l]);
+              break;
 
-	    default:
-	      FATAL_BUG("Invalid projection type in gen_proj_DOS.");
-	    }
-	  }
-	  j++;
+            default:
+              FATAL_BUG("Invalid projection type in gen_proj_DOS.");
+            }
+          }
+          j++;
 
-	  if( j < tot_num_orbs ){
-	    diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
-	    accum *= (real)details->K_POINTS[orbital_ordering[j].Kpoint].weight;
-	  }
+          if( j < tot_num_orbs ){
+            diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
+            accum *= (real)details->K_POINTS[orbital_ordering[j].Kpoint].weight;
+          }
 
-	  num_at_this_E += accum;
-	}
+          num_at_this_E += accum;
+        }
       }
       i = j;
       /* write out the result */

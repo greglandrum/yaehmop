@@ -69,7 +69,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 void eval_charge_matrix(cell,eigenset,overlap,num_orbs,
-			  orbital_lookup_table,chg_matrix,accum)
+                          orbital_lookup_table,chg_matrix,accum)
   cell_type *cell;
   eigenset_type eigenset;
   hermetian_matrix_type overlap;
@@ -104,35 +104,35 @@ void eval_charge_matrix(cell,eigenset,overlap,num_orbs,
       AO_chgI = HERMETIAN_I(overlap,j,j) * EIGENVECT_I(eigenset,i,j);
 
       for( k=j+1; k<num_orbs; k++){
-	ktab = k*num_orbs;
-	/****
+        ktab = k*num_orbs;
+        /****
 
-	  to save a ton of pointer math, set some temporary
-	  variables here.
+          to save a ton of pointer math, set some temporary
+          variables here.
 
-	*****/
-	Sjk_R = overlap.mat[jtab+k];
-	Sjk_I = overlap.mat[ktab+j];
-	Cik_R = eigenset.vectR[itab+k];
-	Cik_I = eigenset.vectI[itab+k];
+        *****/
+        Sjk_R = overlap.mat[jtab+k];
+        Sjk_I = overlap.mat[ktab+j];
+        Cik_R = eigenset.vectR[itab+k];
+        Cik_I = eigenset.vectI[itab+k];
 
-	AO_chg +=  Sjk_R * Cik_R + Sjk_I * Cik_I;
-	AO_chgI += Sjk_R * Cik_I - Sjk_I * Cik_R;
+        AO_chg +=  Sjk_R * Cik_R + Sjk_I * Cik_I;
+        AO_chgI += Sjk_R * Cik_I - Sjk_I * Cik_R;
       }
 
       for( k=0; k<j; k++){
-	ktab = k*num_orbs;
-	Sjk_R = overlap.mat[ktab+j];
-	Sjk_I = overlap.mat[jtab+k];
-	Cik_R = eigenset.vectR[itab+k];
-	Cik_I = eigenset.vectI[itab+k];
+        ktab = k*num_orbs;
+        Sjk_R = overlap.mat[ktab+j];
+        Sjk_I = overlap.mat[jtab+k];
+        Cik_R = eigenset.vectR[itab+k];
+        Cik_I = eigenset.vectI[itab+k];
 
-	AO_chg +=  Sjk_R * Cik_R - Sjk_I * Cik_I;
-	AO_chgI += Sjk_R * Cik_I + Sjk_I * Cik_R;
+        AO_chg +=  Sjk_R * Cik_R - Sjk_I * Cik_I;
+        AO_chgI += Sjk_R * Cik_I + Sjk_I * Cik_R;
       }
 
       chg_matrix[itab+j] = EIGENVECT_R(eigenset,i,j)*AO_chg +
-	EIGENVECT_I(eigenset,i,j)*AO_chgI;
+        EIGENVECT_I(eigenset,i,j)*AO_chgI;
 
     }
 

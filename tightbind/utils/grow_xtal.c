@@ -107,7 +107,7 @@ int skipcomments(FILE *file,char *string,char toggle)
   i = 0;
   while(string[i] == ' ') i++;
   while( string[i] == '\n' || string[i] == ';'
-	&& string[i] != 0 ){
+        && string[i] != 0 ){
     string[0] = 0;
     fgets(string,MAX_STR_LEN,file);
     i = 0;
@@ -142,7 +142,7 @@ void read_from_file(FILE *infile, molec_type *molec)
   sscanf(instring,"%d",&molec->num_dim);
   skipcomments(infile,instring,FATAL);
   sscanf(instring,"%d %d %d",&molec->overlaps[0],
-	 &molec->overlaps[1],&molec->overlaps[2]);
+         &molec->overlaps[1],&molec->overlaps[2]);
 
   skipcomments(infile,instring,FATAL);
   sscanf(instring,"%lf",&molec->num_raw_electrons);
@@ -158,8 +158,8 @@ void read_from_file(FILE *infile, molec_type *molec)
   for(i=0;i<molec->num_raw_atoms;i++){
     skipcomments(infile,instring,FATAL);
     sscanf(instring,"%d %s %lf %lf %lf",&foo_int,molec->raw_atoms[i].type,
-	   &(molec->raw_atoms[i].loc.x),&(molec->raw_atoms[i].loc.y),
-	   &(molec->raw_atoms[i].loc.z));
+           &(molec->raw_atoms[i].loc.x),&(molec->raw_atoms[i].loc.y),
+           &(molec->raw_atoms[i].loc.z));
   }
 
   /* figure out the lattice vectors */
@@ -202,24 +202,24 @@ void grow_it(molec_type *solid,int num_a,int num_b, int num_c)
       dist_b.z = j*solid->vects[1].z;
 
       for(k=0;k<num_c;k++){
-	dist_c.x = k*solid->vects[2].x;
-	dist_c.y = k*solid->vects[2].y;
-	dist_c.z = k*solid->vects[2].z;
+        dist_c.x = k*solid->vects[2].x;
+        dist_c.y = k*solid->vects[2].y;
+        dist_c.z = k*solid->vects[2].z;
 
-	/* first copy in the old atom data */
-	bcopy((char *)solid->raw_atoms,(char *)&(temp_atoms[num_added]),
-	      solid->num_raw_atoms*sizeof(atom_type));
+        /* first copy in the old atom data */
+        bcopy((char *)solid->raw_atoms,(char *)&(temp_atoms[num_added]),
+              solid->num_raw_atoms*sizeof(atom_type));
 
-	/* now update the locations */
-	for(l=0;l<solid->num_raw_atoms;l++){
-	  temp_atoms[num_added].loc.x =
-	    solid->raw_atoms[l].loc.x + dist_a.x + dist_b.x + dist_c.x;
-	  temp_atoms[num_added].loc.y =
-	    solid->raw_atoms[l].loc.y + dist_a.y + dist_b.y + dist_c.y;
-	  temp_atoms[num_added].loc.z =
-	    solid->raw_atoms[l].loc.z + dist_a.z + dist_b.z + dist_c.z;
-	  num_added++;
-	}
+        /* now update the locations */
+        for(l=0;l<solid->num_raw_atoms;l++){
+          temp_atoms[num_added].loc.x =
+            solid->raw_atoms[l].loc.x + dist_a.x + dist_b.x + dist_c.x;
+          temp_atoms[num_added].loc.y =
+            solid->raw_atoms[l].loc.y + dist_a.y + dist_b.y + dist_c.y;
+          temp_atoms[num_added].loc.z =
+            solid->raw_atoms[l].loc.z + dist_a.z + dist_b.z + dist_c.z;
+          num_added++;
+        }
       }
     }
   }
@@ -256,7 +256,7 @@ void main(int argc,char **argv)
 
   /* prompt for the size */
   printf("The file system has: %d atoms and is %d dimensional\n",
-	 molec.num_raw_atoms,molec.num_dim);
+         molec.num_raw_atoms,molec.num_dim);
 
   printf("Please enter the number of cells along each lattice direction on separate lines.\n");
   printf("(a)  ");
@@ -308,16 +308,16 @@ void main(int argc,char **argv)
   fprintf(outfile,"%d\n",molec.num_atoms+molec.num_dim);
   for(i=0;i<molec.num_atoms;i++){
     fprintf(outfile,"%d %s %lf %lf %lf\n",i+1,molec.atoms[i].type,
-	    molec.atoms[i].loc.x,molec.atoms[i].loc.y,
-	    molec.atoms[i].loc.z);
+            molec.atoms[i].loc.x,molec.atoms[i].loc.y,
+            molec.atoms[i].loc.z);
   }
   /* write the lattice vectors */
   for(i=0;i<molec.num_dim;i++){
     fprintf(outfile,"%d %s %lf %lf %lf\n",molec.num_atoms+i+1,
-	    molec.atoms[i].type,
-	    molec.raw_atoms[0].loc.x + molec.vects[i].x,
-	    molec.raw_atoms[0].loc.y + molec.vects[i].y,
-	    molec.raw_atoms[0].loc.z + molec.vects[i].z);
+            molec.atoms[i].type,
+            molec.raw_atoms[0].loc.x + molec.vects[i].x,
+            molec.raw_atoms[0].loc.y + molec.vects[i].y,
+            molec.raw_atoms[0].loc.z + molec.vects[i].z);
   }
 
   /* the number of electrons */

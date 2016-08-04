@@ -136,12 +136,12 @@ void g_floatbutton(Window win,button_type *button,int xpos,int ypos)
   middle = xpos + button->xdim/2-
     XTextWidth(small_font,string,strlen(string))/2;
   XFillRectangle(disp,win,blackgc,xpos,ypos,button->xdim,
-		 button->ydim);
+                 button->ydim);
 
   XCopyArea(disp,button->pix1,win,graphgc,0,0,
-	    floatparm_width,floatparm_height,xpos,ypos);
+            floatparm_width,floatparm_height,xpos,ypos);
   XDrawString(disp,win,smalltextgc,middle,ypos+TEXTOFF,
-	      string,strlen(string));
+              string,strlen(string));
 }
 
 /****************************************************************************
@@ -176,11 +176,11 @@ void g_intbutton(Window win,button_type *button,int xpos,int ypos)
   middle = xpos + button->xdim/2-
     XTextWidth(small_font,string,strlen(string))/2;
   XFillRectangle(disp,win,blackgc,xpos,ypos,button->xdim,
-		 button->ydim);
+                 button->ydim);
   XCopyArea(disp,button->pix1,win,graphgc,0,0,
-	    floatparm_width,floatparm_height,xpos,ypos);
+            floatparm_width,floatparm_height,xpos,ypos);
   XDrawString(disp,win,smalltextgc,middle,ypos+TEXTOFF,
-	      string,strlen(string));
+              string,strlen(string));
 }
 
 
@@ -213,12 +213,12 @@ void g_stringbutton(Window win,button_type *button,int xpos,int ypos)
   middle = xpos + button->xdim/2-
     XTextWidth(small_font,string,strlen(string))/2;
   XFillRectangle(disp,win,blackgc,xpos,ypos,button->xdim,
-		 button->ydim);
+                 button->ydim);
 
   XCopyArea(disp,button->pix1,win,graphgc,0,0,
-	    floatparm_width,floatparm_height,xpos,ypos);
+            floatparm_width,floatparm_height,xpos,ypos);
   XDrawString(disp,win,smalltextgc,middle,ypos+TEXTOFF,
-	      string,strlen(string));
+              string,strlen(string));
 }
 
 
@@ -249,12 +249,12 @@ void g_multistringbutton(Window win,button_type *button,int xpos,int ypos)
   middle = xpos + button->xdim/2-
     XTextWidth(small_font,string,strlen(string))/2;
   XFillRectangle(disp,win,blackgc,xpos,ypos,button->xdim,
-		 button->ydim);
+                 button->ydim);
 
   XCopyArea(disp,button->pix1,win,graphgc,0,0,
-	    floatparm_width,floatparm_height,xpos,ypos);
+            floatparm_width,floatparm_height,xpos,ypos);
   XDrawString(disp,win,smalltextgc,middle,ypos+TEXTOFF,
-	      string,strlen(string));
+              string,strlen(string));
 }
 
 
@@ -282,11 +282,11 @@ void g_functionbutton(Window win,button_type *button,int xpos,int ypos)
   middle = xpos + button->xdim/2-
     XTextWidth(small_font,button->string,strlen(button->string))/2;
   XFillRectangle(disp,win,blackgc,xpos,ypos,button->xdim,
-		 button->ydim);
+                 button->ydim);
   XCopyArea(disp,button->pix1,win,graphgc,0,0,
-	    function_width,function_height,xpos,ypos);
+            function_width,function_height,xpos,ypos);
   XDrawString(disp,win,smalltextgc,middle,ypos+TEXTOFF,
-	      button->string,strlen(button->string));
+              button->string,strlen(button->string));
 }
 
 /****************************************************************************
@@ -318,9 +318,9 @@ void g_togglebutton(Window win,button_type *button,int xpos,int ypos)
     XTextWidth(small_font,button->string,strlen(button->string))/2;
 
   XCopyArea(disp,*pix,win,graphgc,0,0,toggleon_width,toggleon_height,
-	    xpos,ypos);
+            xpos,ypos);
   XDrawString(disp,win,smalltextgc,middle,ypos+TEXTOFF,
-	      button->string,strlen(button->string));
+              button->string,strlen(button->string));
 
 }
 
@@ -358,18 +358,18 @@ void g_curvebutton(Window win,button_type *button,int xpos,int ypos)
     XTextWidth(small_font,button->string,strlen(button->string))/2;
 
   XCopyArea(disp,*pix,win,graphgc,0,0,toggleon_width,toggleon_height,
-	    xpos,ypos);
+            xpos,ypos);
   XDrawString(disp,win,smalltextgc,middle,ypos+TEXTOFF,
-	      button->string,strlen(button->string));
+              button->string,strlen(button->string));
 
   /* now draw in the line sample */
   XFillRectangle(disp,win,blackgc,xpos+button->xdim+5,
-		 ypos + button->ydim/2-2,xpos+button->xdim + CURVE_SEG_LEN,
-		 ypos + button->ydim/2+2);
+                 ypos + button->ydim/2-2,xpos+button->xdim + CURVE_SEG_LEN,
+                 ypos + button->ydim/2+2);
   g_change_linestyle(*(button->guts.curve.style));
   XDrawLine(disp,win,graphgc,xpos+button->xdim + 5,
-	    ypos + button->ydim/2,xpos+button->xdim + CURVE_SEG_LEN,
-	    ypos + button->ydim/2);
+            ypos + button->ydim/2,xpos+button->xdim + CURVE_SEG_LEN,
+            ypos + button->ydim/2);
   g_change_linestyle(0);
 }
 
@@ -403,9 +403,9 @@ void g_modebutton(Window win,button_type *button,int xpos,int ypos)
     XTextWidth(small_font,which_string,strlen(which_string))/2;
 
   XCopyArea(disp,*pix,win,graphgc,0,0,toggleon_width,toggleon_height,
-	    xpos,ypos);
+            xpos,ypos);
   XDrawString(disp,win,smalltextgc,middle,ypos+TEXTOFF,
-	      which_string,strlen(which_string));
+              which_string,strlen(which_string));
 
 }
 
@@ -520,9 +520,9 @@ button_type *newbutton(void)
   if(!ptr )fatal("Memory Allocation getting a button");
 
 #ifdef MAC_GRAPHICS
-	/****************
-		insert the item into the menu bar with a bogus string,
-		we'll fix the string later
+        /****************
+                insert the item into the menu bar with a bogus string,
+                we'll fix the string later
   *****************/
   AppendMenu(activeMenu,"\pFoo item");
   ptr->itemID = nextItemID;
@@ -562,8 +562,8 @@ void free_but_win(button_win_type *but_win,button_win_type **but_list)
   } else {
     while( temp && !found){
       if( temp->next == but_win ){
-	temp->next = temp->next->next;
-	found = 1;
+        temp->next = temp->next->next;
+        found = 1;
       }
       else temp = temp->next;
     }
@@ -595,10 +595,10 @@ void free_but_win(button_win_type *but_win,button_win_type **but_list)
 
 #ifdef MAC_GRAPHICS
   /* remove it from the menu bar and free the handle */
-	DeleteMenu(but_win->menuID);
-	DisposeMenu(but_win->theMenu);
-	/* redraw the menu bar so that menu goes away */
-	DrawMenuBar();
+        DeleteMenu(but_win->menuID);
+        DisposeMenu(but_win->theMenu);
+        /* redraw the menu bar so that menu goes away */
+        DrawMenuBar();
 #endif
 
   /* free the structure */
@@ -641,10 +641,10 @@ void free_child_but_win(button_win_type *but_win)
 
 #ifdef MAC_GRAPHICS
   /* remove it from the menu bar and free the handle */
-	DeleteMenu(but_win->menuID);
-	DisposeMenu(but_win->theMenu);
-	/* redraw the menu bar so that menu goes away */
-	DrawMenuBar();
+        DeleteMenu(but_win->menuID);
+        DisposeMenu(but_win->theMenu);
+        /* redraw the menu bar so that menu goes away */
+        DrawMenuBar();
 #endif
 
   /* free the structure */
@@ -670,7 +670,7 @@ void free_child_but_win(button_win_type *but_win)
  *
  ****************************************************************************/
 void handlebutton(button_win_type *button_win,int xpos,int ypos,int mouse_button,
-		  int key_state)
+                  int key_state)
 {
   int xcor, ycor, xdim, ydim, offset;
   button_type *button;
@@ -695,48 +695,48 @@ void handlebutton(button_win_type *button_win,int xpos,int ypos,int mouse_button
     if(xpos>xcor && xpos<xcor+xdim && ypos>ycor && ypos<ycor+ydim){
       switch(mouse_button){
       case 1:
-	switch(button->type){
-	case FLOATPARM:
-	  readfloatparm(button->string,button->guts.floatparm);
-	  break;
-	case INTPARM:
-	  readintparm(button->string,button->guts.intparm);
-	  break;
-	case STRINGPARM:
-	  readstringparm(button->string,button->guts.stringparm.lines);
-	  break;
-	case MULTISTRINGPARM:
-	  readmultistringparm(button->string,button->guts.stringparm.num_lines,
-			      button->guts.stringparm.lines);
-	  break;
-	case TOGGLE:
-	  *(button->guts.boolean) = !*(button->guts.boolean);
-	  break;
-	case CURVETOGGLE:
-	  *(button->guts.curve.boolean) = !*(button->guts.boolean);
-	  break;
-	case FUNCTION:
-	  (button->guts.function.func)(button->guts.function.num_args,
-				       button->guts.function.args);
-	  break;
-	case MODE:
-	  mode_ptr = button->guts.mode.controlling_variable;
-	  *mode_ptr = (*mode_ptr+1) % button->guts.mode.num_modes;
-	  break;
-	}
+        switch(button->type){
+        case FLOATPARM:
+          readfloatparm(button->string,button->guts.floatparm);
+          break;
+        case INTPARM:
+          readintparm(button->string,button->guts.intparm);
+          break;
+        case STRINGPARM:
+          readstringparm(button->string,button->guts.stringparm.lines);
+          break;
+        case MULTISTRINGPARM:
+          readmultistringparm(button->string,button->guts.stringparm.num_lines,
+                              button->guts.stringparm.lines);
+          break;
+        case TOGGLE:
+          *(button->guts.boolean) = !*(button->guts.boolean);
+          break;
+        case CURVETOGGLE:
+          *(button->guts.curve.boolean) = !*(button->guts.boolean);
+          break;
+        case FUNCTION:
+          (button->guts.function.func)(button->guts.function.num_args,
+                                       button->guts.function.args);
+          break;
+        case MODE:
+          mode_ptr = button->guts.mode.controlling_variable;
+          *mode_ptr = (*mode_ptr+1) % button->guts.mode.num_modes;
+          break;
+        }
       case 2:
-	break;
+        break;
       case 3:
-	switch(button->type){
-	case CURVETOGGLE:
-	  if( key_state & ShiftMask && button->guts.curve.fill ){
-	    *(button->guts.curve.fill) = !(*(button->guts.curve.fill));
-	  } else{
-	    *(button->guts.curve.style) = *button->guts.curve.style + 1;
-	  }
-	  break;
-	}
-	break;
+        switch(button->type){
+        case CURVETOGGLE:
+          if( key_state & ShiftMask && button->guts.curve.fill ){
+            *(button->guts.curve.fill) = !(*(button->guts.curve.fill));
+          } else{
+            *(button->guts.curve.style) = *button->guts.curve.style + 1;
+          }
+          break;
+        }
+        break;
       }
     }
     ycor += ydim + offset;
@@ -766,7 +766,7 @@ void handlebutton(button_win_type *button_win,int xpos,int ypos,int mouse_button
  *
  ****************************************************************************/
 void find_button_win(button_win_type *button_win,Window win,
-		     int xpos,int ypos,int mouse_button,int key_state)
+                     int xpos,int ypos,int mouse_button,int key_state)
 {
   button_win_type *which;
   int found = 0;
@@ -812,8 +812,8 @@ void find_button_win(button_win_type *button_win,Window win,
 button_win_type *new_button_win(button_win_type *button_win,char *string)
 {
 #ifdef MAC_GRAPHICS
-	static short nextMenuID = 1;
-	char pstring[255];
+        static short nextMenuID = 1;
+        char pstring[255];
 #endif
   button_win_type *new_win;
 
@@ -824,20 +824,20 @@ button_win_type *new_button_win(button_win_type *button_win,char *string)
 #ifdef X_GRAPHICS
   /* open the window */
   new_win->which_win = XCreateSimpleWindow(disp,root,0,0,BUTWIDTH,BUTHEIGHT,1,
-					   fcolor,bcolor);
+                                           fcolor,bcolor);
   new_win->xdim = BUTWIDTH;
   new_win->ydim = BUTHEIGHT;
 
   /* ask for the events that we need */
   XSelectInput(disp,new_win->which_win,
-	       KeyPressMask|ButtonPressMask|ButtonMotionMask|ExposureMask);
+               KeyPressMask|ButtonPressMask|ButtonMotionMask|ExposureMask);
 
   /* change the cursor in the button window */
   XDefineCursor(disp,new_win->which_win,XCreateFontCursor(disp,60));
 
-	/* set the title */
+        /* set the title */
   XSetStandardProperties( disp,new_win->which_win,string,string,None,
-			 0,0,0);
+                         0,0,0);
 
 
   /* expose the window */
@@ -846,18 +846,18 @@ button_win_type *new_button_win(button_win_type *button_win,char *string)
 #endif
 
 #ifdef MAC_GRAPHICS
-	/* set the title (goofy pascal strings...) */
-	strcpy(pstring,string);
-	CtoPstr(pstring);
-	/* allocate the handle and set the ID */
-	new_win->theMenu = NewMenu(nextMenuID,(unsigned char *)pstring);
-	new_win->menuID = nextMenuID;
-	nextMenuID++;
-	/* insert the menu into the menubar */
-	InsertMenu(new_win->theMenu,0);
+        /* set the title (goofy pascal strings...) */
+        strcpy(pstring,string);
+        CtoPstr(pstring);
+        /* allocate the handle and set the ID */
+        new_win->theMenu = NewMenu(nextMenuID,(unsigned char *)pstring);
+        new_win->menuID = nextMenuID;
+        nextMenuID++;
+        /* insert the menu into the menubar */
+        InsertMenu(new_win->theMenu,0);
 
-	nextItemID = 1;
-	activeMenu = new_win->theMenu;
+        nextItemID = 1;
+        activeMenu = new_win->theMenu;
 #endif
   /* put the window at the head of the list */
   new_win->next = button_win;
@@ -889,63 +889,63 @@ void set_button_pixmaps(button_win_type *button_win)
     switch(b->type){
     case TOGGLE:
       b->pix1=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  toggleon_bits,
-					  toggleon_width,toggleon_height,fcolor,
-					  bcolor,screen_depth);
+                                          toggleon_bits,
+                                          toggleon_width,toggleon_height,fcolor,
+                                          bcolor,screen_depth);
       b->pix2=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  toggleoff_bits,
-					  toggleoff_width,toggleoff_height,
-					  fcolor,bcolor,screen_depth);
+                                          toggleoff_bits,
+                                          toggleoff_width,toggleoff_height,
+                                          fcolor,bcolor,screen_depth);
       break;
     case CURVETOGGLE:
       b->pix1=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  toggleon_bits,
-					  toggleon_width,toggleon_height,fcolor,
-					  bcolor,screen_depth);
+                                          toggleon_bits,
+                                          toggleon_width,toggleon_height,fcolor,
+                                          bcolor,screen_depth);
       b->pix2=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  toggleoff_bits,
-					  toggleoff_width,toggleoff_height,
-					  fcolor,bcolor,screen_depth);
+                                          toggleoff_bits,
+                                          toggleoff_width,toggleoff_height,
+                                          fcolor,bcolor,screen_depth);
       b->pix3=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  toggleonfill_bits,
-					  toggleonfill_width,toggleonfill_height,
-					  fcolor,bcolor,screen_depth);
+                                          toggleonfill_bits,
+                                          toggleonfill_width,toggleonfill_height,
+                                          fcolor,bcolor,screen_depth);
       break;
     case FUNCTION:
       b->pix1=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  function_bits,
-					  function_width,function_height,
-					  fcolor,bcolor,screen_depth);
+                                          function_bits,
+                                          function_width,function_height,
+                                          fcolor,bcolor,screen_depth);
       break;
     case FLOATPARM:
       b->pix1=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  floatparm_bits,
-					  floatparm_width,floatparm_height,
-					  fcolor,bcolor,screen_depth);
+                                          floatparm_bits,
+                                          floatparm_width,floatparm_height,
+                                          fcolor,bcolor,screen_depth);
       break;
     case MULTISTRINGPARM:
       b->pix1=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  floatparm_bits,
-					  floatparm_width,floatparm_height,
-					  fcolor,bcolor,screen_depth);
+                                          floatparm_bits,
+                                          floatparm_width,floatparm_height,
+                                          fcolor,bcolor,screen_depth);
       break;
     case STRINGPARM:
       b->pix1=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  floatparm_bits,
-					  floatparm_width,floatparm_height,
-					  fcolor,bcolor,screen_depth);
+                                          floatparm_bits,
+                                          floatparm_width,floatparm_height,
+                                          fcolor,bcolor,screen_depth);
       break;
     case INTPARM:
       b->pix1=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  floatparm_bits,
-					  floatparm_width,floatparm_height,
-					  fcolor,bcolor,screen_depth);
+                                          floatparm_bits,
+                                          floatparm_width,floatparm_height,
+                                          fcolor,bcolor,screen_depth);
       break;
     case MODE:
       b->pix1=XCreatePixmapFromBitmapData(disp,button_win->which_win,
-					  modal_bits,
-					  modal_width,modal_height,
-					  fcolor,bcolor,screen_depth);
+                                          modal_bits,
+                                          modal_width,modal_height,
+                                          fcolor,bcolor,screen_depth);
       break;
     default:
       FATAL_BUG("Can't do a pixmap for a button.");
@@ -1447,7 +1447,7 @@ void build_molec_button_window(button_win_type **button_winP,molec_type *molec)
   strcpy(string,"Molecule Options");
 #endif
 #ifdef MAC_GRAPHICS
-	strcpy(string,"Molec");
+        strcpy(string,"Molec");
 #endif
   *button_winP = new_button_win(*button_winP,string);
   button_win = *button_winP;
@@ -1848,7 +1848,7 @@ void build_graph_button_window(button_win_type **button_winP,graph_type *graph)
   strcpy(string,"Graph Options");
 #endif
 #ifdef MAC_GRAPHICS
-	strcpy(string,"Graph");
+        strcpy(string,"Graph");
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -2024,7 +2024,7 @@ void build_graph_button_window(button_win_type **button_winP,graph_type *graph)
  *
  *****************************************************************************/
 void build_walsh_button_window(button_win_type **button_winP,
-			       walsh_graph_type *graph)
+                               walsh_graph_type *graph)
 {
   button_type *b,*lastbutton;
   button_win_type *button_win;
@@ -2040,7 +2040,7 @@ void build_walsh_button_window(button_win_type **button_winP,
   strcpy(string,"Walsh Options");
 #endif
 #ifdef MAC_GRAPHICS
-	strcpy(string,"Walsh");
+        strcpy(string,"Walsh");
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -2246,7 +2246,7 @@ void build_walsh_button_window(button_win_type **button_winP,
  *
  *****************************************************************************/
 void build_band_button_window(button_win_type **button_winP,
-			      band_graph_type *band_graph)
+                              band_graph_type *band_graph)
 {
   button_type *b,*lastbutton;
   button_win_type *button_win;
@@ -2262,7 +2262,7 @@ void build_band_button_window(button_win_type **button_winP,
   strcpy(string,"Band Options");
 #endif
 #ifdef MAC_GRAPHICS
-	strcpy(string,"Bands");
+        strcpy(string,"Bands");
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -2461,7 +2461,7 @@ void build_band_button_window(button_win_type **button_winP,
  *
  *****************************************************************************/
 void build_prop_graph_button_window(button_win_type **button_winP,
-				    prop_graph_type *prop_graph)
+                                    prop_graph_type *prop_graph)
 {
   button_type *b,*lastbutton;
   button_win_type *button_win;
@@ -2477,7 +2477,7 @@ void build_prop_graph_button_window(button_win_type **button_winP,
   strcpy(string,"Property Options");
 #endif
 #ifdef MAC_GRAPHICS
-	strcpy(string,"Props");
+        strcpy(string,"Props");
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -2538,9 +2538,9 @@ void build_prop_graph_button_window(button_win_type **button_winP,
       sprintf(b->string,"Integration %d",i+1);
       b->type = CURVETOGGLE;
       b->guts.curve.boolean =
-	&(prop_graph->the_integration->curves_to_display[i]);
+        &(prop_graph->the_integration->curves_to_display[i]);
       b->guts.curve.style =
-	&(prop_graph->the_integration->styles[i]);
+        &(prop_graph->the_integration->styles[i]);
       lastbutton = b;
     }
   }
@@ -2725,7 +2725,7 @@ void build_prop_graph_button_window(button_win_type **button_winP,
  *
  *****************************************************************************/
 void build_FMO_button_window(button_win_type **button_winP,
-			     FMO_diagram_type *diagram)
+                             FMO_diagram_type *diagram)
 {
   button_type *b,*lastbutton;
   button_win_type *button_win;
@@ -2741,7 +2741,7 @@ void build_FMO_button_window(button_win_type **button_winP,
   strcpy(string,"FMO Options");
 #endif
 #ifdef MAC_GRAPHICS
-	strcpy(string,"FMO");
+        strcpy(string,"FMO");
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -2980,7 +2980,7 @@ void build_FMO_button_window(button_win_type **button_winP,
  *
  *****************************************************************************/
 void build_MO_surf_button_window(button_win_type **button_winP,
-				 MO_surface_type *MO_surf)
+                                 MO_surface_type *MO_surf)
 {
   button_type *b,*lastbutton;
   button_win_type *button_win;
@@ -2998,7 +2998,7 @@ void build_MO_surf_button_window(button_win_type **button_winP,
   strcpy(string,"MO Options");
 #endif
 #ifdef MAC_GRAPHICS
-	strcpy(string,"MO");
+        strcpy(string,"MO");
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -3509,7 +3509,7 @@ void build_MO_surf_button_window(button_win_type **button_winP,
  *
  *****************************************************************************/
 void build_cont_plot_button_window(button_win_type **button_winP,
-				   contour_plot_type *cont_plot)
+                                   contour_plot_type *cont_plot)
 {
   button_type *b,*lastbutton;
   button_win_type *button_win;
@@ -3525,7 +3525,7 @@ void build_cont_plot_button_window(button_win_type **button_winP,
   strcpy(string,"Cont_Plot Options");
 #endif
 #ifdef MAC_GRAPHICS
-	strcpy(string,"Cont_Plot");
+        strcpy(string,"Cont_Plot");
 #endif
   *button_winP = new_button_win(*button_winP,string);
 

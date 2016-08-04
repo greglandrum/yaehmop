@@ -137,7 +137,7 @@ Vector3 *V3Lerp(Vector3 *lo, Vector3 *hi, double alpha, Vector3 *result)
 /* make a linear combination of two vectors and return the result. */
 /* result = (a * ascl) + (b * bscl) */
 Vector3 *V3Combine (Vector3 *a, Vector3 *b, Vector3 *result,
-		    double ascl,double bscl)
+                    double ascl,double bscl)
 {
   result->x = (ascl * a->x) + (bscl * b->x);
   result->y = (ascl * a->y) + (bscl * b->y);

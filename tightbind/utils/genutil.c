@@ -121,7 +121,7 @@ int skipcomments(file,string,toggle)
   string[0] = 0;
   fgets(string,MAX_STR_LEN,file);
   while( string[0] == '\n' || string[0] == ';'
-	&& string[0] != 0 ){
+        && string[0] != 0 ){
     string[0] = 0;
     fgets(string,MAX_STR_LEN,file);
   }

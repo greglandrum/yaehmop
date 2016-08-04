@@ -74,7 +74,7 @@ void loadmatrix( matrix_type *mat )
 
 /****************************************************************************
 *
-*		    Procedure pushmatrix
+*                    Procedure pushmatrix
 *
 * Arguments: mat: pointer to matrix_type
 * Returns: none
@@ -153,9 +153,9 @@ void multmatrix( matrix_type *mat )
   for(i=0; i<DIM; i++ )
     for( j=0; j<DIM; j++ )
       storage[i][j]=stack->matrix[i][0]*mat->matrix[0][j]+
-	            stack->matrix[i][1]*mat->matrix[1][j]+
-	            stack->matrix[i][2]*mat->matrix[2][j]+
-		    stack->matrix[i][3]*mat->matrix[3][j];
+                    stack->matrix[i][1]*mat->matrix[1][j]+
+                    stack->matrix[i][2]*mat->matrix[2][j]+
+                    stack->matrix[i][3]*mat->matrix[3][j];
 
   /* put the result at the top of the stack */
 #if 0
@@ -186,9 +186,9 @@ void premultmatrix( matrix_type *mat )
   for(i=0; i<DIM; i++ )
     for( j=0; j<DIM; j++ )
       storage[i][j]=mat->matrix[i][0]*stack->matrix[0][j]+
-	            mat->matrix[i][1]*stack->matrix[1][j]+
-	            mat->matrix[i][2]*stack->matrix[2][j]+
-		    mat->matrix[i][3]*stack->matrix[3][j];
+                    mat->matrix[i][1]*stack->matrix[1][j]+
+                    mat->matrix[i][2]*stack->matrix[2][j]+
+                    mat->matrix[i][3]*stack->matrix[3][j];
 
   /* put the result at the top of the stack */
 #if 0
@@ -221,8 +221,8 @@ void transform( point_type *point )
   for( i=0;i<DIM;i++ )
     storage[i] = stack->matrix[i][0]*point->x+
                    stack->matrix[i][1]*point->y+
-		   stack->matrix[i][2]*point->z+
-		   stack->matrix[i][3];
+                   stack->matrix[i][2]*point->z+
+                   stack->matrix[i][3];
 
   /* now copy the result into point */
   point->x=storage[0]/storage[3];
@@ -252,8 +252,8 @@ void transform_norm( point_type *point )
   for( i=0;i<DIM;i++ )
     storage[i] = stack->matrix[i][0]*point->x+
                    stack->matrix[i][1]*point->y+
-		   stack->matrix[i][2]*point->z+
-		   stack->matrix[i][3];
+                   stack->matrix[i][2]*point->z+
+                   stack->matrix[i][3];
 
   /* now copy the raw result into point */
   point->x=storage[0];
@@ -382,8 +382,8 @@ void translate( float xtrans,float ytrans,float ztrans )
 
   for(i=0;i<4;i++){
     stack->matrix[i][3] += (stack->matrix[i][0]*xtrans +
-			    stack->matrix[i][1]*ytrans +
-			    stack->matrix[i][2]*ztrans);
+                            stack->matrix[i][1]*ytrans +
+                            stack->matrix[i][2]*ztrans);
   }
 }
 

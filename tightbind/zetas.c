@@ -126,10 +126,10 @@ void update_zetas(cell_type *cell,real *net_chgs,real zeta_tol,int *converged,ch
   }
 
   fprintf(output_file,"Total zeta change this cycle: %lg  tolerance: %lg\n",total_delta,
-	  zeta_tol);
+          zeta_tol);
 
 fprintf(stderr,"Total zeta change this cycle: %lg  tolerance: %lg\n",total_delta,
-	  zeta_tol);
+          zeta_tol);
   fprintf(output_file,"\n\n ;-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n");
 
   if( total_delta < zeta_tol || num_calls == max_calls) {

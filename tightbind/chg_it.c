@@ -61,7 +61,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 void update_chg_it_parms(details,cell,AO_occups,converged,num_orbs,
-			 orbital_lookup_table)
+                         orbital_lookup_table)
   detail_type *details;
   cell_type *cell;
   real *AO_occups;
@@ -104,119 +104,119 @@ void update_chg_it_parms(details,cell,AO_occups,converged,num_orbs,
       atom = &(cell->atoms[i]);
       /* find the orbitals */
       find_atoms_orbs(num_orbs,cell->num_atoms,i,orbital_lookup_table,&begin_atom,
-		      &end_atom);
+                      &end_atom);
       if( begin_atom >= 0 ){
-	orb_tab = begin_atom;
-	/********
+        orb_tab = begin_atom;
+        /********
 
-	  figure out the occupations
+          figure out the occupations
 
-	*********/
-	tot_s_occup = 0;
-	old_s_occup = 0;
-	if(atom->ns){
-	  tot_s_occup = AO_occups[orb_tab];
-	  old_s_occup = AO_store[orb_tab];
-	  orb_tab++;
-	  old_Hss = atom->coul_s;
-	}
-	tot_p_occup = 0;
-	old_p_occup = 0;
-	if(atom->np) {
-	  for(j=0;j<3;j++){
-	    tot_p_occup += AO_occups[orb_tab];
-	    old_p_occup += AO_store[orb_tab];
-	    orb_tab++;
-	  }
-	  old_Hpp = atom->coul_p;
-	}
-	tot_d_occup = 0;
-	old_d_occup = 0;
-	if(atom->nd) {
-	  for(j=0;j<5;j++){
-	    tot_d_occup += AO_occups[orb_tab];
-	    old_d_occup += AO_store[orb_tab];
-	    orb_tab++;
-	  }
-	  old_Hdd = atom->coul_d;
-	}
+        *********/
+        tot_s_occup = 0;
+        old_s_occup = 0;
+        if(atom->ns){
+          tot_s_occup = AO_occups[orb_tab];
+          old_s_occup = AO_store[orb_tab];
+          orb_tab++;
+          old_Hss = atom->coul_s;
+        }
+        tot_p_occup = 0;
+        old_p_occup = 0;
+        if(atom->np) {
+          for(j=0;j<3;j++){
+            tot_p_occup += AO_occups[orb_tab];
+            old_p_occup += AO_store[orb_tab];
+            orb_tab++;
+          }
+          old_Hpp = atom->coul_p;
+        }
+        tot_d_occup = 0;
+        old_d_occup = 0;
+        if(atom->nd) {
+          for(j=0;j<5;j++){
+            tot_d_occup += AO_occups[orb_tab];
+            old_d_occup += AO_store[orb_tab];
+            orb_tab++;
+          }
+          old_Hdd = atom->coul_d;
+        }
       }
 
 
       /* find denom.  this is used for convergence checking */
       denom = 0;
       if( atom->ns && fabs(old_s_occup - tot_s_occup) > denom)
-	denom = fabs(old_s_occup - tot_s_occup);
+        denom = fabs(old_s_occup - tot_s_occup);
       if( atom->np && fabs(old_p_occup - tot_p_occup) > denom)
-	denom = fabs(old_p_occup - tot_p_occup);
+        denom = fabs(old_p_occup - tot_p_occup);
       if( atom->nd && fabs(old_d_occup - tot_d_occup) > denom)
-	denom = fabs(old_d_occup - tot_d_occup);
+        denom = fabs(old_d_occup - tot_d_occup);
 
       /* figure out the lambda */
       if( parms->variable_step ){
-	if( num_calls == 1 ) adjust = denom;
-	else{
-	  adjust = parms->damp1;
-	}
+        if( num_calls == 1 ) adjust = denom;
+        else{
+          adjust = parms->damp1;
+        }
 
-	lambda = adjust / denom;
+        lambda = adjust / denom;
       }else {
-	lambda = parms->lambda;
+        lambda = parms->lambda;
       }
 
 fprintf(stderr,"It: %d, denom: %lf tol: %lf\n",num_calls,denom,parms->tolerance);
       if( denom > parms->tolerance ){
-	*converged = 0;
+        *converged = 0;
 
-	/* make sure that the lambda isn't too big, so we don't explode */
-	if( lambda > parms->lampri ) lambda = parms->lampri;
+        /* make sure that the lambda isn't too big, so we don't explode */
+        if( lambda > parms->lampri ) lambda = parms->lampri;
 
 #if 0
-	/* damp the AO occupations */
-	if( num_calls != 1 ){
-	  damped_s_occup = old_s_occup + lambda * (tot_s_occup - old_s_occup);
-	  damped_p_occup = old_p_occup + lambda * (tot_p_occup - old_p_occup);
-	  damped_d_occup = old_d_occup + lambda * (tot_d_occup - old_d_occup);
-	} else{
-	  damped_s_occup = tot_s_occup;
-	  damped_p_occup = tot_p_occup;
-	  damped_d_occup = tot_d_occup;
-	}
+        /* damp the AO occupations */
+        if( num_calls != 1 ){
+          damped_s_occup = old_s_occup + lambda * (tot_s_occup - old_s_occup);
+          damped_p_occup = old_p_occup + lambda * (tot_p_occup - old_p_occup);
+          damped_d_occup = old_d_occup + lambda * (tot_d_occup - old_d_occup);
+        } else{
+          damped_s_occup = tot_s_occup;
+          damped_p_occup = tot_p_occup;
+          damped_d_occup = tot_d_occup;
+        }
 #endif
 
 
-	/* figure out the (damped) net charge */
-	old_chg = atom->num_valence - (old_s_occup + old_p_occup +
-				       old_d_occup);
-	tot_chg = atom->num_valence - (tot_s_occup + tot_p_occup +
-				       tot_d_occup);
+        /* figure out the (damped) net charge */
+        old_chg = atom->num_valence - (old_s_occup + old_p_occup +
+                                       old_d_occup);
+        tot_chg = atom->num_valence - (tot_s_occup + tot_p_occup +
+                                       tot_d_occup);
 #if 0
-	if( num_calls != 1 ){
-	  tot_chg = old_chg + lambda*(tot_chg - old_chg);
-	} else{
-	  tot_chg = lambda*tot_chg;
-	}
+        if( num_calls != 1 ){
+          tot_chg = old_chg + lambda*(tot_chg - old_chg);
+        } else{
+          tot_chg = lambda*tot_chg;
+        }
 #endif
 
-	/* now update the Hii's */
-	new_Hss = tot_chg*tot_chg*atom->s_A + tot_chg*atom->s_B
-	  + atom->s_C;
-	new_Hpp = tot_chg*tot_chg*atom->p_A + tot_chg*atom->p_B
-	  + atom->p_C;
-	new_Hdd = tot_chg*tot_chg*atom->d_A + tot_chg*atom->d_B
-	  + atom->d_C;
+        /* now update the Hii's */
+        new_Hss = tot_chg*tot_chg*atom->s_A + tot_chg*atom->s_B
+          + atom->s_C;
+        new_Hpp = tot_chg*tot_chg*atom->p_A + tot_chg*atom->p_B
+          + atom->p_C;
+        new_Hdd = tot_chg*tot_chg*atom->d_A + tot_chg*atom->d_B
+          + atom->d_C;
 
-	atom->coul_s = atom->coul_s + lambda*(new_Hss - atom->coul_s);
-	atom->coul_p = atom->coul_p + lambda*(new_Hpp - atom->coul_p);
-	atom->coul_d = atom->coul_d + lambda*(new_Hdd - atom->coul_d);
+        atom->coul_s = atom->coul_s + lambda*(new_Hss - atom->coul_s);
+        atom->coul_p = atom->coul_p + lambda*(new_Hpp - atom->coul_p);
+        atom->coul_d = atom->coul_d + lambda*(new_Hdd - atom->coul_d);
 
 
-	/* write out the parameters that we're varying */
-	fprintf(output_file,"%d %s ",i,atom->symb);
-	if( atom->ns ) fprintf(output_file,"S:% -6.4lf ",new_Hss);
-	if( atom->np ) fprintf(output_file,"P:% -6.4lf ",new_Hpp);
-	if( atom->nd ) fprintf(output_file,"D:% -6.4lf ",new_Hdd);
-	fprintf(output_file,"\n");
+        /* write out the parameters that we're varying */
+        fprintf(output_file,"%d %s ",i,atom->symb);
+        if( atom->ns ) fprintf(output_file,"S:% -6.4lf ",new_Hss);
+        if( atom->np ) fprintf(output_file,"P:% -6.4lf ",new_Hpp);
+        if( atom->nd ) fprintf(output_file,"D:% -6.4lf ",new_Hdd);
+        fprintf(output_file,"\n");
       }
     }
   }
@@ -230,6 +230,6 @@ fprintf(stderr,"It: %d, denom: %lf tol: %lf\n",num_calls,denom,parms->tolerance)
 
   if( *converged )
     fprintf(stderr,"Charge iteration converged after %d (of %d max) iterations\n",
-			   num_calls,parms->max_it);
+                           num_calls,parms->max_it);
 
 }

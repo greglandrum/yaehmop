@@ -87,15 +87,15 @@ void read_triangle_locs(num_args,part_surf_p)
   fscanf(infile,"%d",&part_surf->num_triangles);
 
   part_surf->triangles = (triangle_type *)calloc(part_surf->num_triangles,
-						 sizeof(triangle_type));
+                                                 sizeof(triangle_type));
   if( !part_surf->triangles ) fatal("can't get triangle storage");
 
   fprintf(stderr,"Reading %d triangles\n",part_surf->num_triangles);
   for(i=0;i<part_surf->num_triangles;i++){
     temp_tri = &(part_surf->triangles[i]);
     fscanf(infile,"%d %d %d %d",
-	    &temp_tri->vertices[0],&temp_tri->vertices[1],
-	    &temp_tri->vertices[2],&phase);
+            &temp_tri->vertices[0],&temp_tri->vertices[1],
+            &temp_tri->vertices[2],&phase);
     temp_tri->color = phase;
   }
 }
@@ -143,8 +143,8 @@ void save_triangle_locs(num_args,part_surf_p)
   for(i=0;i<part_surf->num_triangles;i++){
     temp_tri = &(part_surf->triangles[i]);
     fprintf(outfile,"%d %d %d %d\n",
-	    temp_tri->vertices[0],temp_tri->vertices[1],
-	    temp_tri->vertices[2],temp_tri->color);
+            temp_tri->vertices[0],temp_tri->vertices[1],
+            temp_tri->vertices[2],temp_tri->color);
   }
   fclose(outfile);
 }
@@ -192,15 +192,15 @@ void save_particle_locs(num_args,part_surf_p)
 
   fprintf(outfile,"%d\n",part_surf->num_particles);
   fprintf(outfile,"%lf %lf\n",part_surf->surface_value,
-	  part_surf->surface_tolerance);
+          part_surf->surface_tolerance);
 
   temp_part = part_surf->bound_particles;
   for(i=0;i<part_surf->num_particles;i++){
     if( !temp_part ) FATAL_BUG("ran out of particles in save_particle_locs");
 
     fprintf(outfile,"%6.4lf %6.4lf %6.4lf %d\n",
-	    temp_part->loc.x,temp_part->loc.y,temp_part->loc.z,
-	    temp_part->phase);
+            temp_part->loc.x,temp_part->loc.y,temp_part->loc.z,
+            temp_part->phase);
     temp_part = temp_part->next;
   }
   fclose(outfile);
@@ -264,7 +264,7 @@ void read_particle_locs(num_args,part_surf_p)
 
   fscanf(infile,"%d",&(part_surf->num_particles));
   fscanf(infile,"%lf %lf",&(part_surf->surface_value),
-	 &(part_surf->surface_tolerance));
+         &(part_surf->surface_tolerance));
 
   printf("Reading in %d particles.\n",part_surf->num_particles);
 
@@ -276,8 +276,8 @@ void read_particle_locs(num_args,part_surf_p)
     part_surf->bound_particles = temp_part;
 
     fscanf(infile,"%lf %lf %lf %d",
-	    &(temp_part->loc.x),&(temp_part->loc.y),
-	    &(temp_part->loc.z),&phase);
+            &(temp_part->loc.x),&(temp_part->loc.y),
+            &(temp_part->loc.z),&phase);
     temp_part->phase = phase;
     temp_part->num = i;
   }
@@ -307,9 +307,9 @@ int compare_triangles(tri1,tri2)
        tri1->vertices[1] == tri2->vertices[1]  ||
        tri1->vertices[1] == tri2->vertices[2] ){
       if( tri1->vertices[2] == tri2->vertices[0] ||
-	 tri1->vertices[2] == tri2->vertices[1]  ||
-	 tri1->vertices[2] == tri2->vertices[2] ){
-	return(1);
+         tri1->vertices[2] == tri2->vertices[1]  ||
+         tri1->vertices[2] == tri2->vertices[2] ){
+        return(1);
       }
     }
   }
@@ -380,31 +380,31 @@ void find_and_connect_nearest_neighbors(particles,num_particles)
     if( i_part->num_neighbors < 2 ){
       j_part = i_part->next;
       for(j=i+1;j<num_particles;j++){
-	if( !j_part ) FATAL_BUG("ran out of j_parts in connection routine.");
+        if( !j_part ) FATAL_BUG("ran out of j_parts in connection routine.");
 
-	if( j_part->num_neighbors < 2 && j_part->phase == i_part->phase ){
-	  dist = (i_part->loc.x-j_part->loc.x)*(i_part->loc.x-j_part->loc.x) +
-	    (i_part->loc.y-j_part->loc.y)*(i_part->loc.y-j_part->loc.y) +
-	      (i_part->loc.z-j_part->loc.z)*(i_part->loc.z-j_part->loc.z);
-	  if( dist < dist1 && dist < .10){
-	    dist2 = dist1;
-	    closest2 = closest1;
-	    dist1 = dist;
-	    closest1 = j_part;
-	  } else if(dist < dist2 && dist < .10){
-	    dist2 = dist;
-	    closest2 = j_part;
-	  }
-	}
-	j_part = j_part->next;
+        if( j_part->num_neighbors < 2 && j_part->phase == i_part->phase ){
+          dist = (i_part->loc.x-j_part->loc.x)*(i_part->loc.x-j_part->loc.x) +
+            (i_part->loc.y-j_part->loc.y)*(i_part->loc.y-j_part->loc.y) +
+              (i_part->loc.z-j_part->loc.z)*(i_part->loc.z-j_part->loc.z);
+          if( dist < dist1 && dist < .10){
+            dist2 = dist1;
+            closest2 = closest1;
+            dist1 = dist;
+            closest1 = j_part;
+          } else if(dist < dist2 && dist < .10){
+            dist2 = dist;
+            closest2 = j_part;
+          }
+        }
+        j_part = j_part->next;
       }
       if( closest1 ){
-	i_part->neighbors[i_part->num_neighbors++] = closest1;
-	closest1->neighbors[closest1->num_neighbors++] = i_part;
+        i_part->neighbors[i_part->num_neighbors++] = closest1;
+        closest1->neighbors[closest1->num_neighbors++] = i_part;
       }
       if( i_part->num_neighbors < 2 && closest2 ){
-	i_part->neighbors[i_part->num_neighbors++] = closest2;
-	closest2->neighbors[closest2->num_neighbors++] = i_part;
+        i_part->neighbors[i_part->num_neighbors++] = closest2;
+        closest2->neighbors[closest2->num_neighbors++] = i_part;
       }
     }
     i_part = i_part->next;
@@ -523,11 +523,11 @@ void remove_outlying_particles(particle_surf)
        10*particle_surf->surface_tolerance ){
 
       if( curr_part == particle_surf->bound_particles ){
-	particle_surf->bound_particles = next_part;
-	last_part = particle_surf->bound_particles;
+        particle_surf->bound_particles = next_part;
+        last_part = particle_surf->bound_particles;
       }else{
-	last_part->next = next_part;
-	last_part = curr_part;
+        last_part->next = next_part;
+        last_part = curr_part;
       }
       free(curr_part);
       particle_surf->num_particles--;
@@ -706,43 +706,43 @@ void calc_bound_particle_forces(particle_surf)
     which_part2 = which_part1+1;
     while(part2){
 /*      if( part1->phase == part2->phase ){*/
-	rad_squared2 = part2->rad*part2->rad;
-	cut_off2 = 9.0 * rad_squared2;
+        rad_squared2 = part2->rad*part2->rad;
+        cut_off2 = 9.0 * rad_squared2;
 
-	dist_vect.x = part1->loc.x - part2->loc.x;
-	dist_vect.y = part1->loc.y - part2->loc.y;
-	dist_vect.z = part1->loc.z - part2->loc.z;
+        dist_vect.x = part1->loc.x - part2->loc.x;
+        dist_vect.y = part1->loc.y - part2->loc.y;
+        dist_vect.z = part1->loc.z - part2->loc.z;
 
-	/********
+        /********
 
-	  calculate the distance between the two particles.
+          calculate the distance between the two particles.
 
-	  *********/
-	dist_squared = dist_vect.x*dist_vect.x + dist_vect.y*dist_vect.y +
-	  dist_vect.z*dist_vect.z;
+          *********/
+        dist_squared = dist_vect.x*dist_vect.x + dist_vect.y*dist_vect.y +
+          dist_vect.z*dist_vect.z;
 
-	/* normalize the inter-particle vector */
-	dist = sqrt(dist_squared);
-	dist_vect.x /= dist;
-	dist_vect.y /= dist;
-	dist_vect.z /= dist;
+        /* normalize the inter-particle vector */
+        dist = sqrt(dist_squared);
+        dist_vect.x /= dist;
+        dist_vect.y /= dist;
+        dist_vect.z /= dist;
 
-	if(dist_squared < cut_off ){
-	  /* add the forces into the accum array */
-	  repulse_strength = exp(-dist_squared/(2.0*rad_squared));
-	  part_force_accum[which_part1].x += dist_vect.x*repulse_strength;
-	  part_force_accum[which_part1].y += dist_vect.y*repulse_strength;
-	  part_force_accum[which_part1].z += dist_vect.z*repulse_strength;
-	}
+        if(dist_squared < cut_off ){
+          /* add the forces into the accum array */
+          repulse_strength = exp(-dist_squared/(2.0*rad_squared));
+          part_force_accum[which_part1].x += dist_vect.x*repulse_strength;
+          part_force_accum[which_part1].y += dist_vect.y*repulse_strength;
+          part_force_accum[which_part1].z += dist_vect.z*repulse_strength;
+        }
 
-	/* now do the same thing for the other particle */
-	if( dist_squared < cut_off2 ){
-	  repulse_strength = exp(-dist_squared/(2.0*rad_squared2));
-	  part_force_accum[which_part2].x -= dist_vect.x*repulse_strength;
-	  part_force_accum[which_part2].y -= dist_vect.y*repulse_strength;
-	  part_force_accum[which_part2].z -= dist_vect.z*repulse_strength;
-	}
-/*      }	 */
+        /* now do the same thing for the other particle */
+        if( dist_squared < cut_off2 ){
+          repulse_strength = exp(-dist_squared/(2.0*rad_squared2));
+          part_force_accum[which_part2].x -= dist_vect.x*repulse_strength;
+          part_force_accum[which_part2].y -= dist_vect.y*repulse_strength;
+          part_force_accum[which_part2].z -= dist_vect.z*repulse_strength;
+        }
+/*      }         */
       part2 = part2->next;
       which_part2++;
     }
@@ -791,8 +791,8 @@ void calc_bound_particle_forces(particle_surf)
     /* update the radius of the particle */
     force_mag =
       part_force_accum[which_part1].x*part_force_accum[which_part1].x +
-	part_force_accum[which_part1].y*part_force_accum[which_part1].y +
-	  part_force_accum[which_part1].z*part_force_accum[which_part1].z;
+        part_force_accum[which_part1].y*part_force_accum[which_part1].y +
+          part_force_accum[which_part1].z*part_force_accum[which_part1].z;
 
 /*printf("%lf\n",force_mag);*/
     if( force_mag > 1.00 ){
@@ -801,11 +801,11 @@ void calc_bound_particle_forces(particle_surf)
       part1->rad *= 1.20;
       if( part1->rad > .35 && particle_surf->okay_to_split ){
 #if 0
-	 && fabs(fabs(part1->val) - particle_surf->surface_value) <
-	 100.0*particle_surf->surface_tolerance){
+         && fabs(fabs(part1->val) - particle_surf->surface_value) <
+         100.0*particle_surf->surface_tolerance){
 #endif
-	printf(".\n");
-	split_a_particle(particle_surf,part1);
+        printf(".\n");
+        split_a_particle(particle_surf,part1);
       }
     }
 
@@ -830,19 +830,19 @@ void calc_bound_particle_forces(particle_surf)
     dist_from_isosurf = fabs(MO_info.val) - particle_surf->surface_value;
     if( fabs(dist_from_isosurf) > particle_surf->surface_tolerance ){
       if( MO_info.val > 0.0 ){
-	part1->loc.x += particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.x;
-	part1->loc.y += particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.y;
-	part1->loc.z += particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.z;
+        part1->loc.x += particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.x;
+        part1->loc.y += particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.y;
+        part1->loc.z += particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.z;
       } else{
-	part1->loc.x -= particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.x;
-	part1->loc.y -= particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.y;
-	part1->loc.z -= particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.z;
+        part1->loc.x -= particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.x;
+        part1->loc.y -= particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.y;
+        part1->loc.z -= particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.z;
       }
     }
     part1->val = MO_info.val;
@@ -919,8 +919,8 @@ void calc_free_particle_forces(particle_surf)
     if( fabs(dist_from_isosurf) <= particle_surf->surface_tolerance){
       /******
 
-	we're there, move the particle to the bound list and
-	set its phase
+        we're there, move the particle to the bound list and
+        set its phase
 
       *******/
       temp_part->on_surf = 1;
@@ -929,43 +929,43 @@ void calc_free_particle_forces(particle_surf)
 
       /* find the particle in the free_particle list */
       if( particle_surf->free_particles == temp_part ){
-	/* this is the easiest case */
-	particle_surf->free_particles = temp_part->next;
-	/* now move the particle */
-	temp_part->next = particle_surf->bound_particles;
-	particle_surf->bound_particles = temp_part;
-	temp_part = particle_surf->free_particles;
+        /* this is the easiest case */
+        particle_surf->free_particles = temp_part->next;
+        /* now move the particle */
+        temp_part->next = particle_surf->bound_particles;
+        particle_surf->bound_particles = temp_part;
+        temp_part = particle_surf->free_particles;
       } else{
-	temp_part2 = particle_surf->free_particles;
-	while(temp_part2 && temp_part2->next != temp_part )
-	  temp_part2 = temp_part2->next;
+        temp_part2 = particle_surf->free_particles;
+        while(temp_part2 && temp_part2->next != temp_part )
+          temp_part2 = temp_part2->next;
 
-	if( !temp_part2 )
-	  FATAL_BUG("Can't find a particle to move it.");
+        if( !temp_part2 )
+          FATAL_BUG("Can't find a particle to move it.");
 
-	temp_part2->next = temp_part->next;
-	/* now move the particle */
-	temp_part->next = particle_surf->bound_particles;
-	particle_surf->bound_particles = temp_part;
-	temp_part = temp_part2->next;
+        temp_part2->next = temp_part->next;
+        /* now move the particle */
+        temp_part->next = particle_surf->bound_particles;
+        particle_surf->bound_particles = temp_part;
+        temp_part = temp_part2->next;
       }
 
     } else{
       /* we're not there yet, take a step */
       if( MO_info.val > 0.0 ){
-	temp_part->loc.x += particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.x;
-	temp_part->loc.y += particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.y;
-	temp_part->loc.z += particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.z;
+        temp_part->loc.x += particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.x;
+        temp_part->loc.y += particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.y;
+        temp_part->loc.z += particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.z;
       } else{
-	temp_part->loc.x -= particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.x;
-	temp_part->loc.y -= particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.y;
-	temp_part->loc.z -= particle_surf->free_step_size*dist_from_isosurf*
-	  MO_info.grad.z;
+        temp_part->loc.x -= particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.x;
+        temp_part->loc.y -= particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.y;
+        temp_part->loc.z -= particle_surf->free_step_size*dist_from_isosurf*
+          MO_info.grad.z;
       }
 
       temp_part = temp_part->next;

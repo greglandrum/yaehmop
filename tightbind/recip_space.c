@@ -128,7 +128,7 @@ void calc_reciprocal_lattice(cell_type *cell)
   printf("Reciprocal Lattice:\n");
   for(i=0;i<cell->dim;i++){
     printf("b[%d] = (%lf %lf %lf)\n",i,rvects[i].x,rvects[i].y,
-	   rvects[i].z);
+           rvects[i].z);
   }
 
   /* check orthonormality */
@@ -165,8 +165,8 @@ void calc_reciprocal_lattice(cell_type *cell)
 *
 *****************************************************************************/
 void gen_k_point_mesh(point_type **points,int num_per_vect[3],
-		      int *num_generated, char include_high_symm_p,int dim,
-		      real offset)
+                      int *num_generated, char include_high_symm_p,int dim,
+                      real offset)
 {
   int i,j,k;
   int num_p;
@@ -222,42 +222,42 @@ void gen_k_point_mesh(point_type **points,int num_per_vect[3],
   for(i=0;i<num_per_vect[0];i++){
     for(j=0;j<num_per_vect[1];j++){
       for(k=0;k<num_per_vect[2];k++){
-	p_array[num_so_far].x = offset + (real)i*step[0];
-	p_array[num_so_far].y = offset + (real)j*step[1];
-	p_array[num_so_far].z = offset + (real)k*step[2];
-	num_so_far++;
-	p_array[num_so_far].x = (offset + (real)i*step[0]);
-	p_array[num_so_far].y = (offset + (real)j*step[1]);
-	p_array[num_so_far].z = -(offset + (real)k*step[2]);
-	num_so_far++;
-	p_array[num_so_far].x = (offset + (real)i*step[0]);
-	p_array[num_so_far].y = -(offset + (real)j*step[1]);
-	p_array[num_so_far].z = -(offset + (real)k*step[2]);
-	num_so_far++;
-	p_array[num_so_far].x = (offset + (real)i*step[0]);
-	p_array[num_so_far].y = -(offset + (real)j*step[1]);
-	p_array[num_so_far].z = offset + (real)k*step[2];
-	num_so_far++;
+        p_array[num_so_far].x = offset + (real)i*step[0];
+        p_array[num_so_far].y = offset + (real)j*step[1];
+        p_array[num_so_far].z = offset + (real)k*step[2];
+        num_so_far++;
+        p_array[num_so_far].x = (offset + (real)i*step[0]);
+        p_array[num_so_far].y = (offset + (real)j*step[1]);
+        p_array[num_so_far].z = -(offset + (real)k*step[2]);
+        num_so_far++;
+        p_array[num_so_far].x = (offset + (real)i*step[0]);
+        p_array[num_so_far].y = -(offset + (real)j*step[1]);
+        p_array[num_so_far].z = -(offset + (real)k*step[2]);
+        num_so_far++;
+        p_array[num_so_far].x = (offset + (real)i*step[0]);
+        p_array[num_so_far].y = -(offset + (real)j*step[1]);
+        p_array[num_so_far].z = offset + (real)k*step[2];
+        num_so_far++;
 
-	p_array[num_so_far].x = -(offset + (real)i*step[0]);
-	p_array[num_so_far].y = -(offset + (real)j*step[1]);
-	p_array[num_so_far].z = -(offset + (real)k*step[2]);
-	num_so_far++;
-	p_array[num_so_far].x = -(offset + (real)i*step[0]);
-	p_array[num_so_far].y = -(offset + (real)j*step[1]);
-	p_array[num_so_far].z = (offset + (real)k*step[2]);
-	num_so_far++;
-	p_array[num_so_far].x = -(offset + (real)i*step[0]);
-	p_array[num_so_far].y = (offset + (real)j*step[1]);
-	p_array[num_so_far].z = (offset + (real)k*step[2]);
-	num_so_far++;
-	p_array[num_so_far].x = -(offset + (real)i*step[0]);
-	p_array[num_so_far].y = (offset + (real)j*step[1]);
-	p_array[num_so_far].z = -(offset + (real)k*step[2]);
-	num_so_far++;
+        p_array[num_so_far].x = -(offset + (real)i*step[0]);
+        p_array[num_so_far].y = -(offset + (real)j*step[1]);
+        p_array[num_so_far].z = -(offset + (real)k*step[2]);
+        num_so_far++;
+        p_array[num_so_far].x = -(offset + (real)i*step[0]);
+        p_array[num_so_far].y = -(offset + (real)j*step[1]);
+        p_array[num_so_far].z = (offset + (real)k*step[2]);
+        num_so_far++;
+        p_array[num_so_far].x = -(offset + (real)i*step[0]);
+        p_array[num_so_far].y = (offset + (real)j*step[1]);
+        p_array[num_so_far].z = (offset + (real)k*step[2]);
+        num_so_far++;
+        p_array[num_so_far].x = -(offset + (real)i*step[0]);
+        p_array[num_so_far].y = (offset + (real)j*step[1]);
+        p_array[num_so_far].z = -(offset + (real)k*step[2]);
+        num_so_far++;
 
       }
-			if(dim == 2){
+                        if(dim == 2){
       p_array[num_so_far].x = (offset + (real)i*step[0]);
       p_array[num_so_far].y = (offset + (real)j*step[1]);
       num_so_far++;
@@ -273,7 +273,7 @@ void gen_k_point_mesh(point_type **points,int num_per_vect[3],
       num_so_far++;
       }
     }
-	  if( dim == 1 ){
+          if( dim == 1 ){
     p_array[num_so_far].x = (offset + (real)i*step[0]);
     num_so_far++;
 
@@ -282,7 +282,7 @@ void gen_k_point_mesh(point_type **points,int num_per_vect[3],
     }
   }
 
-	*points = p_array;
+        *points = p_array;
   *num_generated = num_so_far;
 }
 
@@ -308,11 +308,11 @@ void automagic_k_points(detail_type *details,cell_type *cell)
   int num_raw_points,num_points;
   real tot_weight;
   int nonorthogonal_lattice;
-	int num_duplicates;
+        int num_duplicates;
 
   /* start by generating a reducible mesh */
   gen_k_point_mesh(&raw_points,details->points_per_axis,&num_raw_points,
-		   details->use_high_symm_p,cell->dim,details->k_offset);
+                   details->use_high_symm_p,cell->dim,details->k_offset);
 
   /* okay, now we need to generate the reciprocal lattice */
   calc_reciprocal_lattice(cell);
@@ -326,28 +326,28 @@ void automagic_k_points(detail_type *details,cell_type *cell)
   *********/
   degen_p = (real *)my_calloc(num_raw_points,sizeof(real));
   if(!degen_p)fatal("can't allocate degen_p array.");
-  	num_duplicates = 0;
+          num_duplicates = 0;
   for(i=0;i<num_raw_points;i++){
     if( degen_p[i] == 0 ){
       for(j=i+1;j<num_raw_points;j++){
-	if( POINTS_ARE_THE_SAME(&raw_points[i],&raw_points[j],
-				details->symm_tol) ){
-	  degen_p[j] = -1;
-	  num_duplicates++;
-	}
+        if( POINTS_ARE_THE_SAME(&raw_points[i],&raw_points[j],
+                                details->symm_tol) ){
+          degen_p[j] = -1;
+          num_duplicates++;
+        }
       }
     }
   }
 
 #ifdef DEBUG_SYMM
   printf("Here's the reducible k-point mesh (%d duplicates removed) for (%d %d %d) points per axis,\n",
-	 num_duplicates,details->points_per_axis[0],details->points_per_axis[1],
-	 details->points_per_axis[2]);
+         num_duplicates,details->points_per_axis[0],details->points_per_axis[1],
+         details->points_per_axis[2]);
   printf("and an offset of %lf\n",details->k_offset);
   for(i=0;i<num_raw_points;i++){
     if( degen_p[i] == 0 ){
       printf("% 6.4lf % 6.4lf % 6.4lf\n",raw_points[i].x,raw_points[i].y,
-	     raw_points[i].z);
+             raw_points[i].z);
     }
   }
 #endif
@@ -361,7 +361,7 @@ void automagic_k_points(detail_type *details,cell_type *cell)
 
   *******/
   nonorthogonal_lattice = check_for_orthogonal_basis(cell->recip_vects,cell->dim,
-						details->symm_tol);
+                                                details->symm_tol);
   if( nonorthogonal_lattice ){
     printf("WARNING: The lattice is non-orthogonal.\n");
     printf("\tI am not currently smart enough to generate a\n");
@@ -374,40 +374,40 @@ void automagic_k_points(detail_type *details,cell_type *cell)
     fprintf(status_file,"\tI am not currently smart enough to generate a\n");
     fprintf(status_file,"\tminimal k-point set for non-orthogonal lattices.\n");
     fprintf(status_file,
-	    "\tI am going to make an attempt to reduce the zone somewhat,\n");
+            "\tI am going to make an attempt to reduce the zone somewhat,\n");
     fprintf(status_file,
-	    "\tbut you should check the resulting k-point set *carefully*.\n");
+            "\tbut you should check the resulting k-point set *carefully*.\n");
     fprintf(status_file,
-	    "\tfor a more efficent sampling, you will have to use one of the\n");
+            "\tfor a more efficent sampling, you will have to use one of the\n");
     fprintf(status_file,"\tdistributed k-point programs.\n");
 
     fprintf(output_file,";WARNING: The lattice is non-orthogonal.\n");
     fprintf(output_file,";\tI am not currently smart enough to generate a\n");
     fprintf(output_file,";\tminimal k-point set for non-orthogonal lattices.\n");
     fprintf(output_file,
-	    ";\tI am going to make an attempt to reduce the zone somewhat,\n");
+            ";\tI am going to make an attempt to reduce the zone somewhat,\n");
     fprintf(output_file,
-	    ";\tbut you should check the resulting k-point set *carefully*.\n");
+            ";\tbut you should check the resulting k-point set *carefully*.\n");
     fprintf(output_file,
-	    ";\tfor a more efficent sampling, you will have to use one of the\n");
+            ";\tfor a more efficent sampling, you will have to use one of the\n");
     fprintf(output_file,";\tdistributed k-point programs.\n");
     reduce_kpoints(details,cell,raw_points,num_raw_points,degen_p,
-			      &num_points,nonorthogonal_lattice);
+                              &num_points,nonorthogonal_lattice);
   }else{
 #ifdef DEBUG_SYMM
     printf("Good, the lattice is orthogonal.\n");
 #endif
     reduce_kpoints(details,cell,raw_points,num_raw_points,degen_p,
-			      &num_points,nonorthogonal_lattice);
+                              &num_points,nonorthogonal_lattice);
   }
 #ifdef DEBUG_SYMM
   printf("Of the %d unique points originally present, %d survived:\n",
-  				num_raw_points-num_duplicates,num_points);
+                                  num_raw_points-num_duplicates,num_points);
   tot_weight = 0;
   for(i=0;i<num_raw_points;i++){
     if( degen_p[i] > 0 ){
       printf("(%6.4lf %6.4lf %6.4lf) %4.2lf\n",raw_points[i].x,raw_points[i].y,
-	     raw_points[i].z,degen_p[i]);
+             raw_points[i].z,degen_p[i]);
       tot_weight += degen_p[i];
     }
   }

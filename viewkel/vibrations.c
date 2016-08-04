@@ -100,7 +100,7 @@ void read_vibration_data(FILE *infile,molec_type *molec)
     for(j=0;j<molec->num_atoms;j++){
       if(skipcomments(infile,instring)<0) fatal("EOF hit reading vibration data");
       sscanf(instring,"%lf %lf %lf",&(molec->atoms[j].displacements[i].x),
-	     &(molec->atoms[j].displacements[i].y),&(molec->atoms[j].displacements[i].z));
+             &(molec->atoms[j].displacements[i].y),&(molec->atoms[j].displacements[i].z));
     }
   }
 
@@ -169,20 +169,20 @@ void new_vibration(char *filename)
     return;
   }
 #else
-	if(!filename){
-		infile = choose_mac_file(file_name,MAC_FOPEN_OPEN_CD);
-	} else{
-		strcpy(file_name,filename);
-		infile = fopen(file_name,"r");
-	}
-	if( !infile ){
-   	  printf("Problems opening file: %s\n",file_name);
- 	  display("oooooops!");
-   	  return;
+        if(!filename){
+                infile = choose_mac_file(file_name,MAC_FOPEN_OPEN_CD);
+        } else{
+                strcpy(file_name,filename);
+                infile = fopen(file_name,"r");
+        }
+        if( !infile ){
+             printf("Problems opening file: %s\n",file_name);
+           display("oooooops!");
+             return;
     }
 #endif
 
-	read_molecule_data(infile,whichobj->prim->molec);
+        read_molecule_data(infile,whichobj->prim->molec);
 
 
   /* check to see if any atoms were actually read in.... */

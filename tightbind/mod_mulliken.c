@@ -80,8 +80,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 void modified_mulliken(cell,eigenset,overlap,num_orbs,
-		       occupations,orbital_lookup_table,OP_matrix,
-		       mod_OP_matrix,net_chgs,accum)
+                       occupations,orbital_lookup_table,OP_matrix,
+                       mod_OP_matrix,net_chgs,accum)
   cell_type *cell;
   eigenset_type eigenset;
   hermetian_matrix_type overlap;
@@ -127,11 +127,11 @@ void modified_mulliken(cell,eigenset,overlap,num_orbs,
       jtab = j*num_orbs;
 
       if( i != j ){
-	mod_OP_matrix[itab+j] = OP_matrix[itab+j]/
-	  (OP_matrix[itab+i] + OP_matrix[jtab+j]);
+        mod_OP_matrix[itab+j] = OP_matrix[itab+j]/
+          (OP_matrix[itab+i] + OP_matrix[jtab+j]);
       }
       else{
-	mod_OP_matrix[itab+i] =  OP_matrix[itab+i];
+        mod_OP_matrix[itab+i] =  OP_matrix[itab+i];
       }
     }
   }
@@ -143,16 +143,16 @@ void modified_mulliken(cell,eigenset,overlap,num_orbs,
   ********/
   for(i=0;i<cell->num_atoms;i++){
     find_atoms_orbs(num_orbs,cell->num_atoms,i,orbital_lookup_table,
-		    &begin_of_atom,&end_of_atom);
+                    &begin_of_atom,&end_of_atom);
     if( begin_of_atom >= 0 ){
       net_chg = 0.0;
 
       for(j = begin_of_atom;j<end_of_atom;j++){
-	jtab = j*num_orbs;
-	for(k=0;k<num_orbs;k++){
-	  if( k==j ) net_chg -= mod_OP_matrix[jtab+k];
-	  else net_chg -= mod_OP_matrix[jtab+j]*mod_OP_matrix[jtab+k];
-	}
+        jtab = j*num_orbs;
+        for(k=0;k<num_orbs;k++){
+          if( k==j ) net_chg -= mod_OP_matrix[jtab+k];
+          else net_chg -= mod_OP_matrix[jtab+j]*mod_OP_matrix[jtab+k];
+        }
       }
       /* subtract off the number of valence electrons */
       net_chg += cell->atoms[i].num_valence;

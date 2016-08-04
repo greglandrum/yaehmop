@@ -1,6 +1,6 @@
 /* abfns.f -- translated by f2c (version 19950602).
    You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+        -lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
@@ -86,17 +86,17 @@ e that*/
     rho1 = (*sk1 + *sk2) * .5 * *rr;
     rho2 = (*sk1 - *sk2) * .5 * *rr;
     if (abs(rho1) > 165.) {
-	goto L100;
+        goto L100;
     }
     if (abs(rho2) > 165.) {
-	goto L100;
+        goto L100;
     }
     c = exp(-rho1);
     a[1] = c / rho1;
     i__1 = j;
     for (i = 2; i <= i__1; ++i) {
 /* L15: */
-	a[i] = ((doublereal) ((real) (i - 1)) * a[i - 1] + c) / rho1;
+        a[i] = ((doublereal) ((real) (i - 1)) * a[i - 1] + c) / rho1;
     }
     ix = j;
     ir = (d__1 = rho2 * 2., (integer) abs(d__1));
@@ -104,9 +104,9 @@ e that*/
     i__1 = ir + 1;
     is = min(i__1,19);
     if (rho2 != 0.) {
-	goto L25;
+        goto L25;
     } else {
-	goto L35;
+        goto L35;
     }
 L25:
     d = exp(rho2);
@@ -118,20 +118,20 @@ L25:
 
     r = d - h;
     if (abs(r) - (float).1 >= 0.) {
-	goto L28;
+        goto L28;
     } else {
-	goto L26;
+        goto L26;
     }
 L26:
     ra = rho2;
     rho22 = rho2 * rho2;
     t = rho2;
     for (i = 2; i <= 50; i += 2) {
-	t = t * rho22 / (doublereal) ((real) (i * i + i));
-	ra += t;
-	if (t < 1e-30) {
-	    goto L999;
-	}
+        t = t * rho22 / (doublereal) ((real) (i * i + i));
+        ra += t;
+        if (t < 1e-30) {
+            goto L999;
+        }
 /* L27: */
     }
 L999:
@@ -145,86 +145,86 @@ L28:
     i__1 = ix;
     i__2 = is;
     for (i = 2; i__2 < 0 ? i >= i__1 : i <= i__1; i += i__2) {
-	if (ir == 0) {
-	    goto L40;
-	}
+        if (ir == 0) {
+            goto L40;
+        }
 /* L32: */
-	il = is - 1;
-	if (1 > il) {
-	    goto L9050;
-	}
-	i__3 = il;
-	for (j = 1; j <= i__3; ++j) {
-	    k = i + j - 1;
-	    if (pow_ii(&c_n1, &k) <= 0) {
-		goto L29;
-	    } else {
-		goto L30;
-	    }
+        il = is - 1;
+        if (1 > il) {
+            goto L9050;
+        }
+        i__3 = il;
+        for (j = 1; j <= i__3; ++j) {
+            k = i + j - 1;
+            if (pow_ii(&c_n1, &k) <= 0) {
+                goto L29;
+            } else {
+                goto L30;
+            }
 L29:
-	    b[k] = (r + (doublereal) ((real) (k - 1)) * b[k - 1]) / rho2;
-	    goto L31;
+            b[k] = (r + (doublereal) ((real) (k - 1)) * b[k - 1]) / rho2;
+            goto L31;
 L30:
-	    b[k] = -(d + h - (doublereal) ((real) (k - 1)) * b[k - 1]) / rho2;
+            b[k] = -(d + h - (doublereal) ((real) (k - 1)) * b[k - 1]) / rho2;
 L31:
-	    ;
-	}
+            ;
+        }
 L9050:
 L40:
-	in = i + is - 1;
+        in = i + is - 1;
 
 /*  AFTER THE RECURRENCE FORMULAE HAVE BEEN APPLIED AN APPROPRIATE */
 /*  NUMBER OF TIMES THE NEXT B-FUNCTION IS OBTAINED BY SUMMATION */
 /*  OF THE INFINITE SERIES. */
 
-	if (in - ix <= 0) {
-	    goto L39;
-	} else {
-	    goto L38;
-	}
+        if (in - ix <= 0) {
+            goto L39;
+        } else {
+            goto L38;
+        }
 L39:
-	if (pow_ii(&c_n1, &in) <= 0) {
-	    goto L44;
-	} else {
-	    goto L42;
-	}
+        if (pow_ii(&c_n1, &in) <= 0) {
+            goto L44;
+        } else {
+            goto L42;
+        }
 L42:
-	tr = rho2;
+        tr = rho2;
 /* L105: */
-	b[in] = tr * -2. / (doublereal) ((real) (in + 1));
-	for (j = 1; j <= 500; ++j) {
+        b[in] = tr * -2. / (doublereal) ((real) (in + 1));
+        for (j = 1; j <= 500; ++j) {
 /* Computing 2nd power */
-	    d__1 = rho2;
-	    tr = tr * (d__1 * d__1) / (doublereal) ((real) ((j << 1) * ((j <<
-		    1) + 1)));
-	    if ((d__1 = tr / b[in], abs(d__1)) - 1e-7 <= 0.) {
-		goto L51;
-	    } else {
-		goto L43;
-	    }
+            d__1 = rho2;
+            tr = tr * (d__1 * d__1) / (doublereal) ((real) ((j << 1) * ((j <<
+                    1) + 1)));
+            if ((d__1 = tr / b[in], abs(d__1)) - 1e-7 <= 0.) {
+                goto L51;
+            } else {
+                goto L43;
+            }
 L43:
-	    b[in] -= tr * 2. / (doublereal) ((real) (in + 1 + (j << 1)));
-	}
-	goto L51;
+            b[in] -= tr * 2. / (doublereal) ((real) (in + 1 + (j << 1)));
+        }
+        goto L51;
 L44:
-	tr = (float)1.;
+        tr = (float)1.;
 /* L107: */
-	b[in] = tr * 2. / (doublereal) ((real) in);
-	for (j = 1; j <= 500; ++j) {
+        b[in] = tr * 2. / (doublereal) ((real) in);
+        for (j = 1; j <= 500; ++j) {
 /* Computing 2nd power */
-	    d__1 = rho2;
-	    tr = tr * (d__1 * d__1) / (doublereal) ((real) ((j << 1) * ((j <<
-		    1) - 1)));
-	    if ((d__1 = tr / b[in], abs(d__1)) - 1e-7 <= 0.) {
-		goto L51;
-	    } else {
-		goto L46;
-	    }
+            d__1 = rho2;
+            tr = tr * (d__1 * d__1) / (doublereal) ((real) ((j << 1) * ((j <<
+                    1) - 1)));
+            if ((d__1 = tr / b[in], abs(d__1)) - 1e-7 <= 0.) {
+                goto L51;
+            } else {
+                goto L46;
+            }
 L46:
-	    b[in] += tr * 2. / (doublereal) ((real) (in + (j << 1)));
-	}
+            b[in] += tr * 2. / (doublereal) ((real) (in + (j << 1)));
+        }
 L51:
-	;
+        ;
     }
 
 /*  IF THE ARGUMENT IS ZERO A SEPARATE FORMULA MUST BE USED. */
@@ -233,17 +233,17 @@ L51:
 L35:
     i__2 = ix;
     for (i = 1; i <= i__2; i += 2) {
-	b[i] = 2. / (doublereal) ((real) i);
+        b[i] = 2. / (doublereal) ((real) i);
 /* L36: */
-	b[i + 1] = 0.;
+        b[i + 1] = 0.;
     }
 L38:
     return 0;
 L100:
     for (i = 1; i <= 20; ++i) {
-	a[i] = 0.;
+        a[i] = 0.;
 /* L101: */
-	b[i] = 0.;
+        b[i] = 0.;
     }
     goto L38;
 } /* abfns_ */

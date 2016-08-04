@@ -159,12 +159,12 @@ void contour_data_set(int num_args,char **cont_plot_ptr)
   for(i=0;i<cont_plot->num_curves;i++){
     fprintf(stderr,"%d \n",i);
     cont_plot->contours[i] = contour_data(cont_plot->num_x,i,cont_plot->data,
-					  cont_plot->num_levels,
-					  cont_plot->num_approx_pts,
-					  cont_plot->interp_kind,
-					  cont_plot->order,
-					  cont_plot->levels_kind,
-					  cont_plot->levels_list);
+                                          cont_plot->num_levels,
+                                          cont_plot->num_approx_pts,
+                                          cont_plot->interp_kind,
+                                          cont_plot->order,
+                                          cont_plot->levels_kind,
+                                          cont_plot->levels_list);
 
     /********
 
@@ -177,11 +177,11 @@ void contour_data_set(int num_args,char **cont_plot_ptr)
       last_val = -10;
       num_cont_vals = 0;
       while(cont_ptr){
-	if( cont_ptr->coords[0].z != last_val ){
-	  num_cont_vals++;
-	}
-	last_val = cont_ptr->coords[0].z;
-	cont_ptr = cont_ptr->next;
+        if( cont_ptr->coords[0].z != last_val ){
+          num_cont_vals++;
+        }
+        last_val = cont_ptr->coords[0].z;
+        cont_ptr = cont_ptr->next;
       }
       cont_plot->levels_list = (double *)D_CALLOC(num_cont_vals,sizeof(double));
       if(!cont_plot->levels_list) fatal("Can't get levels_list");
@@ -191,12 +191,12 @@ void contour_data_set(int num_args,char **cont_plot_ptr)
       cont_ptr = cont_plot->contours[i];
       last_val = -10;
       while(cont_ptr){
-	if( cont_ptr->coords[0].z != last_val ){
-	  cont_plot->levels_list[j++] = cont_ptr->coords[0].z;
-	  fprintf(stderr,"%6.3lf\n",cont_ptr->coords[0].z);
-	}
-	last_val = cont_ptr->coords[0].z;
-	cont_ptr = cont_ptr->next;
+        if( cont_ptr->coords[0].z != last_val ){
+          cont_plot->levels_list[j++] = cont_ptr->coords[0].z;
+          fprintf(stderr,"%6.3lf\n",cont_ptr->coords[0].z);
+        }
+        last_val = cont_ptr->coords[0].z;
+        cont_ptr = cont_ptr->next;
       }
       old_cont_kind = cont_plot->levels_kind;
       cont_plot->levels_kind = LEVELS_DISCRETE;
@@ -209,11 +209,11 @@ void contour_data_set(int num_args,char **cont_plot_ptr)
       cont_ptr = cont_plot->contours[i];
       last_val = -10;
       while(cont_ptr){
-	if( cont_ptr->coords[0].z != last_val )
-	  fprintf(stderr,"%6.3lf\n",cont_ptr->coords[0].z);
-	last_val = cont_ptr->coords[0].z;
+        if( cont_ptr->coords[0].z != last_val )
+          fprintf(stderr,"%6.3lf\n",cont_ptr->coords[0].z);
+        last_val = cont_ptr->coords[0].z;
 
-	cont_ptr = cont_ptr->next;
+        cont_ptr = cont_ptr->next;
       }
     }
   }
@@ -248,7 +248,7 @@ void cont_find_tic_sep(contour_plot_type *cont_plot)
   log_range = log10(range);
 
   norm = pow(10.0,log_range-(float)((log_range >= 0.0 ) ? (int)log_range :
-				    ((int)log_range-1)));
+                                    ((int)log_range-1)));
   if (norm <= 2)
     tics = 0.2;
   else if (norm <= 5)
@@ -290,14 +290,14 @@ void cont_find_tic_sep(contour_plot_type *cont_plot)
   range = fabs(cont_plot->min_y-cont_plot->max_y);
   log_range = log10(range);
   norm = pow(10.0,log_range-(float)((log_range >= 0.0 ) ? (int)log_range :
-				    ((int)log_range-1)));
+                                    ((int)log_range-1)));
   if (norm <= 2)
     tics = 0.2;
   else if (norm <= 5)
     tics = 0.5;
   else tics = 1.0;
   tic_sep = tics * pow(10.0,(float)((log_range >= 0.0 ) ? (int)log_range :
-				    ((int)log_range-1)));
+                                    ((int)log_range-1)));
   cont_plot->tic_sep_y = tic_sep;
   ymin = tic_sep * floor(cont_plot->min_y/tic_sep);
   ymax = tic_sep * ceil(cont_plot->max_y/tic_sep);
@@ -456,7 +456,7 @@ void read_3D_data(FILE *infile,contour_plot_type *cont_plot)
     temp_iso_curve->next = cont_plot->raw_data;
     cont_plot->raw_data = temp_iso_curve;
     temp_iso_curve->points = (point_type *)D_CALLOC(cont_plot->raw_num_y*num_curves,
-						  sizeof(point_type));
+                                                  sizeof(point_type));
     if( !temp_iso_curve->points ){
       error("Can't get space for iso_curve points");
       display("Darn!");
@@ -480,31 +480,31 @@ void read_3D_data(FILE *infile,contour_plot_type *cont_plot)
       /* use strtok to read out space delimited numbers */
       temp_point = &(temp_iso_curve->points[ycnt]);
       sscanf((const char *)strtok(instring," "),"%lf",
-	     &(temp_point->z));
+             &(temp_point->z));
       temp_point->x = xval;
       temp_point->y = yval;
       if(temp_point->z > max_z) max_z = temp_point->z;
       if(temp_point->z < min_z) min_z = temp_point->z;
 
       for(i=1;i<num_curves;i++){
-	temp_point = &(temp_iso_curve->points[i*cont_plot->raw_num_y+ycnt]);
-	sscanf((const char *)strtok(0," "),"%lf",
-	       &(temp_point->z));
-	temp_point->x = xval;
-	temp_point->y = yval;
-	if(temp_point->z > max_z) max_z = temp_point->z;
-	if(temp_point->z < min_z) min_z = temp_point->z;
+        temp_point = &(temp_iso_curve->points[i*cont_plot->raw_num_y+ycnt]);
+        sscanf((const char *)strtok(0," "),"%lf",
+               &(temp_point->z));
+        temp_point->x = xval;
+        temp_point->y = yval;
+        if(temp_point->z > max_z) max_z = temp_point->z;
+        if(temp_point->z < min_z) min_z = temp_point->z;
 
       }
 
       if( skipcomments(infile,instring) < 0 )
-	fatal("EOF hit while reading grid data");
+        fatal("EOF hit while reading grid data");
       yval += cont_plot->step_y;
       num_p++;
       if( num_p > max_p ){
-	fatal("Too many points were read.  Halting read.");
-	xcnt = cont_plot->raw_num_x;
-	ycnt = cont_plot->raw_num_y;
+        fatal("Too many points were read.  Halting read.");
+        xcnt = cont_plot->raw_num_x;
+        ycnt = cont_plot->raw_num_y;
       }
     }
     xval += cont_plot->step_x;
@@ -538,13 +538,13 @@ void read_3D_data(FILE *infile,contour_plot_type *cont_plot)
     cont_plot->max_DOS = 0;
     while(instring[0] != '#' && !strstr(instring,"BEGIN_DOS") ){
       if( skipcomments(infile,instring) < 0 )
-	fatal("Can't read DOS data for the FCO plot");
+        fatal("Can't read DOS data for the FCO plot");
       upcase(instring);
     }
     /* get memory for the DOSs */
     cont_plot->raw_data2D =
       (point_type2D *)D_CALLOC((unsigned)cont_plot->raw_num_x*(num_curves+1),
-			     sizeof(point_type2D));
+                             sizeof(point_type2D));
     if( !cont_plot->raw_data2D ) fatal("Can't get space for cont_plot 2D data.");
 
     xval = cont_plot->min_x;
@@ -552,17 +552,17 @@ void read_3D_data(FILE *infile,contour_plot_type *cont_plot)
       if(skipcomments(infile,instring)<0) fatal("Can't read 2D data");
 
       sscanf((const char *)strtok(instring," "),"%lf",
-	     &(cont_plot->raw_data2D[xcnt*(num_curves+1)].y));
+             &(cont_plot->raw_data2D[xcnt*(num_curves+1)].y));
       for(i=1;i<=num_curves;i++){
-	sscanf((const char *)strtok(0," "),"%lf",
-	       &(cont_plot->raw_data2D[xcnt*(num_curves+1)+i].y));
-	if( cont_plot->raw_data2D[xcnt*(num_curves+1)+i].y >
-	   cont_plot->max_DOS ){
-	  cont_plot->max_DOS = cont_plot->raw_data2D[xcnt*(num_curves+1)+i].y;
-	}
+        sscanf((const char *)strtok(0," "),"%lf",
+               &(cont_plot->raw_data2D[xcnt*(num_curves+1)+i].y));
+        if( cont_plot->raw_data2D[xcnt*(num_curves+1)+i].y >
+           cont_plot->max_DOS ){
+          cont_plot->max_DOS = cont_plot->raw_data2D[xcnt*(num_curves+1)+i].y;
+        }
       }
       for(i=0;i<=num_curves;i++){
-	cont_plot->raw_data2D[xcnt*(num_curves+1)+i].x = xval;
+        cont_plot->raw_data2D[xcnt*(num_curves+1)+i].x = xval;
       }
 
       xval += cont_plot->step_x;
@@ -642,7 +642,7 @@ void preprocess_cont_plot_data(contour_plot_type *cont_plot)
   cont_plot->num_x = 0;
   num_along_y= -1;
   while(raw_isocurve && raw_isocurve->points[0].x <= cont_plot->max_x &&
-	raw_isocurve->points[0].x >= cont_plot->min_x){
+        raw_isocurve->points[0].x >= cont_plot->min_x){
     xval = raw_isocurve->points[0].x;
     cont_plot->num_x++;
 
@@ -670,11 +670,11 @@ void preprocess_cont_plot_data(contour_plot_type *cont_plot)
       /* count the points we'll be using along the y direction */
       num_along_y = 0;
       for(i=0;i<cont_plot->raw_num_y;i++){
-	yval = raw_isocurve->points[i].y;
-	if( (yval <= cont_plot->max_y && yval >= cont_plot->min_y) ){
-	  if( num_along_y == 0 ) begin_y = i;
-	  num_along_y++;
-	}
+        yval = raw_isocurve->points[i].y;
+        if( (yval <= cont_plot->max_y && yval >= cont_plot->min_y) ){
+          if( num_along_y == 0 ) begin_y = i;
+          num_along_y++;
+        }
       }
       cont_plot->num_y = num_along_y;
     }
@@ -692,11 +692,11 @@ void preprocess_cont_plot_data(contour_plot_type *cont_plot)
     for(j=0;j<num_curves;j++){
       jtab = j*cont_plot->num_y;
       for(i=0;i<num_along_y;i++){
-	yval = raw_isocurve->points[j*(cont_plot->raw_num_y)+i+begin_y].y;
-	point = &isocurve->points[jtab+i];
-	point->x = xval*xscale;
-	point->y = yval*yscale;
-	point->z = raw_isocurve->points[j*cont_plot->raw_num_y+i+begin_y].z;
+        yval = raw_isocurve->points[j*(cont_plot->raw_num_y)+i+begin_y].y;
+        point = &isocurve->points[jtab+i];
+        point->x = xval*xscale;
+        point->y = yval*yscale;
+        point->z = raw_isocurve->points[j*cont_plot->raw_num_y+i+begin_y].z;
       }
     }
     isocurve->p_max = isocurve->p_count = num_along_y;
@@ -727,8 +727,8 @@ void preprocess_cont_plot_data(contour_plot_type *cont_plot)
 
     if( !cont_plot->data2D){
       cont_plot->data2D = (point_type2D *)
-	D_CALLOC(cont_plot->raw_num_x*(cont_plot->num_curves+1),
-	       sizeof(point_type2D));
+        D_CALLOC(cont_plot->raw_num_x*(cont_plot->num_curves+1),
+               sizeof(point_type2D));
       if(!cont_plot->data2D ) fatal("Can't allocate cont_plot->data2D");
     }
     num_tot = 0;
@@ -737,65 +737,65 @@ void preprocess_cont_plot_data(contour_plot_type *cont_plot)
 
       /* do the total DOS first */
       xscale = DEF_CONT_PLOT_Y /
-	(cont_plot->max_y - cont_plot->min_y);
+        (cont_plot->max_y - cont_plot->min_y);
       yscale = DEF_CONT_PLOT_X*CONT_PLOT_PROPS_SCALE/
-	(cont_plot->max_DOS);
+        (cont_plot->max_DOS);
 
 
 #if 0
       if( cont_plot->raw_data2D[i*(cont_plot->num_curves+1)].x >
-	 cont_plot->max_y ){
+         cont_plot->max_y ){
       }
       else if( cont_plot->raw_data2D[i*(cont_plot->num_curves+1)].x <
-	      cont_plot->min_y ){
+              cont_plot->min_y ){
       }
       else{
 #endif
-	cont_plot->data2D[i*(cont_plot->num_curves+1)].x =
-	  cont_plot->raw_data2D[i*(cont_plot->num_curves+1)].x * xscale;
-	if( cont_plot->raw_data2D[i*(cont_plot->num_curves+1)].y
-	   <= cont_plot->max_DOS ){
-	  cont_plot->data2D[i*(cont_plot->num_curves+1)].y =
-	    cont_plot->raw_data2D[i*(cont_plot->num_curves+1)].y *
-	      yscale;
-	}else{
-	  cont_plot->data2D[i*(cont_plot->num_curves+1)].y =
-	    cont_plot->max_DOS * yscale;
-	}
-	num_tot++;
+        cont_plot->data2D[i*(cont_plot->num_curves+1)].x =
+          cont_plot->raw_data2D[i*(cont_plot->num_curves+1)].x * xscale;
+        if( cont_plot->raw_data2D[i*(cont_plot->num_curves+1)].y
+           <= cont_plot->max_DOS ){
+          cont_plot->data2D[i*(cont_plot->num_curves+1)].y =
+            cont_plot->raw_data2D[i*(cont_plot->num_curves+1)].y *
+              yscale;
+        }else{
+          cont_plot->data2D[i*(cont_plot->num_curves+1)].y =
+            cont_plot->max_DOS * yscale;
+        }
+        num_tot++;
 #if 0
       }
 #endif
       /* now do the fragment DOSs */
       xscale = DEF_CONT_PLOT_X /
-	(cont_plot->max_x - cont_plot->min_x);
+        (cont_plot->max_x - cont_plot->min_x);
       yscale = DEF_CONT_PLOT_Y*CONT_PLOT_PROPS_SCALE/
-	(cont_plot->max_DOS);
+        (cont_plot->max_DOS);
 
 #if 0
       if( cont_plot->raw_data2D[i*(cont_plot->num_curves+1)+1].x >
-	 cont_plot->max_x ){
+         cont_plot->max_x ){
       }
       else if( cont_plot->raw_data2D[i*(cont_plot->num_curves+1)+1].x <
-	      cont_plot->min_x ){
+              cont_plot->min_x ){
       }
       else{
 #endif
-	for(j=1;j<=cont_plot->num_curves;j++){
-	  cont_plot->data2D[i*(cont_plot->num_curves+1)+j].x =
-	    cont_plot->raw_data2D[i*(cont_plot->num_curves+1)+j].x * xscale;
-	  if( cont_plot->raw_data2D[i*(cont_plot->num_curves+1)+j].y
-	     <= cont_plot->max_DOS ){
-	    cont_plot->data2D[i*(cont_plot->num_curves+1)+j].y =
-	      cont_plot->raw_data2D[i*(cont_plot->num_curves+1)+j].y *
-		yscale;
-	  }else{
-	    cont_plot->data2D[i*(cont_plot->num_curves+1)+j].y =
-	      cont_plot->max_DOS * yscale;
-	  }
-	}
+        for(j=1;j<=cont_plot->num_curves;j++){
+          cont_plot->data2D[i*(cont_plot->num_curves+1)+j].x =
+            cont_plot->raw_data2D[i*(cont_plot->num_curves+1)+j].x * xscale;
+          if( cont_plot->raw_data2D[i*(cont_plot->num_curves+1)+j].y
+             <= cont_plot->max_DOS ){
+            cont_plot->data2D[i*(cont_plot->num_curves+1)+j].y =
+              cont_plot->raw_data2D[i*(cont_plot->num_curves+1)+j].y *
+                yscale;
+          }else{
+            cont_plot->data2D[i*(cont_plot->num_curves+1)+j].y =
+              cont_plot->max_DOS * yscale;
+          }
+        }
 #if 0
-	num_frag++;
+        num_frag++;
       }
 #endif
     }
@@ -817,12 +817,12 @@ void preprocess_cont_plot_data(contour_plot_type *cont_plot)
   for(i=0;i<cont_plot->num_curves;i++){
     fprintf(stderr,"%d \n",i);
     cont_plot->contours[i] = contour_data(cont_plot->num_x,i,cont_plot->data,
-					  cont_plot->num_levels,
-					  cont_plot->num_approx_pts,
-					  cont_plot->interp_kind,
-					  cont_plot->order,
-					  cont_plot->levels_kind,
-					  cont_plot->levels_list);
+                                          cont_plot->num_levels,
+                                          cont_plot->num_approx_pts,
+                                          cont_plot->interp_kind,
+                                          cont_plot->order,
+                                          cont_plot->levels_kind,
+                                          cont_plot->levels_list);
   }
 #endif
 
@@ -1043,14 +1043,14 @@ void draw_cont_plot(prim_type *prim,object_type *obj)
   if( the_cont_plot->do_x_tics ){
     for(i=0;i<(int)rint(the_cont_plot->num_tics_x);i++){
       xloc = origin.x + obj->scale.x * (the_cont_plot->tic_start_x +
-					i * the_cont_plot->tic_sep_x - xref);
+                                        i * the_cont_plot->tic_sep_x - xref);
       g_line(xloc,origin.y+obj->scale.y*TIC_DIM,xloc,origin.y);
 
       localmin.y += obj->scale.y*TIC_DIM;
 
       /*****
 
-	do the labels
+        do the labels
 
       *****/
       xval = (the_cont_plot->tic_start_x + i*the_cont_plot->tic_sep_x)*inv_xscale;
@@ -1066,7 +1066,7 @@ void draw_cont_plot(prim_type *prim,object_type *obj)
   if( the_cont_plot->do_y_tics ){
     for(i=0;i<(int)rint(the_cont_plot->num_tics_y);i++){
       yloc = origin.y + obj->scale.y * (yref - the_cont_plot->tic_start_y -
-					i * the_cont_plot->tic_sep_y);
+                                        i * the_cont_plot->tic_sep_y);
       g_line(origin.x-obj->scale.x*TIC_DIM,yloc,origin.x,yloc);
 
       yval = (the_cont_plot->tic_start_y + i*the_cont_plot->tic_sep_y)*inv_yscale;
@@ -1110,56 +1110,56 @@ void draw_cont_plot(prim_type *prim,object_type *obj)
     if( the_cont_plot->curves_to_display[i] ){
       /* adjust the line styles as appropriate */
       if( the_cont_plot->type == CONT_FCO ){
-	g_change_linestyle(the_cont_plot->styles[i]);
+        g_change_linestyle(the_cont_plot->styles[i]);
       }
       /* the contours are in a linked list, loop over that now */
       contour = the_cont_plot->contours[i];
       while(contour){
-	if( the_cont_plot->type != CONT_FCO ){
-	  if( contour->coords[0].z > 0 ){
-	    g_change_linestyle(0);
-	  } else if( contour->coords[0].z < 0 ){
-	    g_change_linestyle(2);
-	  } else{
-	    g_change_linestyle(1);
-	  }
-	}
+        if( the_cont_plot->type != CONT_FCO ){
+          if( contour->coords[0].z > 0 ){
+            g_change_linestyle(0);
+          } else if( contour->coords[0].z < 0 ){
+            g_change_linestyle(2);
+          } else{
+            g_change_linestyle(1);
+          }
+        }
 
-	if( contour->coords[0].z <= the_cont_plot->max_z &&
-	   contour->coords[0].z >= the_cont_plot->min_z ){
+        if( contour->coords[0].z <= the_cont_plot->max_z &&
+           contour->coords[0].z >= the_cont_plot->min_z ){
 
-	  /**********
+          /**********
 
-	    add points to the points array until we are either done with the contour
-	    or we've filled the array... then draw it.
+            add points to the points array until we are either done with the contour
+            or we've filled the array... then draw it.
 
-	    **********/
-	  pts_so_far=0;
-	  for(j=0;j<contour->num_pts;j++){
-	    points[pts_so_far].x = fpoints[pts_so_far].x = origin.x +
-	      (contour->coords[j].x - xref)*obj->scale.x;
-	    points[pts_so_far].y = fpoints[pts_so_far].y = origin.y +
-	      (yref - contour->coords[j].y)* obj->scale.y;
-	    pts_so_far++;
+            **********/
+          pts_so_far=0;
+          for(j=0;j<contour->num_pts;j++){
+            points[pts_so_far].x = fpoints[pts_so_far].x = origin.x +
+              (contour->coords[j].x - xref)*obj->scale.x;
+            points[pts_so_far].y = fpoints[pts_so_far].y = origin.y +
+              (yref - contour->coords[j].y)* obj->scale.y;
+            pts_so_far++;
 
-	    if( pts_so_far == num_points ){
-	      /* the array is full, draw it */
-	      g_lines(points,fpoints,pts_so_far,0);
-	      pts_so_far = 0;
-	      /* put the current point back in the array */
-	      points[pts_so_far].x = fpoints[pts_so_far].x = origin.x +
-		(contour->coords[j].x - xref)*obj->scale.x;
-	      points[pts_so_far].y = fpoints[pts_so_far].y = origin.y +
-		(yref - contour->coords[j].y)* obj->scale.y;
-	      pts_so_far++;
-	    }
-	  }
-	  /* draw the points that are left over */
-	  g_lines(points,fpoints,pts_so_far,0);
+            if( pts_so_far == num_points ){
+              /* the array is full, draw it */
+              g_lines(points,fpoints,pts_so_far,0);
+              pts_so_far = 0;
+              /* put the current point back in the array */
+              points[pts_so_far].x = fpoints[pts_so_far].x = origin.x +
+                (contour->coords[j].x - xref)*obj->scale.x;
+              points[pts_so_far].y = fpoints[pts_so_far].y = origin.y +
+                (yref - contour->coords[j].y)* obj->scale.y;
+              pts_so_far++;
+            }
+          }
+          /* draw the points that are left over */
+          g_lines(points,fpoints,pts_so_far,0);
 
-	}
-	/* move to the next contour */
-	contour = contour->next;
+        }
+        /* move to the next contour */
+        contour = contour->next;
 
       }
       /* set the line style back to the default value */
@@ -1197,27 +1197,27 @@ void draw_cont_plot(prim_type *prim,object_type *obj)
 
     for(j=0;j<the_cont_plot->raw_num_y;j++){
       xval = origin.x +
-	the_cont_plot->data2D[j*(the_cont_plot->num_curves+1)].y*
-	  obj->scale.x;
+        the_cont_plot->data2D[j*(the_cont_plot->num_curves+1)].y*
+          obj->scale.x;
       yval = origin.y +
-	(yref - the_cont_plot->data2D[j*(the_cont_plot->num_curves+1)].x)*
-	  obj->scale.y;
+        (yref - the_cont_plot->data2D[j*(the_cont_plot->num_curves+1)].x)*
+          obj->scale.y;
 
       if( yval <= origin.y && yval >= origin.y - dim.y ){
-	points[pts_so_far].x = fpoints[pts_so_far].x = xval;
-	points[pts_so_far].y = fpoints[pts_so_far].y = yval;
-	pts_so_far++;
+        points[pts_so_far].x = fpoints[pts_so_far].x = xval;
+        points[pts_so_far].y = fpoints[pts_so_far].y = yval;
+        pts_so_far++;
 
-	if( pts_so_far == num_points ){
-	  /* the array is full, draw it */
-	  g_lines(points,fpoints,pts_so_far,0);
-	  pts_so_far = 0;
-	  /* put the current point back in the array */
-	  points[pts_so_far].x = fpoints[pts_so_far].x = xval;
-	  points[pts_so_far].y = fpoints[pts_so_far].y = yval;
+        if( pts_so_far == num_points ){
+          /* the array is full, draw it */
+          g_lines(points,fpoints,pts_so_far,0);
+          pts_so_far = 0;
+          /* put the current point back in the array */
+          points[pts_so_far].x = fpoints[pts_so_far].x = xval;
+          points[pts_so_far].y = fpoints[pts_so_far].y = yval;
 
-	  pts_so_far++;
-	}
+          pts_so_far++;
+        }
       }
     }
     /* draw the points that are left over */
@@ -1234,35 +1234,35 @@ void draw_cont_plot(prim_type *prim,object_type *obj)
     pts_so_far = 0;
     for(i=1; i<=the_cont_plot->num_curves; i++){
       if( the_cont_plot->curves_to_display[i-1] ){
-	g_change_linestyle(the_cont_plot->styles[i-1]);
+        g_change_linestyle(the_cont_plot->styles[i-1]);
 
 
-	for(j=0;j<the_cont_plot->raw_num_x;j++){
+        for(j=0;j<the_cont_plot->raw_num_x;j++){
 
-	  xval = origin.x +
-	    (the_cont_plot->data2D[j*(the_cont_plot->num_curves+1)+i].x-xref)*
-	      obj->scale.x;
-	  yval = origin.y +
-	    (-the_cont_plot->data2D[j*(the_cont_plot->num_curves+1)+i].y)*
-	      obj->scale.y;
-	  if( xval >= origin.x && xval <= origin.x + dim.x ){
-	    points[pts_so_far].x = fpoints[pts_so_far].x = xval;
-	    points[pts_so_far].y = fpoints[pts_so_far].y = yval;
-	    pts_so_far++;
+          xval = origin.x +
+            (the_cont_plot->data2D[j*(the_cont_plot->num_curves+1)+i].x-xref)*
+              obj->scale.x;
+          yval = origin.y +
+            (-the_cont_plot->data2D[j*(the_cont_plot->num_curves+1)+i].y)*
+              obj->scale.y;
+          if( xval >= origin.x && xval <= origin.x + dim.x ){
+            points[pts_so_far].x = fpoints[pts_so_far].x = xval;
+            points[pts_so_far].y = fpoints[pts_so_far].y = yval;
+            pts_so_far++;
 
-	    if( pts_so_far == num_points ){
-	      /* the array is full, draw it */
-	      g_lines(points,fpoints,pts_so_far,0);
-	      pts_so_far = 0;
-	      /* put the current point back in the array */
-	      points[pts_so_far].x = fpoints[pts_so_far].x = xval;
-	      points[pts_so_far].y = fpoints[pts_so_far].y = yval;
-	      pts_so_far++;
-	    }
-	  }
-	}
-	/* draw the points that are left over */
-	g_lines(points,fpoints,pts_so_far,0);
+            if( pts_so_far == num_points ){
+              /* the array is full, draw it */
+              g_lines(points,fpoints,pts_so_far,0);
+              pts_so_far = 0;
+              /* put the current point back in the array */
+              points[pts_so_far].x = fpoints[pts_so_far].x = xval;
+              points[pts_so_far].y = fpoints[pts_so_far].y = yval;
+              pts_so_far++;
+            }
+          }
+        }
+        /* draw the points that are left over */
+        g_lines(points,fpoints,pts_so_far,0);
       }
     }
   }

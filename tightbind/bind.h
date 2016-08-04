@@ -531,9 +531,9 @@ typedef struct {
     Types of COOP -------->
 
  things to   [ type 1 ]  ->  [ type 2] ->  [ type 3]
- average        |                   	       |
-   |            |       	               |
-   |	        V       	               V
+ average        |                                  |
+   |            |                              |
+   |                V                              V
    |         [ type 1 ]                    [ type 3]
    V
 

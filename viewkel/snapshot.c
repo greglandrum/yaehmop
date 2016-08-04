@@ -198,10 +198,10 @@ void takesnap( int which )
       tempshead = (shead_type *)D_CALLOC(1,sizeof(shead_type));
       if(!tempshead)fatal("Memory Allocation" );
       /* make sure that the first element is not supposed to just be
-	 replaced */
+         replaced */
       if( shead->which == which ){
-	D_FREE(shead);
-	shead = 0;
+        D_FREE(shead);
+        shead = 0;
       }
       tempshead->next=shead;
       shead=tempshead;
@@ -212,13 +212,13 @@ void takesnap( int which )
       if(!tempshead)fatal("Memory Allocation" );
       /* check to see if replacement of the snap is needed */
       if( lastshead->next && lastshead->next->which == which ){
-	tempshead->next = lastshead->next->next;
-	D_FREE(lastshead->next);
-	lastshead->next=tempshead;
+        tempshead->next = lastshead->next->next;
+        D_FREE(lastshead->next);
+        lastshead->next=tempshead;
       }
       else{
-	tempshead->next = lastshead->next;
-	lastshead->next = tempshead;
+        tempshead->next = lastshead->next;
+        lastshead->next = tempshead;
       }
     }
   }
@@ -347,26 +347,26 @@ void animateit(int from,int to)
 
       /* fill in the interpolated snap list */
       while( snap1 ){
-	/* do the object parameters */
-	tempsnap->xt=(1-gap)*snap1->xt+gap*snap2->xt;
-	tempsnap->yt=(1-gap)*snap1->yt+gap*snap2->yt;
-	tempsnap->zt=(1-gap)*snap1->zt+gap*snap2->zt;
+        /* do the object parameters */
+        tempsnap->xt=(1-gap)*snap1->xt+gap*snap2->xt;
+        tempsnap->yt=(1-gap)*snap1->yt+gap*snap2->yt;
+        tempsnap->zt=(1-gap)*snap1->zt+gap*snap2->zt;
 
-	tempsnap->xs=(1-gap)*snap1->xs+gap*snap2->xs;
-	tempsnap->ys=(1-gap)*snap1->ys+gap*snap2->ys;
-	tempsnap->zs=(1-gap)*snap1->zs+gap*snap2->zs;
+        tempsnap->xs=(1-gap)*snap1->xs+gap*snap2->xs;
+        tempsnap->ys=(1-gap)*snap1->ys+gap*snap2->ys;
+        tempsnap->zs=(1-gap)*snap1->zs+gap*snap2->zs;
 
-	tempsnap->xc=(1-gap)*snap1->xc+gap*snap2->xc;
-	tempsnap->yc=(1-gap)*snap1->yc+gap*snap2->yc;
-	tempsnap->zc=(1-gap)*snap1->zc+gap*snap2->zc;
+        tempsnap->xc=(1-gap)*snap1->xc+gap*snap2->xc;
+        tempsnap->yc=(1-gap)*snap1->yc+gap*snap2->yc;
+        tempsnap->zc=(1-gap)*snap1->zc+gap*snap2->zc;
 
-	tempsnap->xr=(1-gap)*snap1->xr+gap*snap2->xr;
-	tempsnap->yr=(1-gap)*snap1->yr+gap*snap2->yr;
-	tempsnap->zr=(1-gap)*snap1->zr+gap*snap2->zr;
+        tempsnap->xr=(1-gap)*snap1->xr+gap*snap2->xr;
+        tempsnap->yr=(1-gap)*snap1->yr+gap*snap2->yr;
+        tempsnap->zr=(1-gap)*snap1->zr+gap*snap2->zr;
 
-	snap1 = snap1->next;
-	snap2 = snap2->next;
-	tempsnap = tempsnap->next;
+        snap1 = snap1->next;
+        snap2 = snap2->next;
+        tempsnap = tempsnap->next;
       }
       /* the interpolated list is done, send it off */
       readsnap(0,&interp);

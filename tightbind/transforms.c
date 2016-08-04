@@ -169,7 +169,7 @@ void mult_matrices(real *mat1,real *mat2,real *result,int dim)
     itab = i*dim;
     for(j=0;j<dim;j++){
       for(k=0;k<dim;k++){
-	result[itab+j] += mat1[itab+k]*mat2[k*dim+j];
+        result[itab+j] += mat1[itab+k]*mat2[k*dim+j];
       }
     }
   }
@@ -241,7 +241,7 @@ void transform_atomic_locs(atom_locs,t_mat,num_atoms)
     for(i=0;i<T_MAT_DIM;i++){
       new_loc[i] = 0.0;
       for(j=0; j<T_MAT_DIM; j++){
-	new_loc[i] += loc[j]*t_mat[i][j];
+        new_loc[i] += loc[j]*t_mat[i][j];
       }
     }
 
@@ -335,7 +335,7 @@ void transform_3x3_transpose(atom_locs,t_mat,num_atoms)
     for(i=0;i<3;i++){
       new_loc[i] = 0.0;
       for(j=0; j<3; j++){
-	new_loc[i] += loc[j]*t_mat[j][i];
+        new_loc[i] += loc[j]*t_mat[j][i];
       }
     }
 
@@ -499,7 +499,7 @@ void full_transform(atoms,COM,t_mat,num_atoms)
     for(i=0;i<3;i++){
       new_loc[i] = 0.0;
       for(j=0; j<3; j++){
-	new_loc[i] += loc[j]*t_mat[j][i];
+        new_loc[i] += loc[j]*t_mat[j][i];
       }
     }
 
@@ -553,7 +553,7 @@ void transform_atoms(atoms,t_mat,num_atoms)
     for(i=0;i<T_MAT_DIM;i++){
       new_loc[i] = 0.0;
       for(j=0; j<T_MAT_DIM; j++){
-	new_loc[i] += loc[j]*t_mat[i][j];
+        new_loc[i] += loc[j]*t_mat[i][j];
       }
     }
 

@@ -55,7 +55,7 @@
   change it.
   */
 
-#include	"EasyApp.h"
+#include        "EasyApp.h"
 #include "viewkel.h"
 #include "Mac_defines.h"
 #include "Mac_protos.h"
@@ -85,7 +85,7 @@ Mac_global_struct Mac_globals;
   Returns:  nothing
   */
 
-void	InitToolboxHook (void)
+void        InitToolboxHook (void)
 {
   EasyInitToolbox();
 
@@ -127,13 +127,13 @@ void	InitToolboxHook (void)
   Returns:  error value, 0 => no error, assumes any error is fatal
   */
 
-OSErr	CheckEnvironmentHook (void)
+OSErr        CheckEnvironmentHook (void)
 {
-  OSErr	error = noErr;
+  OSErr        error = noErr;
 
-  error = EasyCheckEnvironment();	/* see what's in the environment */
+  error = EasyCheckEnvironment();        /* see what's in the environment */
   if (error){
-    return error;	/* any error is a fatal error	 */
+    return error;        /* any error is a fatal error         */
   }
 
 
@@ -166,13 +166,13 @@ OSErr	CheckEnvironmentHook (void)
   Returns:  error value, any error at this point is fatal
   */
 
-OSErr	InitAppHook (void)
+OSErr        InitAppHook (void)
 {
-  OSErr	error = noErr;
+  OSErr        error = noErr;
 
   error = EasyInitApp();
   if(error){
-    return error;	/* any error is fatal */
+    return error;        /* any error is fatal */
   }
 
   /* call your own routine here */
@@ -202,14 +202,14 @@ OSErr	InitAppHook (void)
   Returns:  error value 0 => no error, any error fatal
   */
 
-OSErr	LoadCursorsHook (void)
+OSErr        LoadCursorsHook (void)
 {
-  OSErr	error = noErr;
+  OSErr        error = noErr;
 
   error = EasyLoadCursors();
   if(error)
       {
-	return error;	/* any error is fatal */
+        return error;        /* any error is fatal */
       }
 
   /* set up your own cursors here however you want */
@@ -241,9 +241,9 @@ OSErr	LoadCursorsHook (void)
   Returns:  error value, 0 => OK, any error fatal
   */
 
-OSErr	SetupAppMenusHook (void)
+OSErr        SetupAppMenusHook (void)
 {
-  OSErr	error = noErr;
+  OSErr        error = noErr;
 
   /* call our menu setup function */
   error = SetupViewkelMenus();
@@ -402,9 +402,9 @@ void CheckMemoryHook (void)
   Returns:  Boolean indication whether event has been handled
   */
 
-Boolean	PreprocessEventHook (EventRecord *theEvent)
+Boolean        PreprocessEventHook (EventRecord *theEvent)
 {
-  Boolean handled = false;	/* assume not handled */
+  Boolean handled = false;        /* assume not handled */
 
 
   return handled;
@@ -603,7 +603,7 @@ void MouseMovedHook (EventRecord *theEvent)
 
 void ClipToPrivateHook (EventRecord *theEvent)
 {
-  TEFromScrap();	/* ignore error */
+  TEFromScrap();        /* ignore error */
 }
 
 
@@ -634,7 +634,7 @@ void ClipToPrivateHook (EventRecord *theEvent)
 
 void PrivateToClipHook (EventRecord *theEvent)
 {
-  TEToScrap();	/* ignore error */
+  TEToScrap();        /* ignore error */
 }
 
 
@@ -677,7 +677,7 @@ void PrivateToClipHook (EventRecord *theEvent)
   */
 
 
-OSErr	MakeWindowHook (WindowPtr *macWindow, OSType fileType)
+OSErr        MakeWindowHook (WindowPtr *macWindow, OSType fileType)
 {
   return EasyMakeWindow(macWindow, fileType);
 }
@@ -742,7 +742,7 @@ short GetWindowResIDHook (OSType fileType)
 
 void SetWindowInitHook (EasyWindowPtr easyWindow, OSType fileType)
 {
-  /*	EasySetWindowInit (easyWindow, fileType); */
+  /*        EasySetWindowInit (easyWindow, fileType); */
   SetViewkelWindowInit(easyWindow,fileType);
 }
 
@@ -797,7 +797,7 @@ void SetWindowInitHook (EasyWindowPtr easyWindow, OSType fileType)
   Returns:  nothing
   */
 
-void	UpdateMenusHook (WindowPtr macWindow)
+void        UpdateMenusHook (WindowPtr macWindow)
 {
   EasyUpdateMenus(macWindow);
 }
@@ -881,7 +881,7 @@ void UpdateEditMenuHook (WindowPtr macWindow)
   Returns:  nothing
   */
 
-void	UpdateAppMenusHook (WindowPtr macWindow)
+void        UpdateAppMenusHook (WindowPtr macWindow)
 {
   /* call our own handler */
   UpdateViewkelMenus(macWindow);
@@ -920,9 +920,9 @@ void	UpdateAppMenusHook (WindowPtr macWindow)
   Returns:  Boolean indicating whether the selection was handled
   */
 
-Boolean	MenuDispatchHook (WindowPtr macWindow, long menuChoice)
+Boolean        MenuDispatchHook (WindowPtr macWindow, long menuChoice)
 {
-  Boolean	handled;
+  Boolean        handled;
   short menuID,menuItem;
 
   /* handles Apple, File, Edit menus, replace if you need to */
@@ -1022,7 +1022,7 @@ void FileMenuHook (short menuItem)
   Returns:  error value
   */
 
-OSErr	NewHook (WindowPtr *macWindow, OSType fileType)
+OSErr        NewHook (WindowPtr *macWindow, OSType fileType)
 {
   return EasyNew (macWindow, fileType);
 }
@@ -1047,7 +1047,7 @@ OSErr	NewHook (WindowPtr *macWindow, OSType fileType)
   Returns:  error value
   */
 
-OSErr	OpenHook	(WindowPtr *newWindow, FSSpec *theFile)
+OSErr        OpenHook        (WindowPtr *newWindow, FSSpec *theFile)
 {
   return EasyOpen(newWindow, theFile);
 }
@@ -1068,7 +1068,7 @@ OSErr	OpenHook	(WindowPtr *newWindow, FSSpec *theFile)
   Returns:  error value, 0 => closed successfully
   */
 
-OSErr	CloseHook	(WindowPtr macWindow, short saveOptions)
+OSErr        CloseHook        (WindowPtr macWindow, short saveOptions)
 {
 
   return EasyClose(macWindow, saveOptions);
@@ -1094,7 +1094,7 @@ OSErr	CloseHook	(WindowPtr macWindow, short saveOptions)
   Returns:  nothing
   */
 
-OSErr	PageSetupHook (WindowPtr macWindow)
+OSErr        PageSetupHook (WindowPtr macWindow)
 {
   return EasyPageSetup (macWindow);
 }
@@ -1120,7 +1120,7 @@ OSErr	PageSetupHook (WindowPtr macWindow)
   Returns:  error value, 0 => we can quit
   */
 
-OSErr	QuitHook (short saveOptions)
+OSErr        QuitHook (short saveOptions)
 {
   return EasyQuit (saveOptions);
 }
@@ -1171,7 +1171,7 @@ void EditMenuHook (short menuItem)
   Returns:  error value
   */
 
-OSErr	UndoHook (WindowPtr macWindow)
+OSErr        UndoHook (WindowPtr macWindow)
 {
   return EasyUndo (macWindow);
 }

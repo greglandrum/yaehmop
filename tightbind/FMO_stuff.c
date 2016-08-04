@@ -72,7 +72,7 @@ void init_FMO_file(details,num_orbs,num_electrons)
 
   for(i=0;i<details->num_FMO_frags;i++){
     fprintf(FMO_file,"%d %lf\n",details->FMO_frags[i].num_orbs,
-	    details->FMO_frags[i].num_electrons);
+            details->FMO_frags[i].num_electrons);
   }
 }
 
@@ -123,39 +123,39 @@ void build_FMO_overlap(details,num_orbs,num_atoms,overlap,orbital_lookup_table)
     for( atom1=0;atom1<FMO_frag->num_atoms;atom1++){
       /******
 
-	the location of the orbitals belonging to this atom must be found
-	in BOTH the main overlap matrix and the FMO overlap matrix.
+        the location of the orbitals belonging to this atom must be found
+        in BOTH the main overlap matrix and the FMO overlap matrix.
 
       *******/
       find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
-		      orbital_lookup_table,&begin1,&end1);
+                      orbital_lookup_table,&begin1,&end1);
       find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
-		      FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
+                      FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
       /* ignore dummy atoms */
       if( begin1 >= 0 && FMO_begin1 >= 0){
 
-	for( atom2=0;atom2<FMO_frag->num_atoms;atom2++){
-	  /* find the orbitals of the other atom */
-	  find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom2],
-			  orbital_lookup_table,&begin2,&end2);
-	  find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom2,
-			  FMO_frag->orbital_lookup_table,&FMO_begin2,&FMO_end2);
+        for( atom2=0;atom2<FMO_frag->num_atoms;atom2++){
+          /* find the orbitals of the other atom */
+          find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom2],
+                          orbital_lookup_table,&begin2,&end2);
+          find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom2,
+                          FMO_frag->orbital_lookup_table,&FMO_begin2,&FMO_end2);
 
-	  if( begin2 >= 0 && FMO_begin2 >= 0){
-	    /* now loop over and copy the orbitals */
-	    for( i=0; i<(end1-begin1); i++){
-	      itab = (i+begin1)*num_orbs;
-	      FMO_itab = (i+FMO_begin1)*FMO_frag->num_orbs;
-	      for( j=0; j<(end2-begin2); j++){
-		jtab = j+begin2;
-		FMO_jtab = j+FMO_begin2;
+          if( begin2 >= 0 && FMO_begin2 >= 0){
+            /* now loop over and copy the orbitals */
+            for( i=0; i<(end1-begin1); i++){
+              itab = (i+begin1)*num_orbs;
+              FMO_itab = (i+FMO_begin1)*FMO_frag->num_orbs;
+              for( j=0; j<(end2-begin2); j++){
+                jtab = j+begin2;
+                FMO_jtab = j+FMO_begin2;
 
-		FMO_frag->overlap_K.mat[FMO_itab+FMO_jtab] =
-		  overlap.mat[itab+jtab];
-	      }
-	    }
-	  }
-	}
+                FMO_frag->overlap_K.mat[FMO_itab+FMO_jtab] =
+                  overlap.mat[itab+jtab];
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -218,37 +218,37 @@ void build_FMO_hamil(details,num_orbs,num_atoms,hamil,orbital_lookup_table)
     for( atom1=0;atom1<FMO_frag->num_atoms;atom1++){
       /******
 
-	the location of the orbitals belonging to this atom must be found
-	in BOTH the main hamiltonian matrix and the FMO hamiltonian.
+        the location of the orbitals belonging to this atom must be found
+        in BOTH the main hamiltonian matrix and the FMO hamiltonian.
 
       *******/
       find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
-		      orbital_lookup_table,&begin1,&end1);
+                      orbital_lookup_table,&begin1,&end1);
       find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
-		      FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
+                      FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
       /* ignore dummy atoms */
       if( begin1 >= 0 && FMO_begin1 >= 0){
 
-	for( atom2=0;atom2<FMO_frag->num_atoms;atom2++){
-	  find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom2],
-			  orbital_lookup_table,&begin2,&end2);
-	  find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom2,
-			  FMO_frag->orbital_lookup_table,&FMO_begin2,&FMO_end2);
+        for( atom2=0;atom2<FMO_frag->num_atoms;atom2++){
+          find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom2],
+                          orbital_lookup_table,&begin2,&end2);
+          find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom2,
+                          FMO_frag->orbital_lookup_table,&FMO_begin2,&FMO_end2);
 
-	  if( begin2 >= 0 && FMO_begin2 >= 0){
-	    for( i=0; i<(end1-begin1); i++){
-	      itab = (i+begin1)*num_orbs;
-	      FMO_itab = (i+FMO_begin1)*FMO_frag->num_orbs;
-	      for( j=0; j<(end2-begin2); j++){
-		jtab = j+begin2;
-		FMO_jtab = j+FMO_begin2;
+          if( begin2 >= 0 && FMO_begin2 >= 0){
+            for( i=0; i<(end1-begin1); i++){
+              itab = (i+begin1)*num_orbs;
+              FMO_itab = (i+FMO_begin1)*FMO_frag->num_orbs;
+              for( j=0; j<(end2-begin2); j++){
+                jtab = j+begin2;
+                FMO_jtab = j+FMO_begin2;
 
-		FMO_frag->hamil_K.mat[FMO_itab+FMO_jtab] =
-		  hamil.mat[itab+jtab];
-	      }
-	    }
-	  }
-	}
+                FMO_frag->hamil_K.mat[FMO_itab+FMO_jtab] =
+                  hamil.mat[itab+jtab];
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -318,29 +318,29 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
 
     if( details->overlap_mat_PRT ){
       fprintf(output_file,
-	      ";\t\t --- Overlap Matrix ");
+              ";\t\t --- Overlap Matrix ");
       if( details->Execution_Mode == MOLECULAR ){
-	fprintf(output_file,"S(R) ---\n");
+        fprintf(output_file,"S(R) ---\n");
       }
       else{
-	fprintf(output_file,"S(K) ---\n");
+        fprintf(output_file,"S(K) ---\n");
       }
       printmat(FMO_frag->overlap_K.mat,num_orbs,num_orbs,output_file,1e-4,
-	       details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
+               details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
     }
 
     /* What about the hamiltonian? */
     if( details->hamil_PRT ){
       fprintf(output_file,
-	      ";\t\t --- Hamiltonian ");
+              ";\t\t --- Hamiltonian ");
       if( details->Execution_Mode == MOLECULAR ){
-	fprintf(output_file,"H(R) ---\n");
+        fprintf(output_file,"H(R) ---\n");
       }
       else{
-	fprintf(output_file,"H(K) ---\n");
+        fprintf(output_file,"H(K) ---\n");
       }
       printmat(FMO_frag->hamil_K.mat,num_orbs,num_orbs,output_file,1e-4,
-	       details->hamil_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
+               details->hamil_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
     }
 
     fprintf(stdout,"]");
@@ -359,10 +359,10 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
 
     ********/
     cboris(&(num_orbs),&(num_orbs),FMO_frag->hamil_K.mat,
-	   work3,FMO_frag->eigenset.vectI,FMO_frag->eigenset.val,work1,
-	   work2,&diag_error);
+           work3,FMO_frag->eigenset.vectI,FMO_frag->eigenset.val,work1,
+           work2,&diag_error);
     fprintf(status_file,"Error value from FMO diagonalization (fragment %d): %d\n",
-	    i,diag_error);
+            i,diag_error);
     fflush(status_file);
     if( diag_error != 0 ){
       error("Problems in the FMO diagonalization, try more overlaps.");
@@ -378,61 +378,61 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
 
     **********/
     bcopy((char *)FMO_frag->hamil_K.mat,FMO_frag->eigenset.vectR,
-	  num_orbs*num_orbs*sizeof(real));
+          num_orbs*num_orbs*sizeof(real));
 #else
       /**********
 
-	we're using LAPACK to diagonalize and we need to copy the matrices into those
-	used by the LAPACK diagonalizer
+        we're using LAPACK to diagonalize and we need to copy the matrices into those
+        used by the LAPACK diagonalizer
 
-	**********/
+        **********/
       for(j=0;j<num_orbs;j++){
-	jtab = j*num_orbs;
-	for(k=j+1;k<num_orbs;k++){
-	  ktab = k*num_orbs;
-	  cmplx_hamil[jtab+k].r = FMO_frag->hamil_K.mat[jtab+k];
-	  cmplx_hamil[jtab+k].i = FMO_frag->hamil_K.mat[ktab+j];
-	  cmplx_overlap[jtab+k].r = FMO_frag->overlap_K.mat[jtab+k];
-	  cmplx_overlap[jtab+k].i = FMO_frag->overlap_K.mat[ktab+j];
-	  cmplx_hamil[ktab+j].r = 0.0;
-	  cmplx_hamil[ktab+j].i = 0.0;
-	  cmplx_overlap[ktab+j].r = 0.0;
-	  cmplx_overlap[ktab+j].i = 0.0;
-	}
-	cmplx_hamil[jtab+j].r = FMO_frag->hamil_K.mat[jtab+j];
-	cmplx_hamil[jtab+j].i = 0.0;
-	cmplx_overlap[jtab+j].r = FMO_frag->overlap_K.mat[jtab+j];
-	cmplx_overlap[jtab+j].i = 0.0;
+        jtab = j*num_orbs;
+        for(k=j+1;k<num_orbs;k++){
+          ktab = k*num_orbs;
+          cmplx_hamil[jtab+k].r = FMO_frag->hamil_K.mat[jtab+k];
+          cmplx_hamil[jtab+k].i = FMO_frag->hamil_K.mat[ktab+j];
+          cmplx_overlap[jtab+k].r = FMO_frag->overlap_K.mat[jtab+k];
+          cmplx_overlap[jtab+k].i = FMO_frag->overlap_K.mat[ktab+j];
+          cmplx_hamil[ktab+j].r = 0.0;
+          cmplx_hamil[ktab+j].i = 0.0;
+          cmplx_overlap[ktab+j].r = 0.0;
+          cmplx_overlap[ktab+j].i = 0.0;
+        }
+        cmplx_hamil[jtab+j].r = FMO_frag->hamil_K.mat[jtab+j];
+        cmplx_hamil[jtab+j].i = 0.0;
+        cmplx_overlap[jtab+j].r = FMO_frag->overlap_K.mat[jtab+j];
+        cmplx_overlap[jtab+j].i = 0.0;
 
       }
 
 
       itype = 1;
       if( details->just_avgE ){
-	jobz = 'N';
-	fprintf(stdout,".");
+        jobz = 'N';
+        fprintf(stdout,".");
       } else{
-	jobz = 'V';
+        jobz = 'V';
       }
       uplo = 'L';
       num_orbs2 = num_orbs*num_orbs;
       fprintf(stdout,"{");
       zhegv((long *)&(itype),&jobz,&uplo,(long *)&num_orbs,cmplx_hamil,
-      			(long *)&num_orbs,cmplx_overlap,
-	   				(long *)&num_orbs,FMO_frag->eigenset.val,cmplx_work,
-	   				(long *)&num_orbs2,work3,(long *)&diag_error);
+                              (long *)&num_orbs,cmplx_overlap,
+                                           (long *)&num_orbs,FMO_frag->eigenset.val,cmplx_work,
+                                           (long *)&num_orbs2,work3,(long *)&diag_error);
       fprintf(stdout,"}");
 
       /* now copy stuff back out of the results */
       if( !details->just_avgE ){
-	for(j=0;j<num_orbs;j++){
-	  jtab = j*num_orbs;
-	  for(k=0;k<num_orbs;k++){
-	    ktab = k*num_orbs;
-	    FMO_frag->eigenset.vectR[jtab+k] = cmplx_hamil[jtab+k].r;
-	    FMO_frag->eigenset.vectI[jtab+k] = cmplx_hamil[jtab+k].i;
-	  }
-	}
+        for(j=0;j<num_orbs;j++){
+          jtab = j*num_orbs;
+          for(k=0;k<num_orbs;k++){
+            ktab = k*num_orbs;
+            FMO_frag->eigenset.vectR[jtab+k] = cmplx_hamil[jtab+k].r;
+            FMO_frag->eigenset.vectI[jtab+k] = cmplx_hamil[jtab+k].i;
+          }
+        }
       }
 
 #endif
@@ -441,27 +441,27 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
     /* do we need to print out the wave functions? */
     if( details->wave_fn_PRT ){
       if( !(details->wave_fn_PRT & PRT_TRANSPOSE_FLAG) ){
-	fprintf(output_file,
-		";\t*** Wavefunctions *** (MO's in rows, AO's in columns, energies \
+        fprintf(output_file,
+                ";\t*** Wavefunctions *** (MO's in rows, AO's in columns, energies \
 INCREASE down)\n");
       }else{
-	fprintf(output_file,
-		";\t*** Wavefunctions ***  (AO's in rows, MO's in columns, energies \
+        fprintf(output_file,
+                ";\t*** Wavefunctions ***  (AO's in rows, MO's in columns, energies \
 INCREASE to the right)\n");
       }
       fprintf(output_file,";\t***> REAL:\n");
       printmat(FMO_frag->eigenset.vectR,num_orbs,num_orbs,output_file,1e-4,
-	       details->wave_fn_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
+               details->wave_fn_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
       /********
 
-	there's no need to print out imaginary components of the
-	wavefunctions for molecular calculations.
+        there's no need to print out imaginary components of the
+        wavefunctions for molecular calculations.
 
       ********/
       if( details->Execution_Mode != MOLECULAR ){
-	fprintf(output_file,";\t***> IMAGINARY:\n");
-	printmat(FMO_frag->eigenset.vectI,num_orbs,num_orbs,output_file,1e-4,
-		 details->wave_fn_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
+        fprintf(output_file,";\t***> IMAGINARY:\n");
+        printmat(FMO_frag->eigenset.vectI,num_orbs,num_orbs,output_file,1e-4,
+                 details->wave_fn_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
       }
     }
 
@@ -485,7 +485,7 @@ INCREASE to the right)\n");
     fprintf(output_file,"\n#\t****Fragment Energies (in eV) and Occupation Numbers ****\n");
     for(j=0;j<num_orbs;j++){
       fprintf(output_file,"%d:--->  %8.6lg  [%4.3lf Electrons]\n",j+1,
-	      EIGENVAL(FMO_frag->eigenset,j), occupations[j]);
+              EIGENVAL(FMO_frag->eigenset,j), occupations[j]);
       total_energy += occupations[j]*EIGENVAL(FMO_frag->eigenset,j);
     }
     fprintf(output_file,"Total_Fragment_Energy: %8.6lg\n",total_energy);
@@ -500,7 +500,7 @@ INCREASE to the right)\n");
     if( details->num_FMO_frags ){
       fprintf(FMO_file,"; Fragment %d orbital energies\n",i+1);
       for(j=0;j<num_orbs;j++){
-	fprintf(FMO_file,"%lg\n",EIGENVAL(FMO_frag->eigenset,j));
+        fprintf(FMO_file,"%lg\n",EIGENVAL(FMO_frag->eigenset,j));
       }
     }
   }
@@ -554,45 +554,45 @@ void gen_FMO_tform_matrices(details)
     for(i=0;i<FMO_frag->num_orbs;i++){
       itab = i*FMO_frag->num_orbs;
       for(j=0;j<FMO_frag->num_orbs;j++){
-	jtab = j*FMO_frag->num_orbs;
+        jtab = j*FMO_frag->num_orbs;
 
-	/******
+        /******
 
-	  No games are played here with complex components, they are
-	  multiplied normally.  I'm pretty sure that averaging over K points
-	  should not be done here, it's taken care of later when these
-	  things are actually used.
+          No games are played here with complex components, they are
+          multiplied normally.  I'm pretty sure that averaging over K points
+          should not be done here, it's taken care of later when these
+          things are actually used.
 
-	*******/
-	matR[itab+j] = 0.0;
-	matI[itab+j] = 0.0;
-	for(k=0;k<FMO_frag->num_orbs;k++){
-	  matR[itab+j] += EIGENVECT_R(FMO_frag->eigenset,j,k)*
-	    S_ELEMENT_R(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
+        *******/
+        matR[itab+j] = 0.0;
+        matI[itab+j] = 0.0;
+        for(k=0;k<FMO_frag->num_orbs;k++){
+          matR[itab+j] += EIGENVECT_R(FMO_frag->eigenset,j,k)*
+            S_ELEMENT_R(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
 
-	  /* no need to worry about imaginary parts if we're doing a molecule */
-	  if( details->Execution_Mode != MOLECULAR ){
+          /* no need to worry about imaginary parts if we're doing a molecule */
+          if( details->Execution_Mode != MOLECULAR ){
 
-	    /*******
+            /*******
 
-	      there are almost certainly some problems here with
-	      the signs of contributions... I'm sure that there should
-	      be a complex conjugate somewhere that changes some of the
-	      signs, but I haven't had a chance to derive it yet.
+              there are almost certainly some problems here with
+              the signs of contributions... I'm sure that there should
+              be a complex conjugate somewhere that changes some of the
+              signs, but I haven't had a chance to derive it yet.
 
-	      Thus far, after months of use everything seems fine, but I'm wary.
+              Thus far, after months of use everything seems fine, but I'm wary.
 
-	      BEWARE!!! :-)
+              BEWARE!!! :-)
 
-	    ********/
-	    matR[itab+j] -= EIGENVECT_I(FMO_frag->eigenset,j,k)*
-	    S_ELEMENT_I(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
-	    matI[itab+j] -= EIGENVECT_R(FMO_frag->eigenset,j,k)*
-	    S_ELEMENT_I(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
-	    matI[itab+j] -= EIGENVECT_I(FMO_frag->eigenset,j,k)*
-	    S_ELEMENT_R(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
-	  }
-	}
+            ********/
+            matR[itab+j] -= EIGENVECT_I(FMO_frag->eigenset,j,k)*
+            S_ELEMENT_I(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
+            matI[itab+j] -= EIGENVECT_R(FMO_frag->eigenset,j,k)*
+            S_ELEMENT_I(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
+            matI[itab+j] -= EIGENVECT_I(FMO_frag->eigenset,j,k)*
+            S_ELEMENT_R(FMO_frag->overlap_K.mat,FMO_frag->num_orbs,k,i);
+          }
+        }
       }
     }
 
@@ -682,47 +682,47 @@ void tform_wavefuncs_to_FMO_basis(details,num_orbs,num_atoms,eigenset,orbital_lo
       jtab = j*num_orbs;
 
       if( num_orbs_this_frag == FMO_frag->num_orbs ){
-	frag++;
-	FMO_frag = &(details->FMO_frags[frag]);
-	T_matR = FMO_frag->tform_matrix.matR;
-	T_matI = FMO_frag->tform_matrix.matI;
-	num_orbs_this_frag = 0;
+        frag++;
+        FMO_frag = &(details->FMO_frags[frag]);
+        T_matR = FMO_frag->tform_matrix.matR;
+        T_matI = FMO_frag->tform_matrix.matI;
+        num_orbs_this_frag = 0;
       }
 
       FMO_jtab = num_orbs_this_frag;
       /***********
 
-	to do the multiplication, loop over the atoms in the fragment and do the
-	orbitals of each atom.
+        to do the multiplication, loop over the atoms in the fragment and do the
+        orbitals of each atom.
 
       ************/
       accumR = 0.0;
       accumI = 0.0;
       for(atom1=0; atom1<FMO_frag->num_atoms; atom1++){
-	/******
+        /******
 
-	  the location of the orbitals belonging to this atom must be found
-	  in BOTH the main and FMO coefficient matrices.
+          the location of the orbitals belonging to this atom must be found
+          in BOTH the main and FMO coefficient matrices.
 
-	*******/
-	find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
-			orbital_lookup_table,&begin1,&end1);
-	find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
-			FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
+        *******/
+        find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
+                        orbital_lookup_table,&begin1,&end1);
+        find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
+                        FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
 
-	if( begin1 >= 0 && FMO_begin1 >= 0 ){
+        if( begin1 >= 0 && FMO_begin1 >= 0 ){
 
-	  /* loop over the atom's orbitals */
-	  for(k=0;k<(end1-begin1);k++){
-	    ktab = k+begin1;
-	    FMO_ktab = (k+FMO_begin1)*FMO_frag->num_orbs;
+          /* loop over the atom's orbitals */
+          for(k=0;k<(end1-begin1);k++){
+            ktab = k+begin1;
+            FMO_ktab = (k+FMO_begin1)*FMO_frag->num_orbs;
 
-	    accumR += eigenset.vectR[ktab+itab]*T_matR[FMO_jtab + FMO_ktab];
-	    accumR -= eigenset.vectI[ktab+itab]*T_matI[FMO_jtab + FMO_ktab];
-	    accumI += eigenset.vectI[ktab+itab]*T_matR[FMO_jtab + FMO_ktab];
-	    accumI += eigenset.vectR[ktab+itab]*T_matI[FMO_jtab + FMO_ktab];
-	  }
-	}
+            accumR += eigenset.vectR[ktab+itab]*T_matR[FMO_jtab + FMO_ktab];
+            accumR -= eigenset.vectI[ktab+itab]*T_matI[FMO_jtab + FMO_ktab];
+            accumI += eigenset.vectI[ktab+itab]*T_matR[FMO_jtab + FMO_ktab];
+            accumI += eigenset.vectR[ktab+itab]*T_matI[FMO_jtab + FMO_ktab];
+          }
+        }
 
       }
 
@@ -773,7 +773,7 @@ fprintf(output_file,"\n\n\n");
 *
 ****************************************************************************/
 void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
-			       temp_matR,temp_matI,cmplx_mat,orbital_lookup_table)
+                               temp_matR,temp_matI,cmplx_mat,orbital_lookup_table)
   detail_type *details;
   int num_orbs;
   int num_atoms;
@@ -821,11 +821,11 @@ void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
 
       /* check to see if we need to move onto the next fragment */
       if( num_orbs_this_frag == FMO_frag->num_orbs ){
-	frag++;
-	FMO_frag = &(details->FMO_frags[frag]);
-	T_matR = FMO_frag->eigenset.vectR;
-	T_matI = FMO_frag->eigenset.vectI;
-	num_orbs_this_frag = 0;
+        frag++;
+        FMO_frag = &(details->FMO_frags[frag]);
+        T_matR = FMO_frag->eigenset.vectR;
+        T_matI = FMO_frag->eigenset.vectI;
+        num_orbs_this_frag = 0;
       }
 
       jtab = j*num_orbs;
@@ -833,32 +833,32 @@ void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
 
       /***********
 
-	to do the multiplication, loop over the atoms in the fragment and do the
-	orbitals of each atom.
+        to do the multiplication, loop over the atoms in the fragment and do the
+        orbitals of each atom.
 
       ************/
       accumR = 0.0;
       for(atom1=0; atom1<FMO_frag->num_atoms; atom1++){
-	/******
+        /******
 
-	  the location of the orbitals belonging to this atom must be found
-	  in BOTH the main and FMO coefficient matrices.
+          the location of the orbitals belonging to this atom must be found
+          in BOTH the main and FMO coefficient matrices.
 
-	*******/
-	find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
-			orbital_lookup_table,&begin1,&end1);
-	find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
-			FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
+        *******/
+        find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
+                        orbital_lookup_table,&begin1,&end1);
+        find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
+                        FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
 
-	if( begin1 >= 0 && FMO_begin1 >= 0 ){
-	  /* loop over the atom's orbitals */
-	  for(k=0;k<(end1-begin1);k++){
-	    FMO_ktab = k+FMO_begin1;
-	    ktab = (k+begin1);
+        if( begin1 >= 0 && FMO_begin1 >= 0 ){
+          /* loop over the atom's orbitals */
+          for(k=0;k<(end1-begin1);k++){
+            FMO_ktab = k+FMO_begin1;
+            ktab = (k+begin1);
 
-	    accumR += AO_matR[itab + ktab]*T_matR[FMO_ktab+FMO_jtab];
-	  }
-	}
+            accumR += AO_matR[itab + ktab]*T_matR[FMO_ktab+FMO_jtab];
+          }
+        }
       }
 
       num_orbs_this_frag++;
@@ -898,32 +898,32 @@ void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
       jtab = j;
       /***********
 
-	to do the multiplication, loop over the atoms in the fragment and do the
-	orbitals of each atom.
+        to do the multiplication, loop over the atoms in the fragment and do the
+        orbitals of each atom.
 
       ************/
       accumR = 0.0;
       for(atom1=0; atom1<FMO_frag->num_atoms; atom1++){
-	/******
+        /******
 
-	  the location of the orbitals belonging to this atom must be found
-	  in BOTH the main and FMO coefficient matrices.
+          the location of the orbitals belonging to this atom must be found
+          in BOTH the main and FMO coefficient matrices.
 
-	*******/
-	find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
-			orbital_lookup_table,&begin1,&end1);
-	find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
-			FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
+        *******/
+        find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
+                        orbital_lookup_table,&begin1,&end1);
+        find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
+                        FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
 
-	if( begin1 >= 0 && FMO_begin1 >= 0 ){
-	  /* loop over the atom's orbitals */
-	  for(k=0;k<(end1-begin1);k++){
-	    FMO_ktab = k+FMO_begin1;
+        if( begin1 >= 0 && FMO_begin1 >= 0 ){
+          /* loop over the atom's orbitals */
+          for(k=0;k<(end1-begin1);k++){
+            FMO_ktab = k+FMO_begin1;
 
-	    ktab = (k+begin1)*num_orbs;
-	    accumR += T_matR[FMO_itab + FMO_ktab]*temp_matR[ktab+jtab];
-	  }
-	}
+            ktab = (k+begin1)*num_orbs;
+            accumR += T_matR[FMO_itab + FMO_ktab]*temp_matR[ktab+jtab];
+          }
+        }
       }
 
       /* set the matrix element */
@@ -968,7 +968,7 @@ fprintf(output_file,"\n\n\n");
 *
 ****************************************************************************/
 void tform_hermetian_matrix_to_FMO_basis(details,num_orbs,num_atoms,herm_mat,
-			       temp_matR,temp_matI,results,orbital_lookup_table)
+                               temp_matR,temp_matI,results,orbital_lookup_table)
   detail_type *details;
   int num_orbs;
   int num_atoms;
@@ -1016,11 +1016,11 @@ void tform_hermetian_matrix_to_FMO_basis(details,num_orbs,num_atoms,herm_mat,
 
       /* check to see if we need to move onto the next fragment */
       if( num_orbs_this_frag == FMO_frag->num_orbs ){
-	frag++;
-	FMO_frag = &(details->FMO_frags[frag]);
-	T_matR = FMO_frag->eigenset.vectR;
-	T_matI = FMO_frag->eigenset.vectI;
-	num_orbs_this_frag = 0;
+        frag++;
+        FMO_frag = &(details->FMO_frags[frag]);
+        T_matR = FMO_frag->eigenset.vectR;
+        T_matI = FMO_frag->eigenset.vectI;
+        num_orbs_this_frag = 0;
       }
 
       jtab = j*num_orbs;
@@ -1028,41 +1028,41 @@ void tform_hermetian_matrix_to_FMO_basis(details,num_orbs,num_atoms,herm_mat,
 
       /***********
 
-	to do the multiplication, loop over the atoms in the fragment and do the
-	orbitals of each atom.
+        to do the multiplication, loop over the atoms in the fragment and do the
+        orbitals of each atom.
 
       ************/
       accumR = 0.0;
       accumI = 0.0;
       for(atom1=0; atom1<FMO_frag->num_atoms; atom1++){
-	/******
+        /******
 
-	  the location of the orbitals belonging to this atom must be found
-	  in BOTH the main and FMO coefficient matrices.
+          the location of the orbitals belonging to this atom must be found
+          in BOTH the main and FMO coefficient matrices.
 
-	*******/
-	find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
-			orbital_lookup_table,&begin1,&end1);
-	find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
-			FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
+        *******/
+        find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
+                        orbital_lookup_table,&begin1,&end1);
+        find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
+                        FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
 
-	if( begin1 >= 0 && FMO_begin1 >= 0 ){
+        if( begin1 >= 0 && FMO_begin1 >= 0 ){
 
-	  /* loop over the atom's orbitals */
-	  for(k=0;k<(end1-begin1);k++){
-	    FMO_ktab = k+FMO_begin1;
-	    ktab = (k+begin1);
+          /* loop over the atom's orbitals */
+          for(k=0;k<(end1-begin1);k++){
+            FMO_ktab = k+FMO_begin1;
+            ktab = (k+begin1);
 
-	    accumR += S_ELEMENT_R(herm_mat.mat,num_orbs,i,ktab)*
-	      T_matR[FMO_ktab+FMO_jtab];
-	    accumR += S_ELEMENT_I(herm_mat.mat,num_orbs,i,ktab)*
-	      T_matI[FMO_ktab+FMO_jtab];
-	    accumI += S_ELEMENT_I(herm_mat.mat,num_orbs,i,ktab)*
-	      T_matR[FMO_ktab+FMO_jtab];
-	    accumI -= S_ELEMENT_R(herm_mat.mat,num_orbs,i,ktab)*
-	      T_matI[FMO_ktab+FMO_jtab];
-	  }
-	}
+            accumR += S_ELEMENT_R(herm_mat.mat,num_orbs,i,ktab)*
+              T_matR[FMO_ktab+FMO_jtab];
+            accumR += S_ELEMENT_I(herm_mat.mat,num_orbs,i,ktab)*
+              T_matI[FMO_ktab+FMO_jtab];
+            accumI += S_ELEMENT_I(herm_mat.mat,num_orbs,i,ktab)*
+              T_matR[FMO_ktab+FMO_jtab];
+            accumI -= S_ELEMENT_R(herm_mat.mat,num_orbs,i,ktab)*
+              T_matI[FMO_ktab+FMO_jtab];
+          }
+        }
       }
 
       num_orbs_this_frag++;
@@ -1110,42 +1110,42 @@ fprintf(output_file,"\n\n\n");
       jtab = j;
       /***********
 
-	to do the multiplication, loop over the atoms in the fragment and do the
-	orbitals of each atom.
+        to do the multiplication, loop over the atoms in the fragment and do the
+        orbitals of each atom.
 
       ************/
       accumR = 0.0;
       accumI = 0.0;
       for(atom1=0; atom1<FMO_frag->num_atoms; atom1++){
-	/******
+        /******
 
-	  the location of the orbitals belonging to this atom must be found
-	  in BOTH the main and FMO coefficient matrices.
+          the location of the orbitals belonging to this atom must be found
+          in BOTH the main and FMO coefficient matrices.
 
-	*******/
-	find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
-			orbital_lookup_table,&begin1,&end1);
-	find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
-			FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
+        *******/
+        find_atoms_orbs(num_orbs,num_atoms,FMO_frag->atoms_in_frag[atom1],
+                        orbital_lookup_table,&begin1,&end1);
+        find_atoms_orbs(FMO_frag->num_orbs,FMO_frag->num_atoms,atom1,
+                        FMO_frag->orbital_lookup_table,&FMO_begin1,&FMO_end1);
 
-	if( begin1 >= 0 && FMO_begin1 >= 0 ){
+        if( begin1 >= 0 && FMO_begin1 >= 0 ){
 
-	  /* loop over the atom's orbitals */
-	  for(k=0;k<(end1-begin1);k++){
-	    FMO_ktab = k+FMO_begin1;
-	    ktab = (k+begin1)*num_orbs;
-	    accumR += T_matR[FMO_itab + FMO_ktab]*temp_matR[ktab+jtab];
-	    accumR -= T_matI[FMO_itab + FMO_ktab]*temp_matI[ktab+jtab];
-	    accumI += T_matR[FMO_itab + FMO_ktab]*temp_matI[ktab+jtab];
-	    accumI += T_matI[FMO_itab + FMO_ktab]*temp_matR[ktab+jtab];
-	  }
-	}
+          /* loop over the atom's orbitals */
+          for(k=0;k<(end1-begin1);k++){
+            FMO_ktab = k+FMO_begin1;
+            ktab = (k+begin1)*num_orbs;
+            accumR += T_matR[FMO_itab + FMO_ktab]*temp_matR[ktab+jtab];
+            accumR -= T_matI[FMO_itab + FMO_ktab]*temp_matI[ktab+jtab];
+            accumI += T_matR[FMO_itab + FMO_ktab]*temp_matI[ktab+jtab];
+            accumI += T_matI[FMO_itab + FMO_ktab]*temp_matR[ktab+jtab];
+          }
+        }
       }
 
       /* set the matrix element */
       results.mat[itab+j] = accumR;
       if( j != i ){
-	results.mat[j*num_orbs+i] = accumI;
+        results.mat[j*num_orbs+i] = accumI;
       }
     }
     num_orbs_this_frag++;

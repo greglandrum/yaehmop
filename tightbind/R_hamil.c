@@ -84,19 +84,19 @@ void R_space_Hamiltonian(cell,details,overlap,hamil,num_orbs,orbital_lookup_tabl
     /* trap dummy atoms */
     if( orb_tab1 >= 0 ){
       if( atom_ptr1->ns != 0 ) hamil.mat[orb_tab1+BEGIN_S]
-	= atom_ptr1->coul_s;
+        = atom_ptr1->coul_s;
       if( atom_ptr1->np != 0 )
-	for(j=BEGIN_P;j<=END_P;j++){
-	  hamil.mat[orb_tab1+j] = atom_ptr1->coul_p;
-	}
+        for(j=BEGIN_P;j<=END_P;j++){
+          hamil.mat[orb_tab1+j] = atom_ptr1->coul_p;
+        }
       if( atom_ptr1->nd != 0 )
-	for(j=BEGIN_D;j<=END_D;j++){
-	  hamil.mat[orb_tab1+j] = atom_ptr1->coul_d;
-	}
+        for(j=BEGIN_D;j<=END_D;j++){
+          hamil.mat[orb_tab1+j] = atom_ptr1->coul_d;
+        }
       if(atom_ptr1->nf != 0)
-	for(j=BEGIN_F;j<END_F;j++){
-	  hamil.mat[orb_tab1+j] = atom_ptr1->coul_f;
-	}
+        for(j=BEGIN_F;j<END_F;j++){
+          hamil.mat[orb_tab1+j] = atom_ptr1->coul_f;
+        }
     }
   }
 }
@@ -121,9 +121,9 @@ void R_space_Hamiltonian(cell,details,overlap,hamil,num_orbs,orbital_lookup_tabl
  *
  ****************************************************************************/
 void full_R_space_Hamiltonian(cell_type *cell,detail_type *details,
-			      hermetian_matrix_type overlap,hermetian_matrix_type hamil,
-			      int num_orbs,
-			      int *orbital_lookup_table, char mult_by_overlap)
+                              hermetian_matrix_type overlap,hermetian_matrix_type hamil,
+                              int num_orbs,
+                              int *orbital_lookup_table, char mult_by_overlap)
 {
   int i,j,k;
   int orb_tab1,orb_tab2;
@@ -153,31 +153,31 @@ rham = (real *)calloc(num_orbs*num_orbs,sizeof(real));
     /* trap dummy atoms */
     if( orb_tab1 >= 0 ){
       if( atom_ptr1->ns != 0 ){
-	diagonal_elements[orb_tab1+BEGIN_S] =
-	  hamil.mat[(orb_tab1+BEGIN_S)*num_orbs+orb_tab1+BEGIN_S] =
-	    atom_ptr1->coul_s;
+        diagonal_elements[orb_tab1+BEGIN_S] =
+          hamil.mat[(orb_tab1+BEGIN_S)*num_orbs+orb_tab1+BEGIN_S] =
+            atom_ptr1->coul_s;
       }
       if( atom_ptr1->np != 0 ){
-	for(j=BEGIN_P;j<=END_P;j++){
-	  diagonal_elements[orb_tab1+j] =
-	    hamil.mat[(orb_tab1+j)*num_orbs+orb_tab1+j] =
-	      atom_ptr1->coul_p;
-	}
+        for(j=BEGIN_P;j<=END_P;j++){
+          diagonal_elements[orb_tab1+j] =
+            hamil.mat[(orb_tab1+j)*num_orbs+orb_tab1+j] =
+              atom_ptr1->coul_p;
+        }
       }
       if( atom_ptr1->nd != 0 ){
-	for(j=BEGIN_D;j<=END_D;j++){
-	  diagonal_elements[orb_tab1+j] =
-	    hamil.mat[(orb_tab1+j)*num_orbs+orb_tab1+j] =
-	      atom_ptr1->coul_d;
-	}
+        for(j=BEGIN_D;j<=END_D;j++){
+          diagonal_elements[orb_tab1+j] =
+            hamil.mat[(orb_tab1+j)*num_orbs+orb_tab1+j] =
+              atom_ptr1->coul_d;
+        }
       }
 
       if( atom_ptr1->nf != 0 ){
-	for(j=BEGIN_F;j<=END_F;j++){
-	  diagonal_elements[orb_tab1+j] =
-	    hamil.mat[(orb_tab1+j)*num_orbs+orb_tab1+j] =
-	      atom_ptr1->coul_f;
-	}
+        for(j=BEGIN_F;j<=END_F;j++){
+          diagonal_elements[orb_tab1+j] =
+            hamil.mat[(orb_tab1+j)*num_orbs+orb_tab1+j] =
+              atom_ptr1->coul_f;
+        }
       }
     }
   }
@@ -185,25 +185,25 @@ rham = (real *)calloc(num_orbs*num_orbs,sizeof(real));
   for(i=1;i<num_orbs;i++){
     for(j=0;j<i;j++){
       /******
-	The form of these is stolen straight from the new3 code
+        The form of these is stolen straight from the new3 code
       *******/
       if( details->weighted_Hij ){
-	/* use the weighted Hij formula */
-	temp = diagonal_elements[i]+diagonal_elements[j];
-	temp2 = (diagonal_elements[i]-diagonal_elements[j])/temp;
-	temp2 = temp2*temp2;
-	temp2 = .5*(details->the_const + temp2 + temp2*temp2*(1-details->the_const));
-	hamil.mat[j*num_orbs+i] = temp2*temp;
+        /* use the weighted Hij formula */
+        temp = diagonal_elements[i]+diagonal_elements[j];
+        temp2 = (diagonal_elements[i]-diagonal_elements[j])/temp;
+        temp2 = temp2*temp2;
+        temp2 = .5*(details->the_const + temp2 + temp2*temp2*(1-details->the_const));
+        hamil.mat[j*num_orbs+i] = temp2*temp;
       }
       else{
-	/* don't use the weighted Hij formula */
-	hamil.mat[j*num_orbs+i] = .5*details->the_const*(diagonal_elements[i] +
-							 diagonal_elements[j]);
+        /* don't use the weighted Hij formula */
+        hamil.mat[j*num_orbs+i] = .5*details->the_const*(diagonal_elements[i] +
+                                                         diagonal_elements[j]);
       }
       hamil.mat[i*num_orbs+j] = hamil.mat[j*num_orbs+i];
       if(details->Execution_Mode == MOLECULAR || mult_by_overlap){
-	hamil.mat[j*num_orbs+i] *= overlap.mat[j*num_orbs+i];
-	hamil.mat[i*num_orbs+j] *= overlap.mat[i*num_orbs+j];
+        hamil.mat[j*num_orbs+i] *= overlap.mat[j*num_orbs+i];
+        hamil.mat[i*num_orbs+j] *= overlap.mat[i*num_orbs+j];
       }
 
     }
