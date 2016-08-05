@@ -107,13 +107,18 @@ char test_string[80];
 #endif
   /* make sure the program was called with the right arguments */
   if( argc < 2){
-    fprintf(stderr,"Usage: bind <inputfile>\n");
+    fprintf(stderr,"Usage: bind <inputfile> [paramfile]\n");
     exit(-1);
   }
 
   // If the argument is --use_stdin_stdout, use stdin and stdout! Makes sense...
   if (strcmp(argv[1], "--use_stdin_stdout") == 0)
     use_stdin_stdout = true;
+
+  // If there is a third argument, it is the parameter file
+  char* parm_file_name = NULL;
+  if (argc > 2)
+    parm_file_name = argv[2];
 
   /* install the sig_int handler */
   signal(SIGINT,handle_sigint);
@@ -177,7 +182,7 @@ char test_string[80];
   char* fileName = argv[1];
   if (use_stdin_stdout)
     fileName = "stdin";
-  read_inputfile(unit_cell,details,fileName,&num_orbs,&orbital_lookup_table,the_file);
+  read_inputfile(unit_cell,details,fileName,&num_orbs,&orbital_lookup_table,the_file,parm_file_name);
 
   /* copy the file name into the details structure */
   strcpy(details->filename,argv[1]);

@@ -415,6 +415,8 @@ void fill_chg_it_parms(atoms,num_atoms,num_lines,infile)
  * Arguments:  atoms: pointer to atom_type
  *         num_atoms: int
  *            infile: pointer to file type
+ *    parm_file_name: the name of the parameter file taken from the arguments.
+ *                    Put NULL if there is not one from the arguments.
  *
  * Returns: none
  *
@@ -425,13 +427,13 @@ void fill_chg_it_parms(atoms,num_atoms,num_lines,infile)
  *   EHT_PARM_FILE given above (or in the makefile)
  *
  *****************************************************************************/
-void fill_atomic_parms(atoms,num_atoms,infile)
+void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
   atom_type *atoms;
   int num_atoms;
   FILE *infile;
+  char *parm_file_name;
 {
   char err_string[240],instring[80];
-  char *parm_file_name;
   point_type saveloc;
   Z_mat_type saveZloc;
   FILE *parmfile;
@@ -451,9 +453,8 @@ void fill_atomic_parms(atoms,num_atoms,infile)
 
   /* open the parameter file */
 #ifndef USING_THE_MAC
-  parm_file_name = (char *)getenv("BIND_PARM_FILE");
-#else
-  parm_file_name = 0;
+  if (!parm_file_name)
+    parm_file_name = (char *)getenv("BIND_PARM_FILE");
 #endif
   if( !parm_file_name ){
     parm_file_name = (char *)calloc(240,sizeof(char));
@@ -1468,6 +1469,8 @@ void parse_charge_iteration(infile,details,cell)
  *             name: pointer to type char
  *         num_orbs: pointer to int
  *     orbital_lookup_table: pointer to pointer to int
+ *    parm_file_name: the name of the parameter file taken from the arguments.
+ *                    Put NULL if there is not one from the arguments.
  *
  * Returns: none
  *
@@ -1475,13 +1478,15 @@ void parse_charge_iteration(infile,details,cell)
  *   the information is read into the two structures 'cell and 'details
  *
  *****************************************************************************/
-void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
+void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file,
+                    parm_file_name)
   cell_type *cell;
   detail_type *details;
   char *name;
   int *num_orbs;
   int **orbital_lookup_table;
   FILE *the_file;
+  char *parm_file_name;
 {
   walsh_details_type *walsh;
   band_info_type *band_info;
@@ -1593,7 +1598,7 @@ void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file)
       we should call the new3 input routine.
       ******/
     safe_strcpy(details->title,instring);
-    read_NEW3file(cell,details,infile);
+    read_NEW3file(cell,details,infile,parm_file_name);
 
   }
   else{
@@ -1960,12 +1965,12 @@ done.\n");
           fill in the atomic parameters
 
           *************/
-        fill_atomic_parms(cell->atoms,cell->num_atoms,infile);
+        fill_atomic_parms(cell->atoms,cell->num_atoms,infile,parm_file_name);
 
         /* do the geom frags, if need be */
         geom_frag = cell->geom_frags;
         while(geom_frag){
-          fill_atomic_parms(geom_frag->atoms,geom_frag->num_atoms,infile);
+          fill_atomic_parms(geom_frag->atoms,geom_frag->num_atoms,infile,parm_file_name);
           geom_frag = geom_frag->next;
         }
 
@@ -2678,7 +2683,7 @@ calculation.\n");
           muller iteration parameters, get them now if we need to.
         ********/
         if( !got_params ){
-          fill_atomic_parms(cell->atoms,cell->num_atoms,infile);
+          fill_atomic_parms(cell->atoms,cell->num_atoms,infile,parm_file_name);
           got_params = 1;
         }
         parse_muller_parms(infile,details,cell);
@@ -2711,12 +2716,12 @@ calculation.\n");
       so read them in now
     ********/
     if(!got_params){
-      fill_atomic_parms(cell->atoms,cell->num_atoms,infile);
+      fill_atomic_parms(cell->atoms,cell->num_atoms,infile,parm_file_name);
 
       /* do the geom_frags if we need to */
       geom_frag = cell->geom_frags;
       while(geom_frag){
-        fill_atomic_parms(geom_frag->atoms,geom_frag->num_atoms,infile);
+        fill_atomic_parms(geom_frag->atoms,geom_frag->num_atoms,infile,parm_file_name);
         geom_frag = geom_frag->next;
       }
 

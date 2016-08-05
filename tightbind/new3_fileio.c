@@ -54,10 +54,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Action: reads all the data out of the file 'infile
 *
 *****************************************************************************/
-void read_NEW3file(cell,details,infile)
+void read_NEW3file(cell,details,infile,parm_file)
   cell_type *cell;
   detail_type *details;
   FILE *infile;
+  char *parm_file;
 {
   char err_string[240];
   char instring[90];
@@ -152,7 +153,7 @@ void read_NEW3file(cell,details,infile)
   }
 
   /* fill in the atomic parameters */
-  fill_atomic_parms(cell->atoms,cell->num_atoms,infile);
+  fill_atomic_parms(cell->atoms,cell->num_atoms,infile,parm_file);
   write_atom_coords(cell->atoms,cell->num_atoms,cell->using_Zmat,
                     cell->using_xtal_coords);
   write_atom_parms(details,cell->atoms,cell->num_atoms,1);
