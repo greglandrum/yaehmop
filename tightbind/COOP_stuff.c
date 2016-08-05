@@ -55,7 +55,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   *                   Function eval_COOP
   *
-  * Arguments:   COOP: pointer to COOP_type 
+  * Arguments:   COOP: pointer to COOP_type
   *            details: pointer to detail_type
   *              cell: pointer to cell_type
   *          num_orbs: int
@@ -163,7 +163,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      manner.
 
    *********/
-   accum = 0;  
+   accum = 0;
    switch(COOP->type){
    case P_DOS_ORB:
      /* this is the sum of the coefficients */
@@ -200,7 +200,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	     answer = 4.0*overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]*
 	       (accum*phaseR - accumI*phaseI);
 	   }
-	 }	  
+	 }
        } else{
 	 answer = 4.0*overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]*
 	   (accum*phaseR - accumI*phaseI);
@@ -295,7 +295,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      break;
 
    case P_DOS_ATOM:
-     answer=0;answer_contrib=0; 
+     answer=0;answer_contrib=0;
 
      /* find the orbitals */
      find_atoms_orbs(num_orbs,cell->num_atoms,COOP->contrib1,orbital_lookup_table,
@@ -378,7 +378,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		 } else{
 		   answer_contrib = 4.0*overlap.mat[i*num_orbs+j] *
 		     (accum*phaseR -  accumI*phaseI);
-		 }		  
+		 }
 	       }
 	     }
 	     else{
@@ -463,7 +463,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      /* loop over atoms in fragment */
      increment=0;
      for(i=0;i<details->FMO_frags[frag_1].num_atoms;i++){
-       
+
        find_atoms_orbs(num_orbs,cell->num_atoms,details->FMO_frags[frag_1].atoms_in_frag[i],
 		       orbital_lookup_table,&begin1,&end1);
 
@@ -564,7 +564,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	       answer_contrib = 2.0*(accum*phaseR + accumI*phaseI)*ao_term*
 		 overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]];
 	     }
-	   }    
+	   }
 
 	   if(COOP->energy_weight){
 	     found1=0; found2=0; ii=0; offset1=0;
@@ -615,7 +615,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	     if(doing_unit_cell && (FMO_map1[i] == FMO_map2[j])){
 	       answer_contrib *= Hii_1;
 	     }
-	     else{   
+	     else{
 
 	       if(details->weighted_Hij){
 
@@ -641,7 +641,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    }
    /* we're done, return the answer that we have calculated */
    return(answer);
- }  
+ }
 
 
  /****************************************************************************
@@ -665,11 +665,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *  The definition used for the COOP (P) is:
   *    P_uv = 2*C_u*C_v*S_uv
   *  The terms are summed for Atom-Atom COOPs.
-  *  
+  *
   *  This expression is evaluated for every Crystal orbital, weighted by the
   *    weighting factor for the K point of the orbitals.
-  *  
-  *  When evaluating COOPs between cells, there is an additional phase factor  
+  *
+  *  When evaluating COOPs between cells, there is an additional phase factor
   *    present in the expression for P_uv.
   *
   ****************************************************************************/
@@ -707,7 +707,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    /*******
 
-     first determine some values that are needed for averaging purposes 
+     first determine some values that are needed for averaging purposes
 
    *******/
 
@@ -753,7 +753,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        COOP_ptr2 = COOP_ptr2->next_to_avg;
      }
 
-     fprintf(output_file,"#BEGIN CURVE\n");    
+     fprintf(output_file,"#BEGIN CURVE\n");
 
      /* check for inversion of intercell vector */
      intercell_COOP_check(COOP_ptr1);
@@ -844,10 +844,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   * Returns: none
   *
-  * Action:  Generates just the average COOPs and dumps them to the output file. 
+  * Action:  Generates just the average COOPs and dumps them to the output file.
   *   This is for the alternate occupation analysis.
   *   Everything here is done the same way as in gen_COOP
-  *  
+  *
   ****************************************************************************/
  void gen_avg_COOPs(details,cell,num_orbs,avg_prop_info,R_overlaps,orbital_ordering,
 		    orbital_lookup_table)
@@ -872,7 +872,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    /*******
 
-     first determine some values that are needed for averaging purposes 
+     first determine some values that are needed for averaging purposes
 
    *******/
 
@@ -984,7 +984,7 @@ void intercell_COOP_check(COOP)
 COOP_type *COOP;
 {
   int temp;
-  
+
   /* do we need to invert the cell vector ? */
   if((COOP->cell.z == 0.0)&&(COOP->cell.y <= 0.0)){
     if(!((COOP->cell.y == 0.0)&&(COOP->cell.x >= 0.0))){

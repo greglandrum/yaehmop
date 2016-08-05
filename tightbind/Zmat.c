@@ -55,10 +55,10 @@ int find_atom(atoms,num_atoms,which)
   for(i=0;i<num_atoms;i++){
     if( atoms[i].which_atom == which ) return(i);
   }
-  
+
   /* we didn't find it... something's wrong, error out */
   sprintf(err_string,"Can't find atom %d (of %d) in find_atom.\n",
-	  which,num_atoms); 
+	  which,num_atoms);
   FATAL_BUG(err_string);
 }
 
@@ -76,7 +76,7 @@ int find_atom(atoms,num_atoms,which)
 *
 * Returns: none
 *
-* Action: This converts the Z matrix coordinates in the atom list 
+* Action: This converts the Z matrix coordinates in the atom list
 *   into cartesian coordinates.
 *
 *   The procedure for doing this is adopted from the source code for GAMESS
@@ -116,7 +116,7 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
   point_type V_ref3_newpos;
   real bond_length,alpha,beta;
   real dot_p,denom;
-  
+
 
   /*******
     The first atom is at the origin.
@@ -146,13 +146,13 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     loc = &(atom->loc);
     bond_length = atom->Zmat_loc.bond_length;
     loc->y = 0.0;
-    
+
     /* convert the bond angle to degrees */
     alpha = PI*atom->Zmat_loc.alpha/180.0;
-    
+
     /* now figure out the location of the atom */
     loc->x = bond_length * sin(alpha);
-    
+
     which_atom = find_atom(atoms,num_atoms+cell_dim,atom->Zmat_loc.ref1);
     if( which_atom == 0 ){
       loc->z = bond_length*cos(alpha);
@@ -165,7 +165,7 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
       fatal("Invalid angle reference in Z matrix for atom 3.");
     }
   }
-  
+
 
   /* check for atoms lying in a line */
   for(i=3; i<num_atoms+cell_dim && loc->x <= SMALL_X; i++){
@@ -175,8 +175,8 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     Zmat_loc = &(atom->Zmat_loc);
     bond_length = atom->Zmat_loc.bond_length;
     alpha = PI*atom->Zmat_loc.alpha/180.0;
-    beta = PI*atom->Zmat_loc.beta/180.0;      
-  
+    beta = PI*atom->Zmat_loc.beta/180.0;
+
     loc->x = bond_length*sin(alpha);
     loc->y = 0.0;
     loc->z = atoms[which_atom].loc.z -
@@ -193,7 +193,7 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     Zmat_loc = &(atom->Zmat_loc);
     bond_length = Zmat_loc->bond_length;
     alpha = PI*Zmat_loc->alpha/180.0;
-    beta = PI*Zmat_loc->beta/180.0;      
+    beta = PI*Zmat_loc->beta/180.0;
 
     /* determine the vector between ref1 and ref2 */
     vector_diff(&(atoms[Zmat_loc->ref1].loc),&(atoms[Zmat_loc->ref2].loc),
@@ -218,7 +218,7 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     N_V1_X_V2.x = V1_X_V2.x / denom;
     N_V1_X_V2.y = V1_X_V2.y / denom;
     N_V1_X_V2.z = V1_X_V2.z / denom;
-    
+
     /* take the cross prod of that and assign it a dumb name */
     cross_prod(&(N_V1_X_V2),&(N_V_ref1_ref2),&(V_last));
 
@@ -250,5 +250,5 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     }
   }
 }
-    
-    
+
+

@@ -53,7 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   this has got the stuff for dealing with FMO (interaction) diagrams
 
-*********/  
+*********/
 #include "viewkel.h"
 
 
@@ -63,12 +63,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *                   Procedure find_FMO_tic_sep
  *
  * Arguments: diagram: pointer to FMO_diagram_type
- *            
+ *
  * Returns: none
  *
  * Action:  Determines a "reasonable" tic mark separation for the interaction
  *    diagram stored in 'diagram.
- *  
+ *
  ****************************************************************************/
 void find_FMO_tic_sep( FMO_diagram_type *diagram )
 {
@@ -76,7 +76,7 @@ void find_FMO_tic_sep( FMO_diagram_type *diagram )
   float ymax,ymin;
 
   range = fabs(diagram->min_y-diagram->max_y);
-  
+
   log_range = log10(range);
 
   norm = pow(10.0,log_range-(float)((log_range >= 0.0 ) ? (int)log_range :
@@ -85,7 +85,7 @@ void find_FMO_tic_sep( FMO_diagram_type *diagram )
     tics = 0.2;
   else if (norm <= 5)
     tics = 0.5;
-  else tics = 1.0;	
+  else tics = 1.0;
   tic_sep = tics * pow(10.0,(float)((log_range >= 0.0 ) ? (int)log_range : ((int)log_range-1)));
 
   diagram->tic_sep_y = tic_sep;
@@ -123,7 +123,7 @@ void find_FMO_tic_sep( FMO_diagram_type *diagram )
  * Arguments: levels: pointer to level_type
  *     num_electrons: float
  *            occups: point to float
- *            
+ *
  * Returns: none
  *
  * Action: fills the energy levels in 'levels with electrons.  This assumes
@@ -172,7 +172,7 @@ void fill_levels_with_electrons(FMO_level_type *levels,float num_electrons,
     level = level->next;
   }
 }
-  
+
 
 /****************************************************************************
  *
@@ -180,7 +180,7 @@ void fill_levels_with_electrons(FMO_level_type *levels,float num_electrons,
  *
  * Arguments: levels: pointer to level_type
  *         which_orb: int
- *            
+ *
  * Returns: pointer to FMO_level_type
  *
  * Action: finds which level in 'levels contains orbital 'which_orb. returns
@@ -232,11 +232,11 @@ int Ecompare(const void *E1p,const void *E2p)
  *                   Procedure preprocess_FMO_data
  *
  * Arguments: FMO_diagram: pointer to FMO_diagram_type
- *            
+ *
  * Returns: none
  *
  * Action: Does the initial preprocessing of the FMO data. This includes
- *   sorting the energies into increasing order,   
+ *   sorting the energies into increasing order,
  *   converting the energies into levels (dealing with degeneracies), and
  *   filling in which levels should be connected.
  *
@@ -280,7 +280,7 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
 	level = next_level;
       }
     }
-       
+
     level = 0;
     /*****
       go throught the levels backwards so that the ordering in the linked
@@ -306,7 +306,7 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
 	if( !(level) ) fatal("Can't get space for an FMO_level structure.");
 	FMO_frag->levels = level;
       }
-	
+
       level->number = num_levels++;
 
       level->num_degen = 1;
@@ -331,7 +331,7 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
       level = next_level;
     }
   }
-       
+
   level = 0;
   num_levels = 0;
   for(j=0;j<FMO_diagram->tot_num_orbs;j++){
@@ -388,11 +388,11 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
       main_level = map_orbital_to_level(FMO_diagram->levels,i);
       which_main_level = main_level->number;
       num_main_degen = main_level->num_degen;
-    
+
       which_frag = 0;
       FMO_frag = &(FMO_diagram->frags[which_frag]);
       orbs_into_frag = 0;
-    
+
       for(j=0;j<FMO_diagram->tot_num_orbs;j++){
 	/* check to see if we need to change to another fragment */
 	if( orbs_into_frag == FMO_frag->num_orbs ){
@@ -421,7 +421,7 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
 	  }
 	}
 	j += num_frag_degen-1;
-	orbs_into_frag += num_frag_degen;      
+	orbs_into_frag += num_frag_degen;
 
 	/* don't make connectors that aren't going to be shown */
 	if(tot_contrib >= FMO_diagram->min_contrib ){
@@ -479,12 +479,12 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
  *
  * Arguments:    num_args: int
  *                FMO_ptr: pointer to pointer to char
- *            
+ *
  * Returns: none
  *
  * Action: changes the degeneracy tolerance in an FMO diagram
  *    this is intended to be called from a button window
- *  
+ *
  ****************************************************************************/
 void change_FMO_degen_tol(int num_args,char **FMO_ptr)
 {
@@ -502,14 +502,14 @@ void change_FMO_degen_tol(int num_args,char **FMO_ptr)
 
 
 
-  
+
 /****************************************************************************
  *
  *                   Procedure read_FMO_data
  *
  * Arguments: infile: pointer to FILE
  *       FMO_diagram: pointer to FMO_diagram_type
- *            
+ *
  * Returns: none
  *
  * Action: Actually reads the FMO information from the specified file.
@@ -527,7 +527,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
 
   min_E = 1e10;
   max_E = -1e10;
-  
+
   if( !FMO_diagram ) FATAL_BUG("No FMO_diagram passed to read_FMO_data");
 
   /* make sure that this is really FMO data and that the file isn't empty */
@@ -551,7 +551,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
   } else{
     read_occups = 0;
   }
-    
+
 
   /********
 
@@ -605,7 +605,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
       if( !FMO_frag->occups )
 	fatal("Can't get memory for FMO fragment occupations.");
     }
-    
+
     /* read out the raw energies */
     for(j=0;j<FMO_frag->num_orbs;j++){
       skipcomments(infile,instring);
@@ -625,7 +625,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
   /*****
 
     now get space for and read out the molecular energies
-    
+
   ******/
   FMO_diagram->raw_energies = (float *)D_CALLOC(FMO_diagram->tot_num_orbs,
 					      sizeof(float));
@@ -646,7 +646,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
     }else{
       sscanf(instring,"%lf",&(FMO_diagram->raw_energies[i]));
     }
-    
+
     if( FMO_diagram->raw_energies[i] > max_E )
       max_E = FMO_diagram->raw_energies[i];
     if( FMO_diagram->raw_energies[i] < min_E )
@@ -679,7 +679,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
       } else{
 	fatal("EOF hit way too early in FMO file.");
       }
-      
+
       for(j=1;j<FMO_diagram->tot_num_orbs;j++){
 	string_ptr = strtok(0," ");
 	if( string_ptr != 0 ){
@@ -696,14 +696,14 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
 
   /* that's all we have to do */
 }
-    
-  
+
+
 /****************************************************************************
  *
  *                   Procedure new_FMO_diagram
  *
  * Arguments: none
- *            
+ *
  * Returns: none
  *
  * Action: does everything to get space for and read in a new FMO interaction
@@ -717,7 +717,7 @@ void new_FMO_diagram(char *filename)
   char failed;
   FILE *infile;
   FMO_diagram_type *FMO_diagram;
-  
+
   failed = 0;
   /* set up a new object to hold the graph */
   makenewobject();
@@ -727,7 +727,7 @@ void new_FMO_diagram(char *filename)
   whichobj->prim = (prim_type *)D_CALLOC(1,sizeof(prim_type));
   if( !whichobj->prim )fatal("Can't get space for graph primitive.");
   whichobj->prim->which = FMO_DIAGRAM;
-  
+
   whichobj->prim->FMO_diagram = (FMO_diagram_type *)D_CALLOC(1,sizeof(FMO_diagram_type));
   if( !whichobj->prim->FMO_diagram )
     fatal("Can't get space for FMO interaction diagram.");
@@ -754,7 +754,7 @@ void new_FMO_diagram(char *filename)
   } else{
     strcpy(file_name,filename);
   }
-  
+
   /* open the file */
   infile = fopen(file_name,"r");
   if(!infile){
@@ -775,7 +775,7 @@ void new_FMO_diagram(char *filename)
     failed = 1;
   }
 #endif
-  
+
   strcpy(FMO_diagram->filename,file_name);
 
   if( !failed ){
@@ -813,9 +813,9 @@ void new_FMO_diagram(char *filename)
     FMO_diagram->do_y_tics = 1;
     FMO_diagram->show_box = 1;
     FMO_diagram->show_data = 1;
-    
+
     preprocess_FMO_data(FMO_diagram);
-    
+
     whichobj->scale.x=whichobj->scale.y=whichobj->scale.z=2.0*GRAPHICS_SCALE;
     whichobj->cent.x=-180.0;whichobj->cent.y=180.0;
     whichobj->cent.z=0*GRAPHICS_SCALE;
@@ -836,7 +836,7 @@ void new_FMO_diagram(char *filename)
  *
  * Arguments: diagram: pointer to FMO_diagram_type
  *              level: pointer to FMO_level_type
- *            
+ *
  * Returns: none
  *
  * Action: draws in the electrons in level 'level.  This deals
@@ -848,7 +848,7 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
   int i;
   float level_center,xpos;
   float num_electrons;
-  
+
 /*  num_electrons = ceil(level->num_electrons);*/
   num_electrons = level->num_electrons;
 
@@ -860,7 +860,7 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
   }
 
   level_center = level->xmin + diagram->level_width/2.0;
-  
+
   /* if the level is full, then this is easy */
   if( num_electrons == 2.0*level->num_degen ){
     for(i=0;i<level->num_degen;i++){
@@ -889,7 +889,7 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
       level_center += (float)(diagram->level_width + FMO_DEGEN_LEVEL_SKIP);
       num_electrons -= 1.0;
     }
-      
+
     /* loop the second time if we need to */
     if( num_electrons > 0.1 ){
       level_center = level->xmin + diagram->level_width/2.0;
@@ -897,15 +897,15 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
 	xpos = level_center + diagram->level_width/4.0;
 	g_line(xpos,level->yloc-diagram->electron_length/2.0,
 	       xpos,level->yloc+diagram->electron_length/2.0);
-	
+
 	level_center += (float)(diagram->level_width + FMO_DEGEN_LEVEL_SKIP);
 	num_electrons -= 1.0;
       }
     }
   }
 }
-      
-    
+
+
 
 /****************************************************************************
  *
@@ -913,7 +913,7 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
  *
  * Arguments: prim: pointer to prim_type
  *             obj: pointer to object_type
- *            
+ *
  * Returns: none
  *
  * Action: draws in an FMO interaction diagram
@@ -940,7 +940,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
   /* a little error checking */
   if( !prim->FMO_diagram )
     fatal("draw_FMO_diagram called with invalid primitive.  This is a bug!");
-    
+
   diagram = prim->FMO_diagram;
 
   /* check to see if we need to re-determine the location of tic marks */
@@ -949,17 +949,17 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
     diagram->old_max_y = diagram->max_y;
     diagram->old_min_y = diagram->min_y;
   }
-    
+
   /* determine the location of the origin on screen */
   origin.x = obj->cent.x + obj->trans.x + g_xmax / 2;
-  origin.y = obj->cent.y - obj->trans.y + g_ymax / 2;  
+  origin.y = obj->cent.y - obj->trans.y + g_ymax / 2;
   dim.x = DEF_GRAPH_X * obj->scale.x;
   dim.y = DEF_GRAPH_Y * obj->scale.y;
-  
+
   /* scaling terms */
   inv_yscale = (diagram->max_y - diagram->min_y) / DEF_GRAPH_Y;
   yscale = obj->scale.y/inv_yscale;
-  
+
   /* find the point in data space which will appear at the origin */
   yref = diagram->min_y;
 
@@ -968,14 +968,14 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
   localmin.y = obj->bmin.y = origin.y - dim.y;
   localmax.x = obj->bmax.x = origin.x + dim.x;
   localmax.y = obj->bmax.y = origin.y;
-  
+
   /* Y tics */
   if( diagram->do_y_tics ){
     for(i=0;i<floor(diagram->num_tics_y);i++){
       yloc = origin.y + yscale * (yref - diagram->tic_start_y -
 					i * diagram->tic_sep_y);
       g_line(origin.x-obj->scale.x*TIC_DIM,yloc,origin.x,yloc);
-      
+
       yval = (diagram->tic_start_y + i*diagram->tic_sep_y);
       if( fabs(yval) < 1e-12 ) yval = 0.0;
       sprintf(numstring,"%lg",yval);
@@ -983,12 +983,12 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 
       g_right_text(xloc,yloc,numstring);
     }
-  }  
+  }
 
   if( diagram->ylegend[0] != 0 && diagram->do_y_tics ){
     yloc = origin.y - dim.y/2;
     xloc = origin.x-obj->scale.x*TIC_DIM*5.0;
-    
+
     g_ylegend(xloc,yloc,diagram->ylegend);
 
   }
@@ -1007,9 +1007,9 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 
   if( diagram->show_data ){
     g_change_linewidth((float)diagram->level_thickness);
-    
+
     level = diagram->levels;
-    
+
     while(level){
       /* figure out how far out from the center we have to move */
       xoffset = (level->num_degen*diagram->level_width +
@@ -1017,10 +1017,10 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
       level->xmin = xcenter-xoffset;
       level->xmax = xcenter+xoffset;
       xpos = level->xmin;
-      
+
       /* figure out the y position */
       level->yloc = ypos = origin.y + (yref - level->energy)*yscale;
-      
+
       /* now draw the levels (if they're onscreen) */
       if( ypos > obj->bmin.y && ypos < obj->bmax.y ){
 	for(i=0;i<level->num_degen;i++){
@@ -1028,7 +1028,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 	  xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
 	}
       }
-      
+
       /* move onto the next level */
       level = level->next;
     }
@@ -1038,17 +1038,17 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
       yloc = origin.y+obj->scale.y*TIC_DIM*(1.1);
       g_center_text(xcenter,yloc,diagram->label);
     }
-    
-    
+
+
     /* move over to 1/5 the way from the left side and do the left fragment */
     xcenter = origin.x + dim.x/5;
-    
+
     if( diagram->left_fragment-1 < diagram->num_frags && diagram->left_fragment > 0) {
       level = diagram->frags[diagram->left_fragment-1].levels;
     }else{
       level = 0;
     }
-    
+
     while(level){
       /* figure out how far out from the center we have to move */
       xoffset = (level->num_degen*diagram->level_width +
@@ -1056,10 +1056,10 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
       level->xmin = xcenter-xoffset;
       level->xmax = xcenter+xoffset;
       xpos = level->xmin;
-      
+
       /* figure out the y position */
       level->yloc = ypos = origin.y + (yref - level->energy)*yscale;
-      
+
       /* now draw the levels (if they're onscreen) */
       if( ypos > obj->bmin.y && ypos < obj->bmax.y ){
 	for(i=0;i<level->num_degen;i++){
@@ -1067,7 +1067,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 	  xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
 	}
       }
-      
+
       /* move onto the next level */
       level = level->next;
     }
@@ -1079,17 +1079,17 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
       g_center_text(xcenter,yloc,
 		    diagram->frags[diagram->left_fragment-1].label);
     }
-    
-   
+
+
     /* move over to 4/5 the way from the left side and do the left fragment */
     xcenter = origin.x + 4*dim.x/5;
-    
+
     if( diagram->right_fragment-1 < diagram->num_frags && diagram->right_fragment > 0){
       level = diagram->frags[diagram->right_fragment-1].levels;
     }else{
       level = 0;
     }
-    
+
     while(level){
       /* figure out how far out from the center we have to move */
       xoffset = (level->num_degen*diagram->level_width +
@@ -1097,10 +1097,10 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
       level->xmin = xcenter-xoffset;
       level->xmax = xcenter+xoffset;
       xpos = level->xmin;
-      
+
       /* figure out the y position */
       level->yloc = ypos = origin.y + (yref - level->energy)*yscale;
-      
+
       /* now draw the levels (if they're onscreen) */
       if( ypos > obj->bmin.y && ypos < obj->bmax.y ){
 	for(i=0;i<level->num_degen;i++){
@@ -1108,11 +1108,11 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 	  xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
 	}
       }
-      
+
       /* move onto the next level */
       level = level->next;
     }
-    
+
     /* draw in the label */
     if( diagram->right_fragment-1 < diagram->num_frags && diagram->right_fragment > 0 &&
        diagram->frags[diagram->right_fragment-1].label ){
@@ -1120,12 +1120,12 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
       g_center_text(xcenter,yloc,
 		    diagram->frags[diagram->right_fragment-1].label);
     }
-    
+
 
     /*************
-      
+
       draw in the connectors now
-      
+
     *************/
     if( diagram->show_connects ){
       g_change_linewidth(1);
@@ -1134,21 +1134,21 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 	/* find the fragment level to which this guy connects*/
 	if( connector->which_frag == (diagram->left_fragment-1) ||
 	   connector->which_frag == (diagram->right_fragment-1) ){
-	
+
 	  fragment_level = diagram->frags[connector->which_frag].levels;
-	
+
 	  while(fragment_level && fragment_level->number != connector->fragment_level){
 	    fragment_level = fragment_level->next;
 	  }
 	  if( !fragment_level ) fatal("Can't find a fragment level for a connector.");
-	
+
 	  /* find the main level to which this guy connects */
 	  main_level = diagram->levels;
 	  while(main_level && main_level->number != connector->main_level){
 	    main_level = main_level->next;
 	  }
 	  if( !main_level ) fatal("Can't find a main level for a connector.");
-	
+
 	  /* determine the location of the connector end points */
 	  if( connector->which_frag == (diagram->left_fragment-1) ){
 	    con_begin.x = fragment_level->xmax;
@@ -1159,11 +1159,11 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 	  }
 
 	  /*******
-	    
+
 	    the y location of the end points is trickier, because we want
 	    the connectors to go to the edge of the bounding box if one of
 	    the levels to which they are connected isn't on screen
-	    
+
 	    ********/
 	  con_begin.y = fragment_level->yloc;
 	  con_end.y = main_level->yloc;
@@ -1203,7 +1203,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 	    con_begin.x = xval;
 	    con_begin.y = yval;
 	  }
-	
+
 	  /* draw it in */
 	  g_change_linestyle(connector->linestyle);
 	  if(con_begin.y >= -100){

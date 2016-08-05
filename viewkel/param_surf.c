@@ -39,7 +39,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Arguments: surf: pointer to param_surf_type
  *          center: pointer to point_type
  *            mode: char
- *            
+ *
  * Returns: none
  *
  * Action: This draws a parametric surface.
@@ -66,16 +66,16 @@ void draw_param_surf(surf,center,mode)
   int i,j;
   int num_p,back_num1,back_num2,num_segs;
   point_type *the_point;
-  
+
   num_p = surf->samples1*surf->samples2;
   /* Check to see if we need to get space for the temporary points array */
   if( num_p_allocated < num_p ){
     /*******
-      
+
       if we already got space, free it up
       I'm doing this instead of using D_REALLOC because I don't trust
       D_REALLOC.
-      
+
       *******/
     if( temp_points ){
       D_FREE(temp_points);
@@ -85,7 +85,7 @@ void draw_param_surf(surf,center,mode)
       D_FREE(back_xpoints2);
       D_FREE(xsegs);
     }
-    
+
     temp_points = (point_type *)D_CALLOC(num_p,sizeof(point_type));
     front_xpoints1 = (XPoint *)D_CALLOC(num_p,sizeof(XPoint));
     front_xpoints2 = (XPoint *)D_CALLOC(num_p,sizeof(XPoint));
@@ -97,37 +97,37 @@ void draw_param_surf(surf,center,mode)
     }
     num_p_allocated = num_p;
   }
-  
+
   /* okay, copy the points for this surface so that we can transform them */
   bcopy(surf->points,temp_points,num_p*sizeof(point_type));
-  
+
   /***************
-    
+
     Now loop through all the points and transform and draw them
-    
+
     Since we know the total number of points, and they are in cartesian
     coordinates at this point, this can just be done by treating the point
     array as 1 dimensional.
-    
+
     ***************/
   the_point = temp_points;
   num_segs = back_num1 = back_num2 = 0;
-  
+
   if( mode != FRONT ){
     front_num1 = front_num2 = 0;
     for(i=0;i<num_p;i++){
       transform(the_point);
-      
+
       /* now do the homogeneous coordinate transform */
       the_point->x /= the_point->z;
-      the_point->y /= the_point->z;      
-      
+      the_point->y /= the_point->z;
+
       /******
-      
-	check the color. 
+
+	check the color.
 	To add more colors, just change this case
 	statement and get more xpoints arrays.
-      
+
       *******/
       switch(mode){
       case ALL:
@@ -218,9 +218,9 @@ void draw_param_surf(surf,center,mode)
 	XDrawLines(disp,gpix,colorgc,back_xpoints2,back_num2,CoordModeOrigin);
       }
     }
-  }    
+  }
 }
-	
+
 /****
   A hack for drawing surfaces with atoms with the painter's algorithm:
     Call draw_param_surf, WITH the atomic z coordinate
@@ -231,4 +231,4 @@ void draw_param_surf(surf,center,mode)
 
   This should work!
 ****/
-    
+

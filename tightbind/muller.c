@@ -34,7 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *     this file contains everything needed to do an iterative eHT
  *      calculation using Edgar Muller's technique
- * 
+ *
  *
  *  created:  greg landrum  July 1996
  *
@@ -62,7 +62,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Action:  This uses the specified initial occupations of 'atom
  *   to generate an initial parameter set.
- *  
+ *
  ****************************************************************************/
 void calc_muller_init_parms(atom_type *atom)
 {
@@ -136,7 +136,7 @@ void calc_muller_init_parms(atom_type *atom)
       Z_vals[2]*atom->init_s_occup*atom->init_s_occup;
   }
 }
-    
+
 /****************************************************************************
  *
  *                   Procedure calc_muller_parms
@@ -150,7 +150,7 @@ void calc_muller_init_parms(atom_type *atom)
  *
  * Action:  This uses the specified occupations of 'atom
  *   to generate a new parameter set.
- *  
+ *
  ****************************************************************************/
 void calc_muller_parms(atom_type *atom, real s_occup,real p_occup,real d_occup,
 		       real *s_E,real *s_Z,real *p_E,real *p_Z,real *d_E,
@@ -236,8 +236,8 @@ void calc_muller_parms(atom_type *atom, real s_occup,real p_occup,real d_occup,
 	Z_vals[2]*s_occup*s_occup;
   }
 }
-    
-	
+
+
 
 /****************************************************************************
  *
@@ -255,7 +255,7 @@ void calc_muller_parms(atom_type *atom, real s_occup,real p_occup,real d_occup,
  *
  * Action:  This uses the AO occupations in 'AO_occups to update
  *   atomic Hii's and zetas using Muller's iteration technique
- *  
+ *
  ****************************************************************************/
 void update_muller_it_parms(details,cell,AO_occups,converged,num_orbs,
 		      orbital_lookup_table)
@@ -274,7 +274,7 @@ void update_muller_it_parms(details,cell,AO_occups,converged,num_orbs,
   real new_s_Hii,new_s_zeta,new_p_Hii,new_p_zeta,new_d_Hii,new_d_zeta;
   real temp_s_Hii,temp_s_zeta,temp_p_Hii,temp_p_zeta,temp_d_Hii,temp_d_zeta;
   real dH,dZ,max_dH=0.0,max_dZ=0.0;
-    
+
   atom_type *atom;
   equiv_atom_type *equiv_list;
   int begin_atom,end_atom;
@@ -295,7 +295,7 @@ void update_muller_it_parms(details,cell,AO_occups,converged,num_orbs,
 
   /*******
 
-    first loop through the equivalent atoms, 
+    first loop through the equivalent atoms,
 
     after we finish, tag each atom in
      the atoms_done array so that we don't end up doing an
@@ -377,8 +377,8 @@ void update_muller_it_parms(details,cell,AO_occups,converged,num_orbs,
 	fprintf(stderr,"Negative d occupation (%6.4lf) found\n",num_d);
       }
 #endif
-      
-	    
+
+
       /**********
 
 	now use those total occupations to update the parameters
@@ -440,7 +440,7 @@ void update_muller_it_parms(details,cell,AO_occups,converged,num_orbs,
   /******
 
     okay, that takes care of the equivalent atoms list, do any
-    leftover atoms 
+    leftover atoms
 
     This is done exactly the same way as the update for the
      equivalent atoms.
@@ -548,5 +548,5 @@ fprintf(stderr,"Muller iteration converged after %d steps\n",num_its);
   }
 
 }
-	
+
 

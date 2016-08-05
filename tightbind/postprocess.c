@@ -91,16 +91,16 @@ void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
   /********
     use the work2 array to store the occupation numbers for later use
     (in case they become needed later....)
-    
+
     do this by setting a pointer to work2 to make things a little more
     readable.
     *********/
-  occupations = work2; 
+  occupations = work2;
 
   /**************
-    
+
     do the FMO transformation and print out the results
-    
+
     ***************/
   if( details->num_FMO_frags != 0 ){
     tform_wavefuncs_to_FMO_basis(details,num_orbs,cell->num_atoms,eigenset,
@@ -136,7 +136,7 @@ void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
 	fprintf(output_file,"FMO_S(K) ---\n");
       }
       printmat(details->FMO_props->overlap.mat,num_orbs,num_orbs,output_file,
-	       1e-4, details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width); 
+	       1e-4, details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
     }
     /* what about the hamiltonian? */
     if( details->hamil_PRT ){
@@ -154,8 +154,8 @@ void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
 	fprintf(output_file,"FMO_H(K) ---\n");
       }
       printmat(details->FMO_props->hamil.mat,num_orbs,num_orbs,output_file,
-	       1e-4, details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width); 
-    }	 
+	       1e-4, details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
+    }
 
     if( details->OP_mat_PRT || details->ROP_mat_PRT || details->net_chg_PRT
        || details->vary_zeta ){
@@ -165,7 +165,7 @@ void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
 		    details->FMO_props->OP_mat,
 		    work3,work1);
     }
-      
+
     /* this stores the reduced overlap population matrix */
     if( details->ROP_mat_PRT ){
       FMO_reduced_mulliken(details,cell->num_atoms,num_orbs,
@@ -175,13 +175,13 @@ void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
     if( details->OP_mat_PRT ){
       fprintf(output_file,
 	      "\n\n; \tq-q-q-q-q-q-q-q  Mulliken Analysis in FMO basis q-q-q-q-q-q-q-q\n");
-	
+
       fprintf(output_file,
 	      "\n;    FMO Mulliken Overlap Population Matrix for %6.3lf electrons:\n",
 	      cell->num_electrons);
       printmat(details->FMO_props->OP_mat,num_orbs,num_orbs,output_file,
 	       1e-05,details->OP_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
-	
+
     }
     if( details->ROP_mat_PRT ){
       fprintf(output_file,
@@ -191,7 +191,7 @@ void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
 		    details->num_FMO_frags,
 		    output_file,(char *)0,(char *)0,details->line_width);
     }
-      
+
     /* find the charge matrix in the FMO basis */
     eval_charge_matrix(cell,details->FMO_props->eigenset,
 		       details->FMO_props->overlap,
@@ -209,12 +209,12 @@ void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
     }
 
     /*******
-      
+
       if we're not doing an extended calculation, write some information into
       the FMO output file
-      
+
       *******/
-      
+
     /* first the molecular orbital energies need to be written */
     if( details->Execution_Mode == MOLECULAR ){
       fprintf(FMO_file,"; Molecular orbital energies\n");
@@ -292,16 +292,16 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
   int itab,jtab,ktab;
   int test_int;
   real tot_chg;
-  
+
   /********
     use the work2 array to store the occupation numbers for later use
     (in case they become needed later....)
-    
+
     do this by setting a pointer to work2 to make things a little more
     readable.
     *********/
-  occupations = work2; 
-  
+  occupations = work2;
+
 #if 0
   if( details->Execution_Mode != MOLECULAR &&
      details->num_FCO_frags != 0 ){
@@ -325,11 +325,11 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
       }
 
       /* it's open, now write the header... */
-      
+
       /*************
 
 	we start with an int of known value to allow us to
-	check at read time that things are fine (i.e. it's a similar 
+	check at read time that things are fine (i.e. it's a similar
 	machine type).  Otherwise fit_FCO will read garbage.
 
       **************/
@@ -347,14 +347,14 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
 	write(FCO_file,(const char *)&(details->FMO_frags[i].num_orbs),sizeof(int));
       }
     }
-       
-       
+
+
     /**************
-      
+
       do the FCO transformation and print out the results
-      
+
       ***************/
-    
+
     tform_wavefuncs_to_FMO_basis(details,num_orbs,cell->num_atoms,eigenset,
 				 orbital_lookup_table);
 
@@ -387,7 +387,7 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
 	fprintf(output_file,"FCO_S(K) ---\n");
       }
       printmat(details->FMO_props->overlap.mat,num_orbs,num_orbs,output_file,
-	       1e-4, details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width); 
+	       1e-4, details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
     }
     /* what about the hamiltonian? */
     if( details->hamil_PRT ){
@@ -405,8 +405,8 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
 	fprintf(output_file,"FCO_H(K) ---\n");
       }
       printmat(details->FMO_props->hamil.mat,num_orbs,num_orbs,output_file,
-	       1e-4, details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width); 
-    }	 
+	       1e-4, details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
+    }
 
     if( details->OP_mat_PRT || details->ROP_mat_PRT || details->net_chg_PRT
        || details->vary_zeta ){
@@ -416,7 +416,7 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
 		    details->FMO_props->OP_mat,
 		    work3,work1);
     }
-      
+
     /* this stores the reduced overlap population matrix */
     if( details->ROP_mat_PRT ){
       FMO_reduced_mulliken(details,cell->num_atoms,num_orbs,
@@ -426,13 +426,13 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
     if( details->OP_mat_PRT ){
       fprintf(output_file,
 	      "\n\n; \tq-q-q-q-q-q-q-q  Mulliken Analysis in FCO basis q-q-q-q-q-q-q-q\n");
-	
+
       fprintf(output_file,
 	      "\n;    FCO Mulliken Overlap Population Matrix for %6.3lf electrons:\n",
 	      cell->num_electrons);
       printmat(details->FMO_props->OP_mat,num_orbs,num_orbs,output_file,
 	       1e-05,details->OP_mat_PRT & PRT_TRANSPOSE_FLAG,details->line_width);
-	
+
     }
     if( details->ROP_mat_PRT ){
       fprintf(output_file,
@@ -442,7 +442,7 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
 		    details->num_FMO_frags,
 		    output_file,(char *)0,(char *)0,details->line_width);
     }
-      
+
     /* find the charge matrix in the FMO basis */
     eval_charge_matrix(cell,details->FMO_props->eigenset,
 		       details->FMO_props->overlap,
@@ -460,23 +460,23 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
     }
 
     /*******
-      
+
       write some information into
       the FCO output file
-      
+
     *******/
 
     /* start out with the energies */
     write(FCO_file,(const char *)(eigenset.val),num_orbs*sizeof(real));
     for(i=0;i<details->num_FCO_frags;i++){
       write(FCO_file,(const char *)(details->FMO_frags[i].eigenset.val),
-	    details->FMO_frags[i].num_orbs*sizeof(real)); 
+	    details->FMO_frags[i].num_orbs*sizeof(real));
     }
     /* write the charge matrix */
     write(FCO_file,(const char *)details->FMO_props->chg_mat,
 	  num_orbs*num_orbs*sizeof(real));
-    
-    
+
+
   } else FATAL_BUG("postprocess_FCO called with no FMO fragments");
 }
 
@@ -504,11 +504,11 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
  *
  * Returns: none
  *
- * Action:  this is basically a place to collect all the crap that 
+ * Action:  this is basically a place to collect all the crap that
  *   needs to be done after a diagonalization is complete.
  *   putting it all in here makes the k point loop a lot cleaner
  *   and easier to deal with.
- *  
+ *
  ****************************************************************************/
 void postprocess_results(cell,details,overlapR,hamilR,overlapK,hamilK,
 			cmplx_hamil,cmplx_overlap,
@@ -547,18 +547,18 @@ INCREASE down)\n");
 	      ";\t*** Wavefunctions ***  (AO's in rows, MO's in columns, energies \
 INCREASE to the right)\n");
     }
-	 
+
     fprintf(output_file,";\t***> REAL:\n");
     print_labelled_mat(eigenset.vectR,num_orbs,num_orbs,output_file,1e-4,
 		       cell->atoms,cell->num_atoms,orbital_lookup_table,
 		       num_orbs,details->wave_fn_PRT & PRT_TRANSPOSE_FLAG,
 		       LABEL_COLS,details->line_width);
-    
+
     /********
-      
+
       there's no need to print out imaginary components of the
       wavefunctions for molecular calculations.
-      
+
       ********/
     if( details->Execution_Mode != MOLECULAR ){
       fprintf(output_file,";\t***> IMAGINARY:\n");
@@ -569,24 +569,24 @@ INCREASE to the right)\n");
 			 LABEL_COLS,details->line_width);
     }
   }
-  
+
   /* print out the energies and the total energy */
   total_energy = 0;
-  
+
   /********
     use the work2 array to store the occupation numbers for later use
     (in case they become needed later....)
-    
+
     do this by setting a pointer to work2 to make things a little more
     readable.
     *********/
-  occupations = work2; 
-  
+  occupations = work2;
+
   /* zero out the occupations array */
   bzero((char *)occupations,num_orbs*sizeof(real));
-  
+
   calc_occupations(details,cell->num_electrons,num_orbs,occupations,eigenset);
-  
+
   if( details->levels_PRT || details->Execution_Mode == MOLECULAR){
     fprintf(output_file,"\n#\t******* Energies (in eV)  and Occupation Numbers *******\n");
     for(j=0;j<num_orbs;j++){
@@ -597,23 +597,23 @@ INCREASE to the right)\n");
     fprintf(output_file,"Total_Energy: %8.6lg\n",total_energy);
     properties->total_E = total_energy;
   }
-  
+
   /******************
-    
+
     Determine the symmetry of the wavefunctions if that is necessary
-    
+
     *******************/
   if( details->use_symmetry && details->Execution_Mode == MOLECULAR){
     find_MO_symmetries(num_orbs,details,cell,eigenset,overlapK,
 		       orbital_lookup_table);
   }
-  
+
   /******************
-    
+
     Do the properties calculations
-    
+
     *******************/
-  
+
   /* only do mulliken population analysis if we need to */
   if( details->OP_mat_PRT || details->ROP_mat_PRT || details->net_chg_PRT
      || details->vary_zeta || details->mod_OP_mat_PRT ||
@@ -622,13 +622,13 @@ INCREASE to the right)\n");
     eval_mulliken(cell,eigenset,overlapK,num_orbs,
 		  occupations,orbital_lookup_table,properties->OP_mat,
 		  properties->net_chgs,work1);
-    
+
     /* this stores the reduced overlap population matrix */
     if( details->ROP_mat_PRT ){
       reduced_mulliken(cell->num_atoms,num_orbs,orbital_lookup_table,
 		       properties->OP_mat,properties->ROP_mat);
     }
-    
+
     if( details->mod_OP_mat_PRT || details->mod_ROP_mat_PRT ){
       modified_mulliken(cell,eigenset,overlapK,num_orbs,
 			occupations,orbital_lookup_table,properties->OP_mat,
@@ -637,12 +637,12 @@ INCREASE to the right)\n");
 
     }
     /*************
-      
+
       for modified mulliken, we can use the standard
       reduced_mulliken routine, because the structure
       of the OP matrix is the same, just the way
       in which it is evaluated has been changed
-      
+
       **************/
     if(details->mod_ROP_mat_PRT ){
       reduced_mulliken(cell->num_atoms,num_orbs,orbital_lookup_table,
@@ -668,7 +668,7 @@ INCREASE to the right)\n");
     print_sym_mat(properties->ROP_mat,cell->num_atoms,cell->num_atoms,output_file,(char *)0,
 		  (char *)0,details->line_width);
   }
-  
+
   if( details->net_chg_PRT ){
     fprintf(output_file,"\n;    Net Atomic Charges for %6.3lf electrons:\n",
 	    cell->num_electrons);
@@ -680,9 +680,9 @@ INCREASE to the right)\n");
     }
     fprintf(output_file,";      Total Charge is: %8.6lf\n",tot_chg);
   }
-  
-  
-  
+
+
+
   if( details->mod_OP_mat_PRT ){
     fprintf(output_file,
 	    "\n\n; \t\tq-q-q-q-q-q  Modified Mulliken Analysis q-q-q-q-q-q\n");
@@ -702,7 +702,7 @@ INCREASE to the right)\n");
     print_sym_mat(properties->mod_ROP_mat,cell->num_atoms,cell->num_atoms,
 		  output_file,(char *)0,(char *)0,details->line_width);
   }
-  
+
   if( details->mod_net_chg_PRT ){
     fprintf(output_file,"\n;   Modified Mulliken Net Atomic Charges for %6.3lf electrons:\n",
 	    cell->num_electrons);
@@ -714,29 +714,29 @@ INCREASE to the right)\n");
     }
     fprintf(output_file,";      Total Charge is: %8.6lf\n",tot_chg);
   }
-  
-  
+
+
   /********
-    
+
     The charge matrix needs to be evaluated not only when it is being
     printed out, but also when average properties calculations
     are being done.  The charge matrix is used in these instances
     to determine projected densities of states.
-    
+
     *********/
   if( details->chg_mat_PRT || details->Rchg_mat_PRT ||
      (details->avg_props && !details->no_total_DOS_PRT)){
     /* find the charge matrix */
     eval_charge_matrix(cell,eigenset,overlapK,num_orbs,orbital_lookup_table,
 		       properties->chg_mat,work1);
-    
+
     if( details->sparsify_value > 0.0 ){
       fprintf(stderr,"Charge matrix sparsification\n");
       sparsify_matrix(details->sparsify_value,properties->chg_mat,0,
 		      num_orbs);
     }
-    
-    
+
+
     if( details->chg_mat_PRT || details->Rchg_mat_PRT ){
       fprintf(output_file,"\n\n; \t\tq-q-q-q-q-q-q-q  Charge Matrix q-q-q-q-q-q-q-q\n");
     }
@@ -748,7 +748,7 @@ INCREASE to the right)\n");
 			 cell->atoms,cell->num_atoms,orbital_lookup_table,
 			 num_orbs,details->chg_mat_PRT & PRT_TRANSPOSE_FLAG,
 			 LABEL_COLS,details->line_width);
-      
+
     }
     /******
       put in reduced charge matrix stuff here

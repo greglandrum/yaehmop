@@ -17,7 +17,7 @@
 
 static doublereal c_b3 = .5;
 
-/* Subroutine */ int lovlap_(strad, a, b, sk1, sk2, r, l1, l2, m1, n1, n2, 
+/* Subroutine */ int lovlap_(strad, a, b, sk1, sk2, r, l1, l2, m1, n1, n2,
 	max__)
 doublereal *strad, *a, *b, *sk1, *sk2, *r;
 integer *l1, *l2, *m1, *n1, *n2, *max__;
@@ -49,43 +49,43 @@ integer *l1, *l2, *m1, *n1, *n2, *max__;
     static doublereal con1;
 
 
-/*  ******************************************************************** 
+/*  ********************************************************************
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
 /*  *     SUBROUTINE LOVLAP       CALLED FROM MOV                   * */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *       LOVLAP   SUBROUTINE TO CALCULATE THE OVERLAP               * 
+/*  *       LOVLAP   SUBROUTINE TO CALCULATE THE OVERLAP               *
 */
-/*  *                COMPONENT INDEPENDENT OF THE ANGLE BETWEEN        * 
+/*  *                COMPONENT INDEPENDENT OF THE ANGLE BETWEEN        *
 */
-/*  *                THE ATOMS                                         * 
+/*  *                THE ATOMS                                         *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *       SUBROUTINES USED:                                          * 
+/*  *       SUBROUTINES USED:                                          *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *             NONE                                                 * 
+/*  *             NONE                                                 *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  *       ORIGIN LOST IN ANTIQUITY                                   * 
+/*  *       ORIGIN LOST IN ANTIQUITY                                   *
 */
 
 /*   modified by greg in modernity (august 1993) so that it doesn't use th
 at*/
 /*         damn common block any more. */
 
-/*  *                                                                  * 
+/*  *                                                                  *
 */
-/*  ******************************************************************** 
+/*  ********************************************************************
 */
 
 
@@ -119,7 +119,7 @@ at*/
     rhoab *= rhob;
     rhopo = rhoap * rhoab;
     i__1 = *l1 + *l2 + 1;
-    terma = pow_di(&c_b3, &i__1) * sqrt((doublereal) ((real) ((*l1 + *l1 + 1) 
+    terma = pow_di(&c_b3, &i__1) * sqrt((doublereal) ((real) ((*l1 + *l1 + 1)
 	    * (*l2 + *l2 + 1))) * fact[*l1 - *m1] * fact[*l2 - *m1] / (fact[*
 	    n1 + *n1] * fact[*n2 + *n2] * fact[*l1 + *m1] * fact[*l2 + *m1]) *
 	     rhopo);
@@ -136,7 +136,7 @@ at*/
 	i__2 = kend;
 	for (k = 1; k <= i__2; ++k) {
 	    ku = k - 1;
-	    con12 = con1 * fact[*l2 + *l2 - ku - ku] / (fact[*l2 - m2 - ku - 
+	    con12 = con1 * fact[*l2 + *l2 - ku - ku] / (fact[*l2 - m2 - ku -
 		    ku] * fact[ku] * fact[*l2 - ku]);
 	    iev = ju + ku + *l2;
 	    if (iev / 2 << 1 != iev) {
@@ -168,11 +168,11 @@ at*/
 				value4 = bincoe[ibb + (i2 << 3) - 9] * value3;
 				i__8 = iab;
 				for (i1 = 1; i1 <= i__8; ++i1) {
-				    term = value4 * bincoe[iab + (i1 << 3) - 
+				    term = value4 * bincoe[iab + (i1 << 3) -
 					    9];
-				    ir = i1 + i2 + ieb + ieb - i6 - i6 - i3 + 
+				    ir = i1 + i2 + ieb + ieb - i6 - i6 - i3 +
 					    idb - i4 + icb - 1;
-				    ip = iab - i1 + ibb - i2 + ieb + ieb - i5 
+				    ip = iab - i1 + ibb - i2 + ieb + ieb - i5
 					    - i5 + icb - i3 + idb - i4 + 1;
 /* L90: */
 				    value += a[ip] * b[ir] * term;

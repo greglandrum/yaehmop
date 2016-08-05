@@ -43,7 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      routines to allow shift/control clicks.
 
    30.05.98 gL:
-     added toggling for polyhedron outlining. 
+     added toggling for polyhedron outlining.
 
    09.07.98 gL:
       switched '1' action to dump VRML instead of rayshade.
@@ -56,7 +56,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      added "support" for click and drag selection.
      This is implemented in an unpleasing fashion, but it
      works and I need to do my research proposals.
-     
+
    20.09.98 gL:
      updated documentation
 
@@ -115,7 +115,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  To port this to another event driven, interactive system is going to
  *    require some work... I'm not doing it now  gL Sept. 1994
  *
- *    
+ *
  *
  *
  ****************************************************************************/
@@ -325,7 +325,7 @@ void do_keypress(EventRecord *event)
     if(mainmode==SCALE) if(whichobj) whichobj->scale.z -= .5;
     if(mainmode==ROT) if(whichobj) whichobj->rot.z -= .2;
     break;
-    
+
   case 'r':
   case 'R':
     mainmode=ROT;
@@ -343,7 +343,7 @@ void do_keypress(EventRecord *event)
       }
       else if(mainmode == SCALE && whichobj->prim->cont_plot){
 	whichobj->scale.y = whichobj->scale.x *
-	  (whichobj->prim->cont_plot->max_y-whichobj->prim->cont_plot->min_y) / 
+	  (whichobj->prim->cont_plot->max_y-whichobj->prim->cont_plot->min_y) /
 	  (whichobj->prim->cont_plot->max_x-whichobj->prim->cont_plot->min_x);
       } else{
 	mainmode=SCALE;
@@ -409,7 +409,7 @@ void do_keypress(EventRecord *event)
       }
     }
     break;
-   
+
   case '`':
     if(mainmode == CHOOSE && whichobj &&
        whichobj->prim &&
@@ -451,7 +451,7 @@ void do_keypress(EventRecord *event)
 	  head2->next = head1->next;
 	  D_FREE(head1->obj);
 	  D_FREE(head1);
-	}	    
+	}
       } else {
 	FATAL_BUG("I just removed an object, but there's no head.");
       }
@@ -526,12 +526,12 @@ void do_keypress(EventRecord *event)
     camera->foclength += 1;
     redo_projection = 1;
     break;
-    
+
   case '.':
     camera->foclength -= 1;
     redo_projection = 1;
     break;
-    
+
   case '9':
     camera->lf.z += 10;
     redo_projection = 1;
@@ -558,12 +558,12 @@ void do_keypress(EventRecord *event)
       } else{
 	pclose(rot_pipe);
 	rot_pipe = 0;
-	whichobj->prim->molec->rotate_tool_on = 0;	
+	whichobj->prim->molec->rotate_tool_on = 0;
 	non_blocking_event_loop = 0;
       }
     }
 #endif
-    
+
     readcharparm("(V)rml or (R)ayshade (anything else to cancel)",instring);
     switch(instring[0]){
     case 'r':
@@ -621,7 +621,7 @@ void do_keypress(EventRecord *event)
       dump_grids_on = 1;
     }
     break;
-      
+
   case 'q':
   case 'Q': quit=1;break;
     }
@@ -647,7 +647,7 @@ char drag_select=0;
 void do_button( XEvent event )
 {
   int xpos, ypos;
-  
+
   xpos=event.xbutton.x;
   ypos=event.xbutton.y;
   click_x=event.xbutton.x;
@@ -754,10 +754,10 @@ void do_events(void)
   int xpos,ypos;
   int box_x,box_y,box_width,box_height;
   int num;
-  
+
   g_draw_all_buttons(button_wins);
   XFlush(disp);
-  quit = 0;  
+  quit = 0;
   drag_select = 0;
 
   /* This is the event loop */
@@ -773,15 +773,15 @@ void do_events(void)
       case KeyPress:
 	do_keypress( event );
 	break;
-      
+
       case ButtonPress:
 	do_button( event );
 	break;
-      
+
       case ButtonRelease:
         if( drag_select && event.xany.window==gwin &&
-	    event.xbutton.button == 1 && 
-	    mainmode == CHOOSE && 
+	    event.xbutton.button == 1 &&
+	    mainmode == CHOOSE &&
 	    (whichobj->prim->molec || (whichobj->prim->MO_surf &&
 				       whichobj->prim->MO_surf->molec))){
 	  drag_select = 0;
@@ -798,7 +798,7 @@ void do_events(void)
 	    select_atoms_in_region(whichobj->prim->MO_surf->molec,box_x,box_y,
 				   box_x+box_width,box_y+box_height);
 	  }
-	    
+
 	  redrawgraph();
 	}
 	break;
@@ -862,12 +862,12 @@ void do_events(void)
 	    }
 
 	    break;
-	      
+
 	  }
 	}
 	break;
 
-      
+
       case ConfigureNotify:
 	/* must resize the window now.... */
 	g_xmax = event.xconfigure.width;
@@ -879,19 +879,19 @@ void do_events(void)
 	if(!gpix){
 	  fatal("Can't D_REALLOCate pixmap\n");
 	}
-      
+
 	redo_projection = 1;
 	camera->yaspect = g_ymax/g_xmax;
 	redraw();
 	break;
-      
+
       case Expose:
 	num=0;
 	/* make sure that we don't get trapped taking exposure events... */
 	while(XCheckMaskEvent(disp,ExposureMask,&event));
 	redraw();
 	break;
-      
+
       default:
 	break;
       }
@@ -901,7 +901,7 @@ void do_events(void)
 
 	if the rotation window is open, then check to see
 	if we need to read from that.
-	
+
       ********/
       if( rot_pipe ){
 	int nfds,readfds,writefds,exceptfds;
@@ -1026,31 +1026,31 @@ void parse_commands(void)
     else if(!strncmp(instring,"GRAP",4)){
       new_graph((char *)0);
       redraw();
-      fgets(instring,80,stdin);      
+      fgets(instring,80,stdin);
     }
     else if(!strncmp(instring,"BAND",4)){
       new_band_graph((char *)0);
       redraw();
-      fgets(instring,80,stdin);      
+      fgets(instring,80,stdin);
     }
     else if(!strncmp(instring,"PROP",4)){
       new_prop_graph((char *)0);
       redraw();
-      fgets(instring,80,stdin);      
+      fgets(instring,80,stdin);
     }
     else if(!strncmp(instring,"FMO",3)){
       new_FMO_diagram(NULL);
       redraw();
-      fgets(instring,80,stdin);      
+      fgets(instring,80,stdin);
     }
     else if(!strncmp(instring,"WAL",3)){
       new_walsh_graph(0);
       redraw();
-      fgets(instring,80,stdin);      
+      fgets(instring,80,stdin);
     }
     else if(!strncmp(instring,"RED",3)){
       redraw();
-      fgets(instring,80,stdin);      
+      fgets(instring,80,stdin);
     }
     else if(!strncmp(instring,"XTIC",4)){
       if(the_graph){
@@ -1087,8 +1087,8 @@ void parse_commands(void)
 	if( prop_graph ){
 	  float_to_change = &(prop_graph->max_x);
 	} else{
-	  float_to_change = &(the_graph->max_x);	  
-	}	
+	  float_to_change = &(the_graph->max_x);
+	}
 	readfloatparm("x max",float_to_change);
 	redraw();
 	fgets(instring,80,stdin);
@@ -1099,8 +1099,8 @@ void parse_commands(void)
 	if( prop_graph ){
 	  float_to_change = &(prop_graph->min_x);
 	} else{
-	  float_to_change = &(the_graph->min_x);	  
-	}	
+	  float_to_change = &(the_graph->min_x);
+	}
 	readfloatparm("x min",float_to_change);
 	redraw();
 	fgets(instring,80,stdin);
@@ -1111,8 +1111,8 @@ void parse_commands(void)
 	if( prop_graph ){
 	  float_to_change = &(prop_graph->max_y);
 	} else{
-	  float_to_change = &(the_graph->max_y);	  
-	}	
+	  float_to_change = &(the_graph->max_y);
+	}
 	readfloatparm("y max",float_to_change);
 	redraw();
 	fgets(instring,80,stdin);
@@ -1129,8 +1129,8 @@ void parse_commands(void)
 	if( prop_graph ){
 	  float_to_change = &(prop_graph->min_y);
 	} else{
-	  float_to_change = &(the_graph->min_y);	  
-	}	
+	  float_to_change = &(the_graph->min_y);
+	}
 	readfloatparm("y min",float_to_change);
 	redraw();
 	fgets(instring,80,stdin);
@@ -1168,8 +1168,8 @@ void parse_commands(void)
 	if( prop_graph ){
 	  float_to_change = &(prop_graph->max_y);
 	} else{
-	  float_to_change = &(the_graph->max_y);	  
-	}	
+	  float_to_change = &(the_graph->max_y);
+	}
 	readfloatparm("y max",float_to_change);
 	redraw();
 	fgets(instring,80,stdin);
@@ -1193,7 +1193,7 @@ void parse_commands(void)
       if( the_graph ){
 	/* figure out which curve to use */
 	sscanf(instring,"%s %d",tempstring,&which_curve);
-	
+
 	if( which_curve <= the_graph->num_curves ){
 	  the_graph->curves_to_display[which_curve-1] =
 	    !(the_graph->curves_to_display[which_curve-1]);
@@ -1207,7 +1207,7 @@ void parse_commands(void)
       if( the_graph ){
 	/* figure out which curve and which style to use */
 	sscanf(instring,"%s %d %d",tempstring,&which_curve,&which_style);
-	
+
 	if( which_curve <= the_graph->num_curves ){
 	  the_graph->styles[which_curve-1] = which_style;
 	}else{
@@ -1223,11 +1223,11 @@ void parse_commands(void)
       }
       else{
 	the_graph = prop_graph->the_integration;
-	
+
 	if( the_graph ){
 	  /* figure out which curve to use */
 	  sscanf(instring,"%s %d %d",tempstring,&which_curve,&which_style);
-	
+
 	  if( which_curve <= the_graph->num_curves ){
 	    the_graph->styles[which_curve-1] = which_style;
 	  }else{
@@ -1247,18 +1247,18 @@ void parse_commands(void)
 	  prop_graph->integs_for_tics = !(prop_graph->integs_for_tics);
 	}
       }
-    }      
+    }
     else if(!strncmp(instring,"INTEG",5)){
       if( whichobj->prim->which != PROP_GRAPH ){
 	fprintf(stderr,"This type of graph doesn't have an integration.\n");
       }
       else{
 	the_graph = prop_graph->the_integration;
-	
+
 	if( the_graph ){
 	  /* figure out which curve to use */
 	  sscanf(instring,"%s %d",tempstring,&which_curve);
-	
+
 	  if( which_curve <= the_graph->num_curves ){
 	    the_graph->curves_to_display[which_curve-1] =
 	      !(the_graph->curves_to_display[which_curve-1]);

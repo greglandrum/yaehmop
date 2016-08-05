@@ -102,11 +102,11 @@ char help_lines[][80] = {"\tHelp for Viewkel","  ",
  *                   Procedure show_help
  *
  * Arguments: none
- *            
+ *
  * Returns: none
  *
  * Action:  Prints out the help message contained in the variable 'help_strings
- *  
+ *
  ****************************************************************************/
 void show_help(void)
 {

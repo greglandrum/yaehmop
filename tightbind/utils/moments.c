@@ -90,7 +90,7 @@ void main(argc,argv)
   }
 
   sscanf(argv[2],"%d",&num_moments);
-  
+
 
   /* get some memory */
   max_p = 100;
@@ -105,7 +105,7 @@ void main(argc,argv)
 
   if( !num_states ) fatal("Can't get space for num_states.");
 
-  
+
   /*******
 
     if the file included a walsh diagram, the information for the
@@ -148,7 +148,7 @@ void main(argc,argv)
   }
   if( eof_hit < 0 ){
     fatal("End of file hit before DOS data was found.\n");
-  }    
+  }
 
   /*****
 
@@ -179,7 +179,7 @@ void main(argc,argv)
 	upcase(instring);
       }
       eof_hit = skipcomments(infile,instring,FATAL);
-      upcase(instring);      
+      upcase(instring);
       i++;
     }
     /* we're at the right step... move on to the DOS data */
@@ -191,7 +191,7 @@ void main(argc,argv)
       upcase(instring);
     }
   }
-      
+
   /* open the output file */
   if( num_walsh_steps ){
     sprintf(instring,"%s.step%d.MOM",argv[1],which_walsh_step);
@@ -217,12 +217,12 @@ void main(argc,argv)
   sscanf(instring,"%d",&(num_states[0]));
   num_curves++;
   skipcomments(infile,instring,FATAL);
-  
+
   /******
 
     okay, we're at the beginning of the DOS data, now read it all in.
      Stop when we hit a line beginning with a #
-    
+
   *******/
   skipcomments(infile,instring,FATAL);
   while(instring[0] != '#'){
@@ -293,7 +293,7 @@ void main(argc,argv)
 	/* free up the old memory */
 	free(t_states);
       }
-	
+
 
       /******
 	deal with the possibility of multiple contributions to the projected
@@ -316,7 +316,7 @@ void main(argc,argv)
 	sscanf(instring,"%lf %lf",&(points[num_p].height),&(points[num_p].energy));
 	num_p++;
 	num_so_far++;
-	
+
 	/* check to see if we need more memory */
 	if( num_p == max_p ){
 	  max_p += 100;
@@ -360,7 +360,7 @@ void main(argc,argv)
       E_accum = 1;
       for(j=1;j<=i;j++) E_accum *= scaled_E;
       scaled_E = E_accum;
-	
+
 
 
       /* loop over the DOS values */
@@ -391,7 +391,7 @@ void main(argc,argv)
 
 
 }
-    
+
 
 
 

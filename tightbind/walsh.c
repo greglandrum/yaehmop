@@ -74,7 +74,7 @@ void auto_walsh(values,num_steps,begin,end)
 
   /* find the total distance */
   tot_dist = end-begin;
-  
+
   /* figure out how big the step needs to be */
   step = tot_dist/(real)(num_steps-1);
 
@@ -83,7 +83,7 @@ void auto_walsh(values,num_steps,begin,end)
     values[i] = cur_val;
     cur_val += step;
   }
-  
+
 }
 
 
@@ -200,10 +200,10 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
     fprintf(output_file,"\n\n;-----------------------------------------------\n");
 
     /****
-      
+
       print out some status information which will be used to generate the actual
       Walsh diagrams
-      
+
       *****/
     fprintf(output_file,"#Walsh_step:  %d ",step);
     for(i=0;i<num_vars;i++){
@@ -218,7 +218,7 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
     update the positions
 
   *******/
-  
+
   /******
     first copy the atoms from the storage array to make sure that they all have
      the proper zeta values.
@@ -311,7 +311,7 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
         atom = &(geom_frag->atoms[i]);
         /*********
           check each coordinate to see if it is variable
-          
+
           NOTE: this assumes that there can't be any initial values greater
           than 1000
           **********/
@@ -344,9 +344,9 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
 
   if( printing && !cell->using_Zmat){
     /************
-      
+
       write out the new atomic positions
-      
+
       *************/
     fprintf(output_file,"\n# ********* Atomic positions this Walsh Step:  *********\n");
     for(i=0;i<cell->num_atoms;i++){
@@ -354,7 +354,7 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
       fprintf(output_file,"%d %s %8.4f %8.4f %8.4g\n",
 	      i+1,atom->symb,atom->loc.x,atom->loc.y,atom->loc.z);
     }
-    
+
     /* that's it! */
   }
 }
@@ -414,7 +414,7 @@ void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
       fprintf(walsh_file,"# %d  Walsh Variable %d\n",things_so_far,i+1);
       things_so_far++;
     }
-      
+
     /* step through the elements of the printing_info linked list */
     p_info = details->step_print_options;
 
@@ -563,10 +563,10 @@ void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
     fprintf(walsh_file,"%8.6lf ",
 	    details->walsh_details.values[i*details->walsh_details.num_steps+step]);
   }
-	  
+
   /* Now step through the elements of the printing_info linked list */
   p_info = details->step_print_options;
-  
+
   while(p_info){
     switch(p_info->which_to_print){
     case PRT_OP:
@@ -588,7 +588,7 @@ void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
 	  fprintf(walsh_file,"%8.6lf ",
 		  properties.ROP_mat[p_info->contrib2*(p_info->contrib2+1)/2
 				     + p_info->contrib1]);
-	}	  
+	}
 	break;
       }
       break;

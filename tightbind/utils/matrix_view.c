@@ -23,7 +23,7 @@
 
 
 #define HERMETIAN_R(matrix,i,j)  ( j>i ? matrix[i*num_orbs+j] : matrix[j*num_orbs+i] )
-#define HERMETIAN_I(matrix,i,j)  ( i==j ? 0.0 : j>i ? matrix[j*num_orbs+i] : matrix[i*num_orbs+j] ) 
+#define HERMETIAN_I(matrix,i,j)  ( i==j ? 0.0 : j>i ? matrix[j*num_orbs+i] : matrix[i*num_orbs+j] )
 
 
 real tic_values[] = {3.0,2.5,2.0,1.5,1.0,0.5,0.25,0.1,0.05,-1.0};
@@ -52,22 +52,22 @@ void main()
 #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
-  
+
 	/* set up some stuff for Sioux */
 	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;	
+	SIOUXSettings.asktosaveonclose = FALSE;
 	SIOUXSettings.autocloseonquit = FALSE;
 	printf("Starting matrix_view.\n");
-	
+
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
   	fatal("User cancelled intial file open");
-  } 
-  
+  }
+
   printf("Enter name of output (PS) file: ");
   scanf("%s",argv[2]);
   argc = 3;
-  
+
 
   /* get the command line arguments */
 //  argc = ccommand(&argv);
@@ -76,7 +76,7 @@ void main()
   if(argc < 3){
     fatal("Usage: matrix_view infile outfile");
   }
-  
+
   if( argc == 4 && argv[3][0] == '1' ) draw_grid = 1;
   else draw_grid = 0;
 
@@ -112,13 +112,13 @@ void main()
   fprintf(psfile,"%%%%Pages: %d\n",num_mats);
   fprintf(psfile,"%%%%BoundingBox: %d %d %d %d\n",START_X-20,START_Y-20,
 	  BOX_WIDTH+START_X+100,BOX_HEIGHT+START_Y+20);
-  fprintf(psfile,"%%%%EndComments\n\n");  
+  fprintf(psfile,"%%%%EndComments\n\n");
 
   fprintf(psfile,"/M {moveto} def\n");
-  fprintf(psfile,"/L {lineto} def\n");  
+  fprintf(psfile,"/L {lineto} def\n");
   fprintf(psfile,"/R {rmoveto} def\n");
   fprintf(psfile,"/RL {rlineto} def\n");
-  fprintf(psfile,"/SG {setgray} def\n");  
+  fprintf(psfile,"/SG {setgray} def\n");
 
   xgap = (real)BOX_WIDTH / (real)num_orbs;
   ygap = (real)BOX_HEIGHT / (real)num_orbs;
@@ -141,7 +141,7 @@ void main()
     fprintf(psfile,"/Times-Roman findfont 12 scalefont setfont\n");
     fprintf(psfile,"%d %d M (Max: %6.4lf) show\n",
 	    START_X+BOX_WIDTH+10,START_Y+BOX_HEIGHT/2,max_mag);
-    
+
     xp = START_X+BOX_WIDTH+20;
     yp = START_Y+BOX_HEIGHT/2-20;
     for( i=0; tic_values[i] != -1.0; i++){
@@ -167,7 +167,7 @@ void main()
 	gray = fabs(max_mag-mag)/max_mag;
 	xp = (real)START_X + (real)i*xgap;
 	yp = (real)START_Y + (real)(num_orbs-j)*ygap;
-	
+
 	tot_cells++;
 	if( mag >= .05 ){
 	  cells_written++;
@@ -202,5 +202,5 @@ void main()
 
 }
 
-      
+
 

@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /***
   Recent Edit History:
-  
+
   03.05.98 gL:
     stupid update bug involving total_E x range not changing fixed.
     bounding boxes adjusted.
@@ -50,7 +50,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   this has got the stuff for dealing with Walsh Diagrams
 
   Created by greg Landrum June 1994
-*********/  
+*********/
 #include "viewkel.h"
 
 
@@ -61,7 +61,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Arguments: infile: pointer to type FILE
  *               graph: a pointer to graph_type
  *               tot_E: a pointer to graph_type
- *            
+ *
  * Returns: none
  *
  * Action:  Reads the data out of 'infile.
@@ -77,7 +77,7 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
   float xval;
   float min_x,min_y,max_x,max_y;
 
-  
+
   if( !graph )FATAL_BUG("No graph passed to read_walsh_data.");
   if( !tot_E )FATAL_BUG("No tot_E passed to read_walsh_data.");
 
@@ -100,7 +100,7 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
     display("Yikes!");
     return;
   }
-  
+
 
   /*******
     get space for the data
@@ -119,7 +119,7 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
     get space to keep track of which curves should be displayed
       we just need two slots here, one for the MO's and one for
       the total energy.
-    
+
   ******/
   graph->curves_to_display = (char *)D_CALLOC(2,sizeof(char));
   if( !graph->curves_to_display )fatal("Can't get space for curves_to_display.");
@@ -143,9 +143,9 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
   }
   for( i=0; i<num_p; i++){
     /*******
-      
+
       assume that the x coordinate is at the end of the line
-      
+
       *******/
     sscanf((const char *)strtok(instring," "),"%lf",&(graph->raw_data[i*num_curves].y));
     for(j=1;j<num_curves;j++){
@@ -153,7 +153,7 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
     }
 
     /* read the total energy */
-    sscanf((const char *)strtok(0," "),"%lf",&(tot_E->raw_data[i].y));    
+    sscanf((const char *)strtok(0," "),"%lf",&(tot_E->raw_data[i].y));
 
     /* now get and copy the x coordinate */
     sscanf((const char *)strtok(0," "),"%lf",&xval);
@@ -214,7 +214,7 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
   graph->data = (point_type2D *)D_CALLOC((unsigned)num_p*num_curves,sizeof(point_type2D));
   tot_E->data = (point_type2D *)D_CALLOC((unsigned)num_p,sizeof(point_type2D));
   if( !graph->data || !tot_E->data ) fatal("Can't get space for graph data.");
-  
+
   /* that's it */
 }
 
@@ -224,7 +224,7 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
  *                   Procedure new_walsh_graph
  *
  * Arguments: none
- *            
+ *
  * Returns: none
  *
  * Action: does everything to get space for and read in a new walsh_graph
@@ -236,7 +236,7 @@ void new_walsh_graph(char *filename)
   char *theinline;
   char file_name[80];
   FILE *infile;
-  
+
   /* set up a new object to hold the thing */
   makenewobject();
   whichobj = head->obj;
@@ -245,7 +245,7 @@ void new_walsh_graph(char *filename)
   whichobj->prim = (prim_type *)D_CALLOC(1,sizeof(prim_type));
   if( !whichobj->prim )fatal("Can't get space for walsh_graph primitive.");
   whichobj->prim->which = WALSH_GRAPH;
-  
+
   whichobj->prim->walsh_graph =
     (walsh_graph_type *)D_CALLOC(1,sizeof(walsh_graph_type));
   if( !whichobj->prim->walsh_graph )
@@ -305,7 +305,7 @@ void new_walsh_graph(char *filename)
    	failed = 1;
   }
 #endif
-  
+
 
   /* get the initial data */
   if( !failed ){
@@ -348,7 +348,7 @@ void new_walsh_graph(char *filename)
  *
  * Arguments: prim: pointer to primitive_type
  *             obj: pointer to object_type
- *            
+ *
  * Returns: none
  *
  * Action: Draws in a Walsh diagram
@@ -375,7 +375,7 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
   walsh_graph = prim->walsh_graph;
   the_graph = walsh_graph->the_data;
   total_E = walsh_graph->total_E;
-  
+
   /* check to see if we need to re-determine the location of tic marks */
   if( the_graph->old_max_x != the_graph->max_x ||
      the_graph->old_max_y != the_graph->max_y ||
@@ -411,16 +411,16 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
     if( !points ) fatal("Can't allocate memory for point storage in draw_graph.");
     if( fpoints ) free(fpoints);
     fpoints = (point_type2D *)calloc(num_points,sizeof(point_type2D));
-    if( !fpoints ) fatal("Can't allocate memory for fpoint storage in draw_graph.");    
+    if( !fpoints ) fatal("Can't allocate memory for fpoint storage in draw_graph.");
   }
 
   /* inverse scaling terms */
   inv_xscale = (the_graph->max_x - the_graph->min_x) / DEF_GRAPH_X;
   inv_yscale = (the_graph->max_y - the_graph->min_y) / DEF_GRAPH_Y;
-  
+
   /* determine the location of the origin on screen */
   origin.x = obj->cent.x + obj->trans.x + g_xmax / 2;
-  origin.y = obj->cent.y - obj->trans.y + g_ymax / 2;  
+  origin.y = obj->cent.y - obj->trans.y + g_ymax / 2;
   dim.x = DEF_GRAPH_X * obj->scale.x;
   dim.y = DEF_GRAPH_Y * obj->scale.y;
 
@@ -444,17 +444,17 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
       xloc = origin.x + obj->scale.x * (the_graph->tic_start_x +
 					i * the_graph->tic_sep_x - xref);
       g_line(xloc,origin.y+obj->scale.y*TIC_DIM,xloc,origin.y);
-      
+
       /*****
-	
+
 	do the labels
-	
+
 	*****/
       xval = (the_graph->tic_start_x + i*the_graph->tic_sep_x)*inv_xscale;
       if( fabs(xval) < 1e-12 ) xval = 0.0;
       sprintf(numstring,"%lg",xval);
       yloc = origin.y+obj->scale.y*TIC_DIM*(1.1);
-      
+
       g_center_text(xloc,yloc,numstring);
     }
   }
@@ -464,7 +464,7 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
       yloc = origin.y + obj->scale.y * (yref - the_graph->tic_start_y -
 					i * the_graph->tic_sep_y);
       g_line(origin.x-obj->scale.x*TIC_DIM,yloc,origin.x,yloc);
-      
+
       yval = (the_graph->tic_start_y + i*the_graph->tic_sep_y)*inv_yscale;
       if( fabs(yval) < 1e-12 ) yval = 0.0;
       sprintf(numstring,"%lg",yval);
@@ -472,13 +472,13 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
 
       g_right_text(xloc,yloc,numstring);
     }
-  }  
+  }
 
   /* put in legends if they are needed */
   if( the_graph->xlegend[0] != 0 && the_graph->do_x_tics ){
     xloc = origin.x + dim.x/2;
     yloc = origin.y+obj->scale.y*TIC_DIM*(1.1);
-    
+
     g_xlegend(xloc,yloc,the_graph->xlegend);
     obj->bmax.y += 2.1*PS_options.fontsize;
 
@@ -487,7 +487,7 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
   if( the_graph->ylegend[0] != 0 && the_graph->do_y_tics ){
     yloc = origin.y - dim.y/2;
     xloc = origin.x-obj->scale.x*TIC_DIM*5.0;
-    
+
     g_ylegend(xloc,yloc,the_graph->ylegend);
     obj->bmin.x -= 3.0*PS_options.fontsize;
   }
@@ -509,7 +509,7 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
 
 	Bug fix: top band not being drawn
 	 05/22/95 gL
-      
+
       ********/
       for(j=0;j<the_graph->num_p;j++){
 	points[j].x = fpoints[j].x = origin.x +
@@ -518,12 +518,12 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
 	  (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
       }
       g_lines(points,fpoints,the_graph->num_p,0);
-      
+
       /* set the line style back to the default value */
       g_change_linestyle(0);
     }
   }
-  
+
   /* draw in the total energy curve */
   if( the_graph->curves_to_display[1] ){
 
@@ -538,16 +538,16 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
 	yloc = origin.y + obj->scale.y * (yref - total_E->tic_start_y -
 					  i * total_E->tic_sep_y);
 	g_line(origin.x+dim.x+obj->scale.x*TIC_DIM,yloc,origin.x+dim.x,yloc);
-	
+
 	yval = (total_E->tic_start_y + i*total_E->tic_sep_y)*inv_yscale;
 	if( fabs(yval) < 1e-12 ) yval = 0.0;
 	sprintf(numstring,"%lg",yval);
 	xloc = origin.x+dim.x+obj->scale.x*TIC_DIM*1.1;
-	
+
 	g_left_text(xloc,yloc,numstring);
 	obj->bmax.x += 3.0*PS_options.fontsize;
       }
-    }  
+    }
 
     g_change_linestyle(the_graph->styles[1]);
     for(j=0;j<total_E->num_p;j++){

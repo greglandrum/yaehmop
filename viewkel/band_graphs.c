@@ -35,18 +35,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   this has got the stuff for dealing with band graphs....
 
   Created by greg Landrum June 1994
-*********/  
+*********/
 
 /***
   Recent Edit History:
-  
+
   03.05.98 gL:
     bounding boxes adjusted.
 
   14.06.98 gL:
-    added support for reading out Fermi levels (if there) 
+    added support for reading out Fermi levels (if there)
     added some EOF checking in read_band_data
- 
+
   26.09.98 gL:
      various modifications to remove warning when compiled with -Wall
      under gcc (yeah yeah... it's anal).  Hopefully this will fix
@@ -66,11 +66,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *                   Procedure preprocess_band_graph_data
  *
  * Arguments: band_graph: a pointer to band_graph_type
- *            
+ *
  * Returns: none
  *
  * Action: This does any preprocessing which is needed on the band graph data.
- *  
+ *
  ****************************************************************************/
 void preprocess_band_graph_data( band_graph_type *band_graph )
 {
@@ -80,7 +80,7 @@ void preprocess_band_graph_data( band_graph_type *band_graph )
 #ifdef SUPPORT_FATBANDS
   int fatband_offset;
 #endif
-  
+
   /* save the x axis maxima and minima */
   oldmax_x = band_graph->the_data->max_x;
   oldmin_x = band_graph->the_data->min_x;
@@ -88,7 +88,7 @@ void preprocess_band_graph_data( band_graph_type *band_graph )
   /* find the tic mark spacing */
   find_tic_sep(band_graph->the_data);
 
-  band_graph->the_data->max_x = oldmax_x; 
+  band_graph->the_data->max_x = oldmax_x;
   band_graph->the_data->min_x = oldmin_x;
 
   /* scale all the points to fit in a DEF_GRAPH_X x DEF_GRAPH_Y box */
@@ -97,13 +97,13 @@ void preprocess_band_graph_data( band_graph_type *band_graph )
 
 #ifdef SUPPORT_FATBANDS
   fatband_offset = band_graph->the_data->num_p*band_graph->the_data->num_curves;
-#endif  
+#endif
 
   for( i=0; i<band_graph->the_data->num_p; i++ ){
     for(j=0;j<band_graph->the_data->num_curves;j++){
       band_graph->the_data->data[i*band_graph->the_data->num_curves+j].x =
-	band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].x*xscale; 
-    
+	band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].x*xscale;
+
       if( band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].y >
 	 band_graph->the_data->max_y ){
 	band_graph->the_data->data[i*band_graph->the_data->num_curves+j].y =
@@ -143,20 +143,20 @@ void preprocess_band_graph_data( band_graph_type *band_graph )
       }
     }
   }
-  
+
   /* change the x tic marks */
   band_graph->the_data->tic_sep_x =  band_graph->points_per_line;
-  
+
   band_graph->the_data->num_tics_x = band_graph->num_special_points;
-  
-  
+
+
   /* adjust the tic mark spacing to fit the new scaling */
   band_graph->the_data->tic_sep_x *= xscale;
-  band_graph->the_data->tic_sep_y *= yscale;  
+  band_graph->the_data->tic_sep_y *= yscale;
   band_graph->the_data->tic_start_x *= xscale;
   band_graph->the_data->tic_start_y *= yscale;
 }
-    
+
 
 
 /****************************************************************************
@@ -165,7 +165,7 @@ void preprocess_band_graph_data( band_graph_type *band_graph )
  *
  * Arguments: infile: pointer to FILE
  *        band_graph: pointer to band_graph_type
- *            
+ *
  * Returns: none
  *
  * Action: Reads in all the data needed to construct a band structure
@@ -200,12 +200,12 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
   }
   sscanf(instring,"%d",&num_special_points);
   band_graph->num_special_points = num_special_points;
-  
+
   /* read out the number of k-points per symmetry line */
   skipcomments(infile,instring);
   sscanf(instring,"%d",&points_per_line);
   band_graph->points_per_line = points_per_line;
-  
+
   /* read out the number of orbitals */
   skipcomments(infile,instring);
   sscanf(instring,"%d",&num_orbs);
@@ -329,7 +329,7 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
  *                   Procedure new_band_graph
  *
  * Arguments: filename: pointer to char
- *            
+ *
  * Returns: none
  *
  * Action: does everything to get space for and read in a new band_graph
@@ -342,7 +342,7 @@ void new_band_graph(char *filename)
   char *theinline;
   FILE *infile;
   graph_type *the_graph;
-  
+
   /* set up a new object to hold the thing */
   makenewobject();
   whichobj = head->obj;
@@ -351,7 +351,7 @@ void new_band_graph(char *filename)
   whichobj->prim = (prim_type *)D_CALLOC(1,sizeof(prim_type));
   if( !whichobj->prim )fatal("Can't get space for prop_graph primitive.");
   whichobj->prim->which = BAND_GRAPH;
-  
+
   whichobj->prim->band_graph =
     (band_graph_type *)D_CALLOC(1,sizeof(band_graph_type));
   if( !whichobj->prim->band_graph )
@@ -361,7 +361,7 @@ void new_band_graph(char *filename)
 #ifndef USING_THE_MAC
   if( !filename ){
     display("Look in the xterm...");
-#ifndef USE_READLINE    
+#ifndef USE_READLINE
     printf("Enter the file name containing the band structure data: ");
     scanf("%s",file_name);
 #else
@@ -429,7 +429,7 @@ void new_band_graph(char *filename)
     whichobj->trans.x=0;whichobj->trans.y=0;
     whichobj->trans.z=0;
 
-    
+
     /* now fill in the legends... */
     the_graph = whichobj->prim->band_graph->the_data;
     strcpy(the_graph->ylegend,"Energy (eV)");
@@ -457,7 +457,7 @@ void new_band_graph(char *filename)
  *
  * Arguments: prim: pointer to primitive_type
  *             obj: pointer to object_type
- *            
+ *
  * Returns: none
  *
  * Action: Draws in a band structure graph.
@@ -486,8 +486,8 @@ void draw_band_graph(prim_type *prim,object_type *obj)
   float fat_width1,fat_width2;
   point_type2D fb_p1,fb_p2;
 #endif
-  
-  the_graph = prim->band_graph->the_data;  
+
+  the_graph = prim->band_graph->the_data;
   band_graph = prim->band_graph;
 
   /* check to see if we need to re-determine the location of tic marks */
@@ -501,7 +501,7 @@ void draw_band_graph(prim_type *prim,object_type *obj)
     the_graph->old_min_y = the_graph->min_y;
   }
 
-  
+
   /* check to see if we need memory for the Xpoints */
   if( !points || num_points < the_graph->num_p ){
     if( points ) free(points);
@@ -510,7 +510,7 @@ void draw_band_graph(prim_type *prim,object_type *obj)
     if( !points ) fatal("Can't allocate memory for point storage in draw_graph.");
     if( fpoints ) free(fpoints);
     fpoints = (point_type2D *)calloc(num_points,sizeof(point_type2D));
-    if( !fpoints ) fatal("Can't allocate memory for fpoint storage in draw_graph.");    
+    if( !fpoints ) fatal("Can't allocate memory for fpoint storage in draw_graph.");
   }
 
   /* inverse scaling terms */
@@ -519,10 +519,10 @@ void draw_band_graph(prim_type *prim,object_type *obj)
 
   xscale = 1/inv_xscale;
   yscale = 1/inv_yscale;
-  
+
   /* determine the location of the origin on screen */
   origin.x = obj->cent.x + obj->trans.x + g_xmax / 2;
-  origin.y = obj->cent.y - obj->trans.y + g_ymax / 2;  
+  origin.y = obj->cent.y - obj->trans.y + g_ymax / 2;
   dim.x = DEF_GRAPH_X * obj->scale.x;
   dim.y = DEF_GRAPH_Y * obj->scale.y;
 
@@ -539,22 +539,22 @@ void draw_band_graph(prim_type *prim,object_type *obj)
   localmin.y = obj->bmin.y = origin.y - dim.y;
   localmax.x = obj->bmax.x = origin.x + dim.x;
   localmax.y = obj->bmax.y = origin.y;
-  
+
   /******
-    
+
     Instead of tic marks on the X axis, put in vertical lines delineating
     the symmetry lines
-    
+
     ******/
   if(the_graph->do_x_tics){
     for(i=0;i<the_graph->num_tics_x;i++){
       xloc = origin.x + obj->scale.x * i * the_graph->tic_sep_x,
       g_line(xloc,origin.y+obj->scale.y*TIC_DIM,xloc,origin.y-dim.y);
-      
+
       /*****
-	
+
 	do the label
-	
+
 	*****/
       strcpy(numstring,band_graph->special_points[i].name);
       yloc = origin.y+obj->scale.y*TIC_DIM;
@@ -562,7 +562,7 @@ void draw_band_graph(prim_type *prim,object_type *obj)
       g_center_text(xloc,yloc,numstring);
     }
   }
-  
+
   /* Y tics */
   if( the_graph->do_y_tics ){
     max_str_len = 0;
@@ -570,7 +570,7 @@ void draw_band_graph(prim_type *prim,object_type *obj)
       yloc = origin.y + obj->scale.y * (yref - the_graph->tic_start_y -
 					i * the_graph->tic_sep_y);
       g_line(origin.x-obj->scale.x*TIC_DIM,yloc,origin.x,yloc);
-      
+
       yval = (the_graph->tic_start_y + i*the_graph->tic_sep_y)*inv_yscale;
       if( fabs(yval) < 1e-12 ) yval = 0.0;
       sprintf(numstring,"%lg",yval);
@@ -579,7 +579,7 @@ void draw_band_graph(prim_type *prim,object_type *obj)
       g_right_text(xloc,yloc,numstring);
     }
     obj->bmin.x -= obj->scale.x*TIC_DIM;
-  }  
+  }
 
   /* put in legends if they are needed */
   if( the_graph->xlegend[0] != 0 && the_graph->do_x_tics ){
@@ -608,9 +608,9 @@ void draw_band_graph(prim_type *prim,object_type *obj)
 
 
   /******
-    
+
     put in the fermi level if the user asked for it
-    
+
     ******/
   if(  prim->band_graph->show_fermi ){
     if( prim->band_graph->Fermi_E > the_graph->min_y &&
@@ -629,12 +629,12 @@ void draw_band_graph(prim_type *prim,object_type *obj)
 
   /* now do the plot itself */
   if( the_graph->curves_to_display[0] ){
-#ifdef SUPPORT_FATBANDS      
+#ifdef SUPPORT_FATBANDS
     tot_num_p = the_graph->num_curves*the_graph->num_p;
 #endif
     for(i=0;i<the_graph->num_curves;i++){
       g_change_linestyle(the_graph->styles[0]);
-#ifdef SUPPORT_FATBANDS      
+#ifdef SUPPORT_FATBANDS
       if( prim->band_graph->num_fatbands && prim->band_graph->fatbands_on ){
 	g_change_linewidth(0.5);
 	for(j=0;j<the_graph->num_p-1;j++){
@@ -687,7 +687,7 @@ void draw_band_graph(prim_type *prim,object_type *obj)
 	  (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
       }
       g_lines(points,fpoints,the_graph->num_p,0);
-#endif      
+#endif
       /* set the line style back to the default value */
       g_change_linestyle(0);
     }

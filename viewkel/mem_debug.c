@@ -264,6 +264,6 @@ void d_check_core(){
     }
   }else{
     printf("\td_check_core: We're clean!\n");
-  } 
+  }
 }
 #endif

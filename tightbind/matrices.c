@@ -62,7 +62,7 @@ void sparsify_hermetian_matrix(value,mat,num_orbs)
   int num_zeroed;
   real mag,val_squared;
   real real_part,imag_part;
-  
+
   fprintf(stderr,"sparsify_hermetian_matrix: %lf\n",value);
   val_squared = value*value;
 
@@ -85,12 +85,12 @@ void sparsify_hermetian_matrix(value,mat,num_orbs)
       mat.mat[itab+i] = 0.0;
       num_zeroed++;
     }
-    
+
   }
   fprintf(stderr,"\t %d of %d zeroed (%4.2lf%% nonzero)\n",num_zeroed,num_orbs*num_orbs,
 	  100.0*((real)(num_orbs*num_orbs)-(real)2*num_zeroed)/(real)(num_orbs*num_orbs));
 }
-  
+
 
 /****************************************************************************
 *
@@ -102,7 +102,7 @@ void sparsify_hermetian_matrix(value,mat,num_orbs)
 *
 * Returns: none
 *
-* Action: zeroes all the elements of 'mat (where 'mat = 'mat_R + 'mat_I) 
+* Action: zeroes all the elements of 'mat (where 'mat = 'mat_R + 'mat_I)
 *         which are smaller than 'value
 *
 ****************************************************************************/
@@ -115,7 +115,7 @@ void sparsify_matrix(value,mat_R,mat_I,num_orbs)
   int num_zeroed;
   real mag,val_squared;
   real real_part,imag_part;
-  
+
   fprintf(stderr,"sparsify_matrix: %lf\n",value);
   val_squared = value*value;
 
@@ -141,4 +141,4 @@ void sparsify_matrix(value,mat_R,mat_I,num_orbs)
   fprintf(stderr,"\t %d of %d zeroed (%4.2lf%% nonzero)\n",num_zeroed,num_orbs*num_orbs,
 	  100.0*((real)(num_orbs*num_orbs)-(real)num_zeroed)/(real)(num_orbs*num_orbs));
 }
-  
+

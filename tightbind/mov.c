@@ -73,10 +73,10 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
 {
   int i,j,num_zeta1,num_zeta2;
   real coeff_1,coeff_2,sk1,sk2,r;
-  
+
   real A_fn_values[30], B_fn_values[30];
   real ang_ind_overlap[4];
-  
+
   int loopvar,max, m=0, nn;  /* definitions for abfns.f and lovlap.f */
   max = q_num1 + q_num2;
 
@@ -90,7 +90,7 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
   /* initialize the components of the overlap to zero */
   *sigma=*pi=*delta=*phi=0.0;
   ang_ind_overlap[0]=ang_ind_overlap[1]=ang_ind_overlap[2]=ang_ind_overlap[3]=0.0;
-  
+
   /* figure out whether or not we are using double zeta f'ns */
 
   if( (l1 == 2 && atoms[which1].coeff_d2 != 0) || (l1 == 3 && atoms[which1].coeff_f2 != 0) ) num_zeta1 = 2;
@@ -153,7 +153,7 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
   abfns(A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
 
   /* test print of A and B functions */
-  
+
 /*    fprintf(stderr,"zeta1[%f]-zeta1[%f] call ...\n",sk1,sk2);
     loopvar=0;
     while(loopvar <= max)
@@ -162,24 +162,24 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
 	loopvar++;
       }
 */
-  
+
   /* call the routine to evaluate sigma,pi,... overlaps in the local ref frame */
-  
+
   for(i=0;i<=nn;i++)
     {
       m=i;
       lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
     }
-  
+
   /* add in the contributions we have found thus far */
-  
+
   *sigma += coeff_1*coeff_2*ang_ind_overlap[0];
   *pi += coeff_1*coeff_2*ang_ind_overlap[1];
   *delta += coeff_1*coeff_2*ang_ind_overlap[2];
   *phi += coeff_1*coeff_2*ang_ind_overlap[3];
-  
+
   /* now do zeta1 - zeta2 overlap if applicable */
-  
+
   if( num_zeta2 == 2){
     if( l2 == 2){
       sk2 = atoms[which2].exp_d2;
@@ -196,15 +196,15 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
       m=i;
       lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
     }
-    
+
     *sigma += coeff_1*coeff_2*ang_ind_overlap[0];
     *pi += coeff_1*coeff_2*ang_ind_overlap[1];
     *delta += coeff_1*coeff_2*ang_ind_overlap[2];
     *phi += coeff_1*coeff_2*ang_ind_overlap[3];
   }
-  
+
   /* now do zeta2 - zeta2 */
-  
+
   if( num_zeta1 == 2 ){
     if( l1 == 2 ){
       sk1 = atoms[which1].exp_d2;
@@ -214,21 +214,21 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
       sk1 = atoms[which1].exp_f2;
       coeff_1 = atoms[which1].coeff_f2;
     }
-    
+
     abfns(A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
-    
+
     for(i=0;i<=nn;i++){
       m=i;
       lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
     }
-    
+
     *sigma += coeff_1*coeff_2*ang_ind_overlap[0];
     *pi += coeff_1*coeff_2*ang_ind_overlap[1];
     *delta += coeff_1*coeff_2*ang_ind_overlap[2];
     *phi += coeff_1*coeff_2*ang_ind_overlap[3];
-    
+
     /* finally do zeta2 - zeta1 */
-    
+
     if( num_zeta2 == 2 ){
       if( l2 == 2){
 	sk2 = atoms[which2].exp_d;
@@ -238,9 +238,9 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
 	sk2 = atoms[which2].exp_f;
 	coeff_2 = atoms[which2].coeff_f1;
       }
-      
+
       abfns(A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
-      
+
       for(i=0;i<=nn;i++){
 	m=i;
 	lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);

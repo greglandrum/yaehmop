@@ -52,7 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Arguments:   num_args:  an integer
  *             part_surf_p: array of pointers to char
- *            
+ *
  * Returns: none
  *
  * Action: reads the locations of the triangles in an input file
@@ -60,7 +60,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *  'num_args is just used because this function is intended to be
  *    called from a function button
- *  
+ *
  ****************************************************************************/
 void read_triangle_locs(num_args,part_surf_p)
   int num_args;
@@ -74,7 +74,7 @@ void read_triangle_locs(num_args,part_surf_p)
   int phase;
 
   part_surf = (particle_surface_type *)part_surf_p[0];
-  
+
   strcpy(filename,part_surf->filename);
   strcat(filename,".tri");
 
@@ -107,7 +107,7 @@ void read_triangle_locs(num_args,part_surf_p)
  *
  * Arguments:   num_args:  an integer
  *             part_surf_p: array of pointers to char
- *            
+ *
  * Returns: none
  *
  * Action: writes the locations of the triangles in 'part_surf
@@ -115,7 +115,7 @@ void read_triangle_locs(num_args,part_surf_p)
  *
  *  'num_args is just used because this function is intended to be
  *    called from a function button
- *  
+ *
  ****************************************************************************/
 void save_triangle_locs(num_args,part_surf_p)
   int num_args;
@@ -128,7 +128,7 @@ void save_triangle_locs(num_args,part_surf_p)
   particle_surface_type *part_surf;
 
   part_surf = (particle_surface_type *)part_surf_p[0];
-  
+
   strcpy(filename,part_surf->filename);
   strcat(filename,".tri");
 
@@ -159,7 +159,7 @@ void save_triangle_locs(num_args,part_surf_p)
  *
  * Arguments:   num_args:  an integer
  *             part_surf_p: array of pointers to char
- *            
+ *
  * Returns: none
  *
  * Action: writes the locations of the particles in 'part_surf
@@ -167,7 +167,7 @@ void save_triangle_locs(num_args,part_surf_p)
  *
  *  'num_args is just used because this function is intended to be
  *    called from a function button
- *  
+ *
  ****************************************************************************/
 void save_particle_locs(num_args,part_surf_p)
   int num_args;
@@ -180,7 +180,7 @@ void save_particle_locs(num_args,part_surf_p)
   particle_surface_type *part_surf;
 
   part_surf = (particle_surface_type *)part_surf_p[0];
-  
+
   strcpy(filename,part_surf->filename);
   strcat(filename,".part");
 
@@ -215,14 +215,14 @@ void save_particle_locs(num_args,part_surf_p)
  *
  * Arguments:   num_args:  an integer
  *             part_surf_p: array of pointers to char
- *            
+ *
  * Returns: none
  *
  * Action: reads particles into 'part_surf from an output file.
  *
  *  'num_args is just used because this function is intended to be
  *    called from a function button
- *  
+ *
  ****************************************************************************/
 void read_particle_locs(num_args,part_surf_p)
   int num_args;
@@ -267,14 +267,14 @@ void read_particle_locs(num_args,part_surf_p)
 	 &(part_surf->surface_tolerance));
 
   printf("Reading in %d particles.\n",part_surf->num_particles);
-  
+
   for(i=0; i<part_surf->num_particles;i++){
     temp_part = (particle_type *)calloc(1,sizeof(particle_type));
     if(!temp_part) fatal("can't get memory to read in a particle");
 
     temp_part->next = part_surf->bound_particles;
     part_surf->bound_particles = temp_part;
-    
+
     fscanf(infile,"%lf %lf %lf %d",
 	    &(temp_part->loc.x),&(temp_part->loc.y),
 	    &(temp_part->loc.z),&phase);
@@ -291,11 +291,11 @@ void read_particle_locs(num_args,part_surf_p)
  *                   function compare_triangles
  *
  * Arguments: tri1,tri2: pointers to triangle_type
- *            
+ *
  * Returns: int
  *
  * Action: returns non-zero if 'tri1 and 'tri2 are the same
- *  
+ *
  ****************************************************************************/
 int compare_triangles(tri1,tri2)
   triangle_type *tri1,*tri2;
@@ -327,13 +327,13 @@ int compare_triangles(tri1,tri2)
  * Arguments: particles: pointer to particle_type
  *        num_particles: int
  *          lookup_list:  pointer to int
- *            
+ *
  * Returns: none
  *
  * Action:  builds 'lookup_list, an array which allows a particular
  *   numbered particle to be found in 'particles instantly.  (it's a
  *   hash table)
- *  
+ *
  ****************************************************************************/
 void build_part_lookup_list(particles,num_particles,lookup_list)
   particle_type *particles;
@@ -343,7 +343,7 @@ void build_part_lookup_list(particles,num_particles,lookup_list)
 
   for(i=0;i<num_particles;i++) lookup_list[particles[i].num] = i;
 }
-  
+
 
 
 /****************************************************************************
@@ -352,16 +352,16 @@ void build_part_lookup_list(particles,num_particles,lookup_list)
  *
  * Arguments: particles: pointer to particle_type
  *         num_particles: int
- *            
+ *
  * Returns: none
  *
  * Action:  goes through the list of particles 'particles and connects
  *  up nearest neighbors for each one.
  *
  *   At the moment this is only intended to work within a slice of
- *    data and will only connect to the two nearest neighbors in 
- *    the current slice. 
- *  
+ *    data and will only connect to the two nearest neighbors in
+ *    the current slice.
+ *
  ****************************************************************************/
 void find_and_connect_nearest_neighbors(particles,num_particles)
   particle_type *particles;
@@ -410,7 +410,7 @@ void find_and_connect_nearest_neighbors(particles,num_particles)
     i_part = i_part->next;
   }
 }
-  
+
 
 /****************************************************************************
  *
@@ -418,11 +418,11 @@ void find_and_connect_nearest_neighbors(particles,num_particles)
  *
  * Arguments: particle_surf: pointer to particle_surface_type.
  *                 particle: pointer to particle_type
- *            
+ *
  * Returns: none
  *
  * Action:  divides 'particle into 2 pieces
- *  
+ *
  ****************************************************************************/
 void split_a_particle(particle_surf,particle)
   particle_surface_type *particle_surf;
@@ -437,10 +437,10 @@ void split_a_particle(particle_surf,particle)
   new_part = (particle_type *)calloc(1,sizeof(particle_type));
   if( !new_part )
     fatal("Can't allocate a particle.\n");
-    
+
   new_part->next = particle_surf->bound_particles;
   particle_surf->bound_particles = new_part;
-    
+
   new_part->loc.x = particle->loc.x + (float)my_drand(.05);
   new_part->loc.y = particle->loc.y + (float)my_drand(.05);
   new_part->loc.z = particle->loc.z + (float)my_drand(.05);
@@ -457,12 +457,12 @@ void split_a_particle(particle_surf,particle)
  *                   Procedure split_bound_particles
  *
  * Arguments: particle_surf: pointer to particle_surface_type.
- *            
+ *
  * Returns: none
  *
  * Action:  divides all the particles on the surface into 2 particles.
  *   in doing this, the repulsion radius of all the particles is lowered.
- *  
+ *
  ****************************************************************************/
 void split_bound_particles(particle_surf)
   particle_surface_type *particle_surf;
@@ -479,10 +479,10 @@ void split_bound_particles(particle_surf)
     new_part = (particle_type *)calloc(1,sizeof(particle_type));
     if( !new_part )
       fatal("Can't allocate a particle.\n");
-    
+
     new_part->next = particle_surf->bound_particles;
     particle_surf->bound_particles = new_part;
-    
+
     new_part->loc.x = curr_part->loc.x + (float)my_drand((float).05);
     new_part->loc.y = curr_part->loc.y + (float)my_drand((float).05);
     new_part->loc.z = curr_part->loc.z + (float)my_drand((float).05);
@@ -500,12 +500,12 @@ void split_bound_particles(particle_surf)
  *                   Procedure remove_outlying_particles
  *
  * Arguments: particle_surf: pointer to particle_surface_type.
- *            
+ *
  * Returns: none
  *
  * Action:  frees all the bound particles in 'particle_surf that have
  *   managed to crawl off of the surface.
- *  
+ *
  ****************************************************************************/
 void remove_outlying_particles(particle_surf)
   particle_surface_type *particle_surf;
@@ -547,11 +547,11 @@ void remove_outlying_particles(particle_surf)
  *                   Procedure remove_free_particles
  *
  * Arguments: particle_surf: pointer to particle_surface_type.
- *            
+ *
  * Returns: none
  *
  * Action:  frees all the non surface bound particles in 'particle_surf
- *  
+ *
  ****************************************************************************/
 void remove_free_particles(particle_surf)
   particle_surface_type *particle_surf;
@@ -579,11 +579,11 @@ void remove_free_particles(particle_surf)
  *
  * Arguments: particle_surf: pointer to particle_surface_type.
  *               num_to_add: integer
- *            
+ *
  * Returns: none
  *
  * Action:  adds 'num_to_add free particles to 'particle_surf
- *  
+ *
  ****************************************************************************/
 void add_free_particles(particle_surf,num_to_add)
   particle_surface_type *particle_surf;
@@ -597,7 +597,7 @@ void add_free_particles(particle_surf,num_to_add)
   if( !particle_surf )
     FATAL_BUG("Bad particle_surf in add_free_particles.");
   particle_surf->num_particles += num_to_add;
-  
+
   /* start at random locations surrounding the centers */
   num_at_this_center = 0;
   center = particle_surf->MO_centers;
@@ -605,12 +605,12 @@ void add_free_particles(particle_surf,num_to_add)
     temp_part = (particle_type *)calloc(1,sizeof(particle_type));
     if( !temp_part )
       fatal("Can't allocate a particle.\n");
-    
+
     temp_part->next = particle_surf->free_particles;
     particle_surf->free_particles = temp_part;
-    
+
     temp_part->rad = 0.3;
-    
+
     temp_part->loc.x = center->loc->x + my_drand(1.0);
     temp_part->loc.y = center->loc->y + my_drand(1.0);
     temp_part->loc.z = center->loc->z + my_drand(1.0);
@@ -633,7 +633,7 @@ void add_free_particles(particle_surf,num_to_add)
  *                   Procedure calc_bound_particle_forces
  *
  * Arguments: particle_surf: pointer to particle_surface_type.
- *            
+ *
  * Returns: none
  *
  * Action:  Calculates the forces on bound particles.
@@ -663,7 +663,7 @@ void calc_bound_particle_forces(particle_surf)
 
   /* primitive error checking */
   if( !particle_surf || !particle_surf->MO_centers ){
-    FATAL_BUG("Bogus particle_surf passed to calc_bound_particle_forces."); 
+    FATAL_BUG("Bogus particle_surf passed to calc_bound_particle_forces.");
   }
 
   /* if there are no bound particles, just return now */
@@ -682,7 +682,7 @@ void calc_bound_particle_forces(particle_surf)
 
   /* zero out the force accumulation array */
   bzero(part_force_accum,num_particles*sizeof(point_type));
-    
+
   /*******
 
     first accumulate the forces, this involves two trips
@@ -693,8 +693,8 @@ void calc_bound_particle_forces(particle_surf)
   which_part1 = 0;
   while(part1){
     /********
-      
-      first determine the distance cut-off for the repulsion 
+
+      first determine the distance cut-off for the repulsion
       we'll make this 3*'particle_surf->particle_rad, because by
       that point the repulsion is down way low
 
@@ -708,25 +708,25 @@ void calc_bound_particle_forces(particle_surf)
 /*      if( part1->phase == part2->phase ){*/
 	rad_squared2 = part2->rad*part2->rad;
 	cut_off2 = 9.0 * rad_squared2;
-	
+
 	dist_vect.x = part1->loc.x - part2->loc.x;
 	dist_vect.y = part1->loc.y - part2->loc.y;
 	dist_vect.z = part1->loc.z - part2->loc.z;
-	
+
 	/********
-	  
+
 	  calculate the distance between the two particles.
-	  
+
 	  *********/
 	dist_squared = dist_vect.x*dist_vect.x + dist_vect.y*dist_vect.y +
 	  dist_vect.z*dist_vect.z;
-	
+
 	/* normalize the inter-particle vector */
 	dist = sqrt(dist_squared);
 	dist_vect.x /= dist;
 	dist_vect.y /= dist;
 	dist_vect.z /= dist;
-	
+
 	if(dist_squared < cut_off ){
 	  /* add the forces into the accum array */
 	  repulse_strength = exp(-dist_squared/(2.0*rad_squared));
@@ -734,7 +734,7 @@ void calc_bound_particle_forces(particle_surf)
 	  part_force_accum[which_part1].y += dist_vect.y*repulse_strength;
 	  part_force_accum[which_part1].z += dist_vect.z*repulse_strength;
 	}
-	
+
 	/* now do the same thing for the other particle */
 	if( dist_squared < cut_off2 ){
 	  repulse_strength = exp(-dist_squared/(2.0*rad_squared2));
@@ -757,10 +757,10 @@ void calc_bound_particle_forces(particle_surf)
 
   ******/
   part1 = particle_surf->bound_particles;
-  which_part1 = 0;    
+  which_part1 = 0;
 
   while(part1){
-    
+
     /* find the value and gradient of the wave func */
     bzero((char *)&MO_info,sizeof(MO_info_type));
     MO_info.loc.x = part1->loc.x;
@@ -793,7 +793,7 @@ void calc_bound_particle_forces(particle_surf)
       part_force_accum[which_part1].x*part_force_accum[which_part1].x +
 	part_force_accum[which_part1].y*part_force_accum[which_part1].y +
 	  part_force_accum[which_part1].z*part_force_accum[which_part1].z;
-    
+
 /*printf("%lf\n",force_mag);*/
     if( force_mag > 1.00 ){
       part1->rad *= .85;
@@ -862,13 +862,13 @@ void calc_bound_particle_forces(particle_surf)
  *                   Procedure calc_free_particle_forces
  *
  * Arguments: particle_surf: pointer to particle_surface_type.
- *            
+ *
  * Returns: none
  *
  * Action:  Calculates the forces on free particles.  If the particle
  *   has not yet made it onto the desired isosurface, there there will be
  *   a force pulling it towards the surface.
- *  
+ *
  ****************************************************************************/
 void calc_free_particle_forces(particle_surf)
   particle_surface_type *particle_surf;
@@ -888,20 +888,20 @@ void calc_free_particle_forces(particle_surf)
 
   /* primitive error checking */
   if( !particle_surf || !particle_surf->MO_centers ){
-    FATAL_BUG("Bogus particle_surf passed to calc_free_article_forces."); 
+    FATAL_BUG("Bogus particle_surf passed to calc_free_article_forces.");
   }
 
 
   /* step through the list of free particles */
   temp_part = particle_surf->free_particles;
   while(temp_part){
-    
+
     /* find the value and gradient of the wave func */
     MO_info.loc.x = temp_part->loc.x;
     MO_info.loc.y = temp_part->loc.y;
     MO_info.loc.z = temp_part->loc.z;
     calc_MO_value(&MO_info,particle_surf->MO_centers);
-    
+
     /******
 
       if we're not on the desired iso-surface yet, then take a step
@@ -909,12 +909,12 @@ void calc_free_particle_forces(particle_surf)
 
     ******/
     dist_from_isosurf = fabs(MO_info.val) - particle_surf->surface_value;
-    
+
     /*****
-      
+
       before stepping, check to see if the last step put us on the
       surface
-      
+
     *****/
     if( fabs(dist_from_isosurf) <= particle_surf->surface_tolerance){
       /******

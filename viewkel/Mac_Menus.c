@@ -49,7 +49,7 @@ Boolean ViewkelObjectMenuDispatch(short menuID, short menuItem);
  *                   Function SetupViewkelMenus
  *
  * Arguments: none
- *            
+ *
  * Returns: OSErr
  *
  * Action: Does the initialization for the menus that will
@@ -64,16 +64,16 @@ OSErr SetupViewkelMenus(void)
   Mac_globals.modeMenu = GetMenu(MODE_MENU_ID);
   Mac_globals.actionMenu = GetMenu(ACTION_MENU_ID);
   Mac_globals.read_dataMenu = GetMenu(READ_DATA_SUBMENU_ID);
-  if(!Mac_globals.modeMenu || !Mac_globals.actionMenu || 
+  if(!Mac_globals.modeMenu || !Mac_globals.actionMenu ||
      !Mac_globals.read_dataMenu ){
     error = kNoResourceError;
     return error;
   }
 
   /* insert the menus into the menu bar now */
-  InsertMenu(Mac_globals.actionMenu, 0 ); 
-  InsertMenu(Mac_globals.read_dataMenu, -1 ); 	 
-  InsertMenu(Mac_globals.modeMenu, 0 ); 
+  InsertMenu(Mac_globals.actionMenu, 0 );
+  InsertMenu(Mac_globals.read_dataMenu, -1 );
+  InsertMenu(Mac_globals.modeMenu, 0 );
 
   return error;
 }
@@ -83,7 +83,7 @@ OSErr SetupViewkelMenus(void)
  *                   Procedure UpdateViewkelMenus
  *
  * Arguments: macWindow: WindowPtr
- *            
+ *
  * Returns: void
  *
  * Action: Deals with all the stuff needed to updated the menus
@@ -95,17 +95,17 @@ void UpdateViewkelMenus(WindowPtr macWindow)
 {
   int i;
   MenuHandle theModeMenu;
-  
+
 	EasyDisableMenu(g.fileMenu);
 	EnableItem(g.fileMenu,kQuitItem);
 
   theModeMenu=GetMenuHandle(MODE_MENU_ID);
-  
+
   /* turn off all the checks */
   for(i=MODE_NONE_ITEM_ID;i<MODE_LAST_ITEM_ID;i++){
     CheckItem(theModeMenu,i,FALSE);
   }
-  
+
   /* update the mode menu to reflect the currently active mode */
   switch(mainmode){
   case NONE:
@@ -119,7 +119,7 @@ void UpdateViewkelMenus(WindowPtr macWindow)
   case CENT:
     CheckItem(theModeMenu,MODE_CENTER_ITEM_ID,TRUE);break;
   }
-  
+
   /* check (or not) the fill proj's item */
   CheckItem(theModeMenu,MODE_FILL_ITEM_ID,(Boolean)fill_projections);
 
@@ -137,7 +137,7 @@ void UpdateViewkelMenus(WindowPtr macWindow)
  *                   Procedure UpdateViewkelObjectMenus
  *
  * Arguments: macWindow: WindowPtr
- *            
+ *
  * Returns: void
  *
  * Action: Deals with all the stuff needed to update the object menus
@@ -152,7 +152,7 @@ void UpdateViewkelObjectMenus(WindowPtr macWindow)
 	button_type *button;
 
 	/* loop over all of the button_wins and their children */
-	button_win = button_wins;	
+	button_win = button_wins;
 	while(button_win){
 		button = button_win->button_list;
 		while(button){
@@ -160,7 +160,7 @@ void UpdateViewkelObjectMenus(WindowPtr macWindow)
 			strcpy(pstring,button->string);
 			CtoPstr(pstring);
 			SetItem(button_win->theMenu,button->itemID,(unsigned char *)pstring);
-			
+
 			/* now make sure that the buttons are properly displayed */
 			switch(button->type){
 			case TOGGLE:
@@ -171,11 +171,11 @@ void UpdateViewkelObjectMenus(WindowPtr macWindow)
 				CheckItem(button_win->theMenu,button->itemID,
 									(Boolean)(*button->guts.boolean));
 				break;
-			
+
 			}
 			button = button->next;
 		}
-		
+
 		/* update the children if there are any */
 		if( button_win->child ){
 				button = button_win->child->button_list;
@@ -184,7 +184,7 @@ void UpdateViewkelObjectMenus(WindowPtr macWindow)
 			strcpy(pstring,button->string);
 			CtoPstr(pstring);
 			SetItem(button_win->child->theMenu,button->itemID,(unsigned char *)pstring);
-			
+
 			/* now make sure that the buttons are properly displayed */
 			switch(button->type){
 			case TOGGLE:
@@ -195,12 +195,12 @@ void UpdateViewkelObjectMenus(WindowPtr macWindow)
 				CheckItem(button_win->child->theMenu,button->itemID,
 									(Boolean)(*button->guts.boolean));
 				break;
-			
+
 			}
 			button = button->next;
-		}	
 		}
-	
+		}
+
 		button_win = button_win->next;
 	}
 }
@@ -210,12 +210,12 @@ Boolean ViewkelMenuDispatch(WindowPtr macWindow, long menuChoice)
 {
   short menuID,menuItem;
   Boolean handled=false;
-  
+
 
     /* EasyApp didn't touch it, now we deal */
     menuID = HiWord(menuChoice);
     menuItem = LoWord(menuChoice);
-    
+
     switch(menuID){
     case READ_DATA_SUBMENU_ID:
       read_data_submenu_hook(menuItem);
@@ -231,14 +231,14 @@ Boolean ViewkelMenuDispatch(WindowPtr macWindow, long menuChoice)
     default:
       handled = ViewkelObjectMenuDispatch(menuID,menuItem);
       break;
-    }		
+    }
  	return handled;
 }
 
 /***************
   action_menu_hook
-  takes a menu choice as an argument and calls 
-  the appropriate function to deal with what should be read in.   
+  takes a menu choice as an argument and calls
+  the appropriate function to deal with what should be read in.
  ****************/
 void action_menu_hook(short menuItem)
 {
@@ -261,8 +261,8 @@ void action_menu_hook(short menuItem)
 
 /***************
   read_data_submenu_hook
-  takes a menu choice as an argument and calls 
-  the appropriate function to deal with what should be read in.   
+  takes a menu choice as an argument and calls
+  the appropriate function to deal with what should be read in.
  ****************/
 void read_data_submenu_hook(short menuItem)
 {
@@ -291,13 +291,13 @@ void read_data_submenu_hook(short menuItem)
   default:
     break;
   }
-} 
+}
 
 
 /***************
   mode_menu_hook
   takes a menu choice as an argument and sets the
-  appropriate mode in the mode menu  
+  appropriate mode in the mode menu
 ****************/
 void mode_menu_hook(short menuItem)
 {
@@ -324,20 +324,20 @@ void mode_menu_hook(short menuItem)
   default:
     break;
   }
-} 
+}
 
 
 /*******************************************
 
 	ViewkelObjectMenuDispatch
-	
+
 	Arguments: menuID, menuItem: shorts
 	Returns: Boolean
-	
-	This tracks through the menus and deals with calling the 
+
+	This tracks through the menus and deals with calling the
 		appropriate function if the user has selected
 		an item in an ObjectMenu
-		
+
 ********************************************/
 Boolean ViewkelObjectMenuDispatch(short menuID, short menuItem)
 {
@@ -347,7 +347,7 @@ Boolean ViewkelObjectMenuDispatch(short menuID, short menuItem)
 	int *mode_ptr;
 
 	/* first find the appropriate button_win */
-	button_win = button_wins;	
+	button_win = button_wins;
 	while(button_win && !handled){
 		if(button_win->menuID == menuID){
 			/* find the item */
@@ -370,7 +370,7 @@ Boolean ViewkelObjectMenuDispatch(short menuID, short menuItem)
 			button_win = button_win->next;
 		}
 	}
-	
+
 	if( handled ){
       switch(button->type){
       case FLOATPARM:
@@ -402,7 +402,7 @@ Boolean ViewkelObjectMenuDispatch(short menuID, short menuItem)
 				break;
       }
 	}
-	
+
 	return handled;
 }
 

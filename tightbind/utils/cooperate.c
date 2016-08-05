@@ -61,13 +61,13 @@ void main()
 #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
-  
+
 	/* set up some stuff for Sioux */
 	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;	
+	SIOUXSettings.asktosaveonclose = FALSE;
 	SIOUXSettings.autocloseonquit = FALSE;
 	printf("Starting cooperate.\n");
-	
+
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
   	fatal("User cancelled intial file open");
@@ -99,13 +99,13 @@ void main()
   } else{
     dist_tol = .01;
   }
-  
+
   /* open the file */
 #ifndef USING_THE_MAC
   infile = open(argv[1],O_RDONLY,"r");
 #else
   infile = open(argv[1],O_RDONLY);
-#endif  
+#endif
   if( infile == -1 ){
     fatal("Can't open file for binary I/O.");
   }
@@ -119,7 +119,7 @@ void main()
   /* get space for the dummies array */
   dummies = (char *)calloc(num_atoms,sizeof(char));
   if(!dummies) fatal("Can't get space for dummies.");
-  
+
   /* read out the dummies array */
   read_err = read(infile,(const char *)dummies,num_atoms*sizeof(char));
   if( read_err <= 0 ) fatal("Can't read dummy array.");
@@ -203,17 +203,17 @@ void main()
   *********/
   qsort((void *)dist_array,num_in_array,sizeof(dist_type),sort_distances_helper);
 
-  
+
   curr_type = 1;
   curr_dist = dist_array[0].dist;
   for(i=0;i<num_in_array;i++){
 
     if( !(dummies[dist_array[i].atom2]) && !(dummies[dist_array[i].atom1]) ){
       /**********
-	
+
 	check to see if we need to change "types"  i.e. if the distance
 	difference is greater than dist_tol
-	
+
 	***********/
       if( fabs(dist_array[i].dist - curr_dist) > dist_tol ){
 	curr_type++;
@@ -223,13 +223,13 @@ void main()
 	     dist_array[i].atom2+1,dist_array[i].cell.x,dist_array[i].cell.y,
 	     dist_array[i].cell.z,dist_array[i].dist);
     }
-    
+
   }
-      
+
 
 
 }
 
-      
+
 
 

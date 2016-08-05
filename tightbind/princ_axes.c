@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *  NOTE: in order to avoid having to write my own matrix diagonalization code
 *   the routines in this file are dependant on the meschach matrix library
 *   which is freely available from netlib.  If you do not understand what this
-*   means or how to get things from netlib feel free to ask me. 
+*   means or how to get things from netlib feel free to ask me.
 *
 *  created:  greg landrum  February 1994
 *
@@ -84,13 +84,13 @@ void find_princ_axes(atoms,locs,princ_axes,moments,num_atoms)
 
   /********
 
-    get space for the matrices, using meschach's routines 
+    get space for the matrices, using meschach's routines
 
   ********/
   MOI_tensor = m_get(3,3);
   evects = m_get(3,3);
   evals = v_get(3);
-  
+
   /********
 
     now build the moment of inertia tensor....
@@ -104,16 +104,16 @@ void find_princ_axes(atoms,locs,princ_axes,moments,num_atoms)
 
     /* we don't want dummy atoms contributing */
     if( mass >= 0 ){
-      
+
       MOI_tensor->me[0][0] += mass*(atom->loc.z*atom->loc.z +
 				    atom->loc.y*atom->loc.y);
       MOI_tensor->me[0][1] -= mass*(atom->loc.x*atom->loc.y);
       MOI_tensor->me[0][2] -= mass*(atom->loc.x*atom->loc.z);
-      
+
       MOI_tensor->me[1][1] += mass*(atom->loc.z*atom->loc.z +
 				    atom->loc.x*atom->loc.x);
-      MOI_tensor->me[1][2] -= mass*(atom->loc.y*atom->loc.z);  
-      
+      MOI_tensor->me[1][2] -= mass*(atom->loc.y*atom->loc.z);
+
       MOI_tensor->me[2][2] += mass*(atom->loc.y*atom->loc.y +
 				    atom->loc.x*atom->loc.x);
     }

@@ -64,50 +64,50 @@ void addprojectmat(void)
   matrix_type *stacksave;
   static matrix_type *temp_mat = 0;
   point_type temp_pt;
-  
+
   if( redo_projection ){
     /* in order to get this all properly built it is necessary to make a new
        matrix stack.  The old stack is saved by pointing stacksave at it
        */
     stacksave=stack;
     stack=0;
-    
+
     /* load up the identity matrix */
     loadmatrix(ident);
     pushmatrix(0);
-    
+
     if( !temp_mat ){
       temp_mat = (matrix_type *)calloc(1,sizeof(matrix_type));
       if( !temp_mat )fatal("Memory allocation." );
     }
-    
-    
+
+
     /* save the view vector as a point */
     temp_pt.x = camera->la.x - camera->lf.x;
     temp_pt.y = camera->la.y - camera->lf.y;
     temp_pt.z = camera->la.z - camera->lf.z;
-    
+
     /* put on the main projection matrix */
     temp_mat->matrix[0][0]=1;
     temp_mat->matrix[1][1]=1;
     temp_mat->matrix[2][2]=1;
     temp_mat->matrix[3][2]=1.0/camera->foclength;
     multmatrix(temp_mat);
-    
+
     scale((float)g_xmax,(float)g_xmax,1.0);
     translate( 0.0, 0.0, -(camera->foclength));
 
     /* translate lookfrom to the origin */
     translate( -(camera->lf.x), -(camera->lf.y), -(camera->lf.z) );
-    
+
     /* get a copy of the matrix */
     getmatrix(mainortho);
     popmatrix();
-    
+
     /* restore things */
     stack = stacksave;
     redo_projection = 0;
-  }    
+  }
   /* premultiply by the projection matrix */
   premultmatrix(mainortho);
 }
@@ -123,7 +123,7 @@ void addprojectmat(void)
  * Returns: none
  *
  * Action: transforms the points of the primitive and then displays it
- *   in the three D window and in the ortho view windows (if ortho views are 
+ *   in the three D window and in the ortho view windows (if ortho views are
  *   currently active.
  *
  ****************************************************************************/
@@ -137,7 +137,7 @@ void drawit( prim_type *prim,object_type *obj )
     case MOLECULE:
       /* load the perspective view matrix */
       pushmatrix(0);
-      addprojectmat(); 
+      addprojectmat();
       draw_3D_objects(prim,obj);
       /* clean up the stack */
       popmatrix();
@@ -163,7 +163,7 @@ void drawit( prim_type *prim,object_type *obj )
     case MO_SURF:
       /* load the perspective view matrix */
       pushmatrix(0);
-      addprojectmat(); 
+      addprojectmat();
       draw_3D_objects(prim,obj);
       /* clean up the stack */
       popmatrix();
@@ -177,7 +177,7 @@ void drawit( prim_type *prim,object_type *obj )
       FATAL_BUG("Bogus primitive in drawit.");
       break;
     }
-  }    
+  }
 }
 
 /****************************************************************************
@@ -195,19 +195,19 @@ void drawit( prim_type *prim,object_type *obj )
 void instantiate( object_type *object, char do_labels )
 {
   int i;
-  
+
   if( !object ) return;
-  
+
   /*******
 
-    stack operations only need to be performed for 3D objects 
-  
+    stack operations only need to be performed for 3D objects
+
   ********/
   if( object->prim && (object->prim->which == MOLECULE
 		       || object->prim->which == MO_SURF)){
     /* update the current matrix */
     pushmatrix(0);
-    
+
     /* undo the translation */
     translate(object->trans.x/20.0,-object->trans.y/20.0,
 	      object->trans.z/20.0);
@@ -220,7 +220,7 @@ void instantiate( object_type *object, char do_labels )
     yrot(object->rot.y);
     zrot(object->rot.z);
   }
-  
+
   /* if there is a primitive at this node then draw it now */
   if( !do_labels ){
     if( object->prim && !object->prim->label ){
@@ -236,13 +236,13 @@ void instantiate( object_type *object, char do_labels )
   if( object->bmax.x>globalmax.x)globalmax.x=object->bmax.x;
   if( object->bmin.y<globalmin.y)globalmin.y=object->bmin.y;
   if( object->bmax.y>globalmax.y)globalmax.y=object->bmax.y;
-  
+
   /* now go through the children of the node */
   i=0;
   while( object->children[i] ){
     /* instantiate this child */
     instantiate(object->children[i],do_labels);
-    
+
     /* move to the next child */
     i++;
   }
@@ -289,7 +289,7 @@ void redrawgraph(void)
     instantiate(temphead->obj,1);
     temphead = temphead->next;
   }
-  
+
   g_switch_buffers();
 
 }
@@ -312,7 +312,7 @@ void redraw(void)
     g_draw_all_buttons(button_wins);
   }
 #endif
-  
+
   redrawgraph();
 }
 

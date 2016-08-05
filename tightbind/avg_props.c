@@ -95,7 +95,7 @@ void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
 
   /* zero out the occupations array. */
   bzero(AO_occups,num_orbs*sizeof(real));
-  
+
   /* loop over all the occupied crystal orbitals */
   total_electrons = 0.0;
 
@@ -104,7 +104,7 @@ void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   avg_E_accum = 0.0;
 
   tot_num_K = 0.0;
-  i = 0;  
+  i = 0;
   while( orbital_ordering[i].occup > .0001 ){
     /* some pointers to make things a little more efficient */
     kpoint = orbital_ordering[i].Kpoint;
@@ -127,7 +127,7 @@ void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   }
 
 
-  
+
   tot_num_K = 0.0;
   num_occup_bands = 0.0;
   tot_K_weight = 0.0;
@@ -219,7 +219,7 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   if( !details->just_avgE ){
     fprintf(output_file,"# Atomic Orbital Occupations\n");
     fprintf(output_file,";        s      px      py      pz    dx2-y2    dz2     dxy     dxz     dyz\n");
-    
+
     for( i=0; i<cell->num_atoms; i++){
       find_atoms_orbs(num_orbs,cell->num_atoms,i,orbital_lookup_table,&begin,&end);
 
@@ -271,9 +271,9 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
 	}
       }
     }
-    
+
     /* now report f orbital occupations */
-    
+
     for(i=0; i<cell->num_atoms; i++){
       if(cell->atoms[i].nf){
 	f_occup_print =1;
@@ -304,7 +304,7 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
 	    fprintf(output_file,"\n");
 
 	    /* no need to work out any more net atomic charges !!! */
-	    
+
 	  }
 	}
       }
@@ -312,15 +312,15 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
 
     /* report the net charges */
     fprintf(output_file,"\n# AVERAGE NET CHARGES\n");
-    
+
     for(i=0;i<cell->num_atoms;i++){
       fprintf(output_file,"%d %s %lf\n",i+1,cell->atoms[i].symb,properties.net_chgs[i]);
 
     }
-    
+
     fprintf(output_file,"There are a total of %lf electrons.\n",total_electrons);
   }
-}  
+}
 
 /****************************************************************************
  *
@@ -369,7 +369,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
 
   /* zero out the occupations array. */
   bzero(FMO_occups,num_orbs*sizeof(real));
-  
+
   /* loop over all the occupied crystal orbitals */
   total_electrons = 0.0;
 
@@ -377,7 +377,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
   avg_E_accum = 0.0;
 
   tot_num_K = 0.0;
-  i = 0;  
+  i = 0;
   while( orbital_ordering[i].occup > .0001 ){
     /* some pointers to make things a little more efficient */
     kpoint = orbital_ordering[i].Kpoint;
@@ -396,7 +396,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
   }
 
 
-  
+
   tot_num_K = 0.0;
   num_occup_bands = 0.0;
   tot_K_weight = 0.0;
@@ -417,7 +417,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
     FMO_occups[i] = FMO_occups[i]*num_occup_bands/(tot_num_K*details->num_KPOINTS);
   }
   accum = accum*num_occup_bands/(tot_num_K*details->num_KPOINTS);
-  
+
   fprintf(output_file,"# Fragment MO Occupations\n");
 
   tot_num_orbs = 0;
@@ -430,7 +430,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
       tot_num_orbs++;
     }
   }
-    
+
   /* report the net charges */
   fprintf(output_file,"\n# AVERAGE FRAGMENT NET CHARGES (Based upon user supplied number of electrons)\n");
 
@@ -440,7 +440,7 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
 
   }
 
-}  
+}
 
 
 
@@ -473,7 +473,7 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   int num_orbs;
   K_orb_ptr_type *orbital_ordering;
   avg_prop_info_type *avg_prop_info;
-  hermetian_matrix_type overlapR; 
+  hermetian_matrix_type overlapR;
   prop_type properties;
 {
   int i,j,k,l;
@@ -489,7 +489,7 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   real num_electrons;
   int num_elements,num_occup_bands,num_occup_orbs;
   COOP_type *COOP_ptr;
-  
+
   tot_num_K = 0.0;
 
   overlap.dim = num_orbs;
@@ -505,27 +505,27 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
   bzero(properties.ROP_mat,num_orbs*num_orbs*sizeof(real));
 
   overlap.mat = overlapR.mat;
-  i = 0;  
+  i = 0;
   while( orbital_ordering[i].occup > .0001 ){
     /* some pointers to make things a little more efficient */
     kpoint = orbital_ordering[i].Kpoint;
     MO = orbital_ordering[i].MO;
-    
+
     /* get pointers to the orbital information */
     MO_ptr = &(avg_prop_info[kpoint].orbs[MO*num_orbs]);
     MO_ptrI = &(avg_prop_info[kpoint].orbsI[MO*num_orbs]);
-    
+
     for(j=0;j<num_orbs;j++){
       for( k=j;k<num_orbs;k++){
 	/*****
 	  within the unit cell there's no need to accumulate an imaginary
-	  contribution to the overlap population, 
+	  contribution to the overlap population,
 	  *****/
 	accum = ((real)MO_ptr[j] * MO_ptr[k] +
 		 (real)MO_ptrI[j] * MO_ptrI[k]) /
 		   ((real)MULTIPLIER*(real)MULTIPLIER);
 	if(j != k){
-	  properties.OP_mat[j*num_orbs+k] += 
+	  properties.OP_mat[j*num_orbs+k] +=
 	    (2.0*orbital_ordering[i].occup*details->K_POINTS[kpoint].weight*
 	      accum*HERMETIAN_R(overlap,j,k));
 
@@ -557,7 +557,7 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
     for(j=i;j<num_orbs;j++){
       properties.OP_mat[i*num_orbs+j] = properties.OP_mat[i*num_orbs+j] *
 	num_occup_bands / (tot_num_K*details->num_KPOINTS);
-      properties.OP_mat[j*num_orbs+i] = properties.OP_mat[i*num_orbs+j]; 
+      properties.OP_mat[j*num_orbs+i] = properties.OP_mat[i*num_orbs+j];
       num_electrons += properties.OP_mat[i*num_orbs+j];
     }
   }
@@ -614,9 +614,9 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
 		(char *)0,(char *)0,details->line_width);
   }
   fprintf(output_file,"\n");
-  
 
-}  
+
+}
 
 
 /****************************************************************************
@@ -654,7 +654,7 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
   real num_here;
   real accum;
   k_point_type *temp_kpoint;
-  
+
   tot_orbs = num_orbs * details->num_KPOINTS;
   electrons_left = electrons_per_cell * (real)details->num_KPOINTS;
 
@@ -663,18 +663,18 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
     orbital_ordering[i].occup = 0.0;
   }
 
-  
+
   /* loop until we either run out of orbitals or electrons */
   accum = 0.0;
   for(i=0;i<tot_orbs && electrons_left > 0.0; i++){
     temp_kpoint = &(details->K_POINTS[orbital_ordering[i].Kpoint]);
-    
+
     if( electrons_left >= 2.0 ){
       num_here = 2.0;
 
       orbital_ordering[i].occup = num_here;
       accum += num_here;
-      
+
       electrons_left -= 2.0;
     }else if(electrons_left > 0.0 ){
       num_here = electrons_left;
@@ -687,7 +687,7 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
 #ifdef DEBUG
   fprintf(output_file,"%%Tot num electrons in: %lf\n",accum);
 #endif
-  
+
   /*********
 
     check for degeneracies
@@ -695,12 +695,12 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
   **********/
   last_occup = i-1;
   end_degen = i;
-  while( end_degen < tot_orbs && fabs((real)*(orbital_ordering[last_occup].energy) - 
+  while( end_degen < tot_orbs && fabs((real)*(orbital_ordering[last_occup].energy) -
 	      (real)*(orbital_ordering[end_degen].energy)) < DEGEN_TOL ){
     end_degen++;
   }
 
-  begin_degen = last_occup - 1; 
+  begin_degen = last_occup - 1;
   while( begin_degen > -1 && fabs((real)*(orbital_ordering[last_occup].energy) -
 	      (real)*(orbital_ordering[begin_degen].energy)) < DEGEN_TOL){
     begin_degen--;
@@ -718,7 +718,7 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
         do this by finding the number of electrons in degenerate levels and
 	then distributing them equally amongst those levels.
     ******/
-    num_degen_electrons = 0; 
+    num_degen_electrons = 0;
     for(i=begin_degen;i<end_degen;i++){
       temp_kpoint = &(details->K_POINTS[orbital_ordering[i].Kpoint]);
       num_degen_electrons += orbital_ordering[i].occup;
@@ -748,8 +748,8 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
   /* store the Fermi level */
   *Fermi_E = (real)*(orbital_ordering[last_occup].energy);
 }
-      
-    
+
+
 
 
 
@@ -882,7 +882,7 @@ void sort_avg_prop_info(details,num_orbs,avg_prop_info,orbital_ordering)
   int num_so_far,num_elements;
 
   num_elements = details->num_KPOINTS * num_orbs;
-  
+
   fprintf(status_file," Sorting %d crystal orbitals.\n",num_elements);
 
   /********
@@ -895,7 +895,7 @@ void sort_avg_prop_info(details,num_orbs,avg_prop_info,orbital_ordering)
   /* loop over K points */
   for(i=0;i<details->num_KPOINTS;i++){
     itab = i;
-    
+
     /* loop over MO's */
     for(j=0;j<num_orbs;j++){
       orbital_ordering[num_so_far].Kpoint = i;

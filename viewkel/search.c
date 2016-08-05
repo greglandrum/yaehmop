@@ -50,7 +50,7 @@ object_type *traverseobj(object_type *obj,int cor1,int cor2,Window win)
     int i, found;
     point_type *min, *max;
 #ifdef X_GRAPHICS
-    XEvent event;   
+    XEvent event;
     object_type *tempobj;
 
     tempobj=0;

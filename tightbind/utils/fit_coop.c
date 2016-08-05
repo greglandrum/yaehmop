@@ -39,13 +39,13 @@ void main()
 #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
-  
+
 	/* set up some stuff for Sioux */
 	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;	
+	SIOUXSettings.asktosaveonclose = FALSE;
 	SIOUXSettings.autocloseonquit = FALSE;
 	printf("Starting fit_coop.\n");
-	
+
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
   	fatal("User cancelled intial file open");
@@ -147,7 +147,7 @@ void main()
   }
   if( eof_hit < 0 ){
     fatal("End of file hit before initial COOP data was found.\n");
-  }    
+  }
 
   /*****
 
@@ -192,7 +192,7 @@ void main()
       upcase(instring);
     }
   }
-      
+
   /* open the output file */
   if( num_walsh_steps ){
     sprintf(instring,"%s.step%d.COOP",argv[1],which_walsh_step);
@@ -220,12 +220,12 @@ void main()
   sscanf(instring,"%d",&num_COOP);
 
 
-  
+
   /******
 
     okay, we're at the beginning of the projected COOP data,
     read in each of the curves
-    
+
   *******/
   skipcomments(infile,instring,FATAL);
   num_p = 0;
@@ -239,7 +239,7 @@ void main()
 
     /* now read in the data until we a line containing END */
     skipcomments(infile,instring,FATAL);
-    
+
     while(!(instring[0] == '#' && strstr(instring,"END"))&&!strstr(instring,"JOB_TITLE")){
       sscanf(instring,"%lf %lf",&(points[num_p].height),&(points[num_p].energy));
       if( !i )points_per_COOP++;
@@ -260,10 +260,10 @@ void main()
   }
 
   /******
-    
+
     now that we have all the points, generate the curve by smoothing
     the data we have with Gaussians.
-    
+
   *******/
   num_E_steps = ceil(fabs(E_max-E_min)/E_step) + 1;
 
@@ -282,8 +282,8 @@ void main()
       /* add the value of the integration at the previous energy step */
       if( i != 0 ){
 	integration[i*num_COOP+j] = integration[(i-1)*num_COOP+j];
-      }	
-      
+      }
+
       /* now loop over all the points in this COOP curve */
       for(k=0;k<points_per_COOP;k++,num_p++){
 	E_diff = curr_E - points[num_p].energy;
@@ -307,7 +307,7 @@ void main()
 
   ******/
   fprintf(outfile,"# END OF COOP\n");
-  fprintf(outfile,"# BEGIN INTEGRATION\n");  
+  fprintf(outfile,"# BEGIN INTEGRATION\n");
   for(i=0, curr_E=E_min;i<num_E_steps;i++, curr_E += E_step ){
     for( j=0; j<num_COOP; j++ ){
       fprintf(outfile,"% -6.4lf ",integration[i*num_COOP+j]);
@@ -316,7 +316,7 @@ void main()
   }
 
   /****
-    find and read out the fermi energy 
+    find and read out the fermi energy
   *****/
   eof_hit = skipcomments(infile,instring,IGNORE);
   upcase(instring);
@@ -337,7 +337,7 @@ void main()
   printf("Done!\n\n");
 
 }
-    
+
 
 
 

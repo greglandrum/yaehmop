@@ -3,33 +3,33 @@
  * Copyright (C) 1986 - 1993   Thomas Williams, Colin Kelley
  *
  * Permission to use, copy, and distribute this software and its
- * documentation for any purpose with or without fee is hereby granted, 
- * provided that the above copyright notice appear in all copies and 
- * that both that copyright notice and this permission notice appear 
+ * documentation for any purpose with or without fee is hereby granted,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
  * in supporting documentation.
  *
  * Permission to modify the software is granted, but not the right to
- * distribute the modified code.  Modifications are to be distributed 
+ * distribute the modified code.  Modifications are to be distributed
  * as patches to released version.
- *  
+ *
  * This software is provided "as is" without express or implied warranty.
- * 
+ *
  *
  * AUTHORS
- * 
+ *
  *   Original Software:
  *       Gershon Elber
- * 
+ *
  *   Modified by Greg Landrum for inclusion with YAeHMOP: June 1996
- *      This modification is distributed with the permission of Gershon 
+ *      This modification is distributed with the permission of Gershon
  *       Elber.
  *
  *
  *
  *
  * There is a mailing list for gnuplot users. Note, however, that the
- * newsgroup 
- *	comp.graphics.gnuplot 
+ * newsgroup
+ *	comp.graphics.gnuplot
  * is identical to the mailing list (they
  * both carry the same set of messages). We prefer that you read the
  * messages through that newsgroup, to subscribing to the mailing list.
@@ -39,9 +39,9 @@
  *
  * The address for mailing to list members is
  *	   info-gnuplot@dartmouth.edu
- * and for mailing administrative requests is 
+ * and for mailing administrative requests is
  *	   info-gnuplot-request@dartmouth.edu
- * The mailing list for bug reports is 
+ * The mailing list for bug reports is
  *	   bug-gnuplot@dartmouth.edu
  * The list of those interested in beta-test versions is
  *	   info-gnuplot-beta@dartmouth.edu
@@ -193,8 +193,8 @@ char *local_alloc(unsigned long size, char *message)
 
   return ptr;
 }
-  
-  
+
+
 
 
 /*
@@ -255,7 +255,7 @@ double *levels_list;
 	    sprintf(contour_list->label, "%8.3g", z);
 	  }
 	}
-	
+
 	/* Free all contouring related temporary data. */
 	while (p_polys) {
 	  p_poly = p_polys -> next;
@@ -272,9 +272,9 @@ double *levels_list;
 	  free (p_vrts);
 	  p_vrts = p_vrtx;
 	}
-	
+
 	if (interp_kind == INTERP_CUBIC) free (hermit_table);
-	
+
 	return contour_list;
       }
 
@@ -307,7 +307,7 @@ void end_crnt_cntr()
     struct gnuplot_contours *cntr = (struct gnuplot_contours *)
       D_CALLOC(1,(unsigned long)sizeof(struct gnuplot_contours));
     if( !cntr ) fatal("Can't allocate gnuplot_contours");
-					 
+
 
     cntr->coords = (point_type *) D_CALLOC(( unsigned long)crnt_cntr_pt_index,
 					 (unsigned long)sizeof(point_type));
@@ -1136,7 +1136,7 @@ double t_min, t_max, tx1, ty1, tx2, ty2;
        m[i][2] = dt;
        m[i][1] = 2 * (m[i][0] + m[i][2]);
        r[i] = m[i][0] * ((p -> next -> X) - (p -> X)) / m[i][2]
-            + m[i][2] * ((p -> next -> next -> X) - 
+            + m[i][2] * ((p -> next -> next -> X) -
                          (p -> next -> X)) / m[i][0];
        r[i] *= 3.0;
        p = p -> next;

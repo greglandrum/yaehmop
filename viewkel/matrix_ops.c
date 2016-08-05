@@ -174,8 +174,8 @@ double V3AngleBetween3Points(Point3 *a, Point3 *b, Point3 *c)
 
   /*********
 
-    we're using: 
-  
+    we're using:
+
       q = acos( (a . b) / (|a| |b|) )
 
   **********/
@@ -204,9 +204,9 @@ double V3DihedralAngle(Point3 *a, Point3 *b, Point3 *c, Point3 *d)
   V3Normalize(&V3xV2);
 
   /*********
-    now figure out the angle between them 
-    we're using: 
-  
+    now figure out the angle between them
+    we're using:
+
       q = acos( (a . b) )
     since a and b are normalized
 

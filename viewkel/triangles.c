@@ -60,14 +60,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *             num_tri: pointer to int
  *              points: pointer to pointer to point_type
  *          num_points: pointer to int
- *            
+ *
  * Returns: none
  *
  * Action: This takes the triangles in 'explicit, which have all of
  *    their vertices specified, and convert them to triangles with
  *    pointers to vertices stored in 'points.  This is to allow more
  *    efficient drawing.
- *        
+ *
  ****************************************************************************/
 void convert_explicit_triangles(explicit_triangle_type *explicit,
 				int num_explicit,triangle_type **triangles,
@@ -164,7 +164,7 @@ void convert_explicit_triangles(explicit_triangle_type *explicit,
       ((*points)[(*triangles)[(*num_tri)].vertices[0]].z +
        (*points)[(*triangles)[(*num_tri)].vertices[1]].z +
        (*points)[(*triangles)[(*num_tri)].vertices[2]].z)/3.0;
-    
+
 
     /**** TEMPORARY HACK ********/
     (*triangles)[(*num_tri)].color = 0;
@@ -187,19 +187,19 @@ void convert_explicit_triangles(explicit_triangle_type *explicit,
 
   /* that's it */
 }
-					      
-       
+
+
 /****************************************************************************
  *
  *                   Procedure remove_degen_triangles
  *
  * Arguments: MO_surf: pointer to MO_surface_type
- *            
+ *
  * Returns: none
  *
  * Action: removes all the triangles in 'part_surf that are degenerate
  *   (identical or have 2 parallel sides).
- *  
+ *
  ****************************************************************************/
 void remove_degen_triangles(MO_surface_type *MO_surf)
 {
@@ -221,7 +221,7 @@ void remove_degen_triangles(MO_surface_type *MO_surf)
 
 
   vertices = MO_surf->triangle_vertices;
-  
+
   num_kept = 0;
   /* loop over the original triangle list */
   for( i=0; i<MO_surf->num_triangles; i++ ){
@@ -265,7 +265,7 @@ void remove_degen_triangles(MO_surface_type *MO_surf)
   /* free the original array */
   D_FREE(MO_surf->triangles);
   D_FREE(ditched);
-  
+
   /* D_REALLOC the new data and set a pointer*/
   MO_surf->triangles = (triangle_type *)
     D_REALLOC(triangle_store,num_kept*sizeof(triangle_type));
@@ -275,10 +275,10 @@ void remove_degen_triangles(MO_surface_type *MO_surf)
 	  MO_surf->num_triangles,
 	  100.0*(float)num_kept/(float)MO_surf->num_triangles);
   MO_surf->num_triangles = num_kept;
-	    
+
 
 }
-	
+
 
 
 
@@ -287,11 +287,11 @@ void remove_degen_triangles(MO_surface_type *MO_surf)
  *                   Procedure calc_triangle_centers
  *
  * Arguments: MO_surf: pointer to MO_surface_type
- *            
+ *
  * Returns: none
  *
  * Action: finds the centers of all the triangles in 'part_surf.
- *  
+ *
  ****************************************************************************/
 void calc_triangle_centers(MO_surface_type *MO_surf)
 {
@@ -324,7 +324,7 @@ void calc_triangle_centers(MO_surface_type *MO_surf)
     }
   }
 }
-	
+
 
 /****************************************************************************
  *
@@ -332,7 +332,7 @@ void calc_triangle_centers(MO_surface_type *MO_surf)
  *
  * Arguments:   num_args:  an integer
  *             MO_surf_p: array of pointers to char
- *            
+ *
  * Returns: none
  *
  * Action: writes the locations of the triangles in 'MO_surf
@@ -340,7 +340,7 @@ void calc_triangle_centers(MO_surface_type *MO_surf)
  *
  *  'num_args is just used because this function is intended to be
  *    called from a function button
- *  
+ *
  ****************************************************************************/
 void save_triangle_locs(int num_args,char *MO_surf_p[MAX_ARGS])
 {
@@ -349,7 +349,7 @@ void save_triangle_locs(int num_args,char *MO_surf_p[MAX_ARGS])
   MO_surface_type *MO_surf;
 
   MO_surf = (MO_surface_type *)MO_surf_p[0];
-  
+
 /*  strcpy(filename,MO_surf->filename);
   strcat(filename,".tri");
 */
@@ -376,11 +376,11 @@ void save_triangle_locs(int num_args,char *MO_surf_p[MAX_ARGS])
 
   printf("Wrote %d vertices and %d triangles\n",MO_surf->num_vertices,
 	 MO_surf->num_triangles);
-  
+
   close(outfile);
 #else
    fprintf(stderr,"Triangle Saves not yet implemented on this system.  Sorry\n");
-#endif   
+#endif
 }
 
 
@@ -393,7 +393,7 @@ void save_triangle_locs(int num_args,char *MO_surf_p[MAX_ARGS])
  *
  * Arguments:   num_args:  an integer
  *             MO_surf_p: array of pointers to char
- *            
+ *
  * Returns: none
  *
  * Action: reads in the locations of the triangles in the output file
@@ -401,7 +401,7 @@ void save_triangle_locs(int num_args,char *MO_surf_p[MAX_ARGS])
  *
  *  'num_args is just used because this function is intended to be
  *    called from a function button
- *  
+ *
  ****************************************************************************/
 void read_triangle_locs(int num_args, char *MO_surf_p[MAX_ARGS])
 {
@@ -410,7 +410,7 @@ void read_triangle_locs(int num_args, char *MO_surf_p[MAX_ARGS])
   MO_surface_type *MO_surf;
 
   MO_surf = (MO_surface_type *)MO_surf_p[0];
-  
+
 /*  strcpy(filename,MO_surf->filename);
   strcat(filename,".tri");
 */
@@ -426,7 +426,7 @@ void read_triangle_locs(int num_args, char *MO_surf_p[MAX_ARGS])
   /* if there's any residual crap allocated, get rid of it now */
   if( MO_surf->num_triangles ) D_FREE(MO_surf->triangles);
   if( MO_surf->num_vertices ) D_FREE(MO_surf->triangle_vertices);
-  
+
 
   /* read out the number of triangles and number of vertices */
   read(infile,&(MO_surf->num_vertices),sizeof(int));
@@ -439,23 +439,23 @@ void read_triangle_locs(int num_args, char *MO_surf_p[MAX_ARGS])
   MO_surf->triangles =
     (triangle_type *)D_CALLOC(MO_surf->num_triangles,sizeof(triangle_type));
   if( !(MO_surf->triangles) ) fatal("Can't get memory for triangles");
-    
-  
+
+
   /* read the vertices */
   read(infile,MO_surf->triangle_vertices,
 	MO_surf->num_vertices*sizeof(vertex_type));
 
   /* write the triangles */
   read(infile,MO_surf->triangles,
-	MO_surf->num_triangles*sizeof(triangle_type)); 
- 
+	MO_surf->num_triangles*sizeof(triangle_type));
+
   printf("Read in %d vertices and %d triangles\n",MO_surf->num_vertices,
 	 MO_surf->num_triangles);
 
   close(infile);
 #else
    fprintf(stderr,"Triangle Saves not yet implemented on this system.  Sorry\n");
-#endif   
+#endif
 
 }
 

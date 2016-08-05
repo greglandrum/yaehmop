@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /***
   Recent Edit History:
    06.04.98 gL:
-    modified code to create rayshade file so that it 
+    modified code to create rayshade file so that it
      (a) just returns if it's not handed a 3D object.
      (b) uses readline to get the filename.
    09.07.98 gL:
@@ -49,7 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      added general_read, which allows only a single file read button
      to appear in the main options window.  yay.  (secretly, this is
      all part of the plan to make the Mac port work better and to
-     facilitate the appearance of a Windoze port) 
+     facilitate the appearance of a Windoze port)
    30.01.99 gL:
      added printing of "#VFIG_FILE" in save_all to allow general_read
      to be able to also deal with save files.
@@ -67,7 +67,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    15.07.1999 gL:
      saving fatbands plots now saves the fatbands information as well.
      read_bands was changed to reflect this
-***/     
+***/
 
 
 #include "viewkel.h"
@@ -135,7 +135,7 @@ void general_read(char *filename)
     return;
   }
 
-  
+
   /*****
 
 	okay, grab the first non-blank, non-comment line
@@ -163,7 +163,7 @@ void general_read(char *filename)
     printf("%s looks like an ADF vibration output file.\n",file_name);
     fclose(infile);
     new_vibration(file_name);
-#endif    
+#endif
   } else if(strstr(instring,"#GRAPH_DATA")){
     printf("%s looks like a graph file.\n",file_name);
     fclose(infile);
@@ -469,11 +469,11 @@ int read_bin_molecule(molec_type *molec)
   } else{
     molec->lines = 0;
   }
-  
+
   close(infile);
   return(0);
 }
-  
+
 
 /****************************************************************************
  *
@@ -515,7 +515,7 @@ void save_molecule( FILE *vfig_file,prim_type *prim,object_type *obj )
     fprintf(vfig_file,"RAD_MULT: %lf\n",the_molec->rad_mult);
   }
 }
-  
+
 /****************************************************************************
  *
  *                   Procedure save_MO_surf
@@ -566,7 +566,7 @@ void save_MO_surf( FILE *vfig_file,prim_type *prim,object_type *obj )
   fprintf(vfig_file,"SEARCH_RADIUS: %lf\n",the_surf->search_radius);
   fprintf(vfig_file,"VOXEL_SIZE: %lf\n",the_surf->voxel_size);
 }
-  
+
 /****************************************************************************
  *
  *                   Procedure save_graph
@@ -664,7 +664,7 @@ void save_FMO( FILE *vfig_file,prim_type *prim,object_type *obj )
   fprintf(vfig_file,"\nLABEL\n");
   fprintf(vfig_file,"%s\n",the_graph->label);
 
-}	
+}
 
 
 /****************************************************************************
@@ -848,7 +848,7 @@ void save_all(void)
     error("Can't open save file.");
     return;
   }
-  
+
   /* write the global variables */
   fprintf(vfig_file,"#VFIG_FILE\n");
   fprintf(vfig_file,"FILL_PROJECTIONS: %d\n",fill_projections);
@@ -870,7 +870,7 @@ void save_all(void)
   }
   fclose(vfig_file);
   printf("%d objects saved\n",num_written);
-}  
+}
 
 
 
@@ -901,7 +901,7 @@ int read_molec_object(FILE *vfig_file,char *filename)
   if( !whichobj ) return -1;
 
   the_molec = whichobj->prim->molec;
-  
+
   /* now read the information out of 'vfig_file */
   read_error = skipcomments(vfig_file,instring);
   while(read_error >= 0 && !strstr(instring,"END_OBJECT")){
@@ -968,7 +968,7 @@ int read_molec_object(FILE *vfig_file,char *filename)
   if( read_error >= 0 ) return(1);
 }
 
-  
+
 /****************************************************************************
  *
  *                   Function read_MO_surf_object
@@ -997,7 +997,7 @@ int read_MO_surf_object(FILE *vfig_file,char *filename)
 
   the_surf = whichobj->prim->MO_surf;
   the_molec = the_surf->molec;
-  
+
   /* now read the information out of 'vfig_file */
   read_error = skipcomments(vfig_file,instring);
   while(read_error >= 0 && !strstr(instring,"END_OBJECT")){
@@ -1203,7 +1203,7 @@ int read_graph_object(FILE *vfig_file,char *filename)
   }
   if( read_error >= 0 ) return(1);
 
-}	
+}
 
 
 /****************************************************************************
@@ -1322,7 +1322,7 @@ int read_band_object(FILE *vfig_file,char *filename)
   }
 
   if( read_error >= 0 ) return(1);
-}	
+}
 
 
 /****************************************************************************
@@ -1439,7 +1439,7 @@ int read_FMO_object(FILE *vfig_file,char *filename)
   }
 
   if( read_error >= 0 ) return(1);
-}	
+}
 
 
 /****************************************************************************
@@ -1473,7 +1473,7 @@ int read_prop_graph_object(FILE *vfig_file,char *filename)
   the_graph = whichobj->prim->prop_graph;
   the_data = the_graph->the_data;
   the_integration = the_graph->the_integration;
-  
+
   /* now read the information out of 'vfig_file */
   read_error = skipcomments(vfig_file,instring);
   while(read_error >= 0 && !strstr(instring,"END_OBJECT")){
@@ -1581,7 +1581,7 @@ int read_prop_graph_object(FILE *vfig_file,char *filename)
     } else{
       fprintf(stderr,"Unrecognized keyword: %s\n",keyword);
     }
-    
+
     read_error = skipcomments(vfig_file,instring);
   }
   return read_error;
@@ -1673,7 +1673,7 @@ int read_object(FILE *vfig_file)
       success = read_FMO_object(vfig_file,filename);
       break;
     }
-  }			     
+  }
   if( read_error < 0 ) success = -1;
 
   return success;
@@ -1725,7 +1725,7 @@ void read_all(char *file_name)
     error("Can't open input file.");
     return;
   }
-  
+
   num_read = 0;
   while(skipcomments(vfig_file,instring) >= 0){
     sscanf(instring,"%s",keyword);
@@ -1755,7 +1755,7 @@ void read_all(char *file_name)
   }
   fclose(vfig_file);
   printf("%d objects read\n",num_read);
-}  
+}
 
 
 /****************************************************************************
@@ -1764,7 +1764,7 @@ void read_all(char *file_name)
  *
  * Arguments: prim: pointer to prim_type
  *             obj: pointer to object_type
- *            
+ *
  * Returns: none
  *
  * Action: Dumps the 3D objects contained in 'prim into an input file
@@ -1829,7 +1829,7 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
   fprintf(rayfile,"light 1 point 50 50 -100\n");
   fprintf(rayfile,"background 1 1 1\n");
   fprintf(rayfile,"surface s1\n");
-  fprintf(rayfile,"        ambient 0.25 0.25 0.25\n"); 
+  fprintf(rayfile,"        ambient 0.25 0.25 0.25\n");
   fprintf(rayfile,"        diffuse 0.55 0.55 0.55 \n");
   fprintf(rayfile,"        specular 0.2 0.2 0.2 \n");
   fprintf(rayfile,"        specpow 3 \n");
@@ -1843,7 +1843,7 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
   fprintf(rayfile,"        reflect 0.1 \n");
   fprintf(rayfile,"        transp 0.3 \n");
   fprintf(rayfile,"surface atomsurf\n");
-  fprintf(rayfile,"        ambient 0.35 0.15 0.15\n"); 
+  fprintf(rayfile,"        ambient 0.35 0.15 0.15\n");
   fprintf(rayfile,"        diffuse 0.65 0.15 0.15\n");
   fprintf(rayfile,"        specular 0.6 0.6 0.6 \n");
   fprintf(rayfile,"        specpow 3 \n");
@@ -1879,19 +1879,19 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
 	else{
 	  fprintf(rayfile,"surface Dummysurf\n");
 	}
-	fprintf(rayfile,"        ambient 0.35 0.15 0.15\n"); 
+	fprintf(rayfile,"        ambient 0.35 0.15 0.15\n");
 	fprintf(rayfile,"        diffuse 0.65 0.15 0.15\n");
 	fprintf(rayfile,"        specular 0.6 0.6 0.6 \n");
 	fprintf(rayfile,"        specpow 3 \n");
 	fprintf(rayfile,"        reflect 0.3 \n");
-	num_unique++;	
+	num_unique++;
       }
     }
   }
-	
+
 
   fprintf(rayfile,"surface cylsurf\n");
-  fprintf(rayfile,"        ambient 0.25 0.25 0.25\n"); 
+  fprintf(rayfile,"        ambient 0.25 0.25 0.25\n");
   fprintf(rayfile,"        diffuse 0.45 0.45 0.45\n");
   fprintf(rayfile,"        specular 0.1 0.1 0.1 \n");
   fprintf(rayfile,"        specpow 3 \n");
@@ -1912,7 +1912,7 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
       triangles = surf->triangles;
       vertices = surf->triangle_vertices;
       num_triangles = surf->num_triangles;
-      for(i=0;i<num_triangles;i++,objects_so_far++){    
+      for(i=0;i<num_triangles;i++,objects_so_far++){
 	triangle = &(triangles[i]);
 	v1 = &vertices[triangle->vertices[0]];
 	v2 = &vertices[triangle->vertices[1]];
@@ -1929,15 +1929,15 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
 		  v2->position.x,v2->position.y,v2->position.z,
 		  v3->position.x,v3->position.y,v3->position.z);
 	}
-      
+
       }
-      
+
       fprintf(rayfile,"end\n");
       fprintf(rayfile,"object MOsurf\n");
       fprintf(rayfile,"rotate 0 0 1 %4.2lf\n",180.0*obj->rot.z/PI);
       fprintf(rayfile,"rotate 0 1 0 %4.2lf\n",180.0*obj->rot.y/PI);
       fprintf(rayfile,"rotate 1 0 0 %4.2lf\n",180.0*obj->rot.x/PI);
-      
+
       fprintf(rayfile,"scale %4.2lf %4.2lf %4.2lf\n",obj->scale.x,obj->scale.y,obj->scale.z);
       fprintf(rayfile,"translate %4.2lf %4.2lf %4.2lf\n",obj->trans.x,obj->trans.y,obj->trans.z);
     }
@@ -1993,7 +1993,7 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
     fprintf(rayfile,"translate %4.2lf %4.2lf %4.2lf\n",obj->trans.x/20.0,obj->trans.y/20.0,
 	    obj->trans.z/20.0);
   }
-    
+
   fclose(rayfile);
   printf("done\n");
 }
@@ -2005,7 +2005,7 @@ void dump_3D_objects(prim_type *prim,object_type *obj)
  *
  * Arguments: prim: pointer to prim_type
  *             obj: pointer to object_type
- *            
+ *
  * Returns: none
  *
  * Action: Dumps the 3D objects contained in 'prim into an input file
@@ -2075,7 +2075,7 @@ void dump_VRML(prim_type *prim,object_type *obj)
       new_file = 0;
     }
   }
-  
+
   strcpy(instring,"n");
   readcharparm("Use LOD with this object? (speeds drawing)",instring);
   if( instring[0] == 'y' || instring[0] == 'Y'){
@@ -2083,16 +2083,16 @@ void dump_VRML(prim_type *prim,object_type *obj)
     LOD_range = 10.0;
     readfloatparm("LOD range",&LOD_range);
   } else{
-    use_LOD = 0; 
+    use_LOD = 0;
   }
 
 
   strcpy(instring,"y");
   readcharparm("show an axis system?",instring);
   if( instring[0] == 'n' || instring[0] == 'N'){
-    do_axes = 0; 
+    do_axes = 0;
   } else{
-    do_axes = 1; 
+    do_axes = 1;
   }
 
 
@@ -2169,7 +2169,7 @@ void dump_VRML(prim_type *prim,object_type *obj)
 	fprintf(outfile,"geometry Sphere { radius IS MyRadius }\n");
 	fprintf(outfile,"appearance Appearance {\n");
 	fprintf(outfile,"material Material {diffuseColor IS MyColor}}}}\n");
-	num_unique++;	
+	num_unique++;
       }
     }
   }
@@ -2177,13 +2177,13 @@ void dump_VRML(prim_type *prim,object_type *obj)
   switch(prim->which){
   case MO_SURF:
     strcpy(label,prim->MO_surf->filename); break;
-  case MOLECULE:    
+  case MOLECULE:
     strcpy(label,prim->molec->filename); break;
   }
-  
+
   stringarr[0] = label;
   readstringparm("molecule label",stringarr);
-  
+
 
   if( new_file ){
     printf("Dumping objects to VRML file\n");
@@ -2251,7 +2251,7 @@ void dump_VRML(prim_type *prim,object_type *obj)
 		fprintf(outfile,"# /* %s - %s */\n",atom->type,atom2->type);
 		fprintf(outfile,
 			"Transform { translation %5.4lf %5.4lf %5.4lf \n",
-			atom->loc.x,atom->loc.y,atom->loc.z); 
+			atom->loc.x,atom->loc.y,atom->loc.z);
 		fprintf(outfile,
 			"\trotation 0 1 0 %4.2lf children[\n",
 			-theta_y);
@@ -2299,7 +2299,7 @@ void dump_VRML(prim_type *prim,object_type *obj)
     fprintf(outfile,"%s\n",VRML_trailer[i]);
     i++;
   }
-    
+
   fclose(outfile);
   printf("done\n");
 }

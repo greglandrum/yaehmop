@@ -138,9 +138,9 @@ SIOUXSettings.asktosaveonclose = FALSE;
 	doing_Mac = 1;
 #endif
   ident = (matrix_type *)D_CALLOC(1,sizeof(matrix_type));
-  mainortho = (matrix_type *)D_CALLOC(1,sizeof(matrix_type));  
+  mainortho = (matrix_type *)D_CALLOC(1,sizeof(matrix_type));
   if( !ident || !mainortho )fatal( "Memory Allocation." );
-  
+
   /* initialize the identity matrix */
   for(i=0;i<DIM;i++) ident->matrix[i][i]=1.0;
 
@@ -151,7 +151,7 @@ SIOUXSettings.asktosaveonclose = FALSE;
   head = 0;
 
   projviewon = 1;
-  
+
   near_plane_clipping_on = 1;
   outline_polyhed_on = 1;
   dump_grids_on = 0;
@@ -167,11 +167,11 @@ SIOUXSettings.asktosaveonclose = FALSE;
   camera->foclength = fabs(camera->lf.z / camera->hsize);
 /*  camera->foclength = 100.0;*/
   /*************************
-	
+
     important note:
     this is where the event loop starts on the Mac,
     so we can't rely on the program coming back after this.
-		  
+
   *************************/
   g_initgraphics(xsize,ysize);
 
@@ -184,7 +184,7 @@ SIOUXSettings.asktosaveonclose = FALSE;
   whichobj->trans.z += 5.0;
   redraw();
   exit();
-#endif  
+#endif
 
   button_wins = 0;
 #ifdef X_GRAPHICS
@@ -229,6 +229,6 @@ SIOUXSettings.asktosaveonclose = FALSE;
 
 #ifdef MEM_DEBUG
   d_check_core();
-#endif  
+#endif
 
 }

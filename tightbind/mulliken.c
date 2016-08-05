@@ -58,7 +58,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *         the information in
  *         details->orbital_occups will be used to CHANGE the occupations of the
  *         specified orbitals.
- *  
+ *
  ****************************************************************************/
 void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
   detail_type *details;
@@ -70,7 +70,7 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
   int i,begin_degen,end_degen,num_degen_levels,last_occup;
   real num_degen_electrons;
   real electrons_left,electrons_per_level;
-  
+
   electrons_left = num_electrons;
 
   /* just loop until we run out of electrons */
@@ -84,7 +84,7 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
       electrons_left = 0.0;
     }
   }
-  
+
   /* now check for degeneracies */
   last_occup = i-1;
   end_degen = i;
@@ -92,7 +92,7 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
 	&& end_degen < num_orbs ){
     end_degen++;
   }
-  begin_degen = last_occup - 1; 
+  begin_degen = last_occup - 1;
   while( fabs(EIGENVAL(eigenset,last_occup) - EIGENVAL(eigenset,begin_degen)) < DEGEN_TOL
 	&& begin_degen > -1){
     begin_degen--;
@@ -109,7 +109,7 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
         do this by finding the number of electrons in degenerate levels and
 	distributing them equally amongst those levels.
     ******/
-    num_degen_electrons = 0; 
+    num_degen_electrons = 0;
     for(i=begin_degen;i<end_degen;i++){
       num_degen_electrons += occupations[i];
     }
@@ -125,9 +125,9 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
       occupations[details->orbital_occups[i].orb] = details->orbital_occups[i].occup;
     }
   }
-}      
-      
-    
+}
+
+
 /****************************************************************************
  *
  *                   Procedure reduced_mulliken
@@ -146,7 +146,7 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
  *
  *   the results are stored in 'ROP_matrix which should be at least
  *     num_atoms * num_atoms
- *  
+ *
  ****************************************************************************/
 void reduced_mulliken(num_atoms,num_orbs,orbital_lookup_table,OP_matrix,ROP_matrix)
   int num_atoms,num_orbs,*orbital_lookup_table;
@@ -190,13 +190,13 @@ void reduced_mulliken(num_atoms,num_orbs,orbital_lookup_table,OP_matrix,ROP_matr
 	  ROP_matrix[num_elements++] = temp;
 	}
       }
-      
+
       /* now add up the diagonal elements which arise from this atom */
       temp = 0;
       for(j=i_orb_tab; j<i_orb_end; j++){
 	temp += OP_matrix[j*num_orbs+j];
       }
-      
+
       ROP_matrix[num_elements++] = temp;
     }
   }
@@ -220,7 +220,7 @@ void reduced_mulliken(num_atoms,num_orbs,orbital_lookup_table,OP_matrix,ROP_matr
  *
  *   the results are stored in 'ROP_matrix which should be at least
  *     details->num_FMO_frags * details->num_FMO_frags
- *  
+ *
  ****************************************************************************/
 void FMO_reduced_mulliken(details,num_atoms,num_orbs,OP_matrix,ROP_matrix)
   detail_type *details;
@@ -268,7 +268,7 @@ void FMO_reduced_mulliken(details,num_atoms,num_orbs,OP_matrix,ROP_matrix)
 	    find_atoms_orbs(num_orbs,num_atoms,FMO_frag2->atoms_in_frag[atom2],
 			    FMO_frag2->orbital_lookup_table,
 			    &begin_atom2,&end_atom2);
-	  
+
 	    if( begin_atom2 >= 0 ){
 
 	      for(k=begin_atom1; k<end_atom1; k++){
@@ -370,13 +370,13 @@ void eval_mulliken(cell,eigenset,overlap,num_orbs,
   int begin_of_atom,end_of_atom;
   real OP_accum,net_chg,tot_chg;
   real OP_accumI;
-  
+
   num_atoms = cell->num_atoms;
-  
+
   /* zero out arrays which will be used */
   bzero((char *)accum,num_orbs*sizeof(real));
   bzero((char *)OP_matrix,num_orbs*num_orbs*sizeof(real));
-  
+
   /********
 
     this is using the following formula:
@@ -386,11 +386,11 @@ void eval_mulliken(cell,eigenset,overlap,num_orbs,
                    \
     OP[i][j] = 2 * /     occupations[k] * c[k][i] * c[k][j] * S[i][j]
                    ---/
-                     k     
-      
+                     k
 
-   for off diagonal elements.... diagonal elements are obtained by using the above 
-     and dividing by 2		     
+
+   for off diagonal elements.... diagonal elements are obtained by using the above
+     and dividing by 2
   *********/
 
   /* i indexes atomic orbitals */
@@ -437,14 +437,14 @@ void eval_mulliken(cell,eigenset,overlap,num_orbs,
 		    &begin_of_atom,&end_of_atom);
     if( begin_of_atom >= 0 ){
       net_chg = 0.0;
-      
+
       for(j = begin_of_atom;j<end_of_atom;j++){
 	net_chg -= accum[j];
       }
-      
+
       /* subtract off the number of valence electrons */
       net_chg += cell->atoms[i].num_valence;
-      
+
       net_chgs[i] = net_chg;
     }
   }

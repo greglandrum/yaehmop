@@ -85,7 +85,7 @@ int compare_energies(a,b)
  *
  * Action:  fills up the lowest num_electrons/2 free atomic levels to find
  *   the "free atomic energy" used in extended Hueckel binding calculations.
- * 
+ *
  ****************************************************************************/
 void free_atomic_energy(cell,energy,work_array)
   cell_type *cell;
@@ -95,8 +95,8 @@ void free_atomic_energy(cell,energy,work_array)
   int i;
   int orbs_so_far;
   real temp,electrons_left;
-  
-  
+
+
   /*********
     to find the energy of the "free" atoms reasonably (like a 1 electron theory
     should) we have to fill the free levels (not by atoms).
@@ -143,7 +143,7 @@ void free_atomic_energy(cell,energy,work_array)
 
   *energy = temp;
 }
-  
+
 /****************************************************************************
  *
  *                   Procedure AO_occupations
@@ -163,7 +163,7 @@ void free_atomic_energy(cell,energy,work_array)
  *   number in the p orbitals, etc.
  *
  *  the results are stored in 'accum which should be at least 'num_orbs long
- * 
+ *
  ****************************************************************************/
 void AO_occupations(cell,num_orbs,OP_mat,orbital_lookup_table,accum)
   cell_type *cell;
@@ -178,7 +178,7 @@ void AO_occupations(cell,num_orbs,OP_mat,orbital_lookup_table,accum)
   real electrons_left;
   int i,j,k;
 
-    
+
 #if 0
 /***************************************
 
@@ -206,12 +206,12 @@ void AO_occupations(cell,num_orbs,OP_mat,orbital_lookup_table,accum)
       }
       /* sweep across */
       for(j=0;j<=orb_tab;j++){
-	accum[orbs_so_far] += .5*OP_mat[orb_tab*num_orbs + j];	
-      }      
+	accum[orbs_so_far] += .5*OP_mat[orb_tab*num_orbs + j];
+      }
 fprintf(stderr,"Atom %d s orbital occupation: %lg\n",i,accum[orbs_so_far]);
       orbs_so_far++;
     }
-    
+
     if( atom->np != 0 ){
       for(j=orb_tab + BEGIN_P;j <= orb_tab + END_P;j++){
 	for( k=j;k<num_orbs;k++){
@@ -243,7 +243,7 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
     figure out the free atom orbital occupations, we only have to do
     this once.
   ********/
-  
+
   /* get space to store the free occupations, if we need it */
   if( !free_atom_occups ){
     free_atom_occups = (real *)calloc(num_orbs,sizeof(real));
@@ -259,7 +259,7 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
     for( i=0;i<cell->num_atoms;i++){
       atom = &(cell->atoms[i]);
       electrons_left = atom->num_valence;
-      
+
       if( atom->ns ){
 	if( electrons_left >= 2.0 ){
 	  free_atom_occups[orbs_so_far++] = 2.0;
@@ -282,7 +282,7 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
       }
     }
   }
-  
+
   /*****
     copy the free atom_occupation numbers into the accum array
     which was passed in
@@ -310,7 +310,7 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
  *
  * Action:   Evaluates the electrostatic repulsion and total energy for the
  *    molecule.
- *  
+ *
  *   'accum is used to build the orbital occupation array.  it should be at least
  *     num_orbs long
  *
@@ -318,7 +318,7 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
  *   EHMO-ASED paper:    J. Phys. Chem. _93_ 5366 (1989)  eqns 17 and the appendix
  *
  *  I've tried to keep the notation in the code similar.
- * 
+ *
  ****************************************************************************/
 void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_lookup_table,
 			 electrostat_term,eHMO_term,total_E,accum,net_chgs)
@@ -341,7 +341,7 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
   real p_sum;
   real electro_accum;
   int electrons_left;
-  
+
   /**************
 
     make sure that we have memory to accumulate the "free" atomic energies
@@ -357,13 +357,13 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
     zero out the accumulator array
   ********/
   bzero((char *)accum,num_orbs*sizeof(real));
-  
+
   /*******
     build the orbital occupation array
   ********/
   AO_occupations(cell,num_orbs,OP_mat,orbital_lookup_table,accum);
-  
-  
+
+
 #if 0
   /******
     NOTE:  Due to the fact that I want to get some quick results, this is only
@@ -372,7 +372,7 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
   numA = 0;
   numB = 1;
 #endif
-  
+
   /******
     find the energies of the "Free" atoms
 
@@ -409,31 +409,31 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 
 
   /**********
-    
+
     loop over all the atoms
-    
+
   **********/
   *electrostat_term = 0.0;
   for(numA=0;numA<cell->num_atoms;numA++){
     for(numB=numA+1; numB<cell->num_atoms; numB++){
       atomA = &(cell->atoms[numA]);
       atomB = &(cell->atoms[numB]);
-      
+
       /************
 	This isn't set up particularly efficiently...
 	if this ever becomes a bottleneck, the code is easily improved.
       *************/
-      
-      
+
+
       /*******
 	get the distance from the symmetric distance matrix and convert it to bohrs...
 	(this reference assumes that numA < numB)
       ********/
       R = cell->distance_mat[ numB*(numB+1)/2 + numA ]/BOHR;
-      
+
       /******
 
-	evaluate the electrostatic term due to center A 
+	evaluate the electrostatic term due to center A
 
       *******/
       rhoA_term = 0.0;
@@ -446,7 +446,7 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 	  p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
 	}
 	p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
-	
+
 	rhoA_term += accum[orbs_so_far] * (1/R - p_sum);
 	orbs_so_far++;
       }
@@ -458,9 +458,9 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 	  p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
 	}
 	p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
-	
+
 	rhoA_term += accum[orbs_so_far] * (1/R - p_sum);
-	orbs_so_far++;    
+	orbs_so_far++;
       }
       if( atomA->nd != 0){
 	/********
@@ -469,9 +469,9 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 	  ********/
 	error("You can't optimize structures with d orbitals yet... sorry.");
       }
-      
+
       /******
-	evaluate the term due to center B 
+	evaluate the term due to center B
       *******/
       rhoB_term = 0.0;
       orbs_so_far = orbital_lookup_table[numB];
@@ -483,7 +483,7 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 	  p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
 	}
 	p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
-	
+
 	rhoB_term += accum[orbs_so_far] * (1/R - p_sum);
 	orbs_so_far++;
       }
@@ -495,7 +495,7 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 	  p_sum += pow((2.0*R*zeta),(2*n-p)) *   (real)p / (real)factorial(2*n-p);
 	}
 	p_sum *= exp(-2.0*R*zeta)/(2.0*n*R);
-	
+
 	rhoB_term += accum[orbs_so_far] * (1/R - p_sum);
 	orbs_so_far++;
       }
@@ -506,17 +506,17 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 	  ********/
 	error("You can't optimize structures with d orbitals yet... sorry.");
       }
-      
+
       /*********
 	figure out the nuclear charges...
-	
+
 	This uses Slater's rules i.e. each electron in the next shell in shields for .8,
 	anything farther in shields for 1. We're not taking the valence orbitals
 	into account here (they come into play in the rho terms calculated above).
       *********/
       ZA = atomA->num_valence;
       ZB = atomB->num_valence;
-      
+
       /* things are wierd for d orbitals (and they aren't implemented yet anyway) */
 #if 0
       if( atomA->nd == 0 ){
@@ -537,8 +537,8 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 	  break;
 	}
       }
-      
-      
+
+
       if( atomB->nd == 0 ){
 	/********
 	  we can use the quantum number of the s and p orbitals to figure out the number
@@ -557,17 +557,17 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 	}
       }
 #endif
-      
+
       /*******
 	now do the total electrostatic energy (this distance needs to be in bohr).
       *******/
-      
+
       electro_accum = ZA*ZB/R;
       fprintf(stderr, "Za:  %lf Zb: %lf  R: %lf  ZaZb/R: %lf Za*rhoB: %lf Zb*rhoA %lf\n",
 	      ZA,ZB,R,electro_accum,ZA*rhoB_term,ZB*rhoA_term);
-      
+
       electro_accum -= .5*(ZA*rhoB_term + ZB*rhoA_term);
-      
+
       electro_accum *= 27.2;
 
       *electrostat_term += electro_accum;
@@ -580,13 +580,13 @@ void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_looku
 #if 0
     free_atomic_energy(cell,&atomic_energy,accum);
 #endif
-    
+
     *eHMO_term -= atomic_energy[numA];
-  }  
+  }
   /*****
     set the total energy and then return
   *****/
   *total_E = *electrostat_term + *eHMO_term;
-  
+
   return;
 }

@@ -50,7 +50,7 @@ void main(argc,argv)
     fatal("Can't open file.");
   }
 
- 
+
   /* get some memory */
   max_p = 100;
   num_p = 0;
@@ -64,7 +64,7 @@ void main(argc,argv)
 
   if( !num_states ) fatal("Can't get space for num_states.");
 
-  
+
   /*******
 
     if the file included a walsh diagram, the information for the
@@ -107,7 +107,7 @@ void main(argc,argv)
   }
   if( eof_hit < 0 ){
     fatal("End of file hit before DOS data was found.\n");
-  }    
+  }
 
   /*****
 
@@ -138,7 +138,7 @@ void main(argc,argv)
 	upcase(instring);
       }
       eof_hit = skipcomments(infile,instring,FATAL);
-      upcase(instring);      
+      upcase(instring);
       i++;
     }
     /* we're at the right step... move on to the DOS data */
@@ -150,7 +150,7 @@ void main(argc,argv)
       upcase(instring);
     }
   }
-      
+
   num_DOS = 1;
 
   /* read out the number of states. */
@@ -158,20 +158,20 @@ void main(argc,argv)
   sscanf(instring,"%d",&(num_states[0]));
   num_curves++;
   skipcomments(infile,instring,FATAL);
-  
+
   /******
 
     okay, we're at the beginning of the total DOS data, now read
     it all in.
      Stop when we hit a line beginning with a #
-    
+
   *******/
   skipcomments(infile,instring,FATAL);
   while(instring[0] != '#'){
     sscanf(instring,"%lf %lf",&(points[num_p].height),&(points[num_p].energy));
     num_p++;
     num_so_far++;
-    
+
     /* check to see if we need more memory */
     if( num_p == max_p ){
       max_p += 100;
@@ -222,7 +222,7 @@ void main(argc,argv)
 	/* free up the old memory */
 	free(t_states);
       }
-	
+
       /******
 	deal with the possibility of multiple contributions to the projected
 	DOS.
@@ -242,7 +242,7 @@ void main(argc,argv)
 	sscanf(instring,"%lf %lf",&(points[num_p].height),&(points[num_p].energy));
 	num_p++;
 	num_so_far++;
-	
+
 	/* check to see if we need more memory */
 	if( num_p == max_p ){
 	  max_p += 100;
@@ -259,7 +259,7 @@ void main(argc,argv)
   }
 
   /****
-    find and read out the fermi energy 
+    find and read out the fermi energy
   *****/
   eof_hit = skipcomments(infile,instring,IGNORE);
   upcase(instring);
@@ -293,7 +293,7 @@ void main(argc,argv)
 	      i,points[i].energy,points[i].height-height_accum);
     }
   }
-       
+
 
 
 
@@ -324,8 +324,8 @@ void main(argc,argv)
 	   avgE_accum);
   }
 }
-	
-    
+
+
 
 
 

@@ -120,7 +120,7 @@ void    BlowOutGlobals(void);
 /*--------------------------------------------------------------------------*/
 void gen_chull( atom_type *active_atoms, int num_atoms, triangle_list_type **tri_list )
 {
-  
+
   debug = 0;
   CopyVertices(active_atoms,num_atoms);
   Tetrahedron();
@@ -162,7 +162,7 @@ void BlowOutGlobals(void)
 
 /*------------------------------------------------------------------
 MakeVertex: Makes a vertex, nulls out fields.
---------------------------------------------------------------------*/ 
+--------------------------------------------------------------------*/
 tVertex	MakeVertex( void )
 {
 	tVertex	v;
@@ -179,7 +179,7 @@ tVertex	MakeVertex( void )
 CopyVertices: Reads in the vertices, and links them into a circular
 list with MakeVertex.  There is no need for the # of vertices to be
 the first line: the function looks for EOF instead.
---------------------------------------------------------------------*/ 
+--------------------------------------------------------------------*/
 void	CopyVertices( atom_type *active_atoms, int num_atoms )
 {
   tVertex v;
@@ -196,7 +196,7 @@ void	CopyVertices( atom_type *active_atoms, int num_atoms )
 }
 
 /*------------------------------------------------------------------
-Print: Prints out the vertices and the faces.  Uses the vnum indices 
+Print: Prints out the vertices and the faces.  Uses the vnum indices
 corresponding to the order in which the vertices were input.
 --------------------------------------------------------------------*/
 void	CopyTris( triangle_list_type **tri_list )
@@ -213,34 +213,34 @@ void	CopyTris( triangle_list_type **tri_list )
   /* Vertices. */
   printf("\n");
   v = vertices;
-  do {                                 
-    V++;           
+  do {
+    V++;
     v = v->next;
   } while ( v != vertices );
   printf("Vertices:\tV = %d\n", V );
 
   printf("index:\tx\ty\tz\n");
-  do {                                 
-    printf("%5d:\t%f\t%f\t%f\n", 
+  do {
+    printf("%5d:\t%f\t%f\t%f\n",
 	   v->vnum, v->v[LXD], v->v[LYD], v->v[LZD] );
     v = v->next;
   } while ( v != vertices );
-	
+
   /* Faces. */
   f = faces;
   do {
-    ++F;                              
+    ++F;
     f  = f ->next;
   } while ( f  != faces );
   printf("Faces:\t\tF = %d\n", F );
 
   printf("\tv0\tv1\tv2\t(vertex indices)\n");
-  do {                           
+  do {
     new_tri = (triangle_list_type *)D_CALLOC(1,sizeof(triangle_list_type));
     if(!new_tri) fatal("can't allocate a triangle\n");
-    printf("\t%d\t%d\t%d\n", 
+    printf("\t%d\t%d\t%d\n",
 	   f->vertex[0]->vnum,
-	   f->vertex[1]->vnum, 
+	   f->vertex[1]->vnum,
 	   f->vertex[2]->vnum );
     new_tri->tri.vertices[0] = f->vertex[0]->vnum;
     new_tri->tri.vertices[1] = f->vertex[1]->vnum;
@@ -252,7 +252,7 @@ void	CopyTris( triangle_list_type **tri_list )
     f = f->next;
   } while ( f != faces );
 
-  /* Edges. */	
+  /* Edges. */
   e = edges;
   do {
     E++;
@@ -273,7 +273,7 @@ void	CopyTris( triangle_list_type **tri_list )
  is not coplanar with that face.  The vertices are stored in the face
  structure in counterclockwise order so that the volume between the face
  and the point is negative. Lastly, the 3 newfaces to the fourth point
- are constructed and the data structures are cleaned up. 
+ are constructed and the data structures are cleaned up.
  -----------------------------------------------------------------------*/
 void	Tetrahedron( void )
 {
@@ -281,23 +281,23 @@ void	Tetrahedron( void )
 	tFace 	f;
 	tEdge 	e1, e2, e3, s;
 	float 	vol;
-	
+
 
 	/* Find 3 non-Collinear points. */
 	v1 = vertices;
-	while ( Collinear( v1, v1->next, v1->next->next ) ) 
+	while ( Collinear( v1, v1->next, v1->next->next ) )
       	      	if ( ( v1 = v1->next ) == vertices ) {
          	     printf("All points are Collinear!\n");
          	     exit(0);
-        	} 
-	
+        	}
+
 	/* Mark the vertices as processed. */
-	v1->mark = PROCESSED;  
-	v1->next->mark = PROCESSED; 
-	v1->next->next->mark = PROCESSED;              
-                                               
+	v1->mark = PROCESSED;
+	v1->next->mark = PROCESSED;
+	v1->next->next->mark = PROCESSED;
+
 	/* Create edges of the initial triangle. */
-	e1 = MakeEdge(); 
+	e1 = MakeEdge();
 	e2 = MakeEdge();
 	e3 = MakeEdge();
 	e1->endpts[0] = v1;              e1->endpts[1] = v1->next;
@@ -305,15 +305,15 @@ void	Tetrahedron( void )
 	e3->endpts[0] = v1->next->next;  e3->endpts[1] = v1;
 
 	/* Create face for triangle. */
-	f = MakeFace();   
+	f = MakeFace();
 	f->edge[0] = e1;   f->edge[1] = e2;   f->edge[2] = e3;
 	f->vertex[0] = v1;  f->vertex[1] = v1->next;
 	f->vertex[2] = v1->next->next;
 
 	/* Link edges to face. */
-	e1->adjface[0] = e2->adjface[0] = e3->adjface[0] = f; 
-	
-	
+	e1->adjface[0] = e2->adjface[0] = e3->adjface[0] = f;
+
+
 	/* Find a fourth, non-coplanar point to form tetrahedron. */
 	v4 = v1->next->next->next;
 	vol = Volume6( f, v4 );
@@ -321,7 +321,7 @@ void	Tetrahedron( void )
       		if ( ( v4 = v4->next ) == v1 ) {
          	       printf("All points are coplanar!\n");
 		       return;
-        	} 
+        	}
        		vol = Volume6( f, v4 );
        	}
 	v4->mark = PROCESSED;
@@ -332,13 +332,13 @@ void	Tetrahedron( void )
             LSWAP( s, f->edge[1], f->edge[2] );
   	}
 
-	
+
 	/* Construct the faces and edges between the original
    	   triangle and the fourth point. */
 	e1->adjface[1] = MakeStructs( e1, v4 );
 	e2->adjface[1] = MakeStructs( e2, v4 );
 	e3->adjface[1] = MakeStructs( e3, v4 );
-	
+
 	CleanUp();
 }
 
@@ -370,15 +370,15 @@ void	ConstructHull( void )
 	} while ( v != vertices );
 }
 /*-------------------------------------------------------------------------
-AddOne is passed a vertex.  It first determines all faces visible from 
+AddOne is passed a vertex.  It first determines all faces visible from
 that point.  If none are visible then the point is marked as not onhull.
 Next is a loop over edges.  If both faces adjacent to an edge are
-visible, then the edge is marked for deletion.  If just one of the adjacent 
+visible, then the edge is marked for deletion.  If just one of the adjacent
 faces is visible then a new face is constructed.
 --------------------------------------------------------------------------*/
 bool 	AddOne( tVertex p )
 {
-	tFace 	f; 
+	tFace 	f;
 	tEdge 	e;
         float 	vol;
 	bool	vis = FALSE;
@@ -391,16 +391,16 @@ bool 	AddOne( tVertex p )
 		if (debug) fprintf(stderr,"faddr: %6x   paddr: %6x   Vol = %f\n",f,p,vol);
 */
 		if ( vol < 0 ) {
-			f->visible = VISIBLE;  
-			vis = TRUE;                      
+			f->visible = VISIBLE;
+			vis = TRUE;
 		}
 		f = f->next;
 	} while ( f != faces );
 
 	/* If no faces are visible from p, then p is inside the hull. */
         if ( !vis ) {
-		p->onhull = !ONHULL;  
-		return FALSE; 
+		p->onhull = !ONHULL;
+		return FALSE;
 	}
 
 	/* Mark edges in interior of visible region for deletion.
@@ -412,7 +412,7 @@ bool 	AddOne( tVertex p )
 		if ( e->adjface[0]->visible && e->adjface[1]->visible )
 			/* e interior: mark for deletion. */
 			e->delete = REMOVED;
-		else if ( e->adjface[0]->visible || e->adjface[1]->visible ) 
+		else if ( e->adjface[0]->visible || e->adjface[1]->visible )
 			/* e border: make a new face. */
 			e->newface = MakeStructs( e, p );
 		e = temp;
@@ -421,9 +421,9 @@ bool 	AddOne( tVertex p )
 }
 
 /*-------------------------------------------------------------------------
-Volume6 returns six times the volume of the tetrahedron determined by f 
+Volume6 returns six times the volume of the tetrahedron determined by f
 and p.  Volume6 is positive iff p is on the negative side of f,
-where the positive side is determined by the rh-rule.  So the volume 
+where the positive side is determined by the rh-rule.  So the volume
 is positive if the ccw normal to f points outside the tetrahedron.
 --------------------------------------------------------------------------*/
 float 	Volume6( tFace f, tVertex p )
@@ -448,20 +448,20 @@ float 	Volume6( tFace f, tVertex p )
 	dz = p->v[LZD];
 
 	/* This is the expression used in the text.  Now replaced.
-	vol = 	 -az * by * cx + ay * bz * cx + az * bx * cy - ax * bz * cy 
-		- ay * bx * cz + ax * by * cz + az * by * dx - ay * bz * dx 
-		- az * cy * dx + bz * cy * dx + ay * cz * dx - by * cz * dx 
-		- az * bx * dy + ax * bz * dy + az * cx * dy - bz * cx * dy 
-		- ax * cz * dy + bx * cz * dy + ay * bx * dz - ax * by * dz 
+	vol = 	 -az * by * cx + ay * bz * cx + az * bx * cy - ax * bz * cy
+		- ay * bx * cz + ax * by * cz + az * by * dx - ay * bz * dx
+		- az * cy * dx + bz * cy * dx + ay * cz * dx - by * cz * dx
+		- az * bx * dy + ax * bz * dy + az * cx * dy - bz * cx * dy
+		- ax * cz * dy + bx * cz * dy + ay * bx * dz - ax * by * dz
 		- ay * cx * dz + by * cx * dz + ax * cy * dz - bx * cy * dz;
 	*/
 	/* This expression is algebraically equivalent to the above, but
 	uses fewer multiplications.
-	vol =	 -(az-dz) * (by-dy) * (cx-dx) 
-		+ (ay-dy) * (bz-dz) * (cx-dx) 
-		+ (az-dz) * (bx-dx) * (cy-dy) 
-		- (ax-dx) * (bz-dz) * (cy-dy) 
-		- (ay-dy) * (bx-dx) * (cz-dz) 
+	vol =	 -(az-dz) * (by-dy) * (cx-dx)
+		+ (ay-dy) * (bz-dz) * (cx-dx)
+		+ (az-dz) * (bx-dx) * (cy-dy)
+		- (ax-dx) * (bz-dz) * (cy-dy)
+		- (ay-dy) * (bx-dx) * (cz-dz)
 		+ (ax-dx) * (by-dy) * (cz-dz); */
 	/* And this one has even fewer arithmetic operations:
 	   (thanks to Robert Fraczkiewicz): */
@@ -499,7 +499,7 @@ float 	Volume6( tFace f, tVertex p )
 		else	return	0;
 	}
 	return vol;
-}		
+}
 /*-------------------------------------------------------------------------
 Volumed is the same as Volume6 but computed with doubles.  For protection
 against overflow.
@@ -547,7 +547,7 @@ void	PrintPoint( tVertex p )
 	putchar('\n');
 }
 /*----------------------------------------------------------------------
-MakeStructs makes a new face and two new edges between the 
+MakeStructs makes a new face and two new edges between the
 edge and the point that are passed to it. It returns a pointer to
 the new face.
 ----------------------------------------------------------------------*/
@@ -558,7 +558,7 @@ tFace	MakeStructs( tEdge e, tVertex p )
         int 	i, j;
 
 	/* Make two new edges (if don't already exist). */
-        for ( i=0; i < 2; ++i ) 
+        for ( i=0; i < 2; ++i )
 		/* If the edge exists, copy it into new_edge. */
 		if ( !( new_edge[i] = e->endpts[i]->duplicate) ) {
 			/* Otherwise (duplicate is NULL), MakeEdge. */
@@ -569,29 +569,29 @@ tFace	MakeStructs( tEdge e, tVertex p )
 		}
 
         /* Make the new face. */
-        new_face = MakeFace();   
+        new_face = MakeFace();
         new_face->edge[0] = e;
         new_face->edge[1] = new_edge[0];
         new_face->edge[2] = new_edge[1];
-        MakeCcw( new_face, e, p ); 
-        
+        MakeCcw( new_face, e, p );
+
         /* Set the adjacent face pointers. */
         for ( i=0; i < 2; ++i )
-	for ( j=0; j < 2; ++j )  
+	for ( j=0; j < 2; ++j )
 		/* Only one NULL link should be set to new_face. */
 		if ( !new_edge[i]->adjface[j] ) {
 			new_edge[i]->adjface[j] = new_face;
 			break;
 		}
-        
+
         return new_face;
 }
 
 /*------------------------------------------------------------------------
-MakeCcw puts the vertices in the face structure in counterclockwise order.  
+MakeCcw puts the vertices in the face structure in counterclockwise order.
 If there is no adjacent face[1] then we know that
 we are working with the first face of the initial tetrahedron.  In this
-case we want to store the vertices in the opposite order from the 
+case we want to store the vertices in the opposite order from the
 initial face.  Otherwise, we want to store the vertices in the same order
 as in the visible face.  The third vertex is always p.
 ------------------------------------------------------------------------*/
@@ -600,37 +600,37 @@ void	MakeCcw( tFace f, tEdge e, tVertex p )
         int 	i;	/* Index */
         tFace 	fi;	/* The invisible face adjacent to e */
 	tEdge	s;	/* Temporary, for swapping */
-      
+
 	/* If this is the initial tetrahedron, then e has only one
 	   adjacent face, and use that for fi.  Otherwise, use the
-	   invisible face. */ 
+	   invisible face. */
 	if ( !e->adjface[1] )
 		fi = e->adjface[0];
 	else {
-		if  ( !e->adjface[0]->visible )      
+		if  ( !e->adjface[0]->visible )
 			fi = e->adjface[0];
 		else	fi = e->adjface[1];
 	}
-       
+
 	/* Set vertex[0] & [1] of f to have the opposite orientation
-	   as do the corresponding vertices of fi. */ 
+	   as do the corresponding vertices of fi. */
 	/* Find the index i of e->endpoint[1] in fi. */
 	for ( i=0; fi->vertex[i] != e->endpts[1]; ++i )
 		;
 	/* Orient f opposite that of fi. */
 	if ( fi->vertex[ (i+1) % 3 ] != e->endpts[0] ) {
-		f->vertex[0] = e->endpts[1];  
-		f->vertex[1] = e->endpts[0];    
+		f->vertex[0] = e->endpts[1];
+		f->vertex[1] = e->endpts[0];
 	}
-	else {                               
-		f->vertex[0] = e->endpts[0];   
-		f->vertex[1] = e->endpts[1];      
+	else {
+		f->vertex[0] = e->endpts[0];
+		f->vertex[1] = e->endpts[1];
 		LSWAP( s, f->edge[1], f->edge[2] );
 	}
- 
+
         f->vertex[2] = p;
 }
- 
+
 /*---------------------------------------------------------------------
 MakeEdge creates a new cell and initializes all pointers to NULL
 and sets all flags to off.  It returns a pointer to the empty cell.
@@ -681,21 +681,21 @@ void	CleanUp( void )
 
 /*------------------------------------------------------------------------
 CleanEdges runs through the edge list and cleans up the structure.
-If there is a newface then it will put that face in place of the 
+If there is a newface then it will put that face in place of the
 visible face and NULL out newface. It also deletes so marked edges.
 -----------------------------------------------------------------------*/
 void	CleanEdges( void )
 {
 	tEdge 	e;	/* Primary index into edge list. */
 	tEdge 	t;	/* Temporary edge pointer. */
-		
+
 	/* Integrate the newface's into the data structure. */
 	/* Check every edge. */
 	e = edges;
 	do {
-		if ( e->newface ) { 
+		if ( e->newface ) {
 			if ( e->adjface[0]->visible )
-				e->adjface[0] = e->newface; 
+				e->adjface[0] = e->newface;
 			else	e->adjface[1] = e->newface;
 			e->newface = NULL;
 		}
@@ -703,7 +703,7 @@ void	CleanEdges( void )
 	} while ( e != edges );
 
 	/* Delete any edges marked for deletion. */
-	while ( edges && edges->delete ) { 
+	while ( edges && edges->delete ) {
 		e = edges;
 		DELETE( edges, e );
 	}
@@ -725,9 +725,9 @@ void	CleanFaces( void )
 {
 	tFace 	f;	/* Primary pointer into face list. */
 	tFace 	t;	/* Temporary pointer, for deleting. */
-	
 
-	while ( faces && faces->visible ) { 
+
+	while ( faces && faces->visible ) {
 		f = faces;
 		DELETE( faces, f );
 	}
@@ -743,43 +743,43 @@ void	CleanFaces( void )
 }
 
 /*-------------------------------------------------------------------------
-CleanVertices runs through the vertex list and deletes the 
+CleanVertices runs through the vertex list and deletes the
 vertices that are marked as processed but are not incident to any undeleted
-edges. 
+edges.
 -------------------------------------------------------------------------*/
 void	CleanVertices( void )
 {
 	tEdge 	e;
 	tVertex	v, t;
-	
+
 	/* Mark all vertices incident to some undeleted edge as on the hull. */
 	e = edges;
 	do {
 	         e->endpts[0]->onhull = e->endpts[1]->onhull = ONHULL;
 	         e = e->next;
 	} while (e != edges);
-	
+
 	/* Delete all vertices that have been processed but
 	   are not on the hull. */
-	while ( vertices && vertices->mark && !vertices->onhull ) { 
+	while ( vertices && vertices->mark && !vertices->onhull ) {
 		v = vertices;
 		DELETE( vertices, v );
 	}
 	v = vertices->next;
 	do {
-		if ( v->mark && !v->onhull ) {    
-			t = v; 
+		if ( v->mark && !v->onhull ) {
+			t = v;
 			v = v->next;
 			DELETE( vertices, t )
 		}
 		else v = v->next;
 	} while ( v != vertices );
-	
+
 	/* Reset flags. */
 	v = vertices;
 	do {
-		v->duplicate = NULL; 
-		v->onhull = !ONHULL; 
+		v->duplicate = NULL;
+		v->onhull = !ONHULL;
 		v = v->next;
 	} while ( v != vertices );
 }
@@ -814,7 +814,7 @@ void	Consistency( void )
     	   /* find index of endpoint[0] in adjacent face[0] */
            for ( i = 0; e->adjface[0]->vertex[i] != e->endpts[0]; ++i )
                  ;
-   
+
    	   /* find index of endpoint[0] in adjacent face[1] */
    	   for ( j = 0; e->adjface[1]->vertex[j] != e->endpts[0]; ++j )
          	 ;
@@ -866,7 +866,7 @@ void	Convexity( void )
 
         if ( f != faces )
            fprintf( stderr, "Checks: NOT convex.\n");
-        else if ( debug ) 
+        else if ( debug )
            fprintf( stderr, "Checks: convex.\n");
 }
 
@@ -889,13 +889,13 @@ void	CheckEuler( int V, int E, int F )
         if ( F != (2 * V - 4) )
              fprintf( stderr, "Checks: F=%d != 2V-4=%d; V=%d\n",
                 F, 2*V-4, V);
-        else if ( debug ) 
+        else if ( debug )
              fprintf( stderr, "F = 2V-4\t");
 
         if ( (2 * E) != (3 * F) )
              fprintf( stderr, "Checks: 2E=%d != 3F=%d; E=%d, F=%d\n",
                 2*E, 3*F, E, F );
-        else if ( debug ) 
+        else if ( debug )
              fprintf( stderr, "2E = 3F\n");
 }
 /*-----------------------------------------------------------------------*/
@@ -927,8 +927,8 @@ void	Checks( void )
 }
 /*================================================================
 These functions are used whenever the debug flag is set.
-They print out the entire contents of each data structure.  
-Printing is to standard error.  To grab the output in a file in the csh, 
+They print out the entire contents of each data structure.
+Printing is to standard error.  To grab the output in a file in the csh,
 use this:
 	chull < i.file >&! o.file
 ==================================================================*/
@@ -965,19 +965,19 @@ void	PrintEdges( void )
 {
 	tEdge 	temp;
 	int 	i;
-	
+
 	temp = edges;
 	fprintf (stderr, "Edge List\n");
 	if (edges) do {
             fprintf( stderr, "  addr: %6x\t", edges );
             fprintf( stderr, "adj: ");
-            for (i=0; i<2; ++i) 
+            for (i=0; i<2; ++i)
                  fprintf( stderr, "%6x", edges->adjface[i] );
             fprintf( stderr, "  endpts:");
-            for (i=0; i<2; ++i) 
+            for (i=0; i<2; ++i)
                  fprintf( stderr, "%4d", edges->endpts[i]->vnum);
             fprintf( stderr, "  del:%3d\n", edges->delete );
-            edges = edges->next; 
+            edges = edges->next;
         } while (edges != temp );
 
 }

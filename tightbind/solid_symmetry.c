@@ -55,18 +55,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 * Returns: none
 *
-* Action: uses the symmetry operations of 'cell 
-*   to reduce the number 
+* Action: uses the symmetry operations of 'cell
+*   to reduce the number
 *   of k points in 'raw_points.  the multiplicity of each point is returned
 *   in 'multiplicity.  If a point has an initial multiplicity of -1, it
-*   will be ignored here.  
+*   will be ignored here.
 *  The final number of points is returned in 'num_points.
 *
 *  If 'nonortho_axes is non-zero then the points are transformed
 *   into the cartesian basis before the comparisons are done.
 *
 *  NOTE:  This code is actually not correct in the general case where the
-*   three lattice vectors do not point along the cartesian axes.  Luckily, 
+*   three lattice vectors do not point along the cartesian axes.  Luckily,
 *   since the code which finds the symmetry elements is too stupid to find
 *   any elements that don't lie along axes, this will work.
 *   ah... the joys of stupid code.  :-)
@@ -95,15 +95,15 @@ void reduce_kpoints(detail_type *details,cell_type *cell,
     orig_points = (point_type *)my_calloc(num_raw_points,sizeof(point_type));
     if(!new_points) fatal("reduce_orthogonal_kpoints can't allocate orig_points");
     bcopy((char *)raw_points,(char *)orig_points,
-	  num_raw_points*sizeof(point_type));	  
+	  num_raw_points*sizeof(point_type));
     for(p1=0;p1<num_raw_points;p1++){
       if(multiplicity[p1] != -1){
 	raw_points[p1].x = orig_points[p1].x * cell->recip_vects[0].x +
 	   orig_points[p1].y * cell->recip_vects[1].x +
-	     orig_points[p1].z * cell->recip_vects[2].x; 
+	     orig_points[p1].z * cell->recip_vects[2].x;
 	raw_points[p1].y = orig_points[p1].x * cell->recip_vects[0].y +
 	   orig_points[p1].y * cell->recip_vects[1].y +
-	     orig_points[p1].z * cell->recip_vects[2].y; 
+	     orig_points[p1].z * cell->recip_vects[2].y;
 	raw_points[p1].z = orig_points[p1].x * cell->recip_vects[0].z +
 	   orig_points[p1].y * cell->recip_vects[1].z +
 	     orig_points[p1].z * cell->recip_vects[2].z;
@@ -273,7 +273,7 @@ int atoms_are_equiv(cell_type *cell,point_type *loc1,point_type *loc2,
   int i,j,k,itab,jtab;
   point_type temploc;
   int result;
-  
+
 
   /* start simply, just compare the positions */
   if( POINTS_ARE_THE_SAME(loc1,loc2,symm_tol) ){
@@ -308,7 +308,7 @@ int atoms_are_equiv(cell_type *cell,point_type *loc1,point_type *loc2,
 	  if( cell->dim == 3 ){
 	    for(k=-1;k<2;k++){
 	      temploc.x = loc2->x + i*cell_dim[0].x +
-		j*cell_dim[1].x+ k*cell_dim[2].x; 
+		j*cell_dim[1].x+ k*cell_dim[2].x;
 	      temploc.y = loc2->y + i*cell_dim[0].y +
 		j*cell_dim[1].y+ k*cell_dim[2].y;
 	      temploc.z = loc2->z + i*cell_dim[0].z +
@@ -342,7 +342,7 @@ int atoms_are_equiv(cell_type *cell,point_type *loc1,point_type *loc2,
 *
 * Action:  checks to see if the two sets of lattice vectors
 *    are the same
-*  
+*
 *   if they are then 'present is  set to be nonzero
 *
 *   the mapping between vectors is passed back in 'mapping, which should
@@ -493,7 +493,7 @@ void compare_crystal_lattice(cell_type *cell,point_type *vects1,point_type *vect
 * Action:  checks to see if the two sets of atomic positions
 *   in 'locs1 and 'locs2 are the same using the translation vectors
 *   defined in 'cell.
-*  
+*
 *   As the name implies, this just checks the basis, it is also
 *    important to make sure the lattice is invariant, you have
 *    to use compare_crystal_lattice to do this.
@@ -543,7 +543,7 @@ void compare_crystal_basis(cell_type *cell,point_type *locs1,point_type *locs2,
       found = 1;
       equiv_atoms[i] = -1;
     }
-    
+
     /* if we didn't find this atom, we might as well go ahead and return */
     if( !found ) return;
   }
