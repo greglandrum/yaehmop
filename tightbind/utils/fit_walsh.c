@@ -37,8 +37,8 @@ real compare_characters(symm1,symm2,num_symm)
     /* assign a large penalty to characters which change sign */
     if( fabs(symm1[i]) > 1e-3 && fabs(symm2[i]) > 1e-3 ){
       if( (symm1[i] > 0 && symm2[i] < 0) ||
-	  (symm1[i] < 0 && symm2[i] > 0) ){
-	dev += 100;
+          (symm1[i] < 0 && symm2[i] > 0) ){
+        dev += 100;
       }
     }
   }
@@ -74,8 +74,8 @@ real compare_symms(symm1,symm2,num_symm)
     /* assign a large penalty to characters which change sign */
     if( fabs(symm1[i]) > 1e-3 && fabs(symm2[i]) > 1e-3 ){
       if( (symm1[i] > 0 && symm2[i] < 0) ||
-	  (symm1[i] < 0 && symm2[i] > 0) ){
-	dev += 100;
+          (symm1[i] < 0 && symm2[i] > 0) ){
+        dev += 100;
       }
     }
 #endif
@@ -127,21 +127,21 @@ void construct_lines(points,num_orbs,num_symm,num_steps)
     for(j=0;j<num_orbs;j++){
       foundit = 0;
       for(k=0;k<num_orbs && !foundit;k++){
-	/********
-	  if this orbital has already been matched, we don't have to
-	  do anything
-	  *********/
-	if( !matched[k] ){
-	  /* it hasn't been, see if it matches the orbital we are trying to match */
-	  if( compare_symms(points[i*num_orbs+j].symmetries,
-			    points[(i+1)*num_orbs+k].symmetries,num_symm) < 1e-6 ){
-	    foundit = 1;
-	    points[i*num_orbs+j].next = &(points[(i+1)*num_orbs+k]);
-	    found[j] = 1;
+        /********
+          if this orbital has already been matched, we don't have to
+          do anything
+          *********/
+        if( !matched[k] ){
+          /* it hasn't been, see if it matches the orbital we are trying to match */
+          if( compare_symms(points[i*num_orbs+j].symmetries,
+                            points[(i+1)*num_orbs+k].symmetries,num_symm) < 1e-6 ){
+            foundit = 1;
+            points[i*num_orbs+j].next = &(points[(i+1)*num_orbs+k]);
+            found[j] = 1;
 fprintf(stderr,"%d: %d->%d\n",i,j,k);
-	    matched[k] = 1;
-	  }
-	}
+            matched[k] = 1;
+          }
+        }
       }
     }
 #endif
@@ -153,35 +153,35 @@ fprintf(stderr,"%d: %d->%d\n",i,j,k);
       ********/
     for( j=0;j<num_orbs;j++){
       /******
-	if we didn't find it, then point this orbital at the closest
-	non-matched orbital at the next step
-	******/
+        if we didn't find it, then point this orbital at the closest
+        non-matched orbital at the next step
+        ******/
       if( !found[j] ){
-	printf("No exact: %d, step: %d\n",j,i);
-	closest = 1e6;
-	which_is_closest = 1000;
-	for(k=0;k<num_orbs;k++){
-	  if( !matched[k] ){
-	    dist =  compare_symms(points[i*num_orbs+j].symmetries,
-				  points[(i+1)*num_orbs+k].symmetries,num_symm);
-	    /* weight the distance in symmetry space by the energy difference */
-	    ediff = fabs(points[i*num_orbs+j].energy - points[(i+1)*num_orbs+k].energy);
+        printf("No exact: %d, step: %d\n",j,i);
+        closest = 1e6;
+        which_is_closest = 1000;
+        for(k=0;k<num_orbs;k++){
+          if( !matched[k] ){
+            dist =  compare_symms(points[i*num_orbs+j].symmetries,
+                                  points[(i+1)*num_orbs+k].symmetries,num_symm);
+            /* weight the distance in symmetry space by the energy difference */
+            ediff = fabs(points[i*num_orbs+j].energy - points[(i+1)*num_orbs+k].energy);
 
-	    dist = dist*(1+ediff)*(1+ediff);
-	    if( dist < closest ){
+            dist = dist*(1+ediff)*(1+ediff);
+            if( dist < closest ){
 fprintf(stderr,"%d: %d->%d\n",i,j,k);
-	      closest = dist;
-	      which_is_closest = k;
-	    }
-	  }
-	}
-	if( which_is_closest >= num_orbs ){
-	  fprintf(stderr,"Can't match orbital %d in step %d\n",j,i);
-	  fatal("Can't match an orbital.");
-	}
-	points[i*num_orbs+j].next = &(points[(i+1)*num_orbs+which_is_closest]);
-	found[j] = 1;
-	matched[which_is_closest] = 1;
+              closest = dist;
+              which_is_closest = k;
+            }
+          }
+        }
+        if( which_is_closest >= num_orbs ){
+          fprintf(stderr,"Can't match orbital %d in step %d\n",j,i);
+          fatal("Can't match an orbital.");
+        }
+        points[i*num_orbs+j].next = &(points[(i+1)*num_orbs+which_is_closest]);
+        found[j] = 1;
+        matched[which_is_closest] = 1;
       }
     }
   }
@@ -203,7 +203,7 @@ fprintf(stderr,"%d: %d->%d\n",i,j,k);
 *
 *****************************************************************************/
 void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
-			p_num_steps)
+                        p_num_steps)
   FILE *infile;
   walsh_point_type **p_points;
   real **p_xvals,**p_tot_E;
@@ -261,7 +261,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
   skipcomments(infile,instring,FATAL);
   upcase(instring);
   while(instring[0] != '#' || !(strstr(instring,"WALSH") &&
-				strstr(instring,"SYMMETRY")) ){
+                                strstr(instring,"SYMMETRY")) ){
     skipcomments(infile,instring,FATAL);
     upcase(instring);
   }
@@ -315,7 +315,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
 
     /* okay, read ahead until we hit the energies */
     while(instring[0] != '#' || !strstr(instring,"ENERGIES") ||
-	  strstr(instring,"FRAGMENT")){
+          strstr(instring,"FRAGMENT")){
       skipcomments(infile,instring,FATAL);
       upcase(instring);
     }
@@ -345,7 +345,7 @@ void extract_walsh_data(infile,p_points,p_xvals,p_tot_E,p_num_orbs,p_num_symm,
       strtok(instring," ");
 
       for(k=0;k<num_symm;k++){
-	sscanf(strtok(0," "),"%lf",&(points[i*num_orbs+j].symmetries[k]));
+        sscanf(strtok(0," "),"%lf",&(points[i*num_orbs+j].symmetries[k]));
       }
     }
   }

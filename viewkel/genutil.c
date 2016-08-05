@@ -79,7 +79,7 @@ void fatal_bug( char *errorstring, char *file, int line )
 #ifndef USING_THE_MAC
   exit(-12);
 #else
-	scanf("/n/n/n");
+        scanf("/n/n/n");
 #endif
 }
 
@@ -94,7 +94,7 @@ void fatal( char *errorstring )
 #ifndef USING_THE_MAC
   exit(-1);
 #else
-	scanf("/n/n/n");
+        scanf("/n/n/n");
 #endif
 }
 
@@ -147,12 +147,12 @@ void display( char *string )
     if( doing_X ){
       /* first clear out anything that was there */
       XFillRectangle(disp,gwin,blackgc,0,
-		     g_ymax-BUTTONOFF-30,BUTWIDTH+30,30);
+                     g_ymax-BUTTONOFF-30,BUTWIDTH+30,30);
 
       /* now draw in the string (centered) */
       pos = BUTWIDTH / 2 - XTextWidth(big_font,string,strlen(string))/2;
       XDrawImageString(disp,gwin,bigtextgc,pos,g_ymax-BUTTONOFF,
-		       string,strlen(string));
+                       string,strlen(string));
 
       /* flush the buffer to make sure that the string is displayed */
       XFlush(disp);
@@ -405,7 +405,7 @@ int skipcomments(FILE *file,char *string)
   string[0] = 0;
   error = fgets(string,MAX_STR_LEN,file);
   while( error && (string[0] == '\n' || string[0] == ';')
-	&& string[0] != 0 ){
+        && string[0] != 0 ){
     string[0] = 0;
     error = fgets(string,MAX_STR_LEN,file);
   }
@@ -448,11 +448,11 @@ void dump_molecular_coords(molec_type *molec)
   for(i=0;i<molec->num_atoms;i++){
     if(!atoms[i].exclude &&
        (molec->hydrogens_on || atoms[i].type[0] != 'H' ||
-	atoms[i].type[1] != 0) &&
+        atoms[i].type[1] != 0) &&
        (molec->dummies_on || atoms[i].type[0] != '&') ){
       printf("%d %s % -6.4lf % -6.4lf % -6.4lf\n",i+1,
-	     atoms[i].type,
-	     atoms[i].loc.x,atoms[i].loc.y,atoms[i].loc.z);
+             atoms[i].type,
+             atoms[i].loc.x,atoms[i].loc.y,atoms[i].loc.z);
     }
   }
 }
@@ -523,9 +523,9 @@ void parse_integer_string(char *string,int **values,int *num_values)
       (*values)[*num_values] = i;
       (*num_values)++;
       if(*num_values == max_values){
-	max_values += 10;
-	*values = (int *)D_REALLOC(*values,max_values*sizeof(int));
-	if( !(*values )) fatal("Can't D_REALLOCate values in parse_integer_string");
+        max_values += 10;
+        *values = (int *)D_REALLOC(*values,max_values*sizeof(int));
+        if( !(*values )) fatal("Can't D_REALLOCate values in parse_integer_string");
       }
     }
     safe_strcpy(num_string,(char *)strtok(0,",\n"));
@@ -712,7 +712,7 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
     /* calculate the bond valence too, because we can */
     R0_val = 0.0;
     bond_length_to_bond_valence(selected_atoms[0],selected_atoms[1],
-				val,&R0_val,&valence);
+                                val,&R0_val,&valence);
     printf("\tBond valence: %6.3lf based on R0= %6.3lf\n",valence,R0_val);
 #endif
     sprintf(label_string,"%6.3lf \\AA",val);
@@ -885,7 +885,7 @@ void invert_selected_atoms(int *num_selected,object_type *obj)
 
 #ifdef INCLUDE_ADF_PLOTS
 void map_AO_number_to_center(int AO_num,MO_surface_type *MO_surf,
-			     MO_center_list_type **center_p,int *offset)
+                             MO_center_list_type **center_p,int *offset)
 {
   int i;
   int center_begin;
@@ -914,8 +914,8 @@ void map_AO_number_to_center(int AO_num,MO_surface_type *MO_surf,
 #endif
 
 void angles_from_bond_vect(point_type *p1,point_type *p2,
-			   float *theta_y,float *theta_z,
-			   float *len)
+                           float *theta_y,float *theta_z,
+                           float *len)
 {
   point_type V;
   float dtot,dxz;

@@ -66,7 +66,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 ********************************************************************************/
 void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
-	 l1,l2,atoms)
+         l1,l2,atoms)
   real *sigma,*pi,*delta,*phi,dist;
   int which1,which2,q_num1,q_num2,l1,l2;
   atom_type *atoms;
@@ -158,8 +158,8 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
     loopvar=0;
     while(loopvar <= max)
       {
-	fprintf(stderr,"A(%d)= %.16f \t B(%d)= %f\n",loopvar,A_fn_values[loopvar],loopvar,B_fn_values[loopvar]);
-	loopvar++;
+        fprintf(stderr,"A(%d)= %.16f \t B(%d)= %f\n",loopvar,A_fn_values[loopvar],loopvar,B_fn_values[loopvar]);
+        loopvar++;
       }
 */
 
@@ -231,19 +231,19 @@ void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
 
     if( num_zeta2 == 2 ){
       if( l2 == 2){
-	sk2 = atoms[which2].exp_d;
-	coeff_2 = atoms[which2].coeff_d1;
+        sk2 = atoms[which2].exp_d;
+        coeff_2 = atoms[which2].coeff_d1;
       }
       if( l2 == 3){
-	sk2 = atoms[which2].exp_f;
-	coeff_2 = atoms[which2].coeff_f1;
+        sk2 = atoms[which2].exp_f;
+        coeff_2 = atoms[which2].coeff_f1;
       }
 
       abfns(A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
 
       for(i=0;i<=nn;i++){
-	m=i;
-	lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
+        m=i;
+        lovlap(&(ang_ind_overlap[i]),A_fn_values,B_fn_values,&sk1,&sk2,&dist,&l1,&l2,&m,&q_num1,&q_num2,&max);
       }
       *sigma += coeff_1*coeff_2*ang_ind_overlap[0];
       *pi += coeff_1*coeff_2*ang_ind_overlap[1];

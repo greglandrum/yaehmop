@@ -80,7 +80,7 @@ void find_FMO_tic_sep( FMO_diagram_type *diagram )
   log_range = log10(range);
 
   norm = pow(10.0,log_range-(float)((log_range >= 0.0 ) ? (int)log_range :
-				    ((int)log_range-1)));
+                                    ((int)log_range-1)));
   if (norm <= 2)
     tics = 0.2;
   else if (norm <= 5)
@@ -133,7 +133,7 @@ void find_FMO_tic_sep( FMO_diagram_type *diagram )
  *
  ****************************************************************************/
 void fill_levels_with_electrons(FMO_level_type *levels,float num_electrons,
-				float *occups)
+                                float *occups)
 {
   FMO_level_type *level;
   float electrons_left,electrons_required;
@@ -148,25 +148,25 @@ void fill_levels_with_electrons(FMO_level_type *levels,float num_electrons,
     if( !occups ){
       electrons_required = level->num_degen*2.0;
       if(electrons_left > electrons_required){
-	level->num_electrons = electrons_required;
-	electrons_left -= electrons_required;
-	if( electrons_left < .001 ){
-	  electrons_left = 0.0;
-	  level->highest = 1;
-	}
+        level->num_electrons = electrons_required;
+        electrons_left -= electrons_required;
+        if( electrons_left < .001 ){
+          electrons_left = 0.0;
+          level->highest = 1;
+        }
       }else{
-	level->num_electrons = electrons_left;
-	level->highest = 1;
-	electrons_left = 0;
+        level->num_electrons = electrons_left;
+        level->highest = 1;
+        electrons_left = 0;
       }
     } else{
       level->num_electrons = 0;
       for(i=0; i<level->num_degen; i++){
-	level->num_electrons += occups[levels_past];
-	levels_past++;
+        level->num_electrons += occups[levels_past];
+        levels_past++;
       }
       if( occups[levels_past] == 0 ){
-	level->highest = 1;
+        level->highest = 1;
       }
     }
     level = level->next;
@@ -261,10 +261,10 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
   for(i=0;i<FMO_diagram->num_frags;i++){
     FMO_frag = &(FMO_diagram->frags[i]);
     qsort(FMO_frag->raw_energies,FMO_frag->num_orbs,
-	  sizeof(float),Ecompare);
+          sizeof(float),Ecompare);
   }
   qsort(FMO_diagram->raw_energies,FMO_diagram->tot_num_orbs,
-	sizeof(float),Ecompare);
+        sizeof(float),Ecompare);
 
   /* now loop over the fragments and figure out which levels are degenerate */
   for(i=0;i<FMO_diagram->num_frags;i++){
@@ -275,9 +275,9 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
     if( FMO_frag->levels ){
       level = FMO_frag->levels;
       while(level){
-	next_level = level->next;
-	D_FREE(level);
-	level = next_level;
+        next_level = level->next;
+        D_FREE(level);
+        level = next_level;
       }
     }
 
@@ -290,21 +290,21 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
     for(j=0;j<FMO_frag->num_orbs;j++){
       /* get space for the new level */
       if( level ){
-	level->next = (FMO_level_type *)D_CALLOC(1,sizeof(FMO_level_type));
-	if( !(level->next) )
-	  fatal("Can't get space for an FMO_level structure.");
-	level = level->next;
+        level->next = (FMO_level_type *)D_CALLOC(1,sizeof(FMO_level_type));
+        if( !(level->next) )
+          fatal("Can't get space for an FMO_level structure.");
+        level = level->next;
       }
       else{
-	/*****
+        /*****
 
-	  if this is the first level for this fragment, set a pointer to
-	  it in the fragment structure.
+          if this is the first level for this fragment, set a pointer to
+          it in the fragment structure.
 
-	*****/
-	level = (FMO_level_type *)D_CALLOC(1,sizeof(FMO_level_type));
-	if( !(level) ) fatal("Can't get space for an FMO_level structure.");
-	FMO_frag->levels = level;
+        *****/
+        level = (FMO_level_type *)D_CALLOC(1,sizeof(FMO_level_type));
+        if( !(level) ) fatal("Can't get space for an FMO_level structure.");
+        FMO_frag->levels = level;
       }
 
       level->number = num_levels++;
@@ -314,10 +314,10 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
 
       /* check for degeneracies */
       while( j+1 < FMO_frag->num_orbs &&
-	    fabs(FMO_frag->raw_energies[j+1] - level->energy) <
-	    FMO_diagram->degen_tol){
-	level->num_degen++;
-	j++;
+            fabs(FMO_frag->raw_energies[j+1] - level->energy) <
+            FMO_diagram->degen_tol){
+        level->num_degen++;
+        j++;
       }
     }
   }
@@ -339,7 +339,7 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
    if( level ){
       level->next = (FMO_level_type *)D_CALLOC(1,sizeof(FMO_level_type));
       if( !(level->next) )
-	fatal("Can't get space for an FMO_level structure.");
+        fatal("Can't get space for an FMO_level structure.");
       level = level->next;
     }
     else{
@@ -355,8 +355,8 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
 
     /* check for degeneracies */
     while( j < FMO_diagram->tot_num_orbs  &&
-	  fabs(FMO_diagram->raw_energies[j+1] - level->energy)
-	  < FMO_diagram->degen_tol){
+          fabs(FMO_diagram->raw_energies[j+1] - level->energy)
+          < FMO_diagram->degen_tol){
       level->num_degen++;
       j++;
     }
@@ -372,9 +372,9 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
     if( FMO_diagram->connects ){
       connector = FMO_diagram->connects;
       while(connector){
-	next_connector = connector->next;
-	D_FREE(connector);
-	connector = next_connector;
+        next_connector = connector->next;
+        D_FREE(connector);
+        connector = next_connector;
       }
     }
 
@@ -394,80 +394,80 @@ void preprocess_FMO_data(FMO_diagram_type *FMO_diagram)
       orbs_into_frag = 0;
 
       for(j=0;j<FMO_diagram->tot_num_orbs;j++){
-	/* check to see if we need to change to another fragment */
-	if( orbs_into_frag == FMO_frag->num_orbs ){
-	  which_frag++;
-	  FMO_frag = &(FMO_diagram->frags[which_frag]);
-	  orbs_into_frag = 0;
-	}
+        /* check to see if we need to change to another fragment */
+        if( orbs_into_frag == FMO_frag->num_orbs ){
+          which_frag++;
+          FMO_frag = &(FMO_diagram->frags[which_frag]);
+          orbs_into_frag = 0;
+        }
 
 
-	/* map the orbital to a level */
-	frag_level = map_orbital_to_level(FMO_frag->levels,orbs_into_frag);
-	which_frag_level = frag_level->number;
-	num_frag_degen = frag_level->num_degen;
+        /* map the orbital to a level */
+        frag_level = map_orbital_to_level(FMO_frag->levels,orbs_into_frag);
+        which_frag_level = frag_level->number;
+        num_frag_degen = frag_level->num_degen;
 
-	/******
+        /******
 
-	  build up the total contribution between sets of degenerate
-	  levels
+          build up the total contribution between sets of degenerate
+          levels
 
-	  *******/
-	tot_contrib = 0.0;
-	for(k=0;k<num_main_degen;k++){
-	  itab = (i+k)*FMO_diagram->tot_num_orbs;
-	  for(l=0;l<num_frag_degen;l++){
-	    tot_contrib += fabs(chg_mat[itab + j + l]);
-	  }
-	}
-	j += num_frag_degen-1;
-	orbs_into_frag += num_frag_degen;
+          *******/
+        tot_contrib = 0.0;
+        for(k=0;k<num_main_degen;k++){
+          itab = (i+k)*FMO_diagram->tot_num_orbs;
+          for(l=0;l<num_frag_degen;l++){
+            tot_contrib += fabs(chg_mat[itab + j + l]);
+          }
+        }
+        j += num_frag_degen-1;
+        orbs_into_frag += num_frag_degen;
 
-	/* don't make connectors that aren't going to be shown */
-	if(tot_contrib >= FMO_diagram->min_contrib ){
-	  /****
+        /* don't make connectors that aren't going to be shown */
+        if(tot_contrib >= FMO_diagram->min_contrib ){
+          /****
 
-	    get memory for the new connector
+            get memory for the new connector
 
-	    ****/
-	  next_connector =
-	    (FMO_connect_type *)D_CALLOC(1,sizeof(FMO_connect_type));
-	  if(!next_connector) fatal("Can't get memory for an FMO connector.");
+            ****/
+          next_connector =
+            (FMO_connect_type *)D_CALLOC(1,sizeof(FMO_connect_type));
+          if(!next_connector) fatal("Can't get memory for an FMO connector.");
 
-	  /* is this the first connector in the list? */
-	  if( !FMO_diagram->connects ){
-	    FMO_diagram->connects = next_connector;
-	    connector = next_connector;
-	  } else {
-	    connector->next = next_connector;
-	    connector = next_connector;
-	  }
+          /* is this the first connector in the list? */
+          if( !FMO_diagram->connects ){
+            FMO_diagram->connects = next_connector;
+            connector = next_connector;
+          } else {
+            connector->next = next_connector;
+            connector = next_connector;
+          }
 
 
-	  /* set up the connector */
-	  connector->which_frag = which_frag;
-	  connector->fragment_level = which_frag_level;
-	  connector->main_level = which_main_level;
-	  connector->contrib = tot_contrib;
+          /* set up the connector */
+          connector->which_frag = which_frag;
+          connector->fragment_level = which_frag_level;
+          connector->main_level = which_main_level;
+          connector->contrib = tot_contrib;
 
-	  /* set the line-style */
-	  if( fabs(connector->contrib) < .25 ) connector->linestyle = 3;
-	  else if(fabs(connector->contrib) < .5) connector->linestyle = 2;
-	  else if(fabs(connector->contrib) < .75) connector->linestyle = 1;
-	  else connector->linestyle = 0;
-	}
+          /* set the line-style */
+          if( fabs(connector->contrib) < .25 ) connector->linestyle = 3;
+          else if(fabs(connector->contrib) < .5) connector->linestyle = 2;
+          else if(fabs(connector->contrib) < .75) connector->linestyle = 1;
+          else connector->linestyle = 0;
+        }
       }
       i += num_main_degen-1;
     }
   }
   /* now fill each fragment and the main set of levels with electrons */
   fill_levels_with_electrons(FMO_diagram->levels,
-			     FMO_diagram->tot_num_electrons,
-			     FMO_diagram->occups);
+                             FMO_diagram->tot_num_electrons,
+                             FMO_diagram->occups);
   for(i=0;i<FMO_diagram->num_frags;i++){
     fill_levels_with_electrons(FMO_diagram->frags[i].levels,
-			       FMO_diagram->frags[i].num_electrons,
-			       FMO_diagram->frags[i].occups);
+                               FMO_diagram->frags[i].num_electrons,
+                               FMO_diagram->frags[i].occups);
   }
 }
 
@@ -574,7 +574,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
   /* get space to store the fragments */
   if( FMO_diagram->num_frags){
     FMO_diagram->frags = (FMO_fragment_type *)D_CALLOC(FMO_diagram->num_frags,
-						     sizeof(FMO_fragment_type));
+                                                     sizeof(FMO_fragment_type));
     if( !FMO_diagram->frags ) fatal("Can't get memory for FMO_frags.");
   }
 
@@ -586,7 +586,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
   for(i=0;i<FMO_diagram->num_frags;i++){
     skipcomments(infile,instring);
     sscanf(instring,"%d %lf",&(FMO_diagram->frags[i].num_orbs),
-	   &(FMO_diagram->frags[i].num_electrons));
+           &(FMO_diagram->frags[i].num_electrons));
   }
 
   /******
@@ -603,22 +603,22 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
     if( read_occups ){
       FMO_frag->occups = (float *)D_CALLOC(FMO_frag->num_orbs,sizeof(float));
       if( !FMO_frag->occups )
-	fatal("Can't get memory for FMO fragment occupations.");
+        fatal("Can't get memory for FMO fragment occupations.");
     }
 
     /* read out the raw energies */
     for(j=0;j<FMO_frag->num_orbs;j++){
       skipcomments(infile,instring);
       if( FMO_frag->occups ){
-	sscanf(instring,"%lf %lf",&(FMO_frag->raw_energies[j]),
-	       &(FMO_frag->occups[j]));
+        sscanf(instring,"%lf %lf",&(FMO_frag->raw_energies[j]),
+               &(FMO_frag->occups[j]));
       } else{
-	sscanf(instring,"%lf",&(FMO_frag->raw_energies[j]));
+        sscanf(instring,"%lf",&(FMO_frag->raw_energies[j]));
       }
       if( FMO_frag->raw_energies[j] > max_E )
-	max_E = FMO_frag->raw_energies[j];
+        max_E = FMO_frag->raw_energies[j];
       if( FMO_frag->raw_energies[j] < min_E )
-	min_E = FMO_frag->raw_energies[j];
+        min_E = FMO_frag->raw_energies[j];
     }
   }
 
@@ -628,13 +628,13 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
 
   ******/
   FMO_diagram->raw_energies = (float *)D_CALLOC(FMO_diagram->tot_num_orbs,
-					      sizeof(float));
+                                              sizeof(float));
   if(!FMO_diagram->raw_energies)
     fatal("Can't get space for raw molecular energies.");
 
   if( read_occups ){
     FMO_diagram->occups = (float *)D_CALLOC(FMO_diagram->tot_num_orbs,
-					  sizeof(float));
+                                          sizeof(float));
     if( !FMO_diagram->occups )
       fatal("Can't allocate space for occupations.");
   }
@@ -642,7 +642,7 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
     skipcomments(infile,instring);
     if( read_occups ){
       sscanf(instring,"%lf %lf",&(FMO_diagram->raw_energies[i]),
-	     &(FMO_diagram->occups[i]));
+             &(FMO_diagram->occups[i]));
     }else{
       sscanf(instring,"%lf",&(FMO_diagram->raw_energies[i]));
     }
@@ -661,8 +661,8 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
   ******/
   if( FMO_diagram->num_frags ){
     FMO_diagram->chg_mat = (float *)D_CALLOC(FMO_diagram->tot_num_orbs*
-					   FMO_diagram->tot_num_orbs,
-					   sizeof(float));
+                                           FMO_diagram->tot_num_orbs,
+                                           sizeof(float));
     if( !FMO_diagram->chg_mat )
       fatal("Can't get memory for FMO charge matrix.");
 
@@ -675,18 +675,18 @@ void read_FMO_data(FILE *infile,FMO_diagram_type *FMO_diagram)
       /* use strtok to read out the space delimited numbers */
       string_ptr = strtok(instring," ");
       if( string_ptr ){
-	sscanf((const char *)string_ptr,"%lf",&(chg_mat[itab]));
+        sscanf((const char *)string_ptr,"%lf",&(chg_mat[itab]));
       } else{
-	fatal("EOF hit way too early in FMO file.");
+        fatal("EOF hit way too early in FMO file.");
       }
 
       for(j=1;j<FMO_diagram->tot_num_orbs;j++){
-	string_ptr = strtok(0," ");
-	if( string_ptr != 0 ){
-	  sscanf((const char *)string_ptr,"%lf",&(chg_mat[itab+j]));
-	} else{
-	  fatal("ran out of entries when reading charge matrix elements.");
-	}
+        string_ptr = strtok(0," ");
+        if( string_ptr != 0 ){
+          sscanf((const char *)string_ptr,"%lf",&(chg_mat[itab+j]));
+        } else{
+          fatal("ran out of entries when reading charge matrix elements.");
+        }
       }
     }
   }
@@ -855,7 +855,7 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
   if( num_electrons/level->num_degen > 2 ){
     char errstring[80];
     sprintf(errstring,"Level at E= %lf, has a filling (%lf) which is larger than 2.0",
-	    level->energy,num_electrons);
+            level->energy,num_electrons);
     FATAL_BUG(errstring);
   }
 
@@ -866,10 +866,10 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
     for(i=0;i<level->num_degen;i++){
       xpos = level_center - diagram->level_width/4.0;
       g_line(xpos,level->yloc-diagram->electron_length/2.0,
-	     xpos,level->yloc+diagram->electron_length/2.0);
+             xpos,level->yloc+diagram->electron_length/2.0);
       xpos = level_center + diagram->level_width/4.0;
       g_line(xpos,level->yloc-diagram->electron_length/2.0,
-	     xpos,level->yloc+diagram->electron_length/2.0);
+             xpos,level->yloc+diagram->electron_length/2.0);
 
       level_center += (float)(diagram->level_width + FMO_DEGEN_LEVEL_SKIP);
     }
@@ -884,7 +884,7 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
     for(i=0;i<level->num_degen && num_electrons > 0.01;i++){
       xpos = level_center - diagram->level_width/4.0;
       g_line(xpos,level->yloc-diagram->electron_length/2.0,
-	     xpos,level->yloc+diagram->electron_length/2.0);
+             xpos,level->yloc+diagram->electron_length/2.0);
 
       level_center += (float)(diagram->level_width + FMO_DEGEN_LEVEL_SKIP);
       num_electrons -= 1.0;
@@ -894,12 +894,12 @@ void FMO_draw_electrons(FMO_diagram_type *diagram, FMO_level_type *level)
     if( num_electrons > 0.1 ){
       level_center = level->xmin + diagram->level_width/2.0;
       for(i=0;i<level->num_degen && num_electrons > 0.1;i++){
-	xpos = level_center + diagram->level_width/4.0;
-	g_line(xpos,level->yloc-diagram->electron_length/2.0,
-	       xpos,level->yloc+diagram->electron_length/2.0);
+        xpos = level_center + diagram->level_width/4.0;
+        g_line(xpos,level->yloc-diagram->electron_length/2.0,
+               xpos,level->yloc+diagram->electron_length/2.0);
 
-	level_center += (float)(diagram->level_width + FMO_DEGEN_LEVEL_SKIP);
-	num_electrons -= 1.0;
+        level_center += (float)(diagram->level_width + FMO_DEGEN_LEVEL_SKIP);
+        num_electrons -= 1.0;
       }
     }
   }
@@ -973,7 +973,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
   if( diagram->do_y_tics ){
     for(i=0;i<floor(diagram->num_tics_y);i++){
       yloc = origin.y + yscale * (yref - diagram->tic_start_y -
-					i * diagram->tic_sep_y);
+                                        i * diagram->tic_sep_y);
       g_line(origin.x-obj->scale.x*TIC_DIM,yloc,origin.x,yloc);
 
       yval = (diagram->tic_start_y + i*diagram->tic_sep_y);
@@ -1013,7 +1013,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
     while(level){
       /* figure out how far out from the center we have to move */
       xoffset = (level->num_degen*diagram->level_width +
-		 (level->num_degen-1)*FMO_DEGEN_LEVEL_SKIP)/2;
+                 (level->num_degen-1)*FMO_DEGEN_LEVEL_SKIP)/2;
       level->xmin = xcenter-xoffset;
       level->xmax = xcenter+xoffset;
       xpos = level->xmin;
@@ -1023,10 +1023,10 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 
       /* now draw the levels (if they're onscreen) */
       if( ypos > obj->bmin.y && ypos < obj->bmax.y ){
-	for(i=0;i<level->num_degen;i++){
-	  g_line(xpos,ypos,xpos+diagram->level_width,ypos);
-	  xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
-	}
+        for(i=0;i<level->num_degen;i++){
+          g_line(xpos,ypos,xpos+diagram->level_width,ypos);
+          xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
+        }
       }
 
       /* move onto the next level */
@@ -1052,7 +1052,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
     while(level){
       /* figure out how far out from the center we have to move */
       xoffset = (level->num_degen*diagram->level_width +
-		 (level->num_degen-1)*FMO_DEGEN_LEVEL_SKIP)/2;
+                 (level->num_degen-1)*FMO_DEGEN_LEVEL_SKIP)/2;
       level->xmin = xcenter-xoffset;
       level->xmax = xcenter+xoffset;
       xpos = level->xmin;
@@ -1062,10 +1062,10 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 
       /* now draw the levels (if they're onscreen) */
       if( ypos > obj->bmin.y && ypos < obj->bmax.y ){
-	for(i=0;i<level->num_degen;i++){
-	  g_line(xpos,ypos,xpos+diagram->level_width,ypos);
-	  xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
-	}
+        for(i=0;i<level->num_degen;i++){
+          g_line(xpos,ypos,xpos+diagram->level_width,ypos);
+          xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
+        }
       }
 
       /* move onto the next level */
@@ -1077,7 +1077,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
        diagram->frags[diagram->left_fragment-1].label ){
       yloc = origin.y+obj->scale.y*TIC_DIM*(1.1);
       g_center_text(xcenter,yloc,
-		    diagram->frags[diagram->left_fragment-1].label);
+                    diagram->frags[diagram->left_fragment-1].label);
     }
 
 
@@ -1093,7 +1093,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
     while(level){
       /* figure out how far out from the center we have to move */
       xoffset = (level->num_degen*diagram->level_width +
-		 (level->num_degen-1)*FMO_DEGEN_LEVEL_SKIP)/2;
+                 (level->num_degen-1)*FMO_DEGEN_LEVEL_SKIP)/2;
       level->xmin = xcenter-xoffset;
       level->xmax = xcenter+xoffset;
       xpos = level->xmin;
@@ -1103,10 +1103,10 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 
       /* now draw the levels (if they're onscreen) */
       if( ypos > obj->bmin.y && ypos < obj->bmax.y ){
-	for(i=0;i<level->num_degen;i++){
-	  g_line(xpos,ypos,xpos+diagram->level_width,ypos);
-	  xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
-	}
+        for(i=0;i<level->num_degen;i++){
+          g_line(xpos,ypos,xpos+diagram->level_width,ypos);
+          xpos += diagram->level_width + FMO_DEGEN_LEVEL_SKIP;
+        }
       }
 
       /* move onto the next level */
@@ -1118,7 +1118,7 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
        diagram->frags[diagram->right_fragment-1].label ){
       yloc = origin.y+obj->scale.y*TIC_DIM*(1.1);
       g_center_text(xcenter,yloc,
-		    diagram->frags[diagram->right_fragment-1].label);
+                    diagram->frags[diagram->right_fragment-1].label);
     }
 
 
@@ -1131,86 +1131,86 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
       g_change_linewidth(1);
       connector = diagram->connects;
       while(connector){
-	/* find the fragment level to which this guy connects*/
-	if( connector->which_frag == (diagram->left_fragment-1) ||
-	   connector->which_frag == (diagram->right_fragment-1) ){
+        /* find the fragment level to which this guy connects*/
+        if( connector->which_frag == (diagram->left_fragment-1) ||
+           connector->which_frag == (diagram->right_fragment-1) ){
 
-	  fragment_level = diagram->frags[connector->which_frag].levels;
+          fragment_level = diagram->frags[connector->which_frag].levels;
 
-	  while(fragment_level && fragment_level->number != connector->fragment_level){
-	    fragment_level = fragment_level->next;
-	  }
-	  if( !fragment_level ) fatal("Can't find a fragment level for a connector.");
+          while(fragment_level && fragment_level->number != connector->fragment_level){
+            fragment_level = fragment_level->next;
+          }
+          if( !fragment_level ) fatal("Can't find a fragment level for a connector.");
 
-	  /* find the main level to which this guy connects */
-	  main_level = diagram->levels;
-	  while(main_level && main_level->number != connector->main_level){
-	    main_level = main_level->next;
-	  }
-	  if( !main_level ) fatal("Can't find a main level for a connector.");
+          /* find the main level to which this guy connects */
+          main_level = diagram->levels;
+          while(main_level && main_level->number != connector->main_level){
+            main_level = main_level->next;
+          }
+          if( !main_level ) fatal("Can't find a main level for a connector.");
 
-	  /* determine the location of the connector end points */
-	  if( connector->which_frag == (diagram->left_fragment-1) ){
-	    con_begin.x = fragment_level->xmax;
-	    con_end.x = main_level->xmin;
-	  }else{
-	    con_begin.x = fragment_level->xmin;
-	    con_end.x = main_level->xmax;
-	  }
+          /* determine the location of the connector end points */
+          if( connector->which_frag == (diagram->left_fragment-1) ){
+            con_begin.x = fragment_level->xmax;
+            con_end.x = main_level->xmin;
+          }else{
+            con_begin.x = fragment_level->xmin;
+            con_end.x = main_level->xmax;
+          }
 
-	  /*******
+          /*******
 
-	    the y location of the end points is trickier, because we want
-	    the connectors to go to the edge of the bounding box if one of
-	    the levels to which they are connected isn't on screen
+            the y location of the end points is trickier, because we want
+            the connectors to go to the edge of the bounding box if one of
+            the levels to which they are connected isn't on screen
 
-	    ********/
-	  con_begin.y = fragment_level->yloc;
-	  con_end.y = main_level->yloc;
+            ********/
+          con_begin.y = fragment_level->yloc;
+          con_end.y = main_level->yloc;
 
-	  /* this is the case where we don't have to draw the connector at all */
-	  if( (con_begin.y < obj->bmin.y || con_begin.y > obj->bmax.y) &&
-	     (con_end.y < obj->bmin.y || con_end.y > obj->bmax.y) ){
-	    con_begin.y = con_end.y = -1000;
-	  } else if( (con_begin.y > obj->bmin.y && con_begin.y < obj->bmax.y) &&
-		    (con_end.y < obj->bmin.y || con_end.y > obj->bmax.y) ){
-	    /*****
-	      the beginning is onscreen, but the end point is off.
-	      leave the beginning alone and figure out where we should
-	      draw the end to.
-	      ******/
-	    if( con_end.y < obj->bmin.y ) yval = obj->bmin.y;
-	    else yval = obj->bmax.y;
+          /* this is the case where we don't have to draw the connector at all */
+          if( (con_begin.y < obj->bmin.y || con_begin.y > obj->bmax.y) &&
+             (con_end.y < obj->bmin.y || con_end.y > obj->bmax.y) ){
+            con_begin.y = con_end.y = -1000;
+          } else if( (con_begin.y > obj->bmin.y && con_begin.y < obj->bmax.y) &&
+                    (con_end.y < obj->bmin.y || con_end.y > obj->bmax.y) ){
+            /*****
+              the beginning is onscreen, but the end point is off.
+              leave the beginning alone and figure out where we should
+              draw the end to.
+              ******/
+            if( con_end.y < obj->bmin.y ) yval = obj->bmin.y;
+            else yval = obj->bmax.y;
 
-	    xval = con_begin.x + (yval - con_begin.y)*(con_end.x - con_begin.x)/
-	      (con_end.y-con_begin.y);
+            xval = con_begin.x + (yval - con_begin.y)*(con_end.x - con_begin.x)/
+              (con_end.y-con_begin.y);
 
-	    con_end.x = xval;
-	    con_end.y = yval;
-	  } else if( (con_begin.y < obj->bmin.y || con_begin.y > obj->bmax.y) &&
-		    (con_end.y > obj->bmin.y && con_end.y < obj->bmax.y) ){
-	    /*****
-	      the end is onscreen, but the beginning point is off.
-	      leave the end alone and figure out where we should
-	      draw the beginning to.
-	      ******/
-	    if( con_begin.y < obj->bmin.y ) yval = obj->bmin.y;
-	    else yval = obj->bmax.y;
+            con_end.x = xval;
+            con_end.y = yval;
+          } else if( (con_begin.y < obj->bmin.y || con_begin.y > obj->bmax.y) &&
+                    (con_end.y > obj->bmin.y && con_end.y < obj->bmax.y) ){
+            /*****
+              the end is onscreen, but the beginning point is off.
+              leave the end alone and figure out where we should
+              draw the beginning to.
+              ******/
+            if( con_begin.y < obj->bmin.y ) yval = obj->bmin.y;
+            else yval = obj->bmax.y;
 
-	    xval = con_end.x + (yval - con_end.y)*(con_end.x - con_begin.x)/
-	      (con_end.y-con_begin.y);
+            xval = con_end.x + (yval - con_end.y)*(con_end.x - con_begin.x)/
+              (con_end.y-con_begin.y);
 
-	    con_begin.x = xval;
-	    con_begin.y = yval;
-	  }
+            con_begin.x = xval;
+            con_begin.y = yval;
+          }
 
-	  /* draw it in */
-	  g_change_linestyle(connector->linestyle);
-	  if(con_begin.y >= -100){
-	    g_line(con_begin.x,con_begin.y,con_end.x,con_end.y);
-	  }
-	}
-	connector = connector->next;
+          /* draw it in */
+          g_change_linestyle(connector->linestyle);
+          if(con_begin.y >= -100){
+            g_line(con_begin.x,con_begin.y,con_end.x,con_end.y);
+          }
+        }
+        connector = connector->next;
       }
     }
     g_change_linewidth(1);
@@ -1229,9 +1229,9 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 #if 0
     while( level && !(level->highest) ){
       if( diagram->electron_filling_mode == FMO_FILL_ALL ){
-	if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
-	  FMO_draw_electrons(diagram,level);
-	}
+        if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
+          FMO_draw_electrons(diagram,level);
+        }
       }
 
       level = level->next;
@@ -1240,16 +1240,16 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
     /* fill the highest occupied level */
     if( level ){
       if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
-	FMO_draw_electrons(diagram,level);
+        FMO_draw_electrons(diagram,level);
       }
     }
 
 #endif
     while( level ){
       if( diagram->electron_filling_mode == FMO_FILL_ALL || level->highest){
-	if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
-	  FMO_draw_electrons(diagram,level);
-	}
+        if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
+          FMO_draw_electrons(diagram,level);
+        }
       }
 
       level = level->next;
@@ -1264,23 +1264,23 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
 #if 0
     while( level && !(level->highest) ){
       if( diagram->electron_filling_mode == FMO_FILL_ALL ){
-	if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
-	  FMO_draw_electrons(diagram,level);
-	}
+        if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
+          FMO_draw_electrons(diagram,level);
+        }
       }
       level = level->next;
     }
     if( level ){
       if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
-	FMO_draw_electrons(diagram,level);
+        FMO_draw_electrons(diagram,level);
       }
     }
 #endif
     while( level ){
       if( diagram->electron_filling_mode == FMO_FILL_ALL || level->highest ){
-	if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
-	  FMO_draw_electrons(diagram,level);
-	}
+        if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
+          FMO_draw_electrons(diagram,level);
+        }
       }
       level = level->next;
     }
@@ -1292,15 +1292,15 @@ void draw_FMO_diagram(prim_type *prim,object_type *obj)
     }
     while( level && !(level->highest) ){
       if( diagram->electron_filling_mode == FMO_FILL_ALL ){
-	if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
-	  FMO_draw_electrons(diagram,level);
-	}
+        if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
+          FMO_draw_electrons(diagram,level);
+        }
       }
       level = level->next;
     }
     if( level ){
       if( level->yloc > obj->bmin.y && level->yloc < obj->bmax.y ){
-	FMO_draw_electrons(diagram,level);
+        FMO_draw_electrons(diagram,level);
       }
     }
   }

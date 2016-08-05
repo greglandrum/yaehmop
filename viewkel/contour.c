@@ -29,7 +29,7 @@
  *
  * There is a mailing list for gnuplot users. Note, however, that the
  * newsgroup
- *	comp.graphics.gnuplot
+ *        comp.graphics.gnuplot
  * is identical to the mailing list (they
  * both carry the same set of messages). We prefer that you read the
  * messages through that newsgroup, to subscribing to the mailing list.
@@ -38,13 +38,13 @@
  * removed from the mailing list.)
  *
  * The address for mailing to list members is
- *	   info-gnuplot@dartmouth.edu
+ *           info-gnuplot@dartmouth.edu
  * and for mailing administrative requests is
- *	   info-gnuplot-request@dartmouth.edu
+ *           info-gnuplot-request@dartmouth.edu
  * The mailing list for bug reports is
- *	   bug-gnuplot@dartmouth.edu
+ *           bug-gnuplot@dartmouth.edu
  * The list of those interested in beta-test versions is
- *	   info-gnuplot-beta@dartmouth.edu
+ *           info-gnuplot-beta@dartmouth.edu
  */
 
 #include "viewkel.h"
@@ -69,9 +69,9 @@
 #define FALSE    0
 #endif
 
-#define DEFAULT_NUM_CONTOURS	10
-#define MAX_POINTS_PER_CNTR 	4096
-#define SHIFT_Z_EPSILON		0.000301060 /* Dec. change of poly bndry hit.*/
+#define DEFAULT_NUM_CONTOURS        10
+#define MAX_POINTS_PER_CNTR         4096
+#define SHIFT_Z_EPSILON                0.000301060 /* Dec. change of poly bndry hit.*/
 
 #ifdef abs
 #undef abs
@@ -88,29 +88,29 @@ extern double sqrt();
 #endif
 
 typedef double tri_diag[3];         /* Used to allocate the tri-diag matrix. */
-typedef double table_entry[4];	       /* Cubic spline interpolation 4 coef. */
+typedef double table_entry[4];               /* Cubic spline interpolation 4 coef. */
 
 struct vrtx_struct {
-	double X, Y, Z;                       /* The coordinates of this vertex. */
-	struct vrtx_struct *next;                             /* To chain lists. */
+        double X, Y, Z;                       /* The coordinates of this vertex. */
+        struct vrtx_struct *next;                             /* To chain lists. */
 };
 
 struct edge_struct {
-	struct poly_struct *poly[2];   /* Each edge belongs to up to 2 polygons. */
-	struct vrtx_struct *vertex[2]; /* The two extreme points of this vertex. */
-	struct edge_struct *next;                             /* To chain lists. */
-	int status, /* Status flag to mark edges in scanning at certain Z level. */
-	boundary;                   /* True if this edge is on the boundary. */
+        struct poly_struct *poly[2];   /* Each edge belongs to up to 2 polygons. */
+        struct vrtx_struct *vertex[2]; /* The two extreme points of this vertex. */
+        struct edge_struct *next;                             /* To chain lists. */
+        int status, /* Status flag to mark edges in scanning at certain Z level. */
+        boundary;                   /* True if this edge is on the boundary. */
 };
 
 struct poly_struct {
-	struct edge_struct *edge[3];           /* As we do triangolation here... */
-	struct poly_struct *next;                             /* To chain lists. */
+        struct edge_struct *edge[3];           /* As we do triangolation here... */
+        struct poly_struct *next;                             /* To chain lists. */
 };
 
-struct cntr_struct {	       /* Contours are saved using this struct list. */
-	double X, Y;                          /* The coordinates of this vertex. */
-	struct cntr_struct *next;                             /* To chain lists. */
+struct cntr_struct {               /* Contours are saved using this struct list. */
+        double X, Y;                          /* The coordinates of this vertex. */
+        struct cntr_struct *next;                             /* To chain lists. */
 };
 
 static int test_boundary;    /* If TRUE look for contours on boundary first. */
@@ -127,55 +127,55 @@ static int levels_kind = LEVELS_AUTO;  /* auto, incremental, discrete */
 
 /* the prototypes for this file */
 void gen_contours PROTO((struct edge_struct *,double,double,double,
-			 double,double));
+                         double,double));
 void add_cntr_point PROTO((double,double));
 void end_crnt_cntr PROTO(());
 int update_all_edges PROTO((struct edge_struct *,double));
 struct cntr_struct *gen_one_contour PROTO((struct edge_struct *, double,
-					   int *, int *));
+                                           int *, int *));
 struct cntr_struct *trace_contour PROTO((struct edge_struct *,double,
-					 int *, int));
+                                         int *, int));
 struct cntr_struct *update_cntr_pt PROTO((struct edge_struct *,double,
-					  int *));
+                                          int *));
 int fuzzy_equal PROTO((double, double));
 void gen_triangle PROTO((int, int, struct iso_curve *,struct poly_struct **,
-			 struct edge_struct **, struct vrtx_struct **,
-			 double *,double *,double *,double *,
-			 double *,double *));
+                         struct edge_struct **, struct vrtx_struct **,
+                         double *,double *,double *,double *,
+                         double *,double *));
 struct vrtx_struct *gen_vertices PROTO((int,point_type *,double *,double *,
-					double *,double *,double *,double *));
+                                        double *,double *,double *,double *));
 struct edge_struct *gen_edges_middle PROTO((int, struct vrtx_struct *,
-					    struct vrtx_struct *,
-					    struct edge_struct **));
+                                            struct vrtx_struct *,
+                                            struct edge_struct **));
 struct edge_struct *gen_edges PROTO((int, struct vrtx_struct *,
-				     struct edge_struct **));
+                                     struct edge_struct **));
 struct poly_struct *gen_polys PROTO((int, struct edge_struct *,
-				     struct edge_struct *,struct edge_struct *,
-				     struct poly_struct **));
+                                     struct edge_struct *,struct edge_struct *,
+                                     struct poly_struct **));
 void put_contour PROTO((struct cntr_struct *,double,double,double,double,
-			double,int));
+                        double,int));
 void put_contour_nothing PROTO((struct cntr_struct *));
 int put_contour_cubic PROTO((struct cntr_struct *,double,double,
-			      double,double,double,int));
+                              double,double,double,int));
 int put_contour_bspline PROTO((struct cntr_struct *,double,double,
-				double,double,double,int));
+                                double,double,double,int));
 void calc_tangent PROTO((int,double,double,double,double,double,
-			 double,double *,double *));
+                         double,double *,double *));
 void free_contour PROTO((struct cntr_struct *));
 int count_contour PROTO((struct cntr_struct *));
 int complete_spline_interp PROTO((struct cntr_struct *,int,
-				   double,double,double,double,
-				   double,double));
+                                   double,double,double,double,
+                                   double,double));
 void calc_hermit_table PROTO(());
 void hermit_interp PROTO((double,double,double,double,double,double,
-			  double,double,double));
+                          double,double,double));
 void prepare_spline_interp PROTO((double *,double *,struct cntr_struct *,
-				  int,double,double,double,double,
-				  double,double));
+                                  int,double,double,double,double,
+                                  double,double));
 int solve_tri_diag PROTO((tri_diag *,double *,double *,int));
 void gen_bspline_approx PROTO((struct cntr_struct *,int,int,int));
 void eval_bspline PROTO((double,struct cntr_struct *,int,int,int,int,
-			 double *, double *));
+                         double *, double *));
 double fetch_knot PROTO(( int,int,int,int));
 char *alloc PROTO(( unsigned long, char * ));
 
@@ -202,80 +202,80 @@ char *local_alloc(unsigned long size, char *message)
  *
  */
 struct gnuplot_contours *contour_data(num_isolines,which_curve,iso_lines,
-				      ZLevels, approx_pts, int_kind, order1,
-				      levels_kind, levels_list)
+                                      ZLevels, approx_pts, int_kind, order1,
+                                      levels_kind, levels_list)
 int num_isolines,which_curve;
 iso_curve_type *iso_lines;
 int ZLevels, approx_pts, int_kind, order1;
 int levels_kind;
 double *levels_list;
 {
-	int i;
-	struct poly_struct *p_polys, *p_poly;
-	struct edge_struct *p_edges, *p_edge;
-	struct vrtx_struct *p_vrts, *p_vrtx;
-	double x_min, y_min, z_min, x_max, y_max, z_max, z, dz;
- 	struct gnuplot_contours *save_contour_list;
+        int i;
+        struct poly_struct *p_polys, *p_poly;
+        struct edge_struct *p_edges, *p_edge;
+        struct vrtx_struct *p_vrts, *p_vrtx;
+        double x_min, y_min, z_min, x_max, y_max, z_max, z, dz;
+         struct gnuplot_contours *save_contour_list;
 
-	num_of_z_levels = ZLevels;
-	num_approx_pts = approx_pts;
-	bspline_order = order1 - 1;
-	interp_kind = int_kind;
+        num_of_z_levels = ZLevels;
+        num_approx_pts = approx_pts;
+        bspline_order = order1 - 1;
+        interp_kind = int_kind;
 
-	contour_list = NULL;
+        contour_list = NULL;
 
-	if (interp_kind == INTERP_CUBIC) calc_hermit_table();
+        if (interp_kind == INTERP_CUBIC) calc_hermit_table();
 
-	gen_triangle(num_isolines,which_curve,iso_lines,
-		     &p_polys, &p_edges, &p_vrts,
-		     &x_min, &y_min, &z_min, &x_max, &y_max, &z_max);
-	crnt_cntr_pt_index = 0;
+        gen_triangle(num_isolines,which_curve,iso_lines,
+                     &p_polys, &p_edges, &p_vrts,
+                     &x_min, &y_min, &z_min, &x_max, &y_max, &z_max);
+        crnt_cntr_pt_index = 0;
 
-	dz = (z_max - z_min) / (num_of_z_levels + 1);
-	z = z_min;
-	for (i = 0; i < num_of_z_levels; i++) {
-	  switch(levels_kind) {
-	  case LEVELS_AUTO:
-	    /* Step from z_min+dz upto z_max-dz in num_of_z_levels times. */
-	    z += dz;
-	    break;
-	  case LEVELS_INCREMENTAL:
-	    z = levels_list[0] + i * levels_list[1];
-	    break;
-	  case LEVELS_DISCRETE:
-	    z = levels_list[i];
-	    break;
-	  }
-	  contour_level = z;
-	  save_contour_list = contour_list;
-	  gen_contours(p_edges, z + dz * SHIFT_Z_EPSILON, x_min, x_max,
-		       y_min, y_max);
-	  if(contour_list != save_contour_list) {
-	    contour_list->isNewLevel = 1;
-	    sprintf(contour_list->label, "%8.3g", z);
-	  }
-	}
+        dz = (z_max - z_min) / (num_of_z_levels + 1);
+        z = z_min;
+        for (i = 0; i < num_of_z_levels; i++) {
+          switch(levels_kind) {
+          case LEVELS_AUTO:
+            /* Step from z_min+dz upto z_max-dz in num_of_z_levels times. */
+            z += dz;
+            break;
+          case LEVELS_INCREMENTAL:
+            z = levels_list[0] + i * levels_list[1];
+            break;
+          case LEVELS_DISCRETE:
+            z = levels_list[i];
+            break;
+          }
+          contour_level = z;
+          save_contour_list = contour_list;
+          gen_contours(p_edges, z + dz * SHIFT_Z_EPSILON, x_min, x_max,
+                       y_min, y_max);
+          if(contour_list != save_contour_list) {
+            contour_list->isNewLevel = 1;
+            sprintf(contour_list->label, "%8.3g", z);
+          }
+        }
 
-	/* Free all contouring related temporary data. */
-	while (p_polys) {
-	  p_poly = p_polys -> next;
-	  free (p_polys);
-	  p_polys = p_poly;
-	}
-	while (p_edges) {
-	  p_edge = p_edges -> next;
-	  free (p_edges);
-	  p_edges = p_edge;
-	}
-	while (p_vrts) {
-	  p_vrtx = p_vrts -> next;
-	  free (p_vrts);
-	  p_vrts = p_vrtx;
-	}
+        /* Free all contouring related temporary data. */
+        while (p_polys) {
+          p_poly = p_polys -> next;
+          free (p_polys);
+          p_polys = p_poly;
+        }
+        while (p_edges) {
+          p_edge = p_edges -> next;
+          free (p_edges);
+          p_edges = p_edge;
+        }
+        while (p_vrts) {
+          p_vrtx = p_vrts -> next;
+          free (p_vrts);
+          p_vrts = p_vrtx;
+        }
 
-	if (interp_kind == INTERP_CUBIC) free (hermit_table);
+        if (interp_kind == INTERP_CUBIC) free (hermit_table);
 
-	return contour_list;
+        return contour_list;
       }
 
 /*
@@ -287,11 +287,11 @@ double x, y;
     int index;
 
     if (crnt_cntr_pt_index >= MAX_POINTS_PER_CNTR-1) {
-	index = crnt_cntr_pt_index - 1;
-	end_crnt_cntr();
-	crnt_cntr[0] = crnt_cntr[index * 2];
-	crnt_cntr[1] = crnt_cntr[index * 2 + 1];
-	crnt_cntr_pt_index = 1; /* Keep the last point as first of this one. */
+        index = crnt_cntr_pt_index - 1;
+        end_crnt_cntr();
+        crnt_cntr[0] = crnt_cntr[index * 2];
+        crnt_cntr[1] = crnt_cntr[index * 2 + 1];
+        crnt_cntr_pt_index = 1; /* Keep the last point as first of this one. */
     }
     crnt_cntr[crnt_cntr_pt_index * 2] = x;
     crnt_cntr[crnt_cntr_pt_index * 2 + 1] = y;
@@ -310,19 +310,19 @@ void end_crnt_cntr()
 
 
     cntr->coords = (point_type *) D_CALLOC(( unsigned long)crnt_cntr_pt_index,
-					 (unsigned long)sizeof(point_type));
+                                         (unsigned long)sizeof(point_type));
     if( !cntr->coords ) fatal("Can't allocate cntr->coords");
 
     for (i=0; i<crnt_cntr_pt_index; i++) {
-	cntr->coords[i].x = crnt_cntr[i * 2];
-	cntr->coords[i].y = crnt_cntr[i * 2 + 1];
-	cntr->coords[i].z = contour_level;
+        cntr->coords[i].x = crnt_cntr[i * 2];
+        cntr->coords[i].y = crnt_cntr[i * 2 + 1];
+        cntr->coords[i].z = contour_level;
     }
     cntr->num_pts = crnt_cntr_pt_index;
 
     cntr->next = contour_list;
     contour_list = cntr;
- 	contour_list->isNewLevel = 0;
+         contour_list->isNewLevel = 0;
 
     crnt_cntr_pt_index = 0;
 }
@@ -335,7 +335,7 @@ struct edge_struct *p_edges;
 double z_level, x_min, x_max, y_min, y_max;
 {
     int num_active,                        /* Number of edges marked ACTIVE. */
-	contour_kind;                /* One of OPEN_CONTOUR, CLOSED_CONTOUR. */
+        contour_kind;                /* One of OPEN_CONTOUR, CLOSED_CONTOUR. */
     struct cntr_struct *p_cntr;
 
     num_active = update_all_edges(p_edges, z_level);           /* Do pass 1. */
@@ -344,9 +344,9 @@ double z_level, x_min, x_max, y_min, y_max;
 
     while (num_active > 0) {                                   /* Do Pass 2. */
         /* Generate One contour (and update MumActive as needed): */
-	p_cntr = gen_one_contour(p_edges, z_level, &contour_kind, &num_active);
-	put_contour(p_cntr, z_level, x_min, x_max, y_min, y_max,
-			      contour_kind); /* Emit it in requested format. */
+        p_cntr = gen_one_contour(p_edges, z_level, &contour_kind, &num_active);
+        put_contour(p_cntr, z_level, x_min, x_max, y_min, y_max,
+                              contour_kind); /* Emit it in requested format. */
     }
 }
 
@@ -362,15 +362,15 @@ double z_level;
     int count = 0;
 
     while (p_edges) {
-	if (((p_edges -> vertex[0] -> Z >= z_level) &&
-	     (p_edges -> vertex[1] -> Z <= z_level)) ||
-	    ((p_edges -> vertex[1] -> Z >= z_level) &&
-	     (p_edges -> vertex[0] -> Z <= z_level))) {
-	    p_edges -> status = ACTIVE;
-	    count++;
-	}
-	else p_edges -> status = INACTIVE;
-	p_edges = p_edges -> next;
+        if (((p_edges -> vertex[0] -> Z >= z_level) &&
+             (p_edges -> vertex[1] -> Z <= z_level)) ||
+            ((p_edges -> vertex[1] -> Z >= z_level) &&
+             (p_edges -> vertex[0] -> Z <= z_level))) {
+            p_edges -> status = ACTIVE;
+            count++;
+        }
+        else p_edges -> status = INACTIVE;
+        p_edges = p_edges -> next;
     }
 
     return count;
@@ -382,7 +382,7 @@ double z_level;
  * one of OPEN_CONTOUR, CLOSED_CONTOUR, and num_active is updated.
  */
 struct cntr_struct *gen_one_contour(p_edges, z_level, contour_kind,
-								num_active)
+                                                                num_active)
 struct edge_struct *p_edges;
 double z_level;
 int *contour_kind, *num_active;
@@ -390,35 +390,35 @@ int *contour_kind, *num_active;
     struct edge_struct *pe_temp;
 
     if (test_boundary) {    /* Look for something to start with on boundary: */
-	pe_temp = p_edges;
-	while (pe_temp) {
-	    if ((pe_temp -> status == ACTIVE) && (pe_temp -> boundary)) break;
-	    pe_temp = pe_temp -> next;
-	}
-	if (!pe_temp) test_boundary = FALSE;/* No more contours on boundary. */
-	else {
-	    *contour_kind = OPEN_CONTOUR;
-	    return trace_contour(pe_temp, z_level, num_active, *contour_kind);
-	}
+        pe_temp = p_edges;
+        while (pe_temp) {
+            if ((pe_temp -> status == ACTIVE) && (pe_temp -> boundary)) break;
+            pe_temp = pe_temp -> next;
+        }
+        if (!pe_temp) test_boundary = FALSE;/* No more contours on boundary. */
+        else {
+            *contour_kind = OPEN_CONTOUR;
+            return trace_contour(pe_temp, z_level, num_active, *contour_kind);
+        }
     }
 
     if (!test_boundary) {        /* Look for something to start with inside: */
-	pe_temp = p_edges;
-	while (pe_temp) {
-	    if ((pe_temp -> status == ACTIVE) && (!(pe_temp -> boundary)))
-		break;
-	    pe_temp = pe_temp -> next;
-	}
-	if (!pe_temp) {
-	    *num_active = 0;
-	    return NULL;
-	}
-	else {
-	    *contour_kind = CLOSED_CONTOUR;
-	    return trace_contour(pe_temp, z_level, num_active, *contour_kind);
-	}
+        pe_temp = p_edges;
+        while (pe_temp) {
+            if ((pe_temp -> status == ACTIVE) && (!(pe_temp -> boundary)))
+                break;
+            pe_temp = pe_temp -> next;
+        }
+        if (!pe_temp) {
+            *num_active = 0;
+            return NULL;
+        }
+        else {
+            *contour_kind = CLOSED_CONTOUR;
+            return trace_contour(pe_temp, z_level, num_active, *contour_kind);
+        }
     }
-    return NULL;		     /* We should never be here, but lint... */
+    return NULL;                     /* We should never be here, but lint... */
 }
 
 /*
@@ -428,7 +428,7 @@ int *contour_kind, *num_active;
  * Also decreases num_active by the number of points on contour.
  */
 struct cntr_struct *trace_contour(pe_start, z_level, num_active,
-								contour_kind)
+                                                                contour_kind)
 struct edge_struct *pe_start;
 double z_level;
 int *num_active, contour_kind;
@@ -443,33 +443,33 @@ int *num_active, contour_kind;
     (*num_active)--;
     p_cntr = pc_tail = update_cntr_pt(pe_start, z_level, &in_middle);
     if (!in_middle) {
-	return NULL;
+        return NULL;
     }
 
     do {
-	/* Find polygon to continue (Not where we came from - PLastpoly): */
-	if (p_edge -> poly[0] == PLastpoly) p_poly = p_edge -> poly[1];
-	else p_poly = p_edge -> poly[0];
-	p_next_edge = NULL;		  /* In case of error, remains NULL. */
-	for (i=0; i<3; i++)              /* Test the 3 edges of the polygon: */
-	    if (p_poly -> edge[i] != p_edge)
-	        if (p_poly -> edge[i] -> status == ACTIVE)
-		    p_next_edge = p_poly -> edge[i];
-	if (!p_next_edge) {
-	    pc_tail -> next = NULL;
-	    free_contour(p_cntr);
-	    return NULL;
-	}
-	p_edge = p_next_edge;
-	PLastpoly = p_poly;
-	p_edge -> status = INACTIVE;
-	(*num_active)--;
-	pc_tail -> next = update_cntr_pt(p_edge, z_level, &in_middle);
-	if (!in_middle) {
-	    pc_tail -> next = NULL;
-	    free_contour(p_cntr);
-	    return NULL;
-	}
+        /* Find polygon to continue (Not where we came from - PLastpoly): */
+        if (p_edge -> poly[0] == PLastpoly) p_poly = p_edge -> poly[1];
+        else p_poly = p_edge -> poly[0];
+        p_next_edge = NULL;                  /* In case of error, remains NULL. */
+        for (i=0; i<3; i++)              /* Test the 3 edges of the polygon: */
+            if (p_poly -> edge[i] != p_edge)
+                if (p_poly -> edge[i] -> status == ACTIVE)
+                    p_next_edge = p_poly -> edge[i];
+        if (!p_next_edge) {
+            pc_tail -> next = NULL;
+            free_contour(p_cntr);
+            return NULL;
+        }
+        p_edge = p_next_edge;
+        PLastpoly = p_poly;
+        p_edge -> status = INACTIVE;
+        (*num_active)--;
+        pc_tail -> next = update_cntr_pt(p_edge, z_level, &in_middle);
+        if (!in_middle) {
+            pc_tail -> next = NULL;
+            free_contour(p_cntr);
+            return NULL;
+        }
         pc_tail = pc_tail -> next;
     }
     while ((pe_start != p_edge) && (!p_edge -> boundary));
@@ -493,21 +493,21 @@ int *in_middle;
     struct cntr_struct *p_cntr;
 
     t = (z_level - p_edge -> vertex[0] -> Z) /
-	(p_edge -> vertex[1] -> Z - p_edge -> vertex[0] -> Z);
+        (p_edge -> vertex[1] -> Z - p_edge -> vertex[0] -> Z);
 
     if (fuzzy_equal(t, 1.0) || fuzzy_equal(t, 0.0)) {
         *in_middle = FALSE;
         return NULL;
     }
     else {
-	*in_middle = TRUE;
-	p_cntr = (struct cntr_struct *) local_alloc((unsigned long)sizeof(struct cntr_struct),
-							"contour cntr_struct");
-	p_cntr -> X = p_edge -> vertex[1] -> X * t +
-		     p_edge -> vertex[0] -> X * (1-t);
-	p_cntr -> Y = p_edge -> vertex[1] -> Y * t +
-		     p_edge -> vertex[0] -> Y * (1-t);
-	return p_cntr;
+        *in_middle = TRUE;
+        p_cntr = (struct cntr_struct *) local_alloc((unsigned long)sizeof(struct cntr_struct),
+                                                        "contour cntr_struct");
+        p_cntr -> X = p_edge -> vertex[1] -> X * t +
+                     p_edge -> vertex[0] -> X * (1-t);
+        p_cntr -> Y = p_edge -> vertex[1] -> Y * t +
+                     p_edge -> vertex[0] -> Y * (1-t);
+        return p_cntr;
     }
 }
 
@@ -518,10 +518,10 @@ int *in_middle;
 int fuzzy_equal(x, y)
 double x, y;
 {
-    if (abs(x) > EPSILON)			/* Calculate relative error: */
+    if (abs(x) > EPSILON)                        /* Calculate relative error: */
         return (abs((x - y) / x) < EPSILON);
-    else					/* Calculate absolute error: */
-	return (abs(x - y) < EPSILON);
+    else                                        /* Calculate absolute error: */
+        return (abs(x - y) < EPSILON);
 }
 
 /*
@@ -529,8 +529,8 @@ double x, y;
  * Returns the lists (vrtxs edges & polys) via pointers to their heads.
  */
 void gen_triangle(num_isolines, which_curve,
-		  iso_lines, p_polys, p_edges,
-		  p_vrts, x_min, y_min, z_min, x_max, y_max, z_max)
+                  iso_lines, p_polys, p_edges,
+                  p_vrts, x_min, y_min, z_min, x_max, y_max, z_max)
   int num_isolines,which_curve;
   iso_curve_type *iso_lines;
   struct poly_struct **p_polys;
@@ -541,7 +541,7 @@ void gen_triangle(num_isolines, which_curve,
     int i, grid_x_max = iso_lines->p_count;
     struct vrtx_struct *p_vrtx1, *p_vrtx2, *pv_temp;
     struct edge_struct *p_edge1, *p_edge2, *pe_tail1, *pe_tail2, *pe_temp,
-		      *p_edge_middle, *pe_m_tail;
+                      *p_edge_middle, *pe_m_tail;
     struct poly_struct *p_poly, *pp_tail;
     int data_offset;
     *p_polys = NULL;
@@ -558,49 +558,49 @@ void gen_triangle(num_isolines, which_curve,
     data_offset = which_curve * iso_lines->p_count;
     /* Read 1st row. */
     p_vrtx1 = gen_vertices(grid_x_max, &iso_lines->points[data_offset],
-			   x_min, y_min, z_min, x_max, y_max, z_max);
+                           x_min, y_min, z_min, x_max, y_max, z_max);
     *p_vrts = p_vrtx1;
     /* Gen. its edges.*/
     pe_temp = p_edge1 = gen_edges(grid_x_max, p_vrtx1, &pe_tail1);
 /*fprintf(stderr," done\n");*/
     for (i = 1; i < grid_x_max; i++) {/* Mark one side of edges as boundary. */
-	pe_temp -> poly[1] = NULL;
-	pe_temp = pe_temp -> next;
+        pe_temp -> poly[1] = NULL;
+        pe_temp = pe_temp -> next;
     }
     for (i = 1; i < num_isolines; i++) { /* Read next column and gen. polys. */
-	iso_lines = iso_lines->next;
-	if( !iso_lines ) FATAL_BUG("Ran out of isolines too soon!");
-    	/* Get row into list. */
+        iso_lines = iso_lines->next;
+        if( !iso_lines ) FATAL_BUG("Ran out of isolines too soon!");
+            /* Get row into list. */
         p_vrtx2 = gen_vertices(grid_x_max, &iso_lines->points[data_offset],
-			       x_min, y_min, z_min, x_max, y_max, z_max);
-    	/* Generate its edges. */
+                               x_min, y_min, z_min, x_max, y_max, z_max);
+            /* Generate its edges. */
         p_edge2 = gen_edges(grid_x_max, p_vrtx2, &pe_tail2);
-	/* Generate edges from one vertex list to the other one: */
-	p_edge_middle = gen_edges_middle(grid_x_max, p_vrtx1, p_vrtx2,
-								 &pe_m_tail);
+        /* Generate edges from one vertex list to the other one: */
+        p_edge_middle = gen_edges_middle(grid_x_max, p_vrtx1, p_vrtx2,
+                                                                 &pe_m_tail);
 
-	/* Now we can generate the polygons themselves (triangles). */
-	p_poly = gen_polys(grid_x_max, p_edge1, p_edge_middle, p_edge2,
-								 &pp_tail);
+        /* Now we can generate the polygons themselves (triangles). */
+        p_poly = gen_polys(grid_x_max, p_edge1, p_edge_middle, p_edge2,
+                                                                 &pp_tail);
         pe_tail1 -> next = (*p_edges);      /* Chain new edges to main list. */
         pe_m_tail -> next = p_edge1;
-	*p_edges = p_edge_middle;
-	pe_tail1 = pe_tail2;
-	p_edge1 = p_edge2;
+        *p_edges = p_edge_middle;
+        pe_tail1 = pe_tail2;
+        p_edge1 = p_edge2;
 
-	pv_temp = p_vrtx2;
-	while (pv_temp -> next) pv_temp = pv_temp -> next;
-	pv_temp -> next = *p_vrts;
-	*p_vrts = p_vrtx1 = p_vrtx2;
+        pv_temp = p_vrtx2;
+        while (pv_temp -> next) pv_temp = pv_temp -> next;
+        pv_temp -> next = *p_vrts;
+        *p_vrts = p_vrtx1 = p_vrtx2;
 
         pp_tail -> next = (*p_polys);       /* Chain new polys to main list. */
-	*p_polys = p_poly;
+        *p_polys = p_poly;
     }
 
     pe_temp = p_edge1;
     for (i = 1; i < grid_x_max; i++) {/* Mark one side of edges as boundary. */
-	pe_temp -> poly[0] = NULL;
-	pe_temp = pe_temp -> next;
+        pe_temp -> poly[0] = NULL;
+        pe_temp = pe_temp -> next;
     }
 
     pe_tail1 -> next = (*p_edges);    /* Chain last edges list to main list. */
@@ -611,9 +611,9 @@ void gen_triangle(num_isolines, which_curve,
     i = 1;
 
     while (pe_temp) {
-	pe_temp -> boundary = (!(pe_temp -> poly[0])) ||
-			      (!(pe_temp -> poly[1]));
-	pe_temp = pe_temp -> next;
+        pe_temp -> boundary = (!(pe_temp -> poly[0])) ||
+                              (!(pe_temp -> poly[1]));
+        pe_temp = pe_temp -> next;
     }
 }
 
@@ -621,7 +621,7 @@ void gen_triangle(num_isolines, which_curve,
  * Handles grid_x_max 3D points (One row) and generate linked list for them.
  */
 struct vrtx_struct *gen_vertices(grid_x_max, points,
-				      x_min, y_min, z_min, x_max, y_max, z_max)
+                                      x_min, y_min, z_min, x_max, y_max, z_max)
 int grid_x_max;
 point_type *points;
 double *x_min, *y_min, *z_min, *x_max, *y_max, *z_max;
@@ -632,24 +632,24 @@ double *x_min, *y_min, *z_min, *x_max, *y_max, *z_max;
 /*fprintf(stderr,"gv(%d)\n",grid_x_max);*/
     for (i=0; i<grid_x_max; i++) {/* Get a point and generate the structure. */
         pv_temp = (struct vrtx_struct *) local_alloc((unsigned long)sizeof(struct vrtx_struct),
-						"contour vertex");
-	pv_temp -> X = points[i].x;
-	pv_temp -> Y = points[i].y;
-	pv_temp -> Z = points[i].z;
+                                                "contour vertex");
+        pv_temp -> X = points[i].x;
+        pv_temp -> Y = points[i].y;
+        pv_temp -> Z = points[i].z;
 
-	if (pv_temp -> X > *x_max) *x_max = pv_temp -> X; /* Update min/max. */
-	if (pv_temp -> Y > *y_max) *y_max = pv_temp -> Y;
-	if (pv_temp -> Z > *z_max) *z_max = pv_temp -> Z;
-	if (pv_temp -> X < *x_min) *x_min = pv_temp -> X;
-	if (pv_temp -> Y < *y_min) *y_min = pv_temp -> Y;
-	if (pv_temp -> Z < *z_min) *z_min = pv_temp -> Z;
+        if (pv_temp -> X > *x_max) *x_max = pv_temp -> X; /* Update min/max. */
+        if (pv_temp -> Y > *y_max) *y_max = pv_temp -> Y;
+        if (pv_temp -> Z > *z_max) *z_max = pv_temp -> Z;
+        if (pv_temp -> X < *x_min) *x_min = pv_temp -> X;
+        if (pv_temp -> Y < *y_min) *y_min = pv_temp -> Y;
+        if (pv_temp -> Z < *z_min) *z_min = pv_temp -> Z;
 
-	if (i == 0)                              /* First vertex in row: */
-	    p_vrtx = pv_tail = pv_temp;
-	else {
-	    pv_tail -> next = pv_temp;   /* Stick new record as last one. */
-	    pv_tail = pv_tail -> next;    /* And continue to last record. */
-	}
+        if (i == 0)                              /* First vertex in row: */
+            p_vrtx = pv_tail = pv_temp;
+        else {
+            pv_tail -> next = pv_temp;   /* Stick new record as last one. */
+            pv_tail = pv_tail -> next;    /* And continue to last record. */
+        }
     }
     pv_tail -> next = NULL;
 
@@ -670,17 +670,17 @@ struct edge_struct **pe_tail;
 
 /*fprintf(stderr,"ge(%d) ",grid_x_max);fflush(stderr);*/
     for (i=0; i<grid_x_max-1; i++) {         /* Generate grid_x_max-1 edges: */
-	pe_temp = (struct edge_struct *) local_alloc((unsigned long)sizeof(struct edge_struct),
-						"contour edge");
-	pe_temp -> vertex[0] = p_vrtx;              /* First vertex of edge. */
-	p_vrtx = p_vrtx -> next;                     /* Skip to next vertex. */
-	pe_temp -> vertex[1] = p_vrtx;             /* Second vertex of edge. */
+        pe_temp = (struct edge_struct *) local_alloc((unsigned long)sizeof(struct edge_struct),
+                                                "contour edge");
+        pe_temp -> vertex[0] = p_vrtx;              /* First vertex of edge. */
+        p_vrtx = p_vrtx -> next;                     /* Skip to next vertex. */
+        pe_temp -> vertex[1] = p_vrtx;             /* Second vertex of edge. */
         if (i == 0)                                    /* First edge in row: */
-	    p_edge = (*pe_tail) = pe_temp;
-	else {
-	    (*pe_tail) -> next = pe_temp;   /* Stick new record as last one. */
-	    *pe_tail = (*pe_tail) -> next;   /* And continue to last record. */
- 	}
+            p_edge = (*pe_tail) = pe_temp;
+        else {
+            (*pe_tail) -> next = pe_temp;   /* Stick new record as last one. */
+            *pe_tail = (*pe_tail) -> next;   /* And continue to last record. */
+         }
     }
     (*pe_tail) -> next = NULL;
 
@@ -697,7 +697,7 @@ struct edge_struct **pe_tail;
  * record).
  */
 struct edge_struct *gen_edges_middle(grid_x_max, p_vrtx1, p_vrtx2,
-								pe_tail)
+                                                                pe_tail)
 int grid_x_max;
 struct vrtx_struct *p_vrtx1, *p_vrtx2;
 struct edge_struct **pe_tail;
@@ -707,28 +707,28 @@ struct edge_struct **pe_tail;
 
     /* Gen first (|). */
     pe_temp = (struct edge_struct *) local_alloc((unsigned long)sizeof(struct edge_struct),
-							"contour edge");
+                                                        "contour edge");
     pe_temp -> vertex[0] = p_vrtx2;                 /* First vertex of edge. */
     pe_temp -> vertex[1] = p_vrtx1;                /* Second vertex of edge. */
     p_edge = (*pe_tail) = pe_temp;
 
     /* Advance in vrtx list grid_x_max-1 times, and gen. 2 edges /| for each.*/
     for (i=0; i<grid_x_max-1; i++) {
-	/* The / edge. */
-	pe_temp = (struct edge_struct *) local_alloc((unsigned long)sizeof(struct edge_struct),
-							"contour edge");
-	pe_temp -> vertex[0] = p_vrtx1;             /* First vertex of edge. */
-	pe_temp -> vertex[1] = p_vrtx2 -> next;    /* Second vertex of edge. */
+        /* The / edge. */
+        pe_temp = (struct edge_struct *) local_alloc((unsigned long)sizeof(struct edge_struct),
+                                                        "contour edge");
+        pe_temp -> vertex[0] = p_vrtx1;             /* First vertex of edge. */
+        pe_temp -> vertex[1] = p_vrtx2 -> next;    /* Second vertex of edge. */
         (*pe_tail) -> next = pe_temp;       /* Stick new record as last one. */
-	*pe_tail = (*pe_tail) -> next;       /* And continue to last record. */
+        *pe_tail = (*pe_tail) -> next;       /* And continue to last record. */
 
-	/* The | edge. */
-	pe_temp = (struct edge_struct *) local_alloc((unsigned long)sizeof(struct edge_struct),
-							"contour edge");
-	pe_temp -> vertex[0] = p_vrtx2 -> next;     /* First vertex of edge. */
-	pe_temp -> vertex[1] = p_vrtx1 -> next;    /* Second vertex of edge. */
+        /* The | edge. */
+        pe_temp = (struct edge_struct *) local_alloc((unsigned long)sizeof(struct edge_struct),
+                                                        "contour edge");
+        pe_temp -> vertex[0] = p_vrtx2 -> next;     /* First vertex of edge. */
+        pe_temp -> vertex[1] = p_vrtx1 -> next;    /* Second vertex of edge. */
         (*pe_tail) -> next = pe_temp;       /* Stick new record as last one. */
-	*pe_tail = (*pe_tail) -> next;       /* And continue to last record. */
+        *pe_tail = (*pe_tail) -> next;       /* And continue to last record. */
 
         p_vrtx1 = p_vrtx1 -> next;   /* Skip to next vertices in both lists. */
         p_vrtx2 = p_vrtx2 -> next;
@@ -762,7 +762,7 @@ struct edge_struct **pe_tail;
  * upper and lower polygons.                             0
  */
 struct poly_struct *gen_polys(grid_x_max, p_edge1, p_edge_middle,
-							p_edge2, pp_tail)
+                                                        p_edge2, pp_tail)
 int grid_x_max;
 struct edge_struct *p_edge1, *p_edge_middle, *p_edge2;
 struct poly_struct **pp_tail;
@@ -770,45 +770,45 @@ struct poly_struct **pp_tail;
     int i;
     struct poly_struct *p_poly, *pp_temp;
 
-    p_edge_middle -> poly[0] = NULL;			    /* Its boundary! */
+    p_edge_middle -> poly[0] = NULL;                            /* Its boundary! */
 
     /* Advance in vrtx list grid_x_max-1 times, and gen. 2 polys for each. */
     for (i=0; i<grid_x_max-1; i++) {
-	/* The Upper. */
-	pp_temp = (struct poly_struct *) local_alloc((unsigned long)sizeof(struct poly_struct),
-							"contour poly");
-	/* Now update polys about its edges, and edges about the polygon. */
-	pp_temp -> edge[0] = p_edge_middle -> next;
-	p_edge_middle -> next -> poly[1] = pp_temp;
-	pp_temp -> edge[1] = p_edge1;
-	p_edge1 -> poly[0] = pp_temp;
-	pp_temp -> edge[2] = p_edge_middle -> next -> next;
-	p_edge_middle -> next -> next -> poly[0] = pp_temp;
-	if (i == 0)				   /* Its first one in list: */
-	    p_poly = (*pp_tail) = pp_temp;
-	else {
-	    (*pp_tail) -> next = pp_temp;
-	    *pp_tail = (*pp_tail) -> next;
-	}
+        /* The Upper. */
+        pp_temp = (struct poly_struct *) local_alloc((unsigned long)sizeof(struct poly_struct),
+                                                        "contour poly");
+        /* Now update polys about its edges, and edges about the polygon. */
+        pp_temp -> edge[0] = p_edge_middle -> next;
+        p_edge_middle -> next -> poly[1] = pp_temp;
+        pp_temp -> edge[1] = p_edge1;
+        p_edge1 -> poly[0] = pp_temp;
+        pp_temp -> edge[2] = p_edge_middle -> next -> next;
+        p_edge_middle -> next -> next -> poly[0] = pp_temp;
+        if (i == 0)                                   /* Its first one in list: */
+            p_poly = (*pp_tail) = pp_temp;
+        else {
+            (*pp_tail) -> next = pp_temp;
+            *pp_tail = (*pp_tail) -> next;
+        }
 
-	/* The Lower. */
-	pp_temp = (struct poly_struct *) local_alloc((unsigned long)sizeof(struct poly_struct),
-							"contour poly");
-	/* Now update polys about its edges, and edges about the polygon. */
-	pp_temp -> edge[0] = p_edge_middle;
-	p_edge_middle -> poly[1] = pp_temp;
-	pp_temp -> edge[1] = p_edge_middle -> next;
-	p_edge_middle -> next -> poly[0] = pp_temp;
-	pp_temp -> edge[2] = p_edge2;
-	p_edge2 -> poly[1] = pp_temp;
-	(*pp_tail) -> next = pp_temp;
-	*pp_tail = (*pp_tail) -> next;
+        /* The Lower. */
+        pp_temp = (struct poly_struct *) local_alloc((unsigned long)sizeof(struct poly_struct),
+                                                        "contour poly");
+        /* Now update polys about its edges, and edges about the polygon. */
+        pp_temp -> edge[0] = p_edge_middle;
+        p_edge_middle -> poly[1] = pp_temp;
+        pp_temp -> edge[1] = p_edge_middle -> next;
+        p_edge_middle -> next -> poly[0] = pp_temp;
+        pp_temp -> edge[2] = p_edge2;
+        p_edge2 -> poly[1] = pp_temp;
+        (*pp_tail) -> next = pp_temp;
+        *pp_tail = (*pp_tail) -> next;
 
         p_edge1 = p_edge1 -> next;
         p_edge2 = p_edge2 -> next;
         p_edge_middle = p_edge_middle -> next -> next;
     }
-    p_edge_middle -> poly[1] = NULL;			    /* Its boundary! */
+    p_edge_middle -> poly[1] = NULL;                            /* Its boundary! */
     (*pp_tail) -> next = NULL;
 
     return p_poly;
@@ -825,17 +825,17 @@ int contr_kind;
     if (!p_cntr) return;            /* Nothing to do if it is empty contour. */
 
     switch (interp_kind) {
-	case INTERP_NOTHING:              /* No interpolation/approximation. */
-	    put_contour_nothing(p_cntr);
-	    break;
-	case INTERP_CUBIC:                    /* Cubic spline interpolation. */
-	    put_contour_cubic(p_cntr, z_level, x_min, x_max, y_min, y_max,
-								contr_kind);
-	    break;
-	case APPROX_BSPLINE:                       /* Bspline approximation. */
-	    put_contour_bspline(p_cntr, z_level, x_min, x_max, y_min, y_max,
-    								contr_kind);
-	    break;
+        case INTERP_NOTHING:              /* No interpolation/approximation. */
+            put_contour_nothing(p_cntr);
+            break;
+        case INTERP_CUBIC:                    /* Cubic spline interpolation. */
+            put_contour_cubic(p_cntr, z_level, x_min, x_max, y_min, y_max,
+                                                                contr_kind);
+            break;
+        case APPROX_BSPLINE:                       /* Bspline approximation. */
+            put_contour_bspline(p_cntr, z_level, x_min, x_max, y_min, y_max,
+                                                                    contr_kind);
+            break;
     }
 
     free_contour(p_cntr);
@@ -849,8 +849,8 @@ void put_contour_nothing(p_cntr)
 struct cntr_struct *p_cntr;
 {
     while (p_cntr) {
-	add_cntr_point(p_cntr -> X, p_cntr -> Y);
-	p_cntr = p_cntr -> next;
+        add_cntr_point(p_cntr -> X, p_cntr -> Y);
+        p_cntr = p_cntr -> next;
     }
     end_crnt_cntr();
 }
@@ -859,7 +859,7 @@ struct cntr_struct *p_cntr;
  * Find Complete Cubic Spline Interpolation.
  */
 int put_contour_cubic(p_cntr, z_level, x_min, x_max, y_min, y_max,
-								 contr_kind)
+                                                                 contr_kind)
 struct cntr_struct *p_cntr;
 double z_level, x_min, x_max, y_min, y_max;
 int contr_kind;
@@ -871,37 +871,37 @@ int contr_kind;
     num_pts = count_contour(p_cntr);         /* Number of points in contour. */
 
     if (num_pts > 2) {  /* Take into account 3 points in tangent estimation. */
-	calc_tangent(3, p_cntr -> X, p_cntr -> next -> X,
-			p_cntr -> next -> next -> X,
-			p_cntr -> Y, p_cntr -> next -> Y,
-			p_cntr -> next -> next -> Y, &tx1, &ty1);
-	pc_temp = p_cntr;
-	for (i=3; i<num_pts; i++) pc_temp = pc_temp -> next;/* Go to the end.*/
-	calc_tangent(3, pc_temp -> next -> next -> X,
- 			pc_temp -> next -> X, pc_temp -> X,
-			pc_temp -> next -> next -> Y,
-			pc_temp -> next -> Y, pc_temp -> Y, &tx2, &ty2);
+        calc_tangent(3, p_cntr -> X, p_cntr -> next -> X,
+                        p_cntr -> next -> next -> X,
+                        p_cntr -> Y, p_cntr -> next -> Y,
+                        p_cntr -> next -> next -> Y, &tx1, &ty1);
+        pc_temp = p_cntr;
+        for (i=3; i<num_pts; i++) pc_temp = pc_temp -> next;/* Go to the end.*/
+        calc_tangent(3, pc_temp -> next -> next -> X,
+                         pc_temp -> next -> X, pc_temp -> X,
+                        pc_temp -> next -> next -> Y,
+                        pc_temp -> next -> Y, pc_temp -> Y, &tx2, &ty2);
         tx2 = (-tx2);   /* Inverse the vector as we need opposite direction. */
         ty2 = (-ty2);
     }
     /* If following (num_pts > 1) is TRUE then exactly 2 points in contour.  */
     else if (num_pts > 1) {/* Take into account 2 points in tangent estimat. */
-	calc_tangent(2, p_cntr -> X, p_cntr -> next -> X, 0.0,
-			p_cntr -> Y, p_cntr -> next -> Y, 0.0, &tx1, &ty1);
-	calc_tangent(2, p_cntr -> next -> X, p_cntr -> X, 0.0,
-			p_cntr -> next -> Y, p_cntr -> Y, 0.0, &tx2, &ty2);
+        calc_tangent(2, p_cntr -> X, p_cntr -> next -> X, 0.0,
+                        p_cntr -> Y, p_cntr -> next -> Y, 0.0, &tx1, &ty1);
+        calc_tangent(2, p_cntr -> next -> X, p_cntr -> X, 0.0,
+                        p_cntr -> next -> Y, p_cntr -> Y, 0.0, &tx2, &ty2);
         tx2 = (-tx2);   /* Inverse the vector as we need opposite direction. */
         ty2 = (-ty2);
     }
-    else return(0);			/* Only one point (???) - ignore it. */
+    else return(0);                        /* Only one point (???) - ignore it. */
 
     switch (contr_kind) {
-	case OPEN_CONTOUR:
-	    break;
-	case CLOSED_CONTOUR:
-	    tx1 = tx2 = (tx1 + tx2) / 2.0;	     /* Make tangents equal. */
-	    ty1 = ty2 = (ty1 + ty2) / 2.0;
-	    break;
+        case OPEN_CONTOUR:
+            break;
+        case CLOSED_CONTOUR:
+            tx1 = tx2 = (tx1 + tx2) / 2.0;             /* Make tangents equal. */
+            ty1 = ty2 = (ty1 + ty2) / 2.0;
+            break;
     }
     complete_spline_interp(p_cntr, num_pts, 0.0, 1.0, tx1, ty1, tx2, ty2);
     end_crnt_cntr();
@@ -914,7 +914,7 @@ int contr_kind;
  * Global variable bspline_order for the order of Bspline to use.
  */
 int put_contour_bspline(p_cntr, z_level, x_min, x_max, y_min, y_max,
-								contr_kind)
+                                                                contr_kind)
 struct cntr_struct *p_cntr;
 double z_level, x_min, x_max,  y_min, y_max;
 int contr_kind;
@@ -941,24 +941,24 @@ double x1, x2, x3, y1, y2, y3, *tx, *ty;
     double v1[2], v2[2], v1_magnitude, v2_magnitude;
 
     switch (n) {
-	case 2:
-	    *tx = (x2 - x1) * 0.3;
-	    *ty = (y2 - y1) * 0.3;
-	    break;
-	case 3:
-	    v1[0] = x2 - x1;   v1[1] = y2 - y1;
-	    v2[0] = x3 - x2;   v2[1] = y3 - y2;
-	    v1_magnitude = sqrt(sqr(v1[0]) + sqr(v1[1]));
-	    v2_magnitude = sqrt(sqr(v2[0]) + sqr(v2[1]));
-	    *tx = (v1[0] / v1_magnitude) - (v2[0] / v2_magnitude) * 0.1;
-	    *tx *= v1_magnitude * 0.1;  /* Make tangent less than magnitude. */
-	    *ty = (v1[1] / v1_magnitude) - (v2[1] / v2_magnitude) * 0.1;
-	    *ty *= v1_magnitude * 0.1;  /* Make tangent less than magnitude. */
-	    break;
-	default:				       /* Should not happen! */
-	    (*ty) = 0.1;
-	    *tx = 0.1;
-	    break;
+        case 2:
+            *tx = (x2 - x1) * 0.3;
+            *ty = (y2 - y1) * 0.3;
+            break;
+        case 3:
+            v1[0] = x2 - x1;   v1[1] = y2 - y1;
+            v2[0] = x3 - x2;   v2[1] = y3 - y2;
+            v1_magnitude = sqrt(sqr(v1[0]) + sqr(v1[1]));
+            v2_magnitude = sqrt(sqr(v2[0]) + sqr(v2[1]));
+            *tx = (v1[0] / v1_magnitude) - (v2[0] / v2_magnitude) * 0.1;
+            *tx *= v1_magnitude * 0.1;  /* Make tangent less than magnitude. */
+            *ty = (v1[1] / v1_magnitude) - (v2[1] / v2_magnitude) * 0.1;
+            *ty *= v1_magnitude * 0.1;  /* Make tangent less than magnitude. */
+            break;
+        default:                                       /* Should not happen! */
+            (*ty) = 0.1;
+            *tx = 0.1;
+            break;
     }
 }
 
@@ -971,9 +971,9 @@ struct cntr_struct *p_cntr;
     struct cntr_struct *pc_temp;
 
     while (p_cntr) {
-	pc_temp = p_cntr;
-	p_cntr = p_cntr -> next;
-	free((char *) pc_temp);
+        pc_temp = p_cntr;
+        p_cntr = p_cntr -> next;
+        free((char *) pc_temp);
     }
 }
 
@@ -986,8 +986,8 @@ struct cntr_struct *p_cntr;
     int count = 0;
 
     while (p_cntr) {
-	count++;
-	p_cntr = p_cntr -> next;
+        count++;
+        p_cntr = p_cntr -> next;
     }
     return count;
 }
@@ -1005,26 +1005,26 @@ double t_min, t_max, tx1, ty1, tx2, ty2;
     int i;
 
     tangents_x = (double *) local_alloc((unsigned long) (sizeof(double) * n),
-						"contour c_s_intr");
+                                                "contour c_s_intr");
     tangents_y = (double *) local_alloc((unsigned long) (sizeof(double) * n),
-						"contour c_s_intr");
+                                                "contour c_s_intr");
 
     if (n > 1) prepare_spline_interp(tangents_x, tangents_y, p_cntr, n,
-					t_min, t_max, tx1, ty1, tx2, ty2);
+                                        t_min, t_max, tx1, ty1, tx2, ty2);
     else {
-	free((char *) tangents_x);
-	free((char *) tangents_y);
-	return(0);
+        free((char *) tangents_x);
+        free((char *) tangents_y);
+        return(0);
     }
 
     dt = (t_max-t_min)/(n-1);
 
-    add_cntr_point(p_cntr -> X, p_cntr -> Y);	       /* First point. */
+    add_cntr_point(p_cntr -> X, p_cntr -> Y);               /* First point. */
 
     for (i=0; i<n-1; i++) {
         hermit_interp(p_cntr -> X, p_cntr -> Y,
                      tangents_x[i], tangents_y[i],
-		     p_cntr -> next -> X, p_cntr -> next -> Y,
+                     p_cntr -> next -> X, p_cntr -> next -> Y,
                      tangents_x[i+1], tangents_y[i+1], dt);
 
         p_cntr = p_cntr -> next;
@@ -1044,15 +1044,15 @@ void calc_hermit_table()
     double t, dt;
 
     hermit_table = (table_entry *) local_alloc ((unsigned long) (sizeof(table_entry) *
-						(num_approx_pts + 1)),
-						"contour hermit table");
+                                                (num_approx_pts + 1)),
+                                                "contour hermit table");
     t = 0;
     dt = 1.0/num_approx_pts;
     for (i=0; i<=num_approx_pts; i++) {
-        hermit_table[i][0] = (t-1)*(t-1)*(2*t+1);		     /* h00. */
-        hermit_table[i][1] = t*t*(-2*t+3);			     /* h10. */
-        hermit_table[i][2] = t*(t-1)*(t-1);			     /* h01. */
-        hermit_table[i][3] = t*t*(t-1);				     /* h11. */
+        hermit_table[i][0] = (t-1)*(t-1)*(2*t+1);                     /* h00. */
+        hermit_table[i][1] = t*t*(-2*t+3);                             /* h10. */
+        hermit_table[i][2] = t*(t-1)*(t-1);                             /* h01. */
+        hermit_table[i][3] = t*t*(t-1);                                     /* h11. */
         t = t + dt;
     }
 }
@@ -1077,13 +1077,13 @@ double x1, y1, tx1, ty1, x2, y2, tx2, ty2, dt;
     vec_size = sqrt(sqr(x1 - x2) + sqr(y2 - y1));
     tang_size = sqrt(sqr(tx1) + sqr(ty1));                  /* Normalize T1. */
     if (tang_size * 3 > vec_size) {
-	tx1 *= vec_size / (tang_size * 3);
-	ty1 *= vec_size / (tang_size * 3);
+        tx1 *= vec_size / (tang_size * 3);
+        ty1 *= vec_size / (tang_size * 3);
     }
     tang_size = sqrt(sqr(tx2) + sqr(ty2));                  /* Normalize T2. */
     if (tang_size * 3 > vec_size) {
-	tx2 *= vec_size / (tang_size * 3);
-	ty2 *= vec_size / (tang_size * 3);
+        tx2 *= vec_size / (tang_size * 3);
+        ty2 *= vec_size / (tang_size * 3);
     }
 
     for (i=1; i<=num_approx_pts; i++) {      /* Note we start from 1 - first */
@@ -1095,7 +1095,7 @@ double x1, y1, tx1, ty1, x2, y2, tx2, ty2, dt;
             hermit_table[i][1] * y2 +
             hermit_table[i][2] * ty1 +
             hermit_table[i][3] * ty2;
-	add_cntr_point(x, y);
+        add_cntr_point(x, y);
     }
 }
 
@@ -1106,7 +1106,7 @@ double x1, y1, tx1, ty1, x2, y2, tx2, ty2, dt;
  * ty1 at starting point and tx2, ty2 and end point.
  */
 void prepare_spline_interp(tangents_x, tangents_y, p_cntr, n, t_min, t_max,
-			   tx1, ty1, tx2, ty2)
+                           tx1, ty1, tx2, ty2)
 double tangents_x[], tangents_y[];
 struct cntr_struct *p_cntr;
 int n;
@@ -1114,20 +1114,20 @@ double t_min, t_max, tx1, ty1, tx2, ty2;
 {
     int i;
     double *r, t, dt;
-    tri_diag *m;		   /* The tri-diagonal matrix is saved here. */
+    tri_diag *m;                   /* The tri-diagonal matrix is saved here. */
     struct cntr_struct *p;
 
     m = (tri_diag *) local_alloc((unsigned long) (sizeof(tri_diag) * n),
-						"contour tri_diag");
+                                                "contour tri_diag");
     r = (double *) local_alloc((unsigned long) (sizeof(double) * n),
-						"contour tri_diag2");
+                                                "contour tri_diag2");
     n--;
 
     p = p_cntr;
     m[0][0] = 0.0;    m[0][1] = 1.0;    m[0][2] = 0.0;
     m[n][0] = 0.0;    m[n][1] = 1.0;    m[n][2] = 0.0;
-    r[0] = tx1;					       /* Set start tangent. */
-    r[n] = tx2;						 /* Set end tangent. */
+    r[0] = tx1;                                               /* Set start tangent. */
+    r[n] = tx2;                                                 /* Set end tangent. */
     t = t_min;
     dt = (t_max-t_min)/n;
     for (i=1; i<n; i++) {
@@ -1143,17 +1143,17 @@ double t_min, t_max, tx1, ty1, tx2, ty2;
     }
 
     if (!solve_tri_diag(m, r, tangents_x, n+1)) { /* Find the X(t) tangents. */
-    	free((char *) m);
-    	free((char *) r);
-	error("Can't interpolate X using complete splines");
-	return;
+            free((char *) m);
+            free((char *) r);
+        error("Can't interpolate X using complete splines");
+        return;
     }
 
     p = p_cntr;
     m[0][0] = 0.0;    m[0][1] = 1.0;    m[0][2] = 0.0;
     m[n][0] = 0.0;    m[n][1] = 1.0;    m[n][2] = 0.0;
-    r[0] = ty1;					       /* Set start tangent. */
-    r[n] = ty2;						 /* Set end tangent. */
+    r[0] = ty1;                                               /* Set start tangent. */
+    r[n] = ty2;                                                 /* Set end tangent. */
     t = t_min;
     dt = (t_max-t_min)/n;
     for (i=1; i<n; i++) {
@@ -1169,10 +1169,10 @@ double t_min, t_max, tx1, ty1, tx2, ty2;
     }
 
     if (!solve_tri_diag(m, r, tangents_y, n+1)) { /* Find the Y(t) tangents. */
-    	free((char *) m);
-    	free((char *) r);
-	error("Can't interpolate Y using complete splines");
-	return;
+            free((char *) m);
+            free((char *) r);
+        error("Can't interpolate Y using complete splines");
+        return;
     }
     free((char *) m);
     free((char *) r);
@@ -1192,18 +1192,18 @@ int n;
     double t;
 
     for (i=1; i<n; i++) {   /* Eliminate element m[i][i-1] (lower diagonal). */
-	if (m[i-1][1] == 0) return FALSE;
-	t = m[i][0] / m[i-1][1];        /* Find ratio between the two lines. */
-	m[i][0] = m[i][0] - m[i-1][1] * t;
-	m[i][1] = m[i][1] - m[i-1][2] * t;
-	r[i] = r[i] - r[i-1] * t;
+        if (m[i-1][1] == 0) return FALSE;
+        t = m[i][0] / m[i-1][1];        /* Find ratio between the two lines. */
+        m[i][0] = m[i][0] - m[i-1][1] * t;
+        m[i][1] = m[i][1] - m[i-1][2] * t;
+        r[i] = r[i] - r[i-1] * t;
     }
     /* Now do back subtitution - update the solution vector X: */
     if (m[n-1][1] == 0) return FALSE;
-    x[n-1] = r[n-1] / m[n-1][1];		       /* Find last element. */
+    x[n-1] = r[n-1] / m[n-1][1];                       /* Find last element. */
     for (i=n-2; i>=0; i--) {
-	if (m[i][1] == 0) return FALSE;
-	x[i] = (r[i] - x[i+1] * m[i][2]) / m[i][1];
+        if (m[i][1] == 0) return FALSE;
+        x[i] = (r[i] - x[i+1] * m[i][2]) / m[i][1];
     }
     return TRUE;
 }
@@ -1229,10 +1229,10 @@ int num_of_points, order, contour_kind;
     /* 2. Update num_of_points - increase it by "order-1" so contour will be */
     /*    closed. This will evaluate order more sections to close it!        */
     if (contour_kind == CLOSED_CONTOUR) {
-	pc_tail = p_cntr;
-	while (pc_tail -> next) pc_tail = pc_tail -> next;/* Find last point.*/
-	pc_tail -> next = p_cntr;   /* Close contour list - make it circular.*/
-	num_of_points += order;
+        pc_tail = p_cntr;
+        while (pc_tail -> next) pc_tail = pc_tail -> next;/* Find last point.*/
+        pc_tail -> next = p_cntr;   /* Close contour list - make it circular.*/
+        num_of_points += order;
     }
 
     /* Find first (t_min) and last (t_max) t value to eval: */
@@ -1244,30 +1244,30 @@ int num_of_points, order, contour_kind;
 
 
     while (t<t_max) {
-	if (t > next_t) {
-	    pc_temp = pc_temp -> next;     /* Next order ctrl. pt. to blend. */
+        if (t > next_t) {
+            pc_temp = pc_temp -> next;     /* Next order ctrl. pt. to blend. */
             knot_index++;
-	    next_t += 1.0;
-	}
+            next_t += 1.0;
+        }
         eval_bspline(t, pc_temp, num_of_points, order, knot_index,
-    					contour_kind, &x, &y);   /* Next pt. */
-	add_cntr_point(x, y);
-	pts_count++;
-	/* As we might have some real number round off problems we must      */
-	/* test if we dont produce too many points here...                   */
-	if (pts_count + 1 == num_approx_pts * (num_of_points - order) + 1)
-    		break;
+                                            contour_kind, &x, &y);   /* Next pt. */
+        add_cntr_point(x, y);
+        pts_count++;
+        /* As we might have some real number round off problems we must      */
+        /* test if we dont produce too many points here...                   */
+        if (pts_count + 1 == num_approx_pts * (num_of_points - order) + 1)
+                    break;
         t += dt;
     }
 
     eval_bspline(t_max - EPSILON, pc_temp, num_of_points, order, knot_index,
-		contour_kind, &x, &y);
+                contour_kind, &x, &y);
     /* If from round off errors we need more than one last point: */
     for (i=pts_count; i<num_approx_pts * (num_of_points - order) + 1; i++)
-	add_cntr_point(x, y);			    /* Complete the contour. */
+        add_cntr_point(x, y);                            /* Complete the contour. */
 
     if (contour_kind == CLOSED_CONTOUR)     /* Update list - un-circular it. */
-	pc_tail -> next = NULL;
+        pc_tail -> next = NULL;
 }
 
 /*
@@ -1286,9 +1286,9 @@ double *x, *y;
     double ti, tikp, *dx, *dy;      /* Copy p_cntr into it to make it faster. */
 
     dx = (double *) local_alloc((unsigned long) (sizeof(double) * (order + j)),
-						"contour b_spline");
+                                                "contour b_spline");
     dy = (double *) local_alloc((unsigned long) (sizeof(double) * (order + j)),
-						"contour b_spline");
+                                                "contour b_spline");
     /* Set the dx/dy - [0] iteration step, control points (p==0 iterat.): */
     for (i=j-order; i<=j; i++) {
         dx[i] = p_cntr -> X;
@@ -1297,18 +1297,18 @@ double *x, *y;
     }
 
     for (p=1; p<=order; p++) {        /* Iteration (b-spline level) counter. */
-	for (i=j; i>=j-order+p; i--) {           /* Control points indexing. */
+        for (i=j; i>=j-order+p; i--) {           /* Control points indexing. */
             ti = fetch_knot(contour_kind, num_of_points, order, i);
             tikp = fetch_knot(contour_kind, num_of_points, order, i+order+1-p);
-	    if (ti == tikp) {   /* Should not be a problems but how knows... */
-	    }
-	    else {
-		dx[i] = dx[i] * (t - ti)/(tikp-ti) +         /* Calculate x. */
-			dx[i-1] * (tikp-t)/(tikp-ti);
-		dy[i] = dy[i] * (t - ti)/(tikp-ti) +         /* Calculate y. */
-			dy[i-1] * (tikp-t)/(tikp-ti);
-	    }
-	}
+            if (ti == tikp) {   /* Should not be a problems but how knows... */
+            }
+            else {
+                dx[i] = dx[i] * (t - ti)/(tikp-ti) +         /* Calculate x. */
+                        dx[i-1] * (tikp-t)/(tikp-ti);
+                dy[i] = dy[i] * (t - ti)/(tikp-ti) +         /* Calculate y. */
+                        dy[i-1] * (tikp-t)/(tikp-ti);
+            }
+        }
     }
     *x = dx[j]; *y = dy[j];
     free((char *) dx);
@@ -1327,13 +1327,13 @@ double fetch_knot(contour_kind, num_of_points, order, i)
 int contour_kind, num_of_points, order, i;
 {
     switch (contour_kind) {
-	case OPEN_CONTOUR:
-	    if (i <= order) return 0.0;
-	    else if (i <= num_of_points) return (double) (i - order);
-		 else return (double) (num_of_points - order);
-	case CLOSED_CONTOUR:
-	    return (double) i;
-	default: /* Should never happen */
-	    return 1.0;
+        case OPEN_CONTOUR:
+            if (i <= order) return 0.0;
+            else if (i <= num_of_points) return (double) (i - order);
+                 else return (double) (num_of_points - order);
+        case CLOSED_CONTOUR:
+            return (double) i;
+        default: /* Should never happen */
+            return 1.0;
     }
 }

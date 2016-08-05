@@ -40,17 +40,17 @@ void main()
   int argc;
   char argv[4][80];
 
-	/* set up some stuff for Sioux */
-	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;
-	SIOUXSettings.autocloseonquit = FALSE;
-	printf("Starting fit_coop.\n");
+        /* set up some stuff for Sioux */
+        //SIOUXSettings.standalone = FALSE;
+        SIOUXSettings.asktosaveonclose = FALSE;
+        SIOUXSettings.autocloseonquit = FALSE;
+        printf("Starting fit_coop.\n");
 
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
-  	fatal("User cancelled intial file open");
+          fatal("User cancelled intial file open");
   } else{
-  	argc = 2;
+          argc = 2;
   }
 
   /* get the command line arguments */
@@ -118,25 +118,25 @@ void main()
   while( eof_hit >= 0 && !done ){
     if( instring[0] == '#' ){
       if(strstr(instring,"WALSH INFO")&&!strstr(instring,"JOB_TITLE")){
-	/***
-	  read out the walsh information
-	****/
+        /***
+          read out the walsh information
+        ****/
 
-	/* the first line has the number of variables */
-	skipcomments(infile,instring,FATAL);
-	/***
-	  the next line has the number of steps, which is what we
-	  are looking for.
-	****/
-	skipcomments(infile,instring,FATAL);
-	sscanf(instring,"%d",&num_walsh_steps);
-	done = 1;
+        /* the first line has the number of variables */
+        skipcomments(infile,instring,FATAL);
+        /***
+          the next line has the number of steps, which is what we
+          are looking for.
+        ****/
+        skipcomments(infile,instring,FATAL);
+        sscanf(instring,"%d",&num_walsh_steps);
+        done = 1;
       } else if( strstr(instring,"COOP")&&!strstr(instring,"JOB_TITLE")){
-	done = 1;
+        done = 1;
       }
       else{
-	eof_hit = skipcomments(infile,instring,IGNORE);
-	upcase(instring);
+        eof_hit = skipcomments(infile,instring,IGNORE);
+        upcase(instring);
       }
 
     }
@@ -164,8 +164,8 @@ void main()
       printf(" Which would you like to fit? ");
       scanf("%d",&which_walsh_step);
       if( which_walsh_step > num_walsh_steps || which_walsh_step <= 0){
-	fprintf(stderr,"%d is a bogus value.\n");
-	which_walsh_step = 0;
+        fprintf(stderr,"%d is a bogus value.\n");
+        which_walsh_step = 0;
       }
     }
 
@@ -173,11 +173,11 @@ void main()
     i = 0;
     while(i != which_walsh_step){
       while(instring[0] != '#' || !strstr(instring,"WALSH_STEP")&&!strstr(instring,"JOB_TITLE")){
-	eof_hit = skipcomments(infile,instring,IGNORE);
-	if( eof_hit < 0 ){
-	  fatal("End of file hit before the walsh step was found.");
-	}
-	upcase(instring);
+        eof_hit = skipcomments(infile,instring,IGNORE);
+        if( eof_hit < 0 ){
+          fatal("End of file hit before the walsh step was found.");
+        }
+        upcase(instring);
       }
       eof_hit = skipcomments(infile,instring,FATAL);
       upcase(instring);
@@ -187,7 +187,7 @@ void main()
     while(instring[0] != '#' || !strstr(instring,"COOP") &&!strstr(instring,"JOB_TITLE")){
       eof_hit = skipcomments(infile,instring,IGNORE);
       if( eof_hit < 0 ){
-	fatal("End of file hit before the COOP data was found.");
+        fatal("End of file hit before the COOP data was found.");
       }
       upcase(instring);
     }
@@ -247,13 +247,13 @@ void main()
 
       /* check to see if we need more memory */
       if( num_p == max_p ){
-	max_p += 100;
-	tpoints = (point_type *)calloc(max_p,sizeof(point_type));
-	if( !tpoints ) fatal("Can't get additional space to store the points.");
-	/* free up the memory that we are currently using */
-	bcopy(points,tpoints,num_p*sizeof(point_type));
-	free(points);
-	points = tpoints;
+        max_p += 100;
+        tpoints = (point_type *)calloc(max_p,sizeof(point_type));
+        if( !tpoints ) fatal("Can't get additional space to store the points.");
+        /* free up the memory that we are currently using */
+        bcopy(points,tpoints,num_p*sizeof(point_type));
+        free(points);
+        points = tpoints;
       }
       skipcomments(infile,instring,FATAL);
     }
@@ -281,16 +281,16 @@ void main()
 
       /* add the value of the integration at the previous energy step */
       if( i != 0 ){
-	integration[i*num_COOP+j] = integration[(i-1)*num_COOP+j];
+        integration[i*num_COOP+j] = integration[(i-1)*num_COOP+j];
       }
 
       /* now loop over all the points in this COOP curve */
       for(k=0;k<points_per_COOP;k++,num_p++){
-	E_diff = curr_E - points[num_p].energy;
-	E_diff *= E_diff;
-	if( E_diff <= 25.0 ){
-	  COOP_here += points[num_p].height*exp(-broadening*E_diff);
-	}
+        E_diff = curr_E - points[num_p].energy;
+        E_diff *= E_diff;
+        if( E_diff <= 25.0 ){
+          COOP_here += points[num_p].height*exp(-broadening*E_diff);
+        }
       }
       COOP_here *= norm_fact;
       fprintf(outfile,"% -6.4lf ",COOP_here);

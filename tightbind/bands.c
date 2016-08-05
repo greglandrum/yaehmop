@@ -84,11 +84,11 @@ void gen_symm_lines(bands)
       along this line
       ****/
     spacing.x = (bands->special_points[i+1].loc.x -
-		 bands->special_points[i].loc.x) / points_per_line;
+                 bands->special_points[i].loc.x) / points_per_line;
     spacing.y = (bands->special_points[i+1].loc.y -
-		 bands->special_points[i].loc.y) / points_per_line;
+                 bands->special_points[i].loc.y) / points_per_line;
     spacing.z = (bands->special_points[i+1].loc.z -
-		 bands->special_points[i].loc.z) / points_per_line;
+                 bands->special_points[i].loc.z) / points_per_line;
 
     curr_loc.x = bands->special_points[i].loc.x;
     curr_loc.y = bands->special_points[i].loc.y;
@@ -160,9 +160,9 @@ void gen_symm_lines(bands)
  *
  ****************************************************************************/
 void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
-			      cmplx_hamil,cmplx_overlap,
-			      eigenset,work1,work2,work3,cmplx_work,
-			      num_orbs,orbital_lookup_table)
+                              cmplx_hamil,cmplx_overlap,
+                              eigenset,work1,work2,work3,cmplx_work,
+                              num_orbs,orbital_lookup_table)
   cell_type *cell;
   detail_type *details;
   hermetian_matrix_type overlapR,hamilR;
@@ -198,7 +198,7 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
   bands = details->band_info;
 
   num_KPOINTS = (bands->num_special_points-1) *
-		  bands->points_per_line + 1;
+                  bands->points_per_line + 1;
 
   /* write out some status information */
   fprintf(status_file,"Generating band structure.\n");
@@ -209,16 +209,16 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
   fprintf(band_file,"#BAND_DATA\n");
   fprintf(band_file,";Band structure calculation results\n");
   fprintf(band_file,"%d Special points were done with\n",
-	  bands->num_special_points);
+          bands->num_special_points);
   fprintf(band_file,"%d k points connecting them. There are\n",
-	  bands->points_per_line);
+          bands->points_per_line);
 
   fprintf(band_file,"%d orbitals in the unit cell.\n",num_orbs);
 
   for(i=0;i<bands->num_special_points;i++){
     fprintf(band_file,"%s %lf %lf %lf\n",
-	    bands->special_points[i].name,bands->special_points[i].loc.x,
-	    bands->special_points[i].loc.y,bands->special_points[i].loc.z);
+            bands->special_points[i].name,bands->special_points[i].loc.x,
+            bands->special_points[i].loc.y,bands->special_points[i].loc.z);
   }
 
   fprintf(band_file,"; Begin band data.\n");
@@ -241,9 +241,9 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
     switch(details->Execution_Mode){
     case FAT:
       if( details->store_R_overlaps ){
-	build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs);
+        build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs);
       } else{
-	fatal("construct_band_structure called while store_R_overlaps was 0.\n \
+        fatal("construct_band_structure called while store_R_overlaps was 0.\n \
 \tThis is wrong.");
       }
       build_k_hamil_FAT(cell,hamilR,hamilK,overlapK,num_orbs);
@@ -274,22 +274,22 @@ fprintf(stderr,">");
 
     ********/
     cboris(&(num_orbs),&(num_orbs),hamilK.mat,overlapK.mat,eigenset.vectI,
-	   eigenset.val,work1,
-	   work2,&diag_error);
+           eigenset.val,work1,
+           work2,&diag_error);
 
 #else
     for(j=0;j<num_orbs;j++){
       jtab = j*num_orbs;
       for(k=j+1;k<num_orbs;k++){
-	ktab = k*num_orbs;
-	cmplx_hamil[jtab+k].r = hamilK.mat[jtab+k];
-	cmplx_hamil[jtab+k].i = hamilK.mat[ktab+j];
-	cmplx_overlap[jtab+k].r = overlapK.mat[jtab+k];
-	cmplx_overlap[jtab+k].i = overlapK.mat[ktab+j];
-	cmplx_hamil[ktab+j].r = 0.0;
-	cmplx_hamil[ktab+j].i = 0.0;
-	cmplx_overlap[ktab+j].r = 0.0;
-	cmplx_overlap[ktab+j].i = 0.0;
+        ktab = k*num_orbs;
+        cmplx_hamil[jtab+k].r = hamilK.mat[jtab+k];
+        cmplx_hamil[jtab+k].i = hamilK.mat[ktab+j];
+        cmplx_overlap[jtab+k].r = overlapK.mat[jtab+k];
+        cmplx_overlap[jtab+k].i = overlapK.mat[ktab+j];
+        cmplx_hamil[ktab+j].r = 0.0;
+        cmplx_hamil[ktab+j].i = 0.0;
+        cmplx_overlap[ktab+j].r = 0.0;
+        cmplx_overlap[ktab+j].i = 0.0;
       }
       cmplx_hamil[jtab+j].r = hamilK.mat[jtab+j];
       cmplx_hamil[jtab+j].i = 0.0;
@@ -305,12 +305,12 @@ fprintf(stderr,">");
     fprintf(stderr,"{");
     if(!details->diag_wo_overlap){
       zhegv((long *)&(itype),&jobz,&uplo,(long *)&num_orbs,cmplx_hamil,
-      			(long *)&num_orbs,cmplx_overlap,
-	          (long *)&num_orbs,eigenset.val,cmplx_work,
-	          (long *)&num_orbs2,work3,(long *)&diag_error);
+                              (long *)&num_orbs,cmplx_overlap,
+                  (long *)&num_orbs,eigenset.val,cmplx_work,
+                  (long *)&num_orbs2,work3,(long *)&diag_error);
     }else{
       zheev(&jobz,&uplo,(long *)&num_orbs,cmplx_hamil,(long *)&num_orbs,
-	    			eigenset.val,cmplx_work,(long *)&num_orbs2,work3,(long *)&diag_error);
+                                    eigenset.val,cmplx_work,(long *)&num_orbs2,work3,(long *)&diag_error);
     }
     fprintf(stderr,"}");
 #endif
@@ -323,7 +323,7 @@ fprintf(stderr,">");
       write just the energies to the output file.
     ********/
     fprintf(band_file,"; K point: %lf %lf %lf\n",
-	    kpoint->loc.x,kpoint->loc.y,kpoint->loc.z);
+            kpoint->loc.x,kpoint->loc.y,kpoint->loc.z);
     for(j=0;j<num_orbs;j++){
       fprintf(band_file,"%10.8lg\n",EIGENVAL(eigenset,j));
     }

@@ -99,10 +99,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
-			cmplx_hamil,cmplx_overlap,
-			eigenset,work1,work2,work3,cmplx_work,
-			properties,avg_prop_info,
-			num_orbs,orbital_lookup_table)
+                        cmplx_hamil,cmplx_overlap,
+                        eigenset,work1,work2,work3,cmplx_work,
+                        properties,avg_prop_info,
+                        num_orbs,orbital_lookup_table)
   cell_type *cell;
   detail_type *details;
   hermetian_matrix_type overlapR,hamilR;
@@ -178,7 +178,7 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
     if( cell->dim > 0){
       fprintf(status_file,"Kpoint: %d\n",i+1);
       fprintf(output_file,";***& Kpoint: %d (%6.4lf %6.4lf %6.4lf) Weight: %lf\n",i+1,
-	      kpoint->loc.x,kpoint->loc.y,kpoint->loc.z,kpoint->weight);
+              kpoint->loc.x,kpoint->loc.y,kpoint->loc.z,kpoint->weight);
     }
 
     /*****
@@ -189,15 +189,15 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
     switch(details->Execution_Mode){
     case FAT:
       if( details->store_R_overlaps ){
-	build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs);
+        build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs);
       } else{
-	overlapK.mat = &mat_save[i*num_orbs*num_orbs];
+        overlapK.mat = &mat_save[i*num_orbs*num_orbs];
       }
 
       if( details->sparsify_value > 0.0 ){
-	fprintf(stderr,"Overlap Sparsification\n");
-	sparsify_hermetian_matrix(details->sparsify_value,
-				  overlapK,num_orbs);
+        fprintf(stderr,"Overlap Sparsification\n");
+        sparsify_hermetian_matrix(details->sparsify_value,
+                                  overlapK,num_orbs);
       }
       build_k_hamil_FAT(cell,hamilR,hamilK,overlapK,num_orbs);
       break;
@@ -208,15 +208,15 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
     case MOLECULAR:
       /******
 
-	for molecular calculations, we don't need to evaluate anything in k space,
-	so just set the pointers here....
+        for molecular calculations, we don't need to evaluate anything in k space,
+        so just set the pointers here....
 
-	*******/
+        *******/
       overlapK = overlapR;
       if( details->sparsify_value > 0.0 ){
-	fprintf(stderr,"Overlap Sparsification\n");
-	sparsify_hermetian_matrix(details->sparsify_value,
-				  overlapK,num_orbs);
+        fprintf(stderr,"Overlap Sparsification\n");
+        sparsify_hermetian_matrix(details->sparsify_value,
+                                  overlapK,num_orbs);
       }
       hamilK = hamilR;
       break;
@@ -227,53 +227,53 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
     /* do we need to print out the overlap matrix? */
     if( details->overlap_mat_PRT ){
       fprintf(output_file,
-	      ";\t\t --- Overlap Matrix ");
+              ";\t\t --- Overlap Matrix ");
       if( details->Execution_Mode == MOLECULAR ){
-	fprintf(output_file,"S(R) ---\n");
+        fprintf(output_file,"S(R) ---\n");
       }
       else{
-	fprintf(output_file,"S(K) ---\n");
+        fprintf(output_file,"S(K) ---\n");
       }
       print_labelled_mat(overlapK.mat,num_orbs,num_orbs,output_file,1e-4,
-			 cell->atoms,cell->num_atoms,orbital_lookup_table,
-			 num_orbs,details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,
-			 LABEL_BOTH,details->line_width);
+                         cell->atoms,cell->num_atoms,orbital_lookup_table,
+                         num_orbs,details->overlap_mat_PRT & PRT_TRANSPOSE_FLAG,
+                         LABEL_BOTH,details->line_width);
     }
 
     /* What about the hamiltonian? */
     if( details->hamil_PRT ){
       fprintf(output_file,
-	      ";\t\t --- Hamiltonian ");
+              ";\t\t --- Hamiltonian ");
       if( details->Execution_Mode == MOLECULAR ){
-	fprintf(output_file,"H(R) ---\n");
+        fprintf(output_file,"H(R) ---\n");
       }
       else{
-	fprintf(output_file,"H(K) ---\n");
+        fprintf(output_file,"H(K) ---\n");
       }
       print_labelled_mat(hamilK.mat,num_orbs,num_orbs,output_file,1e-4,
-			 cell->atoms,cell->num_atoms,orbital_lookup_table,
-			 num_orbs,details->hamil_PRT & PRT_TRANSPOSE_FLAG,
-			 LABEL_BOTH,details->line_width);
+                         cell->atoms,cell->num_atoms,orbital_lookup_table,
+                         num_orbs,details->hamil_PRT & PRT_TRANSPOSE_FLAG,
+                         LABEL_BOTH,details->line_width);
     }
 
     /* do we need to do binary dumps of the matrices? */
     if( details->dump_overlap ){
       /* if this is the first call, the open the file */
       if(i==0){
-	sprintf(tempfilename,"%s.OV",details->filename);
+        sprintf(tempfilename,"%s.OV",details->filename);
 
 #ifndef USING_THE_MAC
-	overlap_file = open(tempfilename,
-			    O_RDWR|O_TRUNC|O_APPEND|O_CREAT,S_IRUSR|S_IWUSR);
+        overlap_file = open(tempfilename,
+                            O_RDWR|O_TRUNC|O_APPEND|O_CREAT,S_IRUSR|S_IWUSR);
 #else
-	overlap_file = open(tempfilename,O_RDWR|O_TRUNC|O_APPEND|O_CREAT);
+        overlap_file = open(tempfilename,O_RDWR|O_TRUNC|O_APPEND|O_CREAT);
 #endif
 
-	if( overlap_file == -1 ){
-	  fatal("Can't open .OV file for binary I/O");
-	}
-	write(overlap_file,(const char *)&num_KPOINTS,sizeof(int));
-	write(overlap_file,(const char *)&num_orbs,sizeof(int));
+        if( overlap_file == -1 ){
+          fatal("Can't open .OV file for binary I/O");
+        }
+        write(overlap_file,(const char *)&num_KPOINTS,sizeof(int));
+        write(overlap_file,(const char *)&num_orbs,sizeof(int));
 
       }
       dump_hermetian_mat(overlap_file,overlapK.mat,num_orbs);
@@ -282,13 +282,13 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
     if( details->dump_sparse_mats ){
       /* do we need to open the sparse matrix files? */
       if(i==0){
-	sprintf(tempfilename,"%s.SPARSE.OV",details->filename);
+        sprintf(tempfilename,"%s.SPARSE.OV",details->filename);
 
-	sparse_OVfile = fopen(tempfilename,"w+");
-	if( !sparse_OVfile ) fatal("Can't open .SPARSE.OV file!\n");
-	sprintf(tempfilename,"%s.SPARSE.HAM",details->filename);
-	sparse_HAMfile = fopen(tempfilename,"w+");
-	if( !sparse_HAMfile ) fatal("Can't open .SPARSE.HAM file!\n");
+        sparse_OVfile = fopen(tempfilename,"w+");
+        if( !sparse_OVfile ) fatal("Can't open .SPARSE.OV file!\n");
+        sprintf(tempfilename,"%s.SPARSE.HAM",details->filename);
+        sparse_HAMfile = fopen(tempfilename,"w+");
+        if( !sparse_HAMfile ) fatal("Can't open .SPARSE.HAM file!\n");
       }
       dump_sparse_mat(sparse_OVfile,overlapK.mat,num_orbs,1e-08);
       dump_sparse_mat(sparse_HAMfile,hamilK.mat,num_orbs,1e-08);
@@ -297,18 +297,18 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
     if( details->dump_hamil ){
       /* if this is the first call, the open the file */
       if(i==0){
-	sprintf(tempfilename,"%s.HAM",details->filename);
+        sprintf(tempfilename,"%s.HAM",details->filename);
 #ifndef USING_THE_MAC
-	hamil_file = open(tempfilename,
-			  O_RDWR|O_APPEND|O_CREAT,S_IRUSR|S_IWUSR);
+        hamil_file = open(tempfilename,
+                          O_RDWR|O_APPEND|O_CREAT,S_IRUSR|S_IWUSR);
 #else
-	hamil_file = open(tempfilename,O_RDWR|O_APPEND|O_CREAT);
+        hamil_file = open(tempfilename,O_RDWR|O_APPEND|O_CREAT);
 #endif
-	if( hamil_file == -1 ){
-	  fatal("Can't open .HAM file for binary I/O");
-	}
-	write(hamil_file,(const char *)&num_KPOINTS,sizeof(int));
-	write(hamil_file,(const char *)&num_orbs,sizeof(int));
+        if( hamil_file == -1 ){
+          fatal("Can't open .HAM file for binary I/O");
+        }
+        write(hamil_file,(const char *)&num_KPOINTS,sizeof(int));
+        write(hamil_file,(const char *)&num_orbs,sizeof(int));
 
       }
       dump_hermetian_mat(hamil_file,hamilK.mat,num_orbs);
@@ -318,64 +318,64 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
 
       /*****
 
-	do the FCO analysis if it's needed
+        do the FCO analysis if it's needed
 
-	if we're doing a molecule, the appropriate matrices have
-	already been built, so we don't have to worry about those
+        if we're doing a molecule, the appropriate matrices have
+        already been built, so we don't have to worry about those
 
       ******/
       if(details->num_FCO_frags && details->Execution_Mode != MOLECULAR){
-	/* first build the matrices */
-	build_FMO_overlap(details,num_orbs,unit_cell->num_atoms,Overlap_K,
-			  orbital_lookup_table);
-	build_FMO_hamil(details,num_orbs,unit_cell->num_atoms,Hamil_K,
-			orbital_lookup_table);
-	/* now diagonalize them */
-	diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_work);
+        /* first build the matrices */
+        build_FMO_overlap(details,num_orbs,unit_cell->num_atoms,Overlap_K,
+                          orbital_lookup_table);
+        build_FMO_hamil(details,num_orbs,unit_cell->num_atoms,Hamil_K,
+                        orbital_lookup_table);
+        /* now diagonalize them */
+        diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_work);
 
-	/* generate the transform matrices */
-	gen_FMO_tform_matrices(details);
+        /* generate the transform matrices */
+        gen_FMO_tform_matrices(details);
       }
       fprintf(stdout,"%d >",i+1);
 
 #ifndef USE_LAPACK
       /******
-	The matrix diagonalization routine destroys the overlap and hamiltonian
-	matrices, so if we need to (i.e. we are printing elements of them)
-	we make a copy of the overlap matrix in work3 and the
-	hamiltonian matrix in eigenset.vectR.  We'll move things around
-	later to get everything straightened out.
-	*******/
+        The matrix diagonalization routine destroys the overlap and hamiltonian
+        matrices, so if we need to (i.e. we are printing elements of them)
+        we make a copy of the overlap matrix in work3 and the
+        hamiltonian matrix in eigenset.vectR.  We'll move things around
+        later to get everything straightened out.
+        *******/
       if(!details->diag_wo_overlap){
-	bcopy((char *)overlapK.mat,(char *)work3,num_orbs*num_orbs*sizeof(real));
+        bcopy((char *)overlapK.mat,(char *)work3,num_orbs*num_orbs*sizeof(real));
       } else {
-	bzero((char *)work3,num_orbs*num_orbs*sizeof(real));
-	for(j=0;j<num_orbs;j++) work3[j*num_orbs+j] = 1.0;
+        bzero((char *)work3,num_orbs*num_orbs*sizeof(real));
+        for(j=0;j<num_orbs;j++) work3[j*num_orbs+j] = 1.0;
       }
       if( details->hamil_PRT ){
-	bcopy((char *)hamilK.mat,(char *)eigenset.vectR,num_orbs*num_orbs*sizeof(real));
+        bcopy((char *)hamilK.mat,(char *)eigenset.vectR,num_orbs*num_orbs*sizeof(real));
       }
 
       /*******
 
-	now diagonalize that beast by calling the FORTRAN subroutine used
-	to diagonalize stuff in new3 and CACAO.
+        now diagonalize that beast by calling the FORTRAN subroutine used
+        to diagonalize stuff in new3 and CACAO.
 
-	THIS REALLY SHOULD BE REPLACED with a routine written in C, so if you
-	happen to have some time on your hands....
+        THIS REALLY SHOULD BE REPLACED with a routine written in C, so if you
+        happen to have some time on your hands....
 
-	********/
+        ********/
       cboris(&(num_orbs),&(num_orbs),hamilK.mat,work3,eigenset.vectI,eigenset.val,work1,
-	     work2,&diag_error);
+             work2,&diag_error);
 
       /********
 
-	This is some comic relief aimed at members of the Hoffmann group.
-	If you want to do something similar for your site, uncomment this
-	section of code and change the uid's (you can find these in the
-	file /etc/passwd) and messages.
+        This is some comic relief aimed at members of the Hoffmann group.
+        If you want to do something similar for your site, uncomment this
+        section of code and change the uid's (you can find these in the
+        file /etc/passwd) and messages.
 
-	********/
+        ********/
 #if 0
       switch(getuid()){
       case 1426: fprintf(stderr,"Jahn-Teller is REAL!"); break;
@@ -389,65 +389,65 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
 
       /*********
 
-	at this point, hamilK.mat contains the real part of the eigenvectors,
-	eigenset.vectI contains the imaginary part,
-	eigenset.val has the energies,
-	and eigenset.vectR contains the hamiltonian matrix.
+        at this point, hamilK.mat contains the real part of the eigenvectors,
+        eigenset.vectI contains the imaginary part,
+        eigenset.val has the energies,
+        and eigenset.vectR contains the hamiltonian matrix.
 
-	rearrange things so that eigenset.vectR and hamilK.mat store the
-	proper information.
+        rearrange things so that eigenset.vectR and hamilK.mat store the
+        proper information.
 
 
-	**********/
+        **********/
       if( details->hamil_PRT ){
-	bcopy((char *)eigenset.vectR,(char *)work3,num_orbs*num_orbs*sizeof(real));
-	bcopy((char *)hamilK.mat,(char *)eigenset.vectR,num_orbs*num_orbs*sizeof(real));
-	bcopy((char *)work3,(char *)hamilK.mat,num_orbs*num_orbs*sizeof(real));
+        bcopy((char *)eigenset.vectR,(char *)work3,num_orbs*num_orbs*sizeof(real));
+        bcopy((char *)hamilK.mat,(char *)eigenset.vectR,num_orbs*num_orbs*sizeof(real));
+        bcopy((char *)work3,(char *)hamilK.mat,num_orbs*num_orbs*sizeof(real));
       } else{
-	bcopy((char *)hamilK.mat,(char *)eigenset.vectR,num_orbs*num_orbs*sizeof(real));
+        bcopy((char *)hamilK.mat,(char *)eigenset.vectR,num_orbs*num_orbs*sizeof(real));
       }
 
 #else
       /**********
 
-	we're using LAPACK to diagonalize and we need to copy the matrices into those
-	used by the LAPACK diagonalizer
+        we're using LAPACK to diagonalize and we need to copy the matrices into those
+        used by the LAPACK diagonalizer
 
-	**********/
+        **********/
       for(j=0;j<num_orbs;j++){
-	jtab = j*num_orbs;
-	for(k=j+1;k<num_orbs;k++){
-	  ktab = k*num_orbs;
-	  cmplx_hamil[jtab+k].r = hamilK.mat[jtab+k];
-	  cmplx_hamil[jtab+k].i = hamilK.mat[ktab+j];
-	  cmplx_overlap[jtab+k].r = overlapK.mat[jtab+k];
-	  cmplx_overlap[jtab+k].i = overlapK.mat[ktab+j];
-	  cmplx_hamil[ktab+j].r = 0.0;
-	  cmplx_hamil[ktab+j].i = 0.0;
-	  cmplx_overlap[ktab+j].r = 0.0;
-	  cmplx_overlap[ktab+j].i = 0.0;
-	}
-	cmplx_hamil[jtab+j].r = hamilK.mat[jtab+j];
-	cmplx_hamil[jtab+j].i = 0.0;
-	cmplx_overlap[jtab+j].r = overlapK.mat[jtab+j];
-	cmplx_overlap[jtab+j].i = 0.0;
+        jtab = j*num_orbs;
+        for(k=j+1;k<num_orbs;k++){
+          ktab = k*num_orbs;
+          cmplx_hamil[jtab+k].r = hamilK.mat[jtab+k];
+          cmplx_hamil[jtab+k].i = hamilK.mat[ktab+j];
+          cmplx_overlap[jtab+k].r = overlapK.mat[jtab+k];
+          cmplx_overlap[jtab+k].i = overlapK.mat[ktab+j];
+          cmplx_hamil[ktab+j].r = 0.0;
+          cmplx_hamil[ktab+j].i = 0.0;
+          cmplx_overlap[ktab+j].r = 0.0;
+          cmplx_overlap[ktab+j].i = 0.0;
+        }
+        cmplx_hamil[jtab+j].r = hamilK.mat[jtab+j];
+        cmplx_hamil[jtab+j].i = 0.0;
+        cmplx_overlap[jtab+j].r = overlapK.mat[jtab+j];
+        cmplx_overlap[jtab+j].i = 0.0;
 
       }
 
 
       itype = 1;
       if( details->just_avgE ){
-	jobz = 'N';
-	fprintf(stdout,".");
+        jobz = 'N';
+        fprintf(stdout,".");
       } else{
-	jobz = 'V';
+        jobz = 'V';
       }
       uplo = 'L';
       num_orbs2 = num_orbs*num_orbs;
       fprintf(stdout,"{");
       if(!details->diag_wo_overlap){
         zhegv((long *)&(itype),&jobz,&uplo,(long *)&num_orbs,cmplx_hamil,
-        			(long *)&num_orbs,cmplx_overlap,
+                                (long *)&num_orbs,cmplx_overlap,
               (long *)&num_orbs,eigenset.val,cmplx_work,
               (long *)&num_orbs2,work3,(long *)&diag_error);
       }else{
@@ -459,67 +459,67 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
 
       /* now copy stuff back out of the results */
       if( !details->just_avgE ){
-	for(j=0;j<num_orbs;j++){
-	  jtab = j*num_orbs;
-	  for(k=0;k<num_orbs;k++){
-	    ktab = k*num_orbs;
-	    eigenset.vectR[jtab+k] = cmplx_hamil[jtab+k].r;
-	    eigenset.vectI[jtab+k] = cmplx_hamil[jtab+k].i;
-	  }
-	}
+        for(j=0;j<num_orbs;j++){
+          jtab = j*num_orbs;
+          for(k=0;k<num_orbs;k++){
+            ktab = k*num_orbs;
+            eigenset.vectR[jtab+k] = cmplx_hamil[jtab+k].r;
+            eigenset.vectI[jtab+k] = cmplx_hamil[jtab+k].i;
+          }
+        }
       }
 #endif
 
       fprintf(stdout,"<\n");
       fprintf(status_file,"Error value from Diagonalization (0 is good): %d\n",
-	      diag_error);
+              diag_error);
       fflush(status_file);
       if( diag_error != 0 ){
-	error("Problems in the diagonalization, try more overlaps.");
+        error("Problems in the diagonalization, try more overlaps.");
       }
 
       if( !details->just_avgE ){
 
-	postprocess_results(cell,details,overlapR,hamilR,overlapK,hamilK,
-			    cmplx_hamil,cmplx_overlap,
-			    eigenset,work1,work2,work3,cmplx_work,
-			    properties,avg_prop_info,
-			    num_orbs,orbital_lookup_table);
+        postprocess_results(cell,details,overlapR,hamilR,overlapK,hamilK,
+                            cmplx_hamil,cmplx_overlap,
+                            eigenset,work1,work2,work3,cmplx_work,
+                            properties,avg_prop_info,
+                            num_orbs,orbital_lookup_table);
 
-	if(details->num_MOs_to_print > 0) print_MOs(details,num_orbs,eigenset,i,
-						    unique_atoms,num_unique_atoms,
-						    cell->num_atoms,orbital_lookup_table);
+        if(details->num_MOs_to_print > 0) print_MOs(details,num_orbs,eigenset,i,
+                                                    unique_atoms,num_unique_atoms,
+                                                    cell->num_atoms,orbital_lookup_table);
 
 
-	if(details->num_FMO_frags != 0 ){
-	  postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
-			  cmplx_hamil,cmplx_overlap,
-			  eigenset,work1,work2,work3,cmplx_work,
-			  properties,avg_prop_info,
-			  num_orbs,orbital_lookup_table);
+        if(details->num_FMO_frags != 0 ){
+          postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
+                          cmplx_hamil,cmplx_overlap,
+                          eigenset,work1,work2,work3,cmplx_work,
+                          properties,avg_prop_info,
+                          num_orbs,orbital_lookup_table);
 
-	}
+        }
 
-	if(details->num_FCO_frags != 0 ){
-	  postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
-			  cmplx_hamil,cmplx_overlap,
-			  eigenset,work1,work2,work3,cmplx_work,
-			  properties,avg_prop_info,
-			  num_orbs,orbital_lookup_table);
+        if(details->num_FCO_frags != 0 ){
+          postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
+                          cmplx_hamil,cmplx_overlap,
+                          eigenset,work1,work2,work3,cmplx_work,
+                          properties,avg_prop_info,
+                          num_orbs,orbital_lookup_table);
 
-	}
+        }
 
       }
       /*********
 
-	if we are doing an extended system calculation and are evaluating
-	average properties, then store the information required for the
-	properties calculation which will be done later in the execution.
+        if we are doing an extended system calculation and are evaluating
+        average properties, then store the information required for the
+        properties calculation which will be done later in the execution.
 
-	*********/
+        *********/
       if( details->avg_props ){
-	store_avg_prop_info(details,i,eigenset,overlapK,num_orbs,
-			    properties->chg_mat,avg_prop_info);
+        store_avg_prop_info(details,i,eigenset,overlapK,num_orbs,
+                            properties->chg_mat,avg_prop_info);
       }
     } /* end of if(!details->just_matrices) */
   } /* end of k point loop */

@@ -83,14 +83,14 @@ void find_tic_sep(graph_type *graph)
   log_range = log10(range);
 
   norm = pow(10.0,log_range-(float)((log_range >= 0.0 ) ? (int)log_range :
-				    ((int)log_range-1)));
+                                    ((int)log_range-1)));
   if (norm <= 2)
     tics = 0.2;
   else if (norm <= 5)
     tics = 0.5;
   else tics = 1.0;
   tic_sep = tics * pow(10.0,(float)((log_range >= 0.0 ) ? (int)log_range :
-				    ((int)log_range-1)));
+                                    ((int)log_range-1)));
 
   graph->tic_sep_x = tic_sep;
 
@@ -126,14 +126,14 @@ void find_tic_sep(graph_type *graph)
   range = fabs(graph->min_y-graph->max_y);
   log_range = log10(range);
   norm = pow(10.0,log_range-(float)((log_range >= 0.0 ) ? (int)log_range :
-				    ((int)log_range-1)));
+                                    ((int)log_range-1)));
   if (norm <= 2)
     tics = 0.2;
   else if (norm <= 5)
     tics = 0.5;
   else tics = 1.0;
   tic_sep = tics * pow(10.0,(float)((log_range >= 0.0 ) ? (int)log_range :
-				    ((int)log_range-1)));
+                                    ((int)log_range-1)));
   graph->tic_sep_y = tic_sep;
   ymin = tic_sep * floor(graph->min_y/tic_sep);
   ymax = tic_sep * ceil(graph->max_y/tic_sep);
@@ -255,11 +255,11 @@ void read_graph_data(FILE *infile,graph_type *graph,char sideways,char parse_hea
     while(instring[0] == '#'){
       skipcomments(infile,instring);
       if( strstr(instring,"Curve") ){
-	sscanf(instring,"%s %s",foostring,
-	       &(graph->curve_names[num_names*NORMAL_STR_LEN]));
-	num_names++;
+        sscanf(instring,"%s %s",foostring,
+               &(graph->curve_names[num_names*NORMAL_STR_LEN]));
+        num_names++;
       } else if (strstr(instring,"Title")){
-	sscanf(instring,"%s %s",foostring,graph->curve_names);
+        sscanf(instring,"%s %s",foostring,graph->curve_names);
       }
     }
   }
@@ -310,22 +310,22 @@ void read_graph_data(FILE *infile,graph_type *graph,char sideways,char parse_hea
     if( !sideways ){
       sscanf((const char *)strtok(instring," "),"%lf",&xval);
       for(i=0;i<num_curves;i++){
-	graph->raw_data[num_p*num_curves+i].x = xval;
-	sscanf((const char *)strtok(0," "),"%lf",&(graph->raw_data[num_p*num_curves+i].y));
+        graph->raw_data[num_p*num_curves+i].x = xval;
+        sscanf((const char *)strtok(0," "),"%lf",&(graph->raw_data[num_p*num_curves+i].y));
       }
     }
     else{
       /*******
-	assume that the x coordinate is at the end of the line for properties
-	data....
+        assume that the x coordinate is at the end of the line for properties
+        data....
       *******/
       sscanf((const char *)strtok(instring," "),"%lf",&(graph->raw_data[num_p*num_curves].x));
       for(i=1;i<num_curves;i++){
-	sscanf((const char *)strtok(0," "),"%lf",&(graph->raw_data[num_p*num_curves+i].x));
+        sscanf((const char *)strtok(0," "),"%lf",&(graph->raw_data[num_p*num_curves+i].x));
       }
       sscanf((const char *)strtok(0," "),"%lf",&yval);
       for(i=0;i<num_curves;i++){
-	graph->raw_data[num_p*num_curves+i].y = yval;
+        graph->raw_data[num_p*num_curves+i].y = yval;
       }
     }
     num_p++;
@@ -333,12 +333,12 @@ void read_graph_data(FILE *infile,graph_type *graph,char sideways,char parse_hea
     if( num_p == max_p ){
       max_p += 100;
       graph->raw_data = (point_type2D *)D_REALLOC((void *)graph->raw_data,
-					    (unsigned)max_p*num_curves*
-					    sizeof(point_type2D));
+                                            (unsigned)max_p*num_curves*
+                                            sizeof(point_type2D));
       if( !graph->raw_data ){
-	error("Can't D_REALLOCate space for graph data....");
-	display("Oh well...");
-	return;
+        error("Can't D_REALLOCate space for graph data....");
+        display("Oh well...");
+        return;
       }
     }
     done = skipcomments(infile,instring);
@@ -364,9 +364,9 @@ void read_graph_data(FILE *infile,graph_type *graph,char sideways,char parse_hea
 
     for(j=0;j<num_curves;j++){
       if(graph->raw_data[i*num_curves+j].y > max_y)
-	max_y = graph->raw_data[i*num_curves+j].y;
+        max_y = graph->raw_data[i*num_curves+j].y;
       if(graph->raw_data[i*num_curves+j].y < min_y)
-	min_y = graph->raw_data[i*num_curves+j].y;
+        min_y = graph->raw_data[i*num_curves+j].y;
     }
   }
   graph->max_x = max_x;
@@ -410,24 +410,24 @@ void preprocess_graph_data(graph_type *graph)
   for( i=0; i<graph->num_p; i++ ){
     for(j=0;j<graph->num_curves;j++){
       if( graph->raw_data[i*graph->num_curves+j].x > graph->max_x ){
-	graph->data[i*graph->num_curves+j].x = graph->max_x * xscale;
+        graph->data[i*graph->num_curves+j].x = graph->max_x * xscale;
       }
       else    if( graph->raw_data[i*graph->num_curves+j].x < graph->min_x ){
-	graph->data[i*graph->num_curves+j].x = graph->min_x * xscale;
+        graph->data[i*graph->num_curves+j].x = graph->min_x * xscale;
       }
       else{
-	graph->data[i*graph->num_curves+j].x = graph->raw_data[i*graph->num_curves+j].x *
-	  xscale;
+        graph->data[i*graph->num_curves+j].x = graph->raw_data[i*graph->num_curves+j].x *
+          xscale;
       }
       if( graph->raw_data[i*graph->num_curves+j].y > graph->max_y ){
-	graph->data[i*graph->num_curves+j].y = graph->max_y * yscale;
+        graph->data[i*graph->num_curves+j].y = graph->max_y * yscale;
       }
       else    if( graph->raw_data[i*graph->num_curves+j].y < graph->min_y ){
-	graph->data[i*graph->num_curves+j].y = graph->min_y * yscale;
+        graph->data[i*graph->num_curves+j].y = graph->min_y * yscale;
       }
       else{
-	graph->data[i*graph->num_curves+j].y = graph->raw_data[i*graph->num_curves+j].y *
-	  yscale;
+        graph->data[i*graph->num_curves+j].y = graph->raw_data[i*graph->num_curves+j].y *
+          yscale;
       }
     }
   }
@@ -610,74 +610,74 @@ void draw_graph(prim_type *prim,object_type *obj)
     if( prim->prop_graph && prim->prop_graph->integs_for_tics ){
       /*******
 
-	check to see if we've already updated them
+        check to see if we've already updated them
 
-	********/
+        ********/
       if(!integ_last_time){
-	*max_x = prim->prop_graph->the_integration->max_x;
-	*max_y = prim->prop_graph->the_integration->max_y;
-	*min_x = prim->prop_graph->the_integration->min_x;
-	*min_y = prim->prop_graph->the_integration->min_y;
+        *max_x = prim->prop_graph->the_integration->max_x;
+        *max_y = prim->prop_graph->the_integration->max_y;
+        *min_x = prim->prop_graph->the_integration->min_x;
+        *min_y = prim->prop_graph->the_integration->min_y;
 
-	/******
+        /******
 
-	  make sure that we aren't gonna get horked when we display COOP
-	  integrations by displaying COOP's on the same scale as the
-	  integration
+          make sure that we aren't gonna get horked when we display COOP
+          integrations by displaying COOP's on the same scale as the
+          integration
 
-	  *******/
-	if( prim->prop_graph->type == COOP_PROP ){
-	  prim->prop_graph->the_data->max_x = *max_x;
-	  prim->prop_graph->the_data->min_x = *min_x;
-	}
-	prim->prop_graph->the_data->max_y = *max_y;
-	prim->prop_graph->the_data->min_y = *min_y;
+          *******/
+        if( prim->prop_graph->type == COOP_PROP ){
+          prim->prop_graph->the_data->max_x = *max_x;
+          prim->prop_graph->the_data->min_x = *min_x;
+        }
+        prim->prop_graph->the_data->max_y = *max_y;
+        prim->prop_graph->the_data->min_y = *min_y;
 
-	integ_last_time = 1;
+        integ_last_time = 1;
       } /* if(!integ_last_time) */
       else{
-	/*******
+        /*******
 
-	  if we got this far, then it means that the user updated the
-	  max and/or min values, so we need to change the integration
-	  max and min values to reflect the change.
+          if we got this far, then it means that the user updated the
+          max and/or min values, so we need to change the integration
+          max and min values to reflect the change.
 
-	  ********/
-	prim->prop_graph->the_integration->max_x = *max_x;
-	prim->prop_graph->the_integration->min_x = *min_x;
-	prim->prop_graph->the_integration->max_y = *max_y;
-	prim->prop_graph->the_integration->min_y = *min_y;
+          ********/
+        prim->prop_graph->the_integration->max_x = *max_x;
+        prim->prop_graph->the_integration->min_x = *min_x;
+        prim->prop_graph->the_integration->max_y = *max_y;
+        prim->prop_graph->the_integration->min_y = *min_y;
 
-	if( prim->prop_graph->type == COOP_PROP ){
-	  prim->prop_graph->the_data->max_x = *max_x;
-	  prim->prop_graph->the_data->min_x = *min_x;
-	}
-	prim->prop_graph->the_data->max_y = *max_y;
-	prim->prop_graph->the_data->min_y = *min_y;
+        if( prim->prop_graph->type == COOP_PROP ){
+          prim->prop_graph->the_data->max_x = *max_x;
+          prim->prop_graph->the_data->min_x = *min_x;
+        }
+        prim->prop_graph->the_data->max_y = *max_y;
+        prim->prop_graph->the_data->min_y = *min_y;
       }
     } /*  if( prim->prop_graph && prim->prop_graph->integs_for_tics ) */
     else{
       /******
 
-	reset the max and min values to those of the
-	data...
+        reset the max and min values to those of the
+        data...
 
-	******/
+        ******/
       if( prim->prop_graph ){
-	if( integ_last_time ){
-	  *max_x = prim->prop_graph->the_data->max_x;
-	  *min_x = prim->prop_graph->the_data->min_x;
-	  *max_y = prim->prop_graph->the_data->max_y;
-	  *min_y = prim->prop_graph->the_data->min_y;
-	}
-	if( prim->prop_graph->the_integration){
-	  if( prim->prop_graph->type == COOP_PROP ){
-	    prim->prop_graph->the_integration->max_x = *max_x;
-	    prim->prop_graph->the_integration->min_x = *min_x;
-	  }
-	  prim->prop_graph->the_integration->max_y = *max_y;
-	  prim->prop_graph->the_integration->min_y = *min_y;
-	}
+        if( integ_last_time ){
+          *max_x = prim->prop_graph->the_data->max_x;
+          *min_x = prim->prop_graph->the_data->min_x;
+          *max_y = prim->prop_graph->the_data->max_y;
+          *min_y = prim->prop_graph->the_data->min_y;
+        }
+        if( prim->prop_graph->the_integration){
+          if( prim->prop_graph->type == COOP_PROP ){
+            prim->prop_graph->the_integration->max_x = *max_x;
+            prim->prop_graph->the_integration->min_x = *min_x;
+          }
+          prim->prop_graph->the_integration->max_y = *max_y;
+          prim->prop_graph->the_integration->min_y = *min_y;
+        }
       }
       the_graph->max_x = *max_x;
       the_graph->min_x = *min_x;
@@ -742,14 +742,14 @@ void draw_graph(prim_type *prim,object_type *obj)
   if( the_graph->do_x_tics && (!prim->prop_graph || !prim->prop_graph->integs_for_tics)){
     for(i=0;i<(int)rint(the_graph->num_tics_x);i++){
       xloc = origin.x + obj->scale.x * (the_graph->tic_start_x +
-					i * the_graph->tic_sep_x - xref);
+                                        i * the_graph->tic_sep_x - xref);
       g_line(xloc,origin.y+obj->scale.y*TIC_DIM,xloc,origin.y);
 
       localmin.y += obj->scale.y*TIC_DIM;
 
       /*****
 
-	do the labels
+        do the labels
 
       *****/
       xval = (the_graph->tic_start_x + i*the_graph->tic_sep_x)*inv_xscale;
@@ -765,7 +765,7 @@ void draw_graph(prim_type *prim,object_type *obj)
   if( the_graph->do_y_tics ){
     for(i=0;i<(int)rint(the_graph->num_tics_y);i++){
       yloc = origin.y + obj->scale.y * (yref - the_graph->tic_start_y -
-					i * the_graph->tic_sep_y);
+                                        i * the_graph->tic_sep_y);
       g_line(origin.x-obj->scale.x*TIC_DIM,yloc,origin.x,yloc);
 
       yval = (the_graph->tic_start_y + i*the_graph->tic_sep_y)*inv_yscale;
@@ -810,53 +810,53 @@ void draw_graph(prim_type *prim,object_type *obj)
       g_change_linestyle(the_graph->styles[i]);
 
       for(j=0;j<the_graph->num_p;j++){
-	points[j].x = fpoints[j].x = origin.x +
-	  (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
+        points[j].x = fpoints[j].x = origin.x +
+          (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
 
-	points[j].y = fpoints[j].y = origin.y +
-	  (yref - the_graph->data[j*the_graph->num_curves + i].y)* obj->scale.y;
+        points[j].y = fpoints[j].y = origin.y +
+          (yref - the_graph->data[j*the_graph->num_curves + i].y)* obj->scale.y;
       }
       /*********
 
-	Deal with the fact that DOS projections may be filled
+        Deal with the fact that DOS projections may be filled
 
       **********/
       if( prim->prop_graph && ((prim->prop_graph->type != COOP_PROP &&
-	 fill_projections && i != 0 ) || prim->prop_graph->the_data->fills[i])){
+         fill_projections && i != 0 ) || prim->prop_graph->the_data->fills[i])){
 
-	/**********
+        /**********
 
-	  There are some complications in the filling if the
-	  end points of the graph are not at the same x level.
+          There are some complications in the filling if the
+          end points of the graph are not at the same x level.
 
-	  deal with these potential problems by inserting 2 extra
-	  points into the curve.
-	************/
-	if( *min_x == 0.0 || (*max_x >= 0 && *min_x < 0.0) ){
-	  points[the_graph->num_p].x = fpoints[the_graph->num_p].x = origin.x -
-	    xref*obj->scale.x;
-	  points[the_graph->num_p+1].x = fpoints[the_graph->num_p+1].x = origin.x -
-	    xref*obj->scale.x;
-	}else if( *min_x > 0.0 ){
-	  points[the_graph->num_p].x = fpoints[the_graph->num_p].x = origin.x;
-	  points[the_graph->num_p+1].x = fpoints[the_graph->num_p+1].x = origin.x;
-	}
-	else{
-	  points[the_graph->num_p].x = fpoints[the_graph->num_p].x = origin.x +
-	    (*max_x - xref)*obj->scale.x;
-	  points[the_graph->num_p+1].x = fpoints[the_graph->num_p+1].x = origin.x +
-	    (*max_x - xref)*obj->scale.x;
-	}
+          deal with these potential problems by inserting 2 extra
+          points into the curve.
+        ************/
+        if( *min_x == 0.0 || (*max_x >= 0 && *min_x < 0.0) ){
+          points[the_graph->num_p].x = fpoints[the_graph->num_p].x = origin.x -
+            xref*obj->scale.x;
+          points[the_graph->num_p+1].x = fpoints[the_graph->num_p+1].x = origin.x -
+            xref*obj->scale.x;
+        }else if( *min_x > 0.0 ){
+          points[the_graph->num_p].x = fpoints[the_graph->num_p].x = origin.x;
+          points[the_graph->num_p+1].x = fpoints[the_graph->num_p+1].x = origin.x;
+        }
+        else{
+          points[the_graph->num_p].x = fpoints[the_graph->num_p].x = origin.x +
+            (*max_x - xref)*obj->scale.x;
+          points[the_graph->num_p+1].x = fpoints[the_graph->num_p+1].x = origin.x +
+            (*max_x - xref)*obj->scale.x;
+        }
 
-	points[the_graph->num_p].y = fpoints[the_graph->num_p].y = origin.y +
-	  (yref - the_graph->data[(the_graph->num_p-1)*the_graph->num_curves + i].y)
-	    * obj->scale.y;
-	points[the_graph->num_p+1].y = fpoints[the_graph->num_p+1].y = origin.y +
-	  (yref - the_graph->data[i].y)* obj->scale.y;
-	g_lines(points,fpoints,the_graph->num_p+2,1);
+        points[the_graph->num_p].y = fpoints[the_graph->num_p].y = origin.y +
+          (yref - the_graph->data[(the_graph->num_p-1)*the_graph->num_curves + i].y)
+            * obj->scale.y;
+        points[the_graph->num_p+1].y = fpoints[the_graph->num_p+1].y = origin.y +
+          (yref - the_graph->data[i].y)* obj->scale.y;
+        g_lines(points,fpoints,the_graph->num_p+2,1);
       }
       else{
-	g_lines(points,fpoints,the_graph->num_p,0);
+        g_lines(points,fpoints,the_graph->num_p,0);
       }
 
       /* set the line style back to the default value */
@@ -913,23 +913,23 @@ void draw_graph(prim_type *prim,object_type *obj)
     *****/
     if( prim->prop_graph->the_data->do_x_tics && prim->prop_graph->integs_for_tics){
       for(i=0;i<(int)rint(the_graph->num_tics_x);i++){
-	xloc = origin.x + obj->scale.x * (the_graph->tic_start_x +
-					  i * the_graph->tic_sep_x - xref);
-	g_line(xloc,origin.y+obj->scale.y*TIC_DIM,xloc,origin.y);
+        xloc = origin.x + obj->scale.x * (the_graph->tic_start_x +
+                                          i * the_graph->tic_sep_x - xref);
+        g_line(xloc,origin.y+obj->scale.y*TIC_DIM,xloc,origin.y);
 
-	localmin.y += obj->scale.y*TIC_DIM;
+        localmin.y += obj->scale.y*TIC_DIM;
 
-	/*****
+        /*****
 
-	  do the labels
+          do the labels
 
-	  *****/
-	xval = (the_graph->tic_start_x + i*the_graph->tic_sep_x)*inv_xscale;
-	if( fabs(xval) < 1e-12 ) xval = 0.0;
-	sprintf(numstring,"%lg",xval);
-	yloc = origin.y+obj->scale.y*TIC_DIM*(1.1);
+          *****/
+        xval = (the_graph->tic_start_x + i*the_graph->tic_sep_x)*inv_xscale;
+        if( fabs(xval) < 1e-12 ) xval = 0.0;
+        sprintf(numstring,"%lg",xval);
+        yloc = origin.y+obj->scale.y*TIC_DIM*(1.1);
 
-	g_center_text(xloc,yloc,numstring);
+        g_center_text(xloc,yloc,numstring);
       }
     }
 
@@ -938,18 +938,18 @@ void draw_graph(prim_type *prim,object_type *obj)
 
     for(i=0;i<the_graph->num_curves;i++){
       if( the_graph->curves_to_display[i] ){
-	/* adjust the line styles to get distinguishable graphs */
-	g_change_linestyle(the_graph->styles[i]);
+        /* adjust the line styles to get distinguishable graphs */
+        g_change_linestyle(the_graph->styles[i]);
 
-	for(j=0;j<the_graph->num_p;j++){
-	  points[j].x = fpoints[j].x = origin.x +
-	    (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
-	  points[j].y = fpoints[j].y = origin.y +
-	    (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
-	}
-	g_lines(points,fpoints,the_graph->num_p,0);
+        for(j=0;j<the_graph->num_p;j++){
+          points[j].x = fpoints[j].x = origin.x +
+            (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
+          points[j].y = fpoints[j].y = origin.y +
+            (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
+        }
+        g_lines(points,fpoints,the_graph->num_p,0);
 
-	g_change_linestyle(0);
+        g_change_linestyle(0);
       }
     }
     the_graph = prim->prop_graph->the_data;

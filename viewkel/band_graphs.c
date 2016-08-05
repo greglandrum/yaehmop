@@ -102,42 +102,42 @@ void preprocess_band_graph_data( band_graph_type *band_graph )
   for( i=0; i<band_graph->the_data->num_p; i++ ){
     for(j=0;j<band_graph->the_data->num_curves;j++){
       band_graph->the_data->data[i*band_graph->the_data->num_curves+j].x =
-	band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].x*xscale;
+        band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].x*xscale;
 
       if( band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].y >
-	 band_graph->the_data->max_y ){
-	band_graph->the_data->data[i*band_graph->the_data->num_curves+j].y =
-	  band_graph->the_data->max_y * yscale;
+         band_graph->the_data->max_y ){
+        band_graph->the_data->data[i*band_graph->the_data->num_curves+j].y =
+          band_graph->the_data->max_y * yscale;
 #ifdef SUPPORT_FATBANDS
-	for(k=1;k<=band_graph->num_fatbands;k++){
-	  band_graph->the_data->data[k*fatband_offset +
-				    i*band_graph->the_data->num_curves+j].y = 0;
-	}
+        for(k=1;k<=band_graph->num_fatbands;k++){
+          band_graph->the_data->data[k*fatband_offset +
+                                    i*band_graph->the_data->num_curves+j].y = 0;
+        }
 #endif
       }
       else if( band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].y <
-		 band_graph->the_data->min_y ){
-	band_graph->the_data->data[i*band_graph->the_data->num_curves+j].y =
-	  band_graph->the_data->min_y * yscale;
+                 band_graph->the_data->min_y ){
+        band_graph->the_data->data[i*band_graph->the_data->num_curves+j].y =
+          band_graph->the_data->min_y * yscale;
 #ifdef SUPPORT_FATBANDS
-	for(k=1;k<=band_graph->num_fatbands;k++){
-	  band_graph->the_data->data[k*fatband_offset +
-				    i*band_graph->the_data->num_curves+j].y = 0;
-	}
+        for(k=1;k<=band_graph->num_fatbands;k++){
+          band_graph->the_data->data[k*fatband_offset +
+                                    i*band_graph->the_data->num_curves+j].y = 0;
+        }
 #endif
 
       }
       else{
-	band_graph->the_data->data[i*band_graph->the_data->num_curves+j].y =
-	  band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].y *
-	    yscale;
+        band_graph->the_data->data[i*band_graph->the_data->num_curves+j].y =
+          band_graph->the_data->raw_data[i*band_graph->the_data->num_curves+j].y *
+            yscale;
 #ifdef SUPPORT_FATBANDS
-	for(k=1;k<=band_graph->num_fatbands;k++){
-	  band_graph->the_data->data[k*fatband_offset +
-				    i*band_graph->the_data->num_curves+j].y =
-	    band_graph->the_data->raw_data[k*fatband_offset +
-					  i*band_graph->the_data->num_curves+j].y*yscale;
-	}
+        for(k=1;k<=band_graph->num_fatbands;k++){
+          band_graph->the_data->data[k*fatband_offset +
+                                    i*band_graph->the_data->num_curves+j].y =
+            band_graph->the_data->raw_data[k*fatband_offset +
+                                          i*band_graph->the_data->num_curves+j].y*yscale;
+        }
 #endif
 
       }
@@ -212,7 +212,7 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
 
   /* get all the memory that we need */
   band_graph->special_points = (special_point_type *)D_CALLOC(num_special_points,
-							    sizeof(special_point_type));
+                                                            sizeof(special_point_type));
   if( !band_graph->special_points ) fatal("Can't get memory for special_points.");
 
   band_graph->the_data = (graph_type *)D_CALLOC(1,sizeof(graph_type));
@@ -228,7 +228,7 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
 
 #else
   the_data->raw_data = (point_type2D *)D_CALLOC(the_data->num_curves*the_data->num_p,
-					      sizeof(point_type2D));
+                                              sizeof(point_type2D));
 #endif
   if(!the_data->raw_data)fatal("Can't allocate the_data->raw_data");
 
@@ -246,8 +246,8 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
   for(i=0;i<num_special_points;i++){
     skipcomments(infile,instring);
     sscanf(instring,"%s %lf %lf %lf",band_graph->special_points[i].name,
-	   &band_graph->special_points[i].loc.x,&band_graph->special_points[i].loc.y,
-	   &band_graph->special_points[i].loc.z);
+           &band_graph->special_points[i].loc.x,&band_graph->special_points[i].loc.y,
+           &band_graph->special_points[i].loc.z);
   }
 
 
@@ -257,20 +257,20 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
       the_data->raw_data[i*num_orbs+j].x = i;
       eof_hit = skipcomments(infile,instring);
       if( eof_hit < 0 ){
-	fprintf(stderr,"EOF hit whilst reading band file\n");
-	fprintf(stderr,"We had read %d points of %d,\n",
-		i,tot_num_points);
-	fprintf(stderr,"\tand died on orbital %d of %d\n",
-		j,num_orbs);
-	error("Early EOF");
-	the_data->num_curves = 0;
-	return;
+        fprintf(stderr,"EOF hit whilst reading band file\n");
+        fprintf(stderr,"We had read %d points of %d,\n",
+                i,tot_num_points);
+        fprintf(stderr,"\tand died on orbital %d of %d\n",
+                j,num_orbs);
+        error("Early EOF");
+        the_data->num_curves = 0;
+        return;
       }
 #ifdef SUPPORT_FATBANDS
       sscanf((const char *)strtok(instring," "),"%lf",&the_data->raw_data[i*num_orbs+j].y);
       for(k=1;k<=num_fatbands;k++){
-	sscanf((const char *)strtok(0," "),"%lf",
-	       &the_data->raw_data[k*num_orbs*tot_num_points + i*num_orbs+j].y);
+        sscanf((const char *)strtok(0," "),"%lf",
+               &the_data->raw_data[k*num_orbs*tot_num_points + i*num_orbs+j].y);
       }
 #else
       sscanf(instring,"%lf",&the_data->raw_data[i*num_orbs+j].y);
@@ -295,7 +295,7 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
   the_data->data = (point_type2D *)D_CALLOC((unsigned)points_required,sizeof(point_type2D));
 #else
   the_data->data = (point_type2D *)D_CALLOC((unsigned)tot_num_points*num_orbs,
-					  sizeof(point_type2D));
+                                          sizeof(point_type2D));
 #endif
   if( !the_data->data ) fatal("Can't get space for graph data.");
 
@@ -311,9 +311,9 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
 
     for(j=0;j<num_orbs;j++){
       if(the_data->raw_data[i*num_orbs+j].y > max_y)
-	max_y = the_data->raw_data[i*num_orbs+j].y;
+        max_y = the_data->raw_data[i*num_orbs+j].y;
       if(the_data->raw_data[i*num_orbs+j].y < min_y)
-	min_y = the_data->raw_data[i*num_orbs+j].y;
+        min_y = the_data->raw_data[i*num_orbs+j].y;
     }
   }
   the_data->max_x = max_x;
@@ -553,9 +553,9 @@ void draw_band_graph(prim_type *prim,object_type *obj)
 
       /*****
 
-	do the label
+        do the label
 
-	*****/
+        *****/
       strcpy(numstring,band_graph->special_points[i].name);
       yloc = origin.y+obj->scale.y*TIC_DIM;
 
@@ -568,7 +568,7 @@ void draw_band_graph(prim_type *prim,object_type *obj)
     max_str_len = 0;
     for(i=0;i<(int)rint(the_graph->num_tics_y);i++){
       yloc = origin.y + obj->scale.y * (yref - the_graph->tic_start_y -
-					i * the_graph->tic_sep_y);
+                                        i * the_graph->tic_sep_y);
       g_line(origin.x-obj->scale.x*TIC_DIM,yloc,origin.x,yloc);
 
       yval = (the_graph->tic_start_y + i*the_graph->tic_sep_y)*inv_yscale;
@@ -636,55 +636,55 @@ void draw_band_graph(prim_type *prim,object_type *obj)
       g_change_linestyle(the_graph->styles[0]);
 #ifdef SUPPORT_FATBANDS
       if( prim->band_graph->num_fatbands && prim->band_graph->fatbands_on ){
-	g_change_linewidth(0.5);
-	for(j=0;j<the_graph->num_p-1;j++){
-	  fat_width1 = the_graph->data[tot_num_p + j*the_graph->num_curves + i].y;
-	  fat_width2 = the_graph->data[tot_num_p + (j+1)*the_graph->num_curves + i].y;
-	  fat_width1 *= prim->band_graph->fatband_scale/2.0;
-	  fat_width2 *= prim->band_graph->fatband_scale/2.0;
-	  fb_p1.x = the_graph->data[j*the_graph->num_curves + i].x - xref;
-	  fb_p1.y = yref - the_graph->data[j*the_graph->num_curves + i].y;
-	  fb_p2.x = the_graph->data[(j+1)*the_graph->num_curves + i].x - xref;
-	  fb_p2.y = yref - the_graph->data[(j+1)*the_graph->num_curves + i].y;
-	  points[0].x = (int)(origin.x + fb_p1.x*obj->scale.x);
-	  points[0].y = (int)(origin.y + (fb_p1.y+fat_width1)*obj->scale.y);
-	  points[1].x = (int)(origin.x + fb_p1.x*obj->scale.x);
-	  points[1].y = (int)(origin.y + (fb_p1.y - fat_width1)*obj->scale.y);
-	  points[2].x = (int)(origin.x + fb_p2.x*obj->scale.x);
-	  points[2].y = (int)(origin.y + (fb_p2.y - fat_width2)*obj->scale.y);
-	  points[3].x = (int)(origin.x + fb_p2.x*obj->scale.x);
-	  points[3].y = (int)(origin.y + (fb_p2.y + fat_width2)*obj->scale.y);
-	  points[4].x = points[0].x;
-	  points[4].y = points[0].y;
+        g_change_linewidth(0.5);
+        for(j=0;j<the_graph->num_p-1;j++){
+          fat_width1 = the_graph->data[tot_num_p + j*the_graph->num_curves + i].y;
+          fat_width2 = the_graph->data[tot_num_p + (j+1)*the_graph->num_curves + i].y;
+          fat_width1 *= prim->band_graph->fatband_scale/2.0;
+          fat_width2 *= prim->band_graph->fatband_scale/2.0;
+          fb_p1.x = the_graph->data[j*the_graph->num_curves + i].x - xref;
+          fb_p1.y = yref - the_graph->data[j*the_graph->num_curves + i].y;
+          fb_p2.x = the_graph->data[(j+1)*the_graph->num_curves + i].x - xref;
+          fb_p2.y = yref - the_graph->data[(j+1)*the_graph->num_curves + i].y;
+          points[0].x = (int)(origin.x + fb_p1.x*obj->scale.x);
+          points[0].y = (int)(origin.y + (fb_p1.y+fat_width1)*obj->scale.y);
+          points[1].x = (int)(origin.x + fb_p1.x*obj->scale.x);
+          points[1].y = (int)(origin.y + (fb_p1.y - fat_width1)*obj->scale.y);
+          points[2].x = (int)(origin.x + fb_p2.x*obj->scale.x);
+          points[2].y = (int)(origin.y + (fb_p2.y - fat_width2)*obj->scale.y);
+          points[3].x = (int)(origin.x + fb_p2.x*obj->scale.x);
+          points[3].y = (int)(origin.y + (fb_p2.y + fat_width2)*obj->scale.y);
+          points[4].x = points[0].x;
+          points[4].y = points[0].y;
 
-	  switch(prim->band_graph->fatband_fill){
-	  case FATBANDS_SHADE:
-	    g_change_color(2);
-	    g_filled_polygon(points,4);
-	    break;
-	  case FATBANDS_LINE:
-	    g_change_color(0);
-	    g_open_polygon(points,4);
-	    break;
-	  }
-	}
-	g_change_linewidth(1.0);
+          switch(prim->band_graph->fatband_fill){
+          case FATBANDS_SHADE:
+            g_change_color(2);
+            g_filled_polygon(points,4);
+            break;
+          case FATBANDS_LINE:
+            g_change_color(0);
+            g_open_polygon(points,4);
+            break;
+          }
+        }
+        g_change_linewidth(1.0);
       }
       g_change_color(0);
       for(j=0;j<the_graph->num_p;j++){
-	points[j].x = fpoints[j].x = origin.x +
-	  (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
-	points[j].y = fpoints[j].y = origin.y +
-	  (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
+        points[j].x = fpoints[j].x = origin.x +
+          (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
+        points[j].y = fpoints[j].y = origin.y +
+          (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
       }
       g_lines(points,fpoints,the_graph->num_p,0);
       g_change_linewidth(1.0);
 #else
       for(j=0;j<the_graph->num_p;j++){
-	points[j].x = fpoints[j].x = origin.x +
-	  (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
-	points[j].y = fpoints[j].y = origin.y +
-	  (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
+        points[j].x = fpoints[j].x = origin.x +
+          (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
+        points[j].y = fpoints[j].y = origin.y +
+          (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
       }
       g_lines(points,fpoints,the_graph->num_p,0);
 #endif

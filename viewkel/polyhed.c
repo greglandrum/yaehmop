@@ -60,14 +60,14 @@ void set_tri_parms(triangle_list_type *temp_tri,atom_type *active_atoms){
 
   /* set center */
   temp_tri->tri.center.x = (active_atoms[i].loc.x +
-			    active_atoms[j].loc.x +
-			    active_atoms[k].loc.x ) / 3;
+                            active_atoms[j].loc.x +
+                            active_atoms[k].loc.x ) / 3;
   temp_tri->tri.center.y = (active_atoms[i].loc.y +
-			    active_atoms[j].loc.y +
-			    active_atoms[k].loc.y ) / 3;
+                            active_atoms[j].loc.y +
+                            active_atoms[k].loc.y ) / 3;
   temp_tri->tri.center.z = (active_atoms[i].loc.z +
-			    active_atoms[j].loc.z +
-			    active_atoms[k].loc.z ) / 3;
+                            active_atoms[j].loc.z +
+                            active_atoms[k].loc.z ) / 3;
 
   /* set normal */
   V3Sub(&active_atoms[i].loc,&active_atoms[j].loc,&v1);
@@ -179,11 +179,11 @@ void gen_coord_polyhed(molec_type *molec)
     } else{
       num_polyhed =0;
       for(i=0;i<molec->num_atoms;i++){
-	if( atoms[i].is_selected ){
-	  molec->polyhed_centers[num_polyhed] = i;
-	  molec->polyhed_rads[num_polyhed] = cut_off;
-	  num_polyhed++;
-	}
+        if( atoms[i].is_selected ){
+          molec->polyhed_centers[num_polyhed] = i;
+          molec->polyhed_rads[num_polyhed] = cut_off;
+          num_polyhed++;
+        }
       }
     }
   }
@@ -211,7 +211,7 @@ void gen_coord_polyhed(molec_type *molec)
  *
  ****************************************************************************/
 void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
-			int initialize)
+                        int initialize)
 {
   int i,j;
   atom_type *atoms,*active_atoms,*temp_atoms;
@@ -245,8 +245,8 @@ void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
 
 
   memcpy((void *)&(active_atoms[0]),
-	 (void *)&(atoms[which_atom]),
-	 sizeof(atom_type));
+         (void *)&(atoms[which_atom]),
+         sizeof(atom_type));
 
   /* now find the other atoms */
   p1 = &atoms[which_atom].loc;
@@ -256,23 +256,23 @@ void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
       p2 = &atoms[i].loc;
       dist = V3DistanceBetween2Points(p1,p2);
       if( dist < cut_off ){
-	/* yep, this one is good, copy it in */
-	memcpy((void *)&(active_atoms[num_active_atoms]),
-	       (void *)&(atoms[i]),
-	       sizeof(atom_type));
-	num_active_atoms++;
-	/* do we need more memory?  I hope not */
-	if(num_active_atoms == max_active_atoms){
-	  max_active_atoms += 16;
-	  temp_atoms = active_atoms;
-	  active_atoms = (atom_type *)D_CALLOC(max_active_atoms,
-					     sizeof(atom_type));
-	  if(!active_atoms){
-	    fatal("can't D_REALLOCate active atom array.");
-	  }
-	  memcpy((void *)temp_atoms,(void *)active_atoms,
-		 num_active_atoms*sizeof(atom_type));
-	}
+        /* yep, this one is good, copy it in */
+        memcpy((void *)&(active_atoms[num_active_atoms]),
+               (void *)&(atoms[i]),
+               sizeof(atom_type));
+        num_active_atoms++;
+        /* do we need more memory?  I hope not */
+        if(num_active_atoms == max_active_atoms){
+          max_active_atoms += 16;
+          temp_atoms = active_atoms;
+          active_atoms = (atom_type *)D_CALLOC(max_active_atoms,
+                                             sizeof(atom_type));
+          if(!active_atoms){
+            fatal("can't D_REALLOCate active atom array.");
+          }
+          memcpy((void *)temp_atoms,(void *)active_atoms,
+                 num_active_atoms*sizeof(atom_type));
+        }
       }
     }
   }
@@ -297,13 +297,13 @@ void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
     if( molec->triangles) D_FREE(molec->triangles);
 
     molec->triangles = (triangle_type *)D_CALLOC(num_tris,
-					       sizeof(triangle_type));
+                                               sizeof(triangle_type));
 
     if(!molec->triangles) fatal("Can't get space to store triangles.");
 
     if(molec->polyhed_verts)D_FREE(molec->polyhed_verts);
     molec->polyhed_verts = (vertex_type *)D_CALLOC(num_active_atoms,
-					       sizeof(vertex_type));
+                                               sizeof(vertex_type));
     if(!molec->polyhed_verts)
       fatal("Can't get space to store polyedron vertices.");
     molec->num_triangles = 0;
@@ -312,17 +312,17 @@ void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
 
     molec->triangles = (triangle_type *)
       D_REALLOC((void *)molec->triangles,
-	      (num_tris+molec->num_triangles)*sizeof(triangle_type));
+              (num_tris+molec->num_triangles)*sizeof(triangle_type));
     if(!molec->triangles)fatal("can't D_REALLOCated molec->triangles.");
     molec->polyhed_verts = (vertex_type *)
       D_REALLOC((void *)molec->polyhed_verts,
-	      (num_active_atoms+molec->num_polyhed_verts)*sizeof(vertex_type));
+              (num_active_atoms+molec->num_polyhed_verts)*sizeof(vertex_type));
     if(!molec->polyhed_verts)fatal("can't D_REALLOCated molec->polyhed_verts.");
 
   }
   for(i=0;i<num_active_atoms;i++){
     memcpy((void *)&molec->polyhed_verts[i+molec->num_polyhed_verts].position,
-	   (void *)&active_atoms[i].loc,sizeof(point_type));
+           (void *)&active_atoms[i].loc,sizeof(point_type));
   }
 
 
@@ -339,7 +339,7 @@ void find_coord_polyhed(molec_type *molec,int which_atom,float cut_off,
       tri1->tri.vertices[j] += molec->num_polyhed_verts;
     }
     memcpy((void *)&molec->triangles[i],(void *)&(tri1->tri),
-	   sizeof(triangle_type));
+           sizeof(triangle_type));
     molec->triangles[i].color = atoms[which_atom].color;
     i++;
     tri1 = tri1->next;
@@ -357,11 +357,11 @@ for(i=0;i<num_active_atoms;i++){
 tri1 = tri_list;
 while(tri1){
   fprintf(stderr,"tri: %d %d %d",
-	  tri1->tri.vertices[0],tri1->tri.vertices[1],tri1->tri.vertices[2]);
+          tri1->tri.vertices[0],tri1->tri.vertices[1],tri1->tri.vertices[2]);
   fprintf(stderr,"\tcenter: (%f %f %f)\n",
-	  tri1->tri.center.x,tri1->tri.center.y,tri1->tri.center.z);
+          tri1->tri.center.x,tri1->tri.center.y,tri1->tri.center.z);
   fprintf(stderr,"\tnormal: (%f %f %f)\n",
-	  tri1->tri.normal.x,tri1->tri.normal.y,tri1->tri.normal.z);
+          tri1->tri.normal.x,tri1->tri.normal.y,tri1->tri.normal.z);
   tri1 = tri1->next;
 }
 

@@ -106,7 +106,7 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
     get space for the data
   *******/
   graph->raw_data = (point_type2D *)D_CALLOC(num_p*num_curves,
-					   sizeof(point_type2D));
+                                           sizeof(point_type2D));
   tot_E->raw_data = (point_type2D *)D_CALLOC(num_p,sizeof(point_type2D));
   if( !graph->raw_data || !tot_E->raw_data){
     error("Can't get space for raw_graph data....");
@@ -186,9 +186,9 @@ void read_walsh_data(FILE *infile,graph_type *graph,graph_type *tot_E)
 
     for(j=0;j<num_curves;j++){
       if(graph->raw_data[i*num_curves+j].y > max_y)
-	max_y = graph->raw_data[i*num_curves+j].y;
+        max_y = graph->raw_data[i*num_curves+j].y;
       if(graph->raw_data[i*num_curves+j].y < min_y)
-	min_y = graph->raw_data[i*num_curves+j].y;
+        min_y = graph->raw_data[i*num_curves+j].y;
     }
   }
   graph->max_x = max_x;
@@ -293,16 +293,16 @@ void new_walsh_graph(char *filename)
     failed = 1;
   }
 #else
-	if(!filename){
-		infile = choose_mac_file(file_name,MAC_FOPEN_OPEN_CD);
-	} else{
-		strcpy(file_name,filename);
-		infile = fopen(file_name,"r");
-	}
-	if( !infile ){
+        if(!filename){
+                infile = choose_mac_file(file_name,MAC_FOPEN_OPEN_CD);
+        } else{
+                strcpy(file_name,filename);
+                infile = fopen(file_name,"r");
+        }
+        if( !infile ){
     printf("Problems opening file: %s\n",file_name);
- 	 	display("oooooops!");
-   	failed = 1;
+                  display("oooooops!");
+           failed = 1;
   }
 #endif
 
@@ -310,7 +310,7 @@ void new_walsh_graph(char *filename)
   /* get the initial data */
   if( !failed ){
     read_walsh_data(infile,whichobj->prim->walsh_graph->the_data,
-		    whichobj->prim->walsh_graph->total_E);
+                    whichobj->prim->walsh_graph->total_E);
   }
 
   /* check to see if any curves were actually read in.... */
@@ -442,14 +442,14 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
   if( the_graph->do_x_tics ){
     for(i=0;i<(int)rint(the_graph->num_tics_x);i++){
       xloc = origin.x + obj->scale.x * (the_graph->tic_start_x +
-					i * the_graph->tic_sep_x - xref);
+                                        i * the_graph->tic_sep_x - xref);
       g_line(xloc,origin.y+obj->scale.y*TIC_DIM,xloc,origin.y);
 
       /*****
 
-	do the labels
+        do the labels
 
-	*****/
+        *****/
       xval = (the_graph->tic_start_x + i*the_graph->tic_sep_x)*inv_xscale;
       if( fabs(xval) < 1e-12 ) xval = 0.0;
       sprintf(numstring,"%lg",xval);
@@ -462,7 +462,7 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
   if( the_graph->do_y_tics ){
     for(i=0;i<(int)rint(the_graph->num_tics_y);i++){
       yloc = origin.y + obj->scale.y * (yref - the_graph->tic_start_y -
-					i * the_graph->tic_sep_y);
+                                        i * the_graph->tic_sep_y);
       g_line(origin.x-obj->scale.x*TIC_DIM,yloc,origin.x,yloc);
 
       yval = (the_graph->tic_start_y + i*the_graph->tic_sep_y)*inv_yscale;
@@ -507,15 +507,15 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
 
       /*******
 
-	Bug fix: top band not being drawn
-	 05/22/95 gL
+        Bug fix: top band not being drawn
+         05/22/95 gL
 
       ********/
       for(j=0;j<the_graph->num_p;j++){
-	points[j].x = fpoints[j].x = origin.x +
-	  (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
-	points[j].y = fpoints[j].y = origin.y +
-	  (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
+        points[j].x = fpoints[j].x = origin.x +
+          (the_graph->data[j*the_graph->num_curves + i].x - xref)*obj->scale.x;
+        points[j].y = fpoints[j].y = origin.y +
+          (yref - the_graph->data[j*the_graph->num_curves + i].y)*obj->scale.y;
       }
       g_lines(points,fpoints,the_graph->num_p,0);
 
@@ -535,26 +535,26 @@ void draw_walsh_graph(prim_type *prim,object_type *obj)
     /* Y tics */
     if( total_E->do_y_tics ){
       for(i=0;i<(int)rint(total_E->num_tics_y);i++){
-	yloc = origin.y + obj->scale.y * (yref - total_E->tic_start_y -
-					  i * total_E->tic_sep_y);
-	g_line(origin.x+dim.x+obj->scale.x*TIC_DIM,yloc,origin.x+dim.x,yloc);
+        yloc = origin.y + obj->scale.y * (yref - total_E->tic_start_y -
+                                          i * total_E->tic_sep_y);
+        g_line(origin.x+dim.x+obj->scale.x*TIC_DIM,yloc,origin.x+dim.x,yloc);
 
-	yval = (total_E->tic_start_y + i*total_E->tic_sep_y)*inv_yscale;
-	if( fabs(yval) < 1e-12 ) yval = 0.0;
-	sprintf(numstring,"%lg",yval);
-	xloc = origin.x+dim.x+obj->scale.x*TIC_DIM*1.1;
+        yval = (total_E->tic_start_y + i*total_E->tic_sep_y)*inv_yscale;
+        if( fabs(yval) < 1e-12 ) yval = 0.0;
+        sprintf(numstring,"%lg",yval);
+        xloc = origin.x+dim.x+obj->scale.x*TIC_DIM*1.1;
 
-	g_left_text(xloc,yloc,numstring);
-	obj->bmax.x += 3.0*PS_options.fontsize;
+        g_left_text(xloc,yloc,numstring);
+        obj->bmax.x += 3.0*PS_options.fontsize;
       }
     }
 
     g_change_linestyle(the_graph->styles[1]);
     for(j=0;j<total_E->num_p;j++){
       points[j].x = fpoints[j].x = origin.x +
-	(total_E->data[j].x - xref)*obj->scale.x;
+        (total_E->data[j].x - xref)*obj->scale.x;
       points[j].y = fpoints[j].y = origin.y +
-	(yref - total_E->data[j].y)*obj->scale.y;
+        (yref - total_E->data[j].y)*obj->scale.y;
     }
     g_lines(points,fpoints,total_E->num_p,0);
 

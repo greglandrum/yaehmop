@@ -137,11 +137,11 @@ void fatal( errorstring )
     fflush(output_file);
   }
 #ifdef USING_THE_MAC
-	bzero(composite_string,255*sizeof(char));
-	strcpy((char *)composite_string,initstring);
-	strcat((char *)composite_string,errorstring);
-	ParamText(CtoPstr(composite_string),NULL,NULL,NULL);
-	Alert(130, NULL);
+        bzero(composite_string,255*sizeof(char));
+        strcpy((char *)composite_string,initstring);
+        strcat((char *)composite_string,errorstring);
+        ParamText(CtoPstr(composite_string),NULL,NULL,NULL);
+        Alert(130, NULL);
 #endif
   exit(-1);
 }
@@ -170,16 +170,16 @@ void error( errorstring )
   if( output_file) fflush(output_file);
 
 #ifdef USING_THE_MAC
-	bzero(composite_string,255*sizeof(char));
-	strcpy((char *)composite_string,initstring);
-	strcat((char *)composite_string,errorstring);
+        bzero(composite_string,255*sizeof(char));
+        strcpy((char *)composite_string,initstring);
+        strcat((char *)composite_string,errorstring);
 
-	ParamText(CtoPstr(composite_string),NULL,NULL,NULL);
-	disposition = Alert(131, NULL);
-	switch(disposition){
-	case 2: fprintf(stderr,"Continuing\n");break;
-	case 1: fprintf(stderr,"Terminated Execution\n");exit(555);
-	}
+        ParamText(CtoPstr(composite_string),NULL,NULL,NULL);
+        disposition = Alert(131, NULL);
+        switch(disposition){
+        case 2: fprintf(stderr,"Continuing\n");break;
+        case 1: fprintf(stderr,"Terminated Execution\n");exit(555);
+        }
 #endif
 
   return;
@@ -307,7 +307,7 @@ void left_just_text_string(char *src, char *dest, int dest_len)
 *
 *****************************************************************************/
 void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
-			 int num_orbs,atom_type *atoms,int num_atoms)
+                         int num_orbs,atom_type *atoms,int num_atoms)
 {
   int i,j,orb_offset;
   atom_type *atom;
@@ -324,9 +324,9 @@ void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
       j=i+1;
       while(orbital_lookup_table[j]<0 && j<num_atoms) j++;
       if(j==num_atoms || orbital_lookup_table[j] > orb_num){
-	orb_offset = orb_num-orbital_lookup_table[i];
-	atom = &(atoms[i]);
-	break;
+        orb_offset = orb_num-orbital_lookup_table[i];
+        atom = &(atoms[i]);
+        break;
       }
     }
   }
@@ -385,35 +385,35 @@ void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
     if( atom->nf ){
       switch(orb_offset){
       case 0:
-	sprintf(name,"% 2s(% 3d) %dz3",atom->symb,atom->which_atom+1,atom->nf);
-	return;
-	break;
+        sprintf(name,"% 2s(% 3d) %dz3",atom->symb,atom->which_atom+1,atom->nf);
+        return;
+        break;
       case 1:
-	sprintf(name,"% 2s(% 3d) %dxz2",atom->symb,atom->which_atom+1,atom->nf);
-	return;
-	break;
+        sprintf(name,"% 2s(% 3d) %dxz2",atom->symb,atom->which_atom+1,atom->nf);
+        return;
+        break;
       case 2:
-	sprintf(name,"% 2s(% 3d) %dyz2",atom->symb,atom->which_atom+1,atom->nf);
-	return;
-	break;
+        sprintf(name,"% 2s(% 3d) %dyz2",atom->symb,atom->which_atom+1,atom->nf);
+        return;
+        break;
       case 3:
-	sprintf(name,"% 2s(% 3d) %dxyz",atom->symb,atom->which_atom+1,atom->nf);
-	return;
-	break;
+        sprintf(name,"% 2s(% 3d) %dxyz",atom->symb,atom->which_atom+1,atom->nf);
+        return;
+        break;
       case 4:
-	sprintf(name,"% 2s(% 3d) %dz(x2-y2)",atom->symb,atom->which_atom+1,atom->nf);
-	return;
-	break;
+        sprintf(name,"% 2s(% 3d) %dz(x2-y2)",atom->symb,atom->which_atom+1,atom->nf);
+        return;
+        break;
       case 5:
-	sprintf(name,"% 2s(% 3d) %dx(x2-3y2)",atom->symb,atom->which_atom+1,atom->nf);
-	return;
-	break;
+        sprintf(name,"% 2s(% 3d) %dx(x2-3y2)",atom->symb,atom->which_atom+1,atom->nf);
+        return;
+        break;
       case 6:
-	sprintf(name,"% 2s(% 3d) %dy(3x2-y2)",atom->symb,atom->which_atom+1,atom->nf);
-	return;
-	break;
+        sprintf(name,"% 2s(% 3d) %dy(3x2-y2)",atom->symb,atom->which_atom+1,atom->nf);
+        return;
+        break;
       default:
-	orb_offset -= 7;
+        orb_offset -= 7;
       }
     }
   }
@@ -468,14 +468,14 @@ void debugmat( mat, num_row, num_col, tol )
 
       for( j=beg_col; j<end_col && j< num_col; j++ ){
 
-	/* begin each column with a header */
-	if( i == -1) fprintf(stdout,"  % -7d",j+1);
-	else{
-	  val = mat[i*num_col+j];
-	  /* check to see if the value is less than the tolerance */
-	  if( fabs(val) <= tol ) val = 0.0;
-	  fprintf(stdout,"  % -6.4g",val);
-	}
+        /* begin each column with a header */
+        if( i == -1) fprintf(stdout,"  % -7d",j+1);
+        else{
+          val = mat[i*num_col+j];
+          /* check to see if the value is less than the tolerance */
+          if( fabs(val) <= tol ) val = 0.0;
+          fprintf(stdout,"  % -6.4g",val);
+        }
       }
       fprintf(stdout,"\n");
     }
@@ -507,7 +507,7 @@ void debugmat( mat, num_row, num_col, tol )
 *
 *****************************************************************************/
 void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
-	      char transpose,int width)
+              char transpose,int width)
 {
   int i,j;
   int beg_col,end_col;
@@ -538,24 +538,24 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
     for(which_part=0;which_part<num_parts;which_part++){
       for( i=-1; i<num_row; i++ ){
 
-	/* start each row with a label */
-	if( i >= 0 ){
-	  fprintf(outfile,"%4d",i+1);
-	}
-	else fprintf(outfile,"    ");
+        /* start each row with a label */
+        if( i >= 0 ){
+          fprintf(outfile,"%4d",i+1);
+        }
+        else fprintf(outfile,"    ");
 
-	for( j=beg_col; j<end_col && j< num_col; j++ ){
+        for( j=beg_col; j<end_col && j< num_col; j++ ){
 
-	  /* begin each column with a header */
-	  if( i == -1) fprintf(outfile,"  % -7d",j+1);
-	  else{
-	    val = mat[i*num_col+j];
-	    /* check to see if the value is less than the tolerance */
-	    if( fabs(val) <= tol ) val = 0.0;
-	    fprintf(outfile,"  % -6.4lf",val);
-	  }
-	}
-	fprintf(outfile,"\n");
+          /* begin each column with a header */
+          if( i == -1) fprintf(outfile,"  % -7d",j+1);
+          else{
+            val = mat[i*num_col+j];
+            /* check to see if the value is less than the tolerance */
+            if( fabs(val) <= tol ) val = 0.0;
+            fprintf(outfile,"  % -6.4lf",val);
+          }
+        }
+        fprintf(outfile,"\n");
       }
 
       beg_col=end_col;
@@ -573,24 +573,24 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
     for(which_part=0;which_part<num_parts;which_part++){
       for( i=-1; i<num_col; i++ ){
 
-	/* start each row with a label */
-	if( i >= 0 ){
-	  fprintf(outfile,"%4d",i+1);
-	}
-	else fprintf(outfile,"    ");
+        /* start each row with a label */
+        if( i >= 0 ){
+          fprintf(outfile,"%4d",i+1);
+        }
+        else fprintf(outfile,"    ");
 
-	for( j=beg_row; j<end_row && j< num_row; j++ ){
+        for( j=beg_row; j<end_row && j< num_row; j++ ){
 
-	  /* begin each column with a header */
-	  if( i == -1) fprintf(outfile,"  % -7d",j+1);
-	  else{
-	    val = mat[j*num_col+i];
-	    /* check to see if the value is less than the tolerance */
-	    if( fabs(val) <= tol ) val = 0.0;
-	    fprintf(outfile,"  % -6.4lf",val);
-	  }
-	}
-	fprintf(outfile,"\n");
+          /* begin each column with a header */
+          if( i == -1) fprintf(outfile,"  % -7d",j+1);
+          else{
+            val = mat[j*num_col+i];
+            /* check to see if the value is less than the tolerance */
+            if( fabs(val) <= tol ) val = 0.0;
+            fprintf(outfile,"  % -6.4lf",val);
+          }
+        }
+        fprintf(outfile,"\n");
       }
 
       beg_row=end_row;
@@ -626,8 +626,8 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
 *
 *****************************************************************************/
 void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
-			atom_type *atoms,int num_atoms, int *orbital_lookup_table,
-			int num_orbs,char transpose,char label_which,int width)
+                        atom_type *atoms,int num_atoms, int *orbital_lookup_table,
+                        int num_orbs,char transpose,char label_which,int width)
 {
   char name_string[80],just_string[80];
   int i,j;
@@ -660,43 +660,43 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
     for(which_part=0;which_part<num_parts;which_part++){
       for( i=-1; i<num_row; i++ ){
 
-	/* start each row with a label */
-	if( i >= 0 ){
-	  if( label_which == LABEL_ROWS || label_which == LABEL_BOTH ){
-	    map_orb_num_to_name(name_string,i,orbital_lookup_table,
-				num_orbs,atoms,num_atoms);
-	    left_just_text_string(name_string,just_string,18);
-	    fprintf(outfile,"%s",just_string);
-	  }else{
-	    fprintf(outfile,"% 18d",i+1);
-	  }
-	}
-	else fprintf(outfile,"               ");
+        /* start each row with a label */
+        if( i >= 0 ){
+          if( label_which == LABEL_ROWS || label_which == LABEL_BOTH ){
+            map_orb_num_to_name(name_string,i,orbital_lookup_table,
+                                num_orbs,atoms,num_atoms);
+            left_just_text_string(name_string,just_string,18);
+            fprintf(outfile,"%s",just_string);
+          }else{
+            fprintf(outfile,"% 18d",i+1);
+          }
+        }
+        else fprintf(outfile,"               ");
 
-	for( j=beg_col; j<end_col && j< num_col; j++ ){
+        for( j=beg_col; j<end_col && j< num_col; j++ ){
 
-	  /* begin each column with a header */
-	  if( i == -1){
-	    if( label_which == LABEL_COLS || label_which == LABEL_BOTH ){
-	      map_orb_num_to_name(name_string,j,orbital_lookup_table,
-				  num_orbs,atoms,num_atoms);
-	      center_text_string(name_string,just_string,18);
-	      fprintf(outfile,"%s",just_string);
-	    }
-	    else{
-	      sprintf(name_string,"%d",j+1);
-	      center_text_string(name_string,just_string,18);
-	      fprintf(outfile,"%s",just_string);
-	    }
-	  }
-	  else{
-	    val = mat[i*num_col+j];
-	    /* check to see if the value is less than the tolerance */
-	    if( fabs(val) <= tol ) val = 0.0;
-	    fprintf(outfile," % -18.4lf",val);
-	  }
-	}
-	fprintf(outfile,"\n");
+          /* begin each column with a header */
+          if( i == -1){
+            if( label_which == LABEL_COLS || label_which == LABEL_BOTH ){
+              map_orb_num_to_name(name_string,j,orbital_lookup_table,
+                                  num_orbs,atoms,num_atoms);
+              center_text_string(name_string,just_string,18);
+              fprintf(outfile,"%s",just_string);
+            }
+            else{
+              sprintf(name_string,"%d",j+1);
+              center_text_string(name_string,just_string,18);
+              fprintf(outfile,"%s",just_string);
+            }
+          }
+          else{
+            val = mat[i*num_col+j];
+            /* check to see if the value is less than the tolerance */
+            if( fabs(val) <= tol ) val = 0.0;
+            fprintf(outfile," % -18.4lf",val);
+          }
+        }
+        fprintf(outfile,"\n");
       }
 
       beg_col=end_col;
@@ -714,42 +714,42 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
     for(which_part=0;which_part<num_parts;which_part++){
       for( i=-1; i<num_col; i++ ){
 
-	/* start each row with a label */
+        /* start each row with a label */
 
-	if( i >= 0 ){
-	  if( label_which == LABEL_COLS || label_which == LABEL_BOTH ){
-	    map_orb_num_to_name(name_string,i,orbital_lookup_table,
-				num_orbs,atoms,num_atoms);
-	    left_just_text_string(name_string,just_string,18);
-	    fprintf(outfile,"%s",just_string);
-	  }else{
-	    fprintf(outfile,"% 18d",i+1);
-	  }
-	}
-	else fprintf(outfile,"               ");
+        if( i >= 0 ){
+          if( label_which == LABEL_COLS || label_which == LABEL_BOTH ){
+            map_orb_num_to_name(name_string,i,orbital_lookup_table,
+                                num_orbs,atoms,num_atoms);
+            left_just_text_string(name_string,just_string,18);
+            fprintf(outfile,"%s",just_string);
+          }else{
+            fprintf(outfile,"% 18d",i+1);
+          }
+        }
+        else fprintf(outfile,"               ");
 
-	for( j=beg_row; j<end_row && j< num_row; j++ ){
+        for( j=beg_row; j<end_row && j< num_row; j++ ){
 
-	  /* begin each column with a header */
-	  if( i == -1){
-	    if( label_which == LABEL_ROWS || label_which == LABEL_BOTH ){
-	      map_orb_num_to_name(name_string,j,orbital_lookup_table,
-				  num_orbs,atoms,num_atoms);
-	      center_text_string(name_string,just_string,18);
-	      fprintf(outfile,"%s",just_string);
-	    }else{
-	      sprintf(name_string,"%d",j+1);
-	      center_text_string(name_string,just_string,18);
-	      fprintf(outfile,"%s",just_string);
-	    }
-	  }else{
-	    val = mat[j*num_col+i];
-	    /* check to see if the value is less than the tolerance */
-	    if( fabs(val) <= tol ) val = 0.0;
-	    fprintf(outfile," % -18.4lf",val);
-	  }
-	}
-	fprintf(outfile,"\n");
+          /* begin each column with a header */
+          if( i == -1){
+            if( label_which == LABEL_ROWS || label_which == LABEL_BOTH ){
+              map_orb_num_to_name(name_string,j,orbital_lookup_table,
+                                  num_orbs,atoms,num_atoms);
+              center_text_string(name_string,just_string,18);
+              fprintf(outfile,"%s",just_string);
+            }else{
+              sprintf(name_string,"%d",j+1);
+              center_text_string(name_string,just_string,18);
+              fprintf(outfile,"%s",just_string);
+            }
+          }else{
+            val = mat[j*num_col+i];
+            /* check to see if the value is less than the tolerance */
+            if( fabs(val) <= tol ) val = 0.0;
+            fprintf(outfile," % -18.4lf",val);
+          }
+        }
+        fprintf(outfile,"\n");
       }
 
       beg_row=end_row;
@@ -788,7 +788,7 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
 *
 *****************************************************************************/
 void print_sym_mat( real *mat, int num_row, int num_col, FILE *outfile, char *legend,
-		   char *titles,int width)
+                   char *titles,int width)
 {
   int i,j;
   int beg_col,end_col;
@@ -824,39 +824,39 @@ void print_sym_mat( real *mat, int num_row, int num_col, FILE *outfile, char *le
 
       /* start each row with a label */
       if( i >= beg_col ){
-	if( titles ){
-	  if( i<9 ){
-	    fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*i]),i+1);
-	  } else if(i<99){
-	    fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*i]),i+1);
-	  } else {
-	    fprintf(outfile,"% 4s(% 4d) ",&(titles[4*i]),i+1);
-	  }
-	}
-	else fprintf(outfile,"  % -7d",i+1);
+        if( titles ){
+          if( i<9 ){
+            fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*i]),i+1);
+          } else if(i<99){
+            fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*i]),i+1);
+          } else {
+            fprintf(outfile,"% 4s(% 4d) ",&(titles[4*i]),i+1);
+          }
+        }
+        else fprintf(outfile,"  % -7d",i+1);
       }
       else fprintf(outfile,"            ");
 
       /* begin each column with a header */
       if( i == beg_col-1){
-	for(j=beg_col; j<end_col; j++ ){
-	  if( titles ){
-	    if( j<9 ){
-	      fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
-	    } else if(j<99){
-	      fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
-	    } else {
-	      fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
-	    }
-	  }
-	  else fprintf(outfile,"  % -7d",j+1);
-	}
+        for(j=beg_col; j<end_col; j++ ){
+          if( titles ){
+            if( j<9 ){
+              fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
+            } else if(j<99){
+              fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
+            } else {
+              fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
+            }
+          }
+          else fprintf(outfile,"  % -7d",j+1);
+        }
       }
       else{
-	/* go ahead and print out the values for this row */
-	for( j=beg_col; j<end_col && j<=i; j++ ){
-	  fprintf(outfile,"  % -10.4f",mat[i*(i+1)/2 +j]);
-	}
+        /* go ahead and print out the values for this row */
+        for( j=beg_col; j<end_col && j<=i; j++ ){
+          fprintf(outfile,"  % -10.4f",mat[i*(i+1)/2 +j]);
+        }
       }
       fprintf(outfile,"\n");
     }
@@ -907,7 +907,7 @@ int skipcomments(FILE *file,char *string,char toggle)
   i = 0;
   while(string[i] == ' ') i++;
   while( string[i] == '\n' || string[i] == ';'
-	&& string[i] != 0 ){
+        && string[i] != 0 ){
     string[0] = 0;
     fgets(string,MAX_STR_LEN,file);
     i = 0;
@@ -976,12 +976,12 @@ void find_atoms_orbs(num_orbs,num_atoms,atom,orbital_lookup_table,begin,end)
     done = 0;
     while(next_real_atom < num_atoms && !done ){
       if( orbital_lookup_table[next_real_atom] >= 0 ){
-	/* this is the real atom, set end and finish */
-	*end = orbital_lookup_table[next_real_atom];
-	done = 1;
+        /* this is the real atom, set end and finish */
+        *end = orbital_lookup_table[next_real_atom];
+        done = 1;
       }else{
-	/* it's a dummy atom, increment and try the next */
-	next_real_atom++;
+        /* it's a dummy atom, increment and try the next */
+        next_real_atom++;
       }
     }
     /*******
@@ -1037,10 +1037,10 @@ int overlap_tab_from_vect(vect,cell)
     else{
       /* case 2 */
       if( M < 0 && L != 0 ){
-	val = (x + L) * y + ABS(M) + x;
+        val = (x + L) * y + ABS(M) + x;
       }
       else{
-	val = (x - L) * y + ABS(M) + x;
+        val = (x - L) * y + ABS(M) + x;
       }
     }
   }
@@ -1048,13 +1048,13 @@ int overlap_tab_from_vect(vect,cell)
     /* case 3 */
     if( N > 0 ){
       val = (y * (2*x + 1) + x + 1) +
-	(abs(N) - 1)*(2*y + 1)*(2*x + 1) +
-	  (x - L)*(2*y + 1) + (y - M);
+        (abs(N) - 1)*(2*y + 1)*(2*x + 1) +
+          (x - L)*(2*y + 1) + (y - M);
     }
     if( N < 0 ){
       val = (y * (2*x + 1) + x + 1) +
-	(abs(N) - 1)*(2*y + 1)*(2*x + 1) +
-	  (x + L)*(2*y + 1) + (y + M);
+        (abs(N) - 1)*(2*y + 1)*(2*x + 1) +
+          (x + L)*(2*y + 1) + (y + M);
     }
   }
   return(val);
@@ -1102,7 +1102,7 @@ void check_for_errors(cell,details,num_orbs)
   if( cell->num_electrons == 0.0 && !details->just_geom ){
     if( details->avg_props || details->Execution_Mode == MOLECULAR ){
        if( cell->num_electrons == 0.0 && details->avg_props ){
-	 fatal("You forgot to specify the number of electrons.");
+         fatal("You forgot to specify the number of electrons.");
        }
      }
   }
@@ -1130,22 +1130,22 @@ void check_for_errors(cell,details,num_orbs)
     switch(details->proj_DOS[i].type){
     case P_DOS_ORB:
       for(j=0;j<details->proj_DOS[i].num_contributions; j++){
-	if( details->proj_DOS[i].contributions[j] > num_orbs)
-	  fatal("Orbital projected DOS specified which is larger than num_orbs.");
+        if( details->proj_DOS[i].contributions[j] > num_orbs)
+          fatal("Orbital projected DOS specified which is larger than num_orbs.");
       }
       break;
     case P_DOS_ATOM:
       for(j=0;j<details->proj_DOS[i].num_contributions; j++){
-	if( details->proj_DOS[i].contributions[j] > cell->num_atoms)
-	  fatal("Atom projected DOS specified which is larger than num_atoms.");
+        if( details->proj_DOS[i].contributions[j] > cell->num_atoms)
+          fatal("Atom projected DOS specified which is larger than num_atoms.");
       }
       break;
     case P_DOS_FMO:
       if( !details->num_FMO_frags )
-	fatal("FMO projected DOS specified without an FMO specification.");
+        fatal("FMO projected DOS specified without an FMO specification.");
       for(j=0;j<details->proj_DOS[i].num_contributions; j++){
-	if( details->proj_DOS[i].contributions[j] > num_orbs)
-	  fatal("FMO projected DOS specified which is larger than num_orbs.");
+        if( details->proj_DOS[i].contributions[j] > num_orbs)
+          fatal("FMO projected DOS specified which is larger than num_orbs.");
       }
       break;
     }
@@ -1157,22 +1157,22 @@ void check_for_errors(cell,details,num_orbs)
     while(COOP_ptr2){
       switch(COOP_ptr2->type){
       case P_DOS_ORB:
-	if( COOP_ptr2->contrib1 > num_orbs ||
-	    COOP_ptr2->contrib2 > num_orbs )
-	  fatal("Orbital COOP contribution larger than num_orbs.");
-	break;
+        if( COOP_ptr2->contrib1 > num_orbs ||
+            COOP_ptr2->contrib2 > num_orbs )
+          fatal("Orbital COOP contribution larger than num_orbs.");
+        break;
       case P_DOS_ATOM:
-	if( COOP_ptr2->contrib1 > cell->num_atoms ||
-	    COOP_ptr2->contrib2 > cell->num_atoms )
-	  fatal("Atom COOP contribution larger than num_atoms.");
-	break;
+        if( COOP_ptr2->contrib1 > cell->num_atoms ||
+            COOP_ptr2->contrib2 > cell->num_atoms )
+          fatal("Atom COOP contribution larger than num_atoms.");
+        break;
       case P_DOS_FMO:
-	if( !details->num_FMO_frags )
-	  fatal("FMO COOP specified without an FMO specification.");
-	if( COOP_ptr2->contrib1 > num_orbs ||
-	    COOP_ptr2->contrib2 > num_orbs )
-	  fatal("FMO COOP contribution larger than num_orbs.");
-	break;
+        if( !details->num_FMO_frags )
+          fatal("FMO COOP specified without an FMO specification.");
+        if( COOP_ptr2->contrib1 > num_orbs ||
+            COOP_ptr2->contrib2 > num_orbs )
+          fatal("FMO COOP contribution larger than num_orbs.");
+        break;
       }
       COOP_ptr2 = COOP_ptr2->next_to_avg;
     }
@@ -1305,7 +1305,7 @@ void build_orbital_lookup_table(cell,num_orbs,orbital_lookup_table)
 *
 *****************************************************************************/
 void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
-	       num_atoms,orbital_lookup_table)
+               num_atoms,orbital_lookup_table)
   detail_type *details;
   int num_orbs;
   eigenset_type eigenset;
@@ -1345,13 +1345,13 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
     fprintf(MO_file,"#begin_parms\n");
     for(i=0;i<num_unique_atoms;i++){
       fprintf(MO_file,"%s %d %lf %lf %d %lf %lf %d %lf %lf %lf %lf %lf %d %lf %lf %lf %lf %lf\n",
-	      unique_atoms[i].symb,
-	      unique_atoms[i].ns,unique_atoms[i].exp_s,unique_atoms[i].coul_s,
-	      unique_atoms[i].np,unique_atoms[i].exp_p,unique_atoms[i].coul_p,
-	      unique_atoms[i].nd,unique_atoms[i].exp_d,unique_atoms[i].coul_d,
-	      unique_atoms[i].coeff_d1,unique_atoms[i].exp_d2,unique_atoms[i].coeff_d2,
-	      unique_atoms[i].nf,unique_atoms[i].exp_f,unique_atoms[i].coul_f,
-	      unique_atoms[i].coeff_f1,unique_atoms[i].exp_f2,unique_atoms[i].coeff_f2);
+              unique_atoms[i].symb,
+              unique_atoms[i].ns,unique_atoms[i].exp_s,unique_atoms[i].coul_s,
+              unique_atoms[i].np,unique_atoms[i].exp_p,unique_atoms[i].coul_p,
+              unique_atoms[i].nd,unique_atoms[i].exp_d,unique_atoms[i].coul_d,
+              unique_atoms[i].coeff_d1,unique_atoms[i].exp_d2,unique_atoms[i].coeff_d2,
+              unique_atoms[i].nf,unique_atoms[i].exp_f,unique_atoms[i].coul_f,
+              unique_atoms[i].coeff_f1,unique_atoms[i].exp_f2,unique_atoms[i].coeff_f2);
     }
     fprintf(MO_file,"#end_parms\n");
 
@@ -1367,22 +1367,22 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
 
     if( details->Execution_Mode != MOLECULAR ){
       fprintf(MO_file,"#Num_MOs %d\n",
-	      num_walsh_steps*details->num_MOs_to_print*details->num_KPOINTS);
+              num_walsh_steps*details->num_MOs_to_print*details->num_KPOINTS);
       for(i=0;i<num_walsh_steps;i++){
-	for(j=0;j<details->num_KPOINTS;j++){
-	  for(k=0;k<details->num_MOs_to_print;k++){
-	    fprintf(MO_file,"%d %lf %lf %lf %d\n",details->MOs_to_print[k]+1,
-		    details->K_POINTS[j].loc.x,details->K_POINTS[j].loc.y,
-		    details->K_POINTS[j].loc.z,i+1);
-	  }
-	}
+        for(j=0;j<details->num_KPOINTS;j++){
+          for(k=0;k<details->num_MOs_to_print;k++){
+            fprintf(MO_file,"%d %lf %lf %lf %d\n",details->MOs_to_print[k]+1,
+                    details->K_POINTS[j].loc.x,details->K_POINTS[j].loc.y,
+                    details->K_POINTS[j].loc.z,i+1);
+          }
+        }
       }
     } else{
       fprintf(MO_file,"#Num_MOs %d\n",details->num_MOs_to_print*num_walsh_steps);
       for(i=0;i<num_walsh_steps;i++){
-	for(j=0;j<details->num_MOs_to_print;j++){
-	  fprintf(MO_file,"%d 0 0 0 %d\n",details->MOs_to_print[j]+1,i+1);
-	}
+        for(j=0;j<details->num_MOs_to_print;j++){
+          fprintf(MO_file,"%d 0 0 0 %d\n",details->MOs_to_print[j]+1,i+1);
+        }
       }
     }
 
@@ -1398,30 +1398,30 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
       symm_op = sym_ops_present;
       ops_passed = 0;
       while(symm_op){
-	if(symm_op->type == Mirror ){
-	  if( symm_op->axis.x == 1.0 ) x_mirror_present = ops_passed;
-	  else if (symm_op->axis.y == 1.0 ) y_mirror_present = ops_passed;
-	  else if (symm_op->axis.z == 1.0 ) z_mirror_present = ops_passed;
-	}
-	symm_op = symm_op->next;
-	ops_passed++;
+        if(symm_op->type == Mirror ){
+          if( symm_op->axis.x == 1.0 ) x_mirror_present = ops_passed;
+          else if (symm_op->axis.y == 1.0 ) y_mirror_present = ops_passed;
+          else if (symm_op->axis.z == 1.0 ) z_mirror_present = ops_passed;
+        }
+        symm_op = symm_op->next;
+        ops_passed++;
       }
     }
   }
 
 
 /* round a to nearest int */
-#define ROUND(a)	(int)floor((a)+0.5)
+#define ROUND(a)        (int)floor((a)+0.5)
 
   /* okay... we're set, write the MO's that we need to */
   for(i=0;i<details->num_MOs_to_print;i++){
     fprintf(MO_file,"#begin_mo");
     if( x_mirror_present > -1 ){
       this_character = details->characters[x_mirror_present*num_orbs+
-					  details->MOs_to_print[i]];
+                                          details->MOs_to_print[i]];
 
       if( fabs(1-fabs(this_character)) > 0.001 ){
-	this_character = 0;
+        this_character = 0;
       }
     } else{
       this_character = 0;
@@ -1429,9 +1429,9 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
     fprintf(MO_file," %d",ROUND(this_character));
     if( y_mirror_present > -1 ){
       this_character = details->characters[y_mirror_present*num_orbs+
-					  details->MOs_to_print[i]];
+                                          details->MOs_to_print[i]];
       if( fabs(1-fabs(this_character)) > 0.001 ){
-	this_character = 0;
+        this_character = 0;
       }
     } else{
       this_character = 0;
@@ -1439,9 +1439,9 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
     fprintf(MO_file," %d",ROUND(this_character));
     if( z_mirror_present > -1 ){
       this_character = details->characters[z_mirror_present*num_orbs+
-					  details->MOs_to_print[i]];
+                                          details->MOs_to_print[i]];
       if( fabs(1-fabs(this_character)) > 0.001 ){
-	this_character = 0;
+        this_character = 0;
       }
     } else{
       this_character = 0;
@@ -1450,16 +1450,16 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
 
     for( curr_atom=0; curr_atom<num_atoms; curr_atom++ ){
       find_atoms_orbs(num_orbs,num_atoms,curr_atom,orbital_lookup_table,
-		      &(begin_atom),&(end_atom));
+                      &(begin_atom),&(end_atom));
       if( begin_atom >= 0 ){
-	fprintf(MO_file,"; %d\n",curr_atom+1);
-	for(j=begin_atom; j<end_atom; j++){
-	  fprintf(MO_file,"%6.4lf",EIGENVECT_R(eigenset,details->MOs_to_print[i],j));
-	  if( details->Execution_Mode != MOLECULAR ){
-	    fprintf(MO_file," %6.4lf",EIGENVECT_I(eigenset,details->MOs_to_print[i],j));
-	  }
-	  fprintf(MO_file,"\n");
-	}
+        fprintf(MO_file,"; %d\n",curr_atom+1);
+        for(j=begin_atom; j<end_atom; j++){
+          fprintf(MO_file,"%6.4lf",EIGENVECT_R(eigenset,details->MOs_to_print[i],j));
+          if( details->Execution_Mode != MOLECULAR ){
+            fprintf(MO_file," %6.4lf",EIGENVECT_I(eigenset,details->MOs_to_print[i],j));
+          }
+          fprintf(MO_file,"\n");
+        }
       }
     }
     fprintf(MO_file,"#end_mo\n");
@@ -1546,7 +1546,7 @@ void parse_integer_string(string,values,num_values)
       sscanf(num_string,"%d%c%d",&num1,&foo_char,&num2);
       /* deal with negative numbers */
       if(num1<0){
-	num2 = num1;
+        num2 = num1;
       }
     }else{
       sscanf(num_string,"%d",&num1);
@@ -1556,9 +1556,9 @@ void parse_integer_string(string,values,num_values)
       (*values)[*num_values] = i;
       (*num_values)++;
       if(*num_values == max_values){
-	max_values += 10;
-	*values = (int *)my_realloc(*values,max_values*sizeof(int));
-	if( !(*values )) fatal("Can't reallocate values in parse_integer_string");
+        max_values += 10;
+        *values = (int *)my_realloc(*values,max_values*sizeof(int));
+        if( !(*values )) fatal("Can't reallocate values in parse_integer_string");
       }
     }
     safe_strcpy(num_string,strtok(0,",\n"));
@@ -1634,9 +1634,9 @@ void dump_sparse_mat(file,mat,num_orbs,cut_off)
     itab = i * num_orbs;
     for( j=i+1;j<num_orbs;j++){
       if( fabs(mat[itab+j]) > cut_off || fabs(mat[j*num_orbs+i]) > cut_off ){
-	num_non_zero+=2;
-	nonzero_elements_per_row[i]++;
-	nonzero_elements_per_row[j]++;
+        num_non_zero+=2;
+        nonzero_elements_per_row[i]++;
+        nonzero_elements_per_row[j]++;
       }
     }
     if( fabs(mat[itab+i]) > cut_off ){
@@ -1645,7 +1645,7 @@ void dump_sparse_mat(file,mat,num_orbs,cut_off)
     }
   }
   fprintf(stderr,"%d of %d hermetian matrix elements were found to be nonzero\n",
-	  num_non_zero,num_orbs*num_orbs);
+          num_non_zero,num_orbs*num_orbs);
 
   fprintf(file,"%d\n",num_orbs);
   fprintf(file,"%d\n",num_non_zero);
@@ -1661,23 +1661,23 @@ void dump_sparse_mat(file,mat,num_orbs,cut_off)
     for(j=0;j<num_orbs;j++){
       jtab = j*num_orbs;
       if( fabs(mat[itab+j]) > cut_off || fabs(mat[jtab+i]) > cut_off){
-	if( j>i ){
-	  fprintf(file,"%lf %lf\n",mat[itab+j],mat[jtab+i]);
+        if( j>i ){
+          fprintf(file,"%lf %lf\n",mat[itab+j],mat[jtab+i]);
 
-	} else{
-	  if( j != i ){
-	    fprintf(file,"%lf %lf\n",mat[jtab+i],mat[itab+j]);
-	  } else{
-	    fprintf(file,"%lf 0.0\n",mat[jtab+i]);
-	  }
-	}
-	position_in_row[num_written++] = j;
+        } else{
+          if( j != i ){
+            fprintf(file,"%lf %lf\n",mat[jtab+i],mat[itab+j]);
+          } else{
+            fprintf(file,"%lf 0.0\n",mat[jtab+i]);
+          }
+        }
+        position_in_row[num_written++] = j;
       }
     }
   }
   if( num_written != num_non_zero ){
     fprintf(stderr,"num_written (%d) doesn't match num_non_zero (%d)\n",
-	    num_written,num_non_zero);
+            num_written,num_non_zero);
   }
 
   /* now write out the positions of the nonzero elements */

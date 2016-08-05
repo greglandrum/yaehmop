@@ -95,7 +95,7 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
   cos_gamma = cos(cell->xtal_defn.angles[2]*PI/180.0);
   sin_gamma = sin(cell->xtal_defn.angles[2]*PI/180.0);
   weird_term = sqrt(1-cos_alpha*cos_alpha-cos_beta*cos_beta-
-		    cos_gamma*cos_gamma + 2.0*cos_alpha*cos_beta*cos_gamma);
+                    cos_gamma*cos_gamma + 2.0*cos_alpha*cos_beta*cos_gamma);
   cell_volume = weird_term*cell->xtal_defn.axis_lengths[0]*
     cell->xtal_defn.axis_lengths[1]*cell->xtal_defn.axis_lengths[2];
 
@@ -131,8 +131,8 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
     fprintf(output_file,"# Positions of atoms from crystal coordinates\n");
     for(i=0;i<cell->num_raw_atoms;i++){
       fprintf(output_file,"% 4d % 4s % 8.4lf % 8.4lf % 8.4lf\n",
-	      i+1,cell->atoms[i].symb,cell->atoms[i].loc.x,
-	      cell->atoms[i].loc.y,cell->atoms[i].loc.z);
+              i+1,cell->atoms[i].symb,cell->atoms[i].loc.x,
+              cell->atoms[i].loc.y,cell->atoms[i].loc.z);
     }
   }
 }

@@ -193,11 +193,11 @@ void show_coord_env(int num_selected,object_type *obj)
       loc2 = &atoms[i].loc;
       curr_dist = V3DistanceBetween2Points(loc1,loc2);
       if( curr_dist > target_dist ){
-	atoms[i].exclude = 1;
+        atoms[i].exclude = 1;
       } else{
-	atom_dists[num_found].num = i;
-	atom_dists[num_found].dist = curr_dist;
-	num_found++;
+        atom_dists[num_found].num = i;
+        atom_dists[num_found].dist = curr_dist;
+        num_found++;
       }
     }
   }
@@ -205,11 +205,11 @@ void show_coord_env(int num_selected,object_type *obj)
   qsort((void *)atom_dists,num_found,sizeof(atom_dist_type),comp_atom_dists);
 
   printf("Atoms within %6.4f Angstroms of: %s(%d)\n",target_dist,
-	atoms[active_atom].type,atoms[active_atom].num);
+        atoms[active_atom].type,atoms[active_atom].num);
 
   for(i=0;i<num_found;i++){
     printf("\t%s(%d): %6.4f\n",atoms[atom_dists[i].num].type,
-	   atoms[atom_dists[i].num].num, atom_dists[i].dist);
+           atoms[atom_dists[i].num].num, atom_dists[i].dist);
   }
 }
 
@@ -266,14 +266,14 @@ void add_bonds(molec_type *molec,char *type1,char *type2,float target){
   for(i=0;i<molec->num_atoms;i++){
     for(j=0;j<molec->num_atoms;j++){
       if( j != i ){
-	if(!strcmp(molec->atoms[i].type,type1) &&
-	   !strcmp(molec->atoms[j].type,type2)){
-	  length = V3DistanceBetween2Points(&molec->atoms[i].loc,
-					    &molec->atoms[j].loc);
-	  if(fabs(length-target)<0.0001){
-	    add_a_bond(molec,i,j,length);
-	  }
-	}
+        if(!strcmp(molec->atoms[i].type,type1) &&
+           !strcmp(molec->atoms[j].type,type2)){
+          length = V3DistanceBetween2Points(&molec->atoms[i].loc,
+                                            &molec->atoms[j].loc);
+          if(fabs(length-target)<0.0001){
+            add_a_bond(molec,i,j,length);
+          }
+        }
       }
     }
   }
@@ -342,7 +342,7 @@ void adjust_color(int num_selected,object_type *obj,int shade_or_color)
     FATAL_BUG("Can't find the selected atom!");
 
   printf("Altering atom: %s(%d)\n",selected_atom->type,
-	 selected_atom->num);
+         selected_atom->num);
   changed = 0;
 
   switch(shade_or_color){
@@ -356,11 +356,11 @@ void adjust_color(int num_selected,object_type *obj,int shade_or_color)
   case ATOM_COLOR_FILL:
     for(i=0;i<3;i++) oldcolor[i] = selected_atom->atom_color[i];
     sprintf(instring,"%3.3lf %3.3lf %3.3lf",oldcolor[0],oldcolor[1],
-	    oldcolor[2]);
+            oldcolor[2]);
     stringarr[0] = instring;
     readstringparm("atom color (RGB triplet)",stringarr);
     sscanf(instring,"%lf %lf %lf",&selected_atom->atom_color[0],
-	   &selected_atom->atom_color[1],&selected_atom->atom_color[2]);
+           &selected_atom->atom_color[1],&selected_atom->atom_color[2]);
     if( selected_atom->atom_color[0] < 0 ) selected_atom->atom_color[0] = 0;
     if( selected_atom->atom_color[0] > 1 ) selected_atom->atom_color[0] = 1;
     if( selected_atom->atom_color[1] < 0 ) selected_atom->atom_color[1] = 0;
@@ -387,24 +387,24 @@ void adjust_color(int num_selected,object_type *obj,int shade_or_color)
     readcharparm("propagate change to all similar atoms?",instring);
     if(instring[0] == 'Y' || instring[0] == 'y' ){
       for(i=0;i<molec->num_atoms*molec->num_frames;i++){
-	if(&molec->atoms[i] != selected_atom &&
-	   !strcmp(molec->atoms[i].type,selected_atom->type)){
-	  molec->atoms[i].custom = 1;
-	  molec->atoms[i].outlines_on = selected_atom->outlines_on;
-	  molec->atoms[i].shading_on =  selected_atom->shading_on;
-	  molec->atoms[i].crosses_on =  selected_atom->crosses_on;
+        if(&molec->atoms[i] != selected_atom &&
+           !strcmp(molec->atoms[i].type,selected_atom->type)){
+          molec->atoms[i].custom = 1;
+          molec->atoms[i].outlines_on = selected_atom->outlines_on;
+          molec->atoms[i].shading_on =  selected_atom->shading_on;
+          molec->atoms[i].crosses_on =  selected_atom->crosses_on;
 
-	  switch(shade_or_color){
-	  case ATOM_SHADE_FILL:
-	    molec->atoms[i].atom_shade = selected_atom->atom_shade;
-	    break;
-	  case ATOM_COLOR_FILL:
-	    for(j=0;j<3;j++)
-	      molec->atoms[i].atom_color[j] =
-		selected_atom->atom_color[j];
-	    break;
-	  }
-	}
+          switch(shade_or_color){
+          case ATOM_SHADE_FILL:
+            molec->atoms[i].atom_shade = selected_atom->atom_shade;
+            break;
+          case ATOM_COLOR_FILL:
+            for(j=0;j<3;j++)
+              molec->atoms[i].atom_color[j] =
+                selected_atom->atom_color[j];
+            break;
+          }
+        }
       }
     }
   } else{
@@ -484,7 +484,7 @@ void adjust_style(int num_selected,object_type *obj)
 
   case 1:
     printf("Altering atom: %s(%d)\n",selected_atoms[0]->type,
-	   selected_atoms[0]->num);
+           selected_atoms[0]->num);
     changed = 0;
     if(!selected_atoms[0]->custom){
       selected_atoms[0]->outlines_on = molec->outlines_on;
@@ -526,22 +526,22 @@ void adjust_style(int num_selected,object_type *obj)
       strcpy(instring,"no");
       readcharparm("propagate change to all similar atoms?",instring);
       if(instring[0] == 'Y' || instring[0] == 'y' ){
-	for(i=0;i<molec->num_atoms*molec->num_frames;i++){
-	  if(&molec->atoms[i] != selected_atoms[0] &&
-	     !strcmp(molec->atoms[i].type,selected_atoms[0]->type)){
-	    molec->atoms[i].custom = 1;
-	    molec->atoms[i].outlines_on =
-	      selected_atoms[0]->outlines_on;
-	    molec->atoms[i].shading_on =
-	      selected_atoms[0]->shading_on;
-	    molec->atoms[i].crosses_on =
-	      selected_atoms[0]->crosses_on;
-	    molec->atoms[i].rad =
-	      selected_atoms[0]->rad;
-	    molec->atoms[i].color =
-	      selected_atoms[0]->color;
-	  }
-	}
+        for(i=0;i<molec->num_atoms*molec->num_frames;i++){
+          if(&molec->atoms[i] != selected_atoms[0] &&
+             !strcmp(molec->atoms[i].type,selected_atoms[0]->type)){
+            molec->atoms[i].custom = 1;
+            molec->atoms[i].outlines_on =
+              selected_atoms[0]->outlines_on;
+            molec->atoms[i].shading_on =
+              selected_atoms[0]->shading_on;
+            molec->atoms[i].crosses_on =
+              selected_atoms[0]->crosses_on;
+            molec->atoms[i].rad =
+              selected_atoms[0]->rad;
+            molec->atoms[i].color =
+              selected_atoms[0]->color;
+          }
+        }
       }
     } else{
       printf("Okay, you didn't change anything...\n");
@@ -551,78 +551,78 @@ void adjust_style(int num_selected,object_type *obj)
   case 2:
     /* here we have to check to see if the line already exists */
     the_line = find_the_line(selected_atoms[0]->num,
-			     selected_atoms[1]->num,
-			     molec);
+                             selected_atoms[1]->num,
+                             molec);
     if(!the_line){
       length = V3DistanceBetween2Points(&selected_atoms[0]->loc,
-					&selected_atoms[1]->loc);
+                                        &selected_atoms[1]->loc);
       printf("There is no bond between: %s(%d) and %s(%d) (%f A long)\n",
-	     selected_atoms[0]->type,selected_atoms[0]->num,
-	     selected_atoms[1]->type,selected_atoms[1]->num,
-	     length);
+             selected_atoms[0]->type,selected_atoms[0]->num,
+             selected_atoms[1]->type,selected_atoms[1]->num,
+             length);
       printf("Should I add one?\n");
       strcpy(instring,"no");
       readcharparm("add the bond?",instring);
       if(instring[0] == 'Y' || instring[0] == 'y'){
-	strcpy(instring,"no");
-	readcharparm("add all similar bonds?",instring);
-	if(instring[0] == 'Y' || instring[0] == 'y' ){
-	  add_similar = 1;
-	} else{
-	  add_similar = 0;
-	}
-	num_lines = molec->num_lines[molec->current_frame%molec->num_frames];
-	if( add_similar ){
-	  add_bonds(molec,selected_atoms[0]->type,selected_atoms[1]->type,
-		    length);
-	  the_line = find_the_line(selected_atoms[0]->num,selected_atoms[1]->num,
-				   molec);
-	}else{
-	  add_a_bond(molec,selected_atoms[0]->num,selected_atoms[1]->num,
-		     length);
-	  the_line = find_the_line(selected_atoms[0]->num,selected_atoms[1]->num,
-				   molec);
-	}
+        strcpy(instring,"no");
+        readcharparm("add all similar bonds?",instring);
+        if(instring[0] == 'Y' || instring[0] == 'y' ){
+          add_similar = 1;
+        } else{
+          add_similar = 0;
+        }
+        num_lines = molec->num_lines[molec->current_frame%molec->num_frames];
+        if( add_similar ){
+          add_bonds(molec,selected_atoms[0]->type,selected_atoms[1]->type,
+                    length);
+          the_line = find_the_line(selected_atoms[0]->num,selected_atoms[1]->num,
+                                   molec);
+        }else{
+          add_a_bond(molec,selected_atoms[0]->num,selected_atoms[1]->num,
+                     length);
+          the_line = find_the_line(selected_atoms[0]->num,selected_atoms[1]->num,
+                                   molec);
+        }
 
       }
     }
 
     if( the_line ){
       printf("Altering the bond between: %s(%d) and %s(%d) (%f A long)\n",
-	     selected_atoms[0]->type,selected_atoms[0]->num,
-	     selected_atoms[1]->type,selected_atoms[1]->num,
-	     the_line->length);
+             selected_atoms[0]->type,selected_atoms[0]->num,
+             selected_atoms[1]->type,selected_atoms[1]->num,
+             the_line->length);
       changed = 0;
       if(!the_line->custom){
-	the_line->tube = molec->tubes_on;
-	the_line->breaking = molec->breaking_lines;
-	the_line->drawn = 1;
-	the_line->thickness = molec->line_width;
+        the_line->tube = molec->tubes_on;
+        the_line->breaking = molec->breaking_lines;
+        the_line->drawn = 1;
+        the_line->thickness = molec->line_width;
       }
 
       newint = the_line->drawn;
       readintparm("show bond",&newint);
       if(newint!=the_line->drawn){
-	changed=1;
-	the_line->drawn = (char)newint;
+        changed=1;
+        the_line->drawn = (char)newint;
       }
       newint = the_line->tube;
       readintparm("tube bond",&newint);
       if(newint!=the_line->tube){
-	changed=1;
-	the_line->tube = (char)newint;
+        changed=1;
+        the_line->tube = (char)newint;
       }
       newint = the_line->breaking;
       readintparm("breaking line",&newint);
       if(newint!=the_line->breaking){
-	changed=1;
-	the_line->breaking = (char)newint;
+        changed=1;
+        the_line->breaking = (char)newint;
       }
       newint = the_line->dashed;
       readintparm("dashed line",&newint);
       if(newint!=the_line->dashed){
-	changed=1;
-	the_line->dashed = (char)newint;
+        changed=1;
+        the_line->dashed = (char)newint;
       }
 
 #ifdef INCLUDE_BOND_VALENCE
@@ -630,19 +630,19 @@ void adjust_style(int num_selected,object_type *obj)
 #else  /* } */
       if( the_line->dashed ){
 #endif
-	newint = the_line->type;
-	readintparm("line style",&newint);
-	if(newint!=the_line->type){
-	  changed=1;
-	  the_line->type = newint;
-	}
+        newint = the_line->type;
+        readintparm("line style",&newint);
+        if(newint!=the_line->type){
+          changed=1;
+          the_line->type = newint;
+        }
       }
 
       newint = the_line->thickness;
       readintparm("line width",&newint);
       if(newint!=the_line->thickness){
-	changed=1;
-	the_line->thickness = newint;
+        changed=1;
+        the_line->thickness = newint;
       }
 
     } else{
@@ -655,33 +655,33 @@ void adjust_style(int num_selected,object_type *obj)
       strcpy(instring,"no");
       readcharparm("propagate change to all similar bonds?",instring);
       if(instring[0] == 'Y' || instring[0] == 'y' ){
-	strcpy(instring,"yes");
-	readcharparm("use distance to match?",instring);
-	if(instring[0] == 'Y' || instring[0] == 'y' ) match_distance = 1;
-	else match_distance = 0;
-	num_lines = molec->num_lines[molec->current_frame%molec->num_frames];
+        strcpy(instring,"yes");
+        readcharparm("use distance to match?",instring);
+        if(instring[0] == 'Y' || instring[0] == 'y' ) match_distance = 1;
+        else match_distance = 0;
+        num_lines = molec->num_lines[molec->current_frame%molec->num_frames];
 
-	for(i=0;i<num_lines;i++){
-	  if((!match_distance ||
-	      fabs(molec->lines[i].length-the_line->length)<0.0001 &&
-	     &(molec->lines[i]) != the_line) &&
-	     ((!strcmp(molec->atoms[molec->lines[i].end1].type,
-			selected_atoms[0]->type) &&
-	       !strcmp(molec->atoms[molec->lines[i].end2].type,
-			selected_atoms[1]->type)) ||
-	      (!strcmp(molec->atoms[molec->lines[i].end1].type,
-			selected_atoms[1]->type) &&
-	       !strcmp(molec->atoms[molec->lines[i].end2].type,
-			selected_atoms[0]->type)))){
-	    molec->lines[i].drawn = the_line->drawn;
-	    molec->lines[i].tube = the_line->tube;
-	    molec->lines[i].breaking = the_line->breaking;
-	    molec->lines[i].dashed = the_line->dashed;
-	    molec->lines[i].type = the_line->type;
-	    molec->lines[i].thickness = the_line->thickness;
-	    molec->lines[i].custom = 1;
-	  }
-	}
+        for(i=0;i<num_lines;i++){
+          if((!match_distance ||
+              fabs(molec->lines[i].length-the_line->length)<0.0001 &&
+             &(molec->lines[i]) != the_line) &&
+             ((!strcmp(molec->atoms[molec->lines[i].end1].type,
+                        selected_atoms[0]->type) &&
+               !strcmp(molec->atoms[molec->lines[i].end2].type,
+                        selected_atoms[1]->type)) ||
+              (!strcmp(molec->atoms[molec->lines[i].end1].type,
+                        selected_atoms[1]->type) &&
+               !strcmp(molec->atoms[molec->lines[i].end2].type,
+                        selected_atoms[0]->type)))){
+            molec->lines[i].drawn = the_line->drawn;
+            molec->lines[i].tube = the_line->tube;
+            molec->lines[i].breaking = the_line->breaking;
+            molec->lines[i].dashed = the_line->dashed;
+            molec->lines[i].type = the_line->type;
+            molec->lines[i].thickness = the_line->thickness;
+            molec->lines[i].custom = 1;
+          }
+        }
       }
     } else{
       printf("Okay, you didn't change anything...\n");
@@ -742,8 +742,8 @@ void center_molecule(int num_args,char **molec_ptr)
   for(i=0;i<molec->num_atoms;i++){
     atom = &molec->atoms[i];
     if( !atom->exclude && (molec->hydrogens_on ||
-	atom->type[0] != 'H' || atom->type[1] != 0) &&
-	(molec->dummies_on || atom->type[0] != '&') ){
+        atom->type[0] != 'H' || atom->type[1] != 0) &&
+        (molec->dummies_on || atom->type[0] != '&') ){
       center.x += atom->loc.x;
       center.y += atom->loc.y;
       center.z += atom->loc.z;
@@ -809,7 +809,7 @@ void center_molecule(int num_args,char **molec_ptr)
  *
  ****************************************************************************/
 void determine_mol_bounds(molec_type *molec,point_type *bmin,
-			  point_type *bmax)
+                          point_type *bmax)
 {
   int i;
 
@@ -995,8 +995,8 @@ void determine_connections(molec_type *molec)
     num_custom=0;
     for(i=0;i<molec->num_lines[0];i++){
       if( molec->lines[i].custom ){
-	memcpy(&templines[num_custom],&molec->lines[i],sizeof(line_type));
-	num_custom++;
+        memcpy(&templines[num_custom],&molec->lines[i],sizeof(line_type));
+        num_custom++;
       }
     }
     D_FREE(molec->lines);
@@ -1038,62 +1038,62 @@ void determine_connections(molec_type *molec)
       add_a_bond = 0;
 #ifdef INCLUDE_BOND_VALENCE
       if( molec->valence_for_bonds ){
-	R0_val = 0.0;
-	bond_length_to_bond_valence(&atoms[i],&atoms[j],
-				    dist,&R0_val,&valence);
-	if( valence > molec->bond_tol ){
-	  add_a_bond = 2;
-	}
-	else if( valence > molec->bond_tol2 ) {
-	  add_a_bond = 1;
-	}
+        R0_val = 0.0;
+        bond_length_to_bond_valence(&atoms[i],&atoms[j],
+                                    dist,&R0_val,&valence);
+        if( valence > molec->bond_tol ){
+          add_a_bond = 2;
+        }
+        else if( valence > molec->bond_tol2 ) {
+          add_a_bond = 1;
+        }
       }
       else{
 #endif
-	if( dist - rad_sum <= molec->bond_tol*rad_sum ){
-	  add_a_bond=1;
-	}
+        if( dist - rad_sum <= molec->bond_tol*rad_sum ){
+          add_a_bond=1;
+        }
 #ifdef INCLUDE_BOND_VALENCE
       }
 #endif
       if(add_a_bond){
-	/* make sure we don't already have a bond between these
-	   atoms */
-	for(k=0;k<num_connectors && add_a_bond;k++){
-	  if( (molec->lines[k].end1 == i && molec->lines[k].end2 == j) ||
-	      (molec->lines[k].end1 == j && molec->lines[k].end2 == k) ){
-	    add_a_bond = 0;
-	  }
-	}
+        /* make sure we don't already have a bond between these
+           atoms */
+        for(k=0;k<num_connectors && add_a_bond;k++){
+          if( (molec->lines[k].end1 == i && molec->lines[k].end2 == j) ||
+              (molec->lines[k].end1 == j && molec->lines[k].end2 == k) ){
+            add_a_bond = 0;
+          }
+        }
       }
       if(add_a_bond){
-	num_connectors++;
+        num_connectors++;
 
-	/* check to see if we need more memory */
-	if( connectors_so_far >= max_connectors || !molec->lines){
-	  max_connectors += 10;
-	  templines = (line_type *)D_CALLOC(max_connectors,sizeof(line_type));
-	  if( !templines ) fatal("Can't get more memory for connectors");
+        /* check to see if we need more memory */
+        if( connectors_so_far >= max_connectors || !molec->lines){
+          max_connectors += 10;
+          templines = (line_type *)D_CALLOC(max_connectors,sizeof(line_type));
+          if( !templines ) fatal("Can't get more memory for connectors");
 
-	  /* copy in the lines from the current array, if there is one */
-	  if( molec->lines ){
-	    memcpy((char *)templines,(char *)molec->lines,
-		   connectors_so_far*sizeof(line_type));
-	    linesave = molec->lines;
-	    molec->lines = templines;
-	    /* free up the old array */
-	    D_FREE(linesave);
-	  }
-	  else{
-	    molec->lines = templines;
-	  }
-	}
-	if(!molec->lines) molec->lines = templines;
-	molec->lines[connectors_so_far].end1 = i;
-	molec->lines[connectors_so_far].end2 = j;
-	molec->lines[connectors_so_far].type = add_a_bond;
-	molec->lines[connectors_so_far].length = dist;
-	connectors_so_far++;
+          /* copy in the lines from the current array, if there is one */
+          if( molec->lines ){
+            memcpy((char *)templines,(char *)molec->lines,
+                   connectors_so_far*sizeof(line_type));
+            linesave = molec->lines;
+            molec->lines = templines;
+            /* free up the old array */
+            D_FREE(linesave);
+          }
+          else{
+            molec->lines = templines;
+          }
+        }
+        if(!molec->lines) molec->lines = templines;
+        molec->lines[connectors_so_far].end1 = i;
+        molec->lines[connectors_so_far].end2 = j;
+        molec->lines[connectors_so_far].type = add_a_bond;
+        molec->lines[connectors_so_far].length = dist;
+        connectors_so_far++;
       }
     }
   }
@@ -1118,26 +1118,26 @@ void determine_connections(molec_type *molec)
 
       /* check to see if we need memory for the linesto array */
       if( !atoms[end1].linesto ){
-	atoms[end1].linesto = (int *)D_CALLOC(connectors_per_atom[end1],
-					      sizeof(int));
-	if( !atoms[end1].linesto )
-	  fatal("Can't get atomic connector memory.");
+        atoms[end1].linesto = (int *)D_CALLOC(connectors_per_atom[end1],
+                                              sizeof(int));
+        if( !atoms[end1].linesto )
+          fatal("Can't get atomic connector memory.");
       }
       if( !atoms[end2].linesto ){
-	atoms[end2].linesto = (int *)D_CALLOC(connectors_per_atom[end2],
-					      sizeof(int));
-	if( !atoms[end2].linesto )
-	  fatal("Can't get atomic connector memory.");
+        atoms[end2].linesto = (int *)D_CALLOC(connectors_per_atom[end2],
+                                              sizeof(int));
+        if( !atoms[end2].linesto )
+          fatal("Can't get atomic connector memory.");
       }
 
       /* set the endpoints */
       atoms[end1].linesto[atoms[end1].num_lines_out++] = end2;
       atoms[end2].linesto[atoms[end2].num_lines_out++] = end1;
       if( atoms[end1].num_lines_out > connectors_per_atom[end1]){
-	FATAL_BUG("num_lines_out exceeds connectors_per_atom");
+        FATAL_BUG("num_lines_out exceeds connectors_per_atom");
       }
       if( atoms[end2].num_lines_out > connectors_per_atom[end2]){
-	FATAL_BUG("num_lines_out exceeds connectors_per_atom");
+        FATAL_BUG("num_lines_out exceeds connectors_per_atom");
       }
     }
   }
@@ -1194,25 +1194,25 @@ void fill_atomic_info(int num_atoms,atom_type *atoms)
       upcase(instring);
       if(strstr(instring,foostring)){
 #ifdef INCLUDE_BOND_VALENCE
-	sscanf(instring,"%s %lf %c %lf %lf",foostring,&(atoms[i].rad),
-	       &(atoms[i].color),
-	       &atoms[i].ci,&atoms[i].ri);
+        sscanf(instring,"%s %lf %c %lf %lf",foostring,&(atoms[i].rad),
+               &(atoms[i].color),
+               &atoms[i].ci,&atoms[i].ri);
 #else
-	sscanf(instring,"%s %lf %c",foostring,&(atoms[i].rad),
-	       &(atoms[i].color));
+        sscanf(instring,"%s %lf %c",foostring,&(atoms[i].rad),
+               &(atoms[i].color));
 #endif
-	found = 1;
-	atoms[i].color -= '0';
+        found = 1;
+        atoms[i].color -= '0';
       }
       else{
-	eof_hit = skipcomments(infile,instring);
+        eof_hit = skipcomments(infile,instring);
       }
     }
     /* check to see if we actually found the atom */
     if( eof_hit < 0){
       /* nope... */
       fprintf(stderr,"Can't find atom type: %s in parameter file.",
-	      atoms[i].type);
+              atoms[i].type);
       atoms[i].color = 0;
       atoms[i].rad = 1.0;
     }
@@ -1320,8 +1320,8 @@ void read_molecule_data(FILE *infile,molec_type *molec)
   if( reading_movie ){
     while(!strstr(instring,"NUMBER OF FRAMES")){
       if(skipcomments(infile,instring)<0){
-	error("End of File hit while looking for frame data.\n");
-	return;
+        error("End of File hit while looking for frame data.\n");
+        return;
       }
       upcase(instring);
     }
@@ -1344,7 +1344,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
   which_step = 0;
   while( num_steps != 0  && which_step == 0){
     printf("There are %d walsh steps in the file.  Which would you like to see? ",
-	   num_steps);
+           num_steps);
     which_step = 1;
     readintparm("active step",&which_step);
     /*    scanf("%d\n",&which_step);*/
@@ -1362,8 +1362,8 @@ void read_molecule_data(FILE *infile,molec_type *molec)
     upcase(instring);
 */
       while(!reading_movie && !strstr(instring,"ATOMIC POSITIONS") &&
-	    !strstr(instring,"WALSH STEP") &&
-	    !strstr(instring,"POSITIONS OF ATOMS FROM")){
+            !strstr(instring,"WALSH STEP") &&
+            !strstr(instring,"POSITIONS OF ATOMS FROM")){
       skipcomments(infile,instring);
       upcase(instring);
     }
@@ -1374,14 +1374,14 @@ void read_molecule_data(FILE *infile,molec_type *molec)
       upcase(instring);
       /* find the proper walsh step */
       while(!strstr(instring,"WALSH_STEP")){
-	skipcomments(infile,instring);
-	upcase(instring);
+        skipcomments(infile,instring);
+        upcase(instring);
       }
     }
     /* now find the positions of the atoms */
     while((!strstr(instring,"ATOMIC POSITIONS") ||
-	   !strstr(instring,"WALSH STEP")) &&
-	  !strstr(instring,"POSITIONS OF ATOMS FROM")){
+           !strstr(instring,"WALSH STEP")) &&
+          !strstr(instring,"POSITIONS OF ATOMS FROM")){
       skipcomments(infile,instring);
       upcase(instring);
     }
@@ -1402,39 +1402,39 @@ void read_molecule_data(FILE *infile,molec_type *molec)
     if( reading_movie ){
       num_skipped = 1;
       while( num_skipped != num_to_skip ){
-	for(i=0;i<num_atoms;i++){
-	  lines_read++;
-	  if(skipcomments(infile,instring) < 0){
-	    printf("Problems with atom %d of frame %d after reading %d lines.\n",
-		   i,j,lines_read);
-	    fatal("EOF hit reading movie!");
-	  }
+        for(i=0;i<num_atoms;i++){
+          lines_read++;
+          if(skipcomments(infile,instring) < 0){
+            printf("Problems with atom %d of frame %d after reading %d lines.\n",
+                   i,j,lines_read);
+            fatal("EOF hit reading movie!");
+          }
 
-	}
-	num_skipped++;
+        }
+        num_skipped++;
       }
     }
 
     for(i=0;i<num_atoms;i++){
       /* make sure that we didn't hit end of file */
       if(skipcomments(infile,instring) < 0){
-	error("Can't read in all the atoms!");
-	display("Toooo bad.");
-	return;
+        error("Can't read in all the atoms!");
+        display("Toooo bad.");
+        return;
       }
       if( !reading_movie ){
-	sscanf(instring,"%d %s %lf %lf %lf",&(molec->atoms[i].num),
-	        (molec->atoms[i].type),
-	       &(molec->atoms[i].loc.x),
-	       &(molec->atoms[i].loc.y),&(molec->atoms[i].loc.z));
-	molec->atoms[i].num--;
+        sscanf(instring,"%d %s %lf %lf %lf",&(molec->atoms[i].num),
+                (molec->atoms[i].type),
+               &(molec->atoms[i].loc.x),
+               &(molec->atoms[i].loc.y),&(molec->atoms[i].loc.z));
+        molec->atoms[i].num--;
       }else{
-	sscanf(instring,"%s %lf %lf %lf",
-	        (molec->atoms[j*num_atoms+i].type),
-	       &(molec->atoms[j*num_atoms+i].loc.x),
-	       &(molec->atoms[j*num_atoms+i].loc.y),
-	       &(molec->atoms[j*num_atoms+i].loc.z));
-	molec->atoms[j*num_atoms+i].num = j*num_atoms+i;
+        sscanf(instring,"%s %lf %lf %lf",
+                (molec->atoms[j*num_atoms+i].type),
+               &(molec->atoms[j*num_atoms+i].loc.x),
+               &(molec->atoms[j*num_atoms+i].loc.y),
+               &(molec->atoms[j*num_atoms+i].loc.z));
+        molec->atoms[j*num_atoms+i].num = j*num_atoms+i;
       }
     }
   }
@@ -1488,7 +1488,7 @@ void read_molecule_data(FILE *infile,molec_type *molec)
     for(i=1;i<=molec->num_dim;i++){
       skipcomments(infile,instring);
       sscanf(instring,"%s %lf %lf %lf",foostring,&(molec->lattice_vect[i].x),
-	     &(molec->lattice_vect[i].y),&(molec->lattice_vect[i].z));
+             &(molec->lattice_vect[i].y),&(molec->lattice_vect[i].z));
     }
     for(i=0;i<=molec->num_dim;i++){
       molec->orig_lattice[i].x = molec->lattice_vect[i].x;

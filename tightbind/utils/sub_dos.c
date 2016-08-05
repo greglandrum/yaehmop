@@ -63,19 +63,19 @@ void main()
   int argc;
   char argv[4][80];
 
-	/* set up some stuff for Sioux */
-	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;
-	SIOUXSettings.autocloseonquit = FALSE;
-	printf("Starting bind.\n");
+        /* set up some stuff for Sioux */
+        //SIOUXSettings.standalone = FALSE;
+        SIOUXSettings.asktosaveonclose = FALSE;
+        SIOUXSettings.autocloseonquit = FALSE;
+        printf("Starting bind.\n");
 
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
-  	fatal("User cancelled intial file open");
+          fatal("User cancelled intial file open");
   }
   the_file = choose_mac_file(argv[2],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
-  	fatal("User cancelled second file open");
+          fatal("User cancelled second file open");
   }
 
   printf("Enter the name of the output file: ");
@@ -167,12 +167,12 @@ void main()
   }
   if( E_step != E_step2 ){
     fprintf(stderr,"Energy steps (%lf and %lf) aren't equal.\n",E_step,
-	    E_step2);
+            E_step2);
     window_by_hand = 1;
   }
   if( broad1 != broad2 ){
     fprintf(stderr,"The broadening values (%lf and %lf) aren't equal.\n",
-	    broad1,broad2);
+            broad1,broad2);
     fprintf(stderr,"It's okay to continue, but this is a questionably valid procedure.\n");
   }
 
@@ -180,7 +180,7 @@ void main()
 
   if( window_by_hand ){
     fprintf(stderr,
-	    "Enter the window by hand.  This is a dubious thing to do.\n");
+            "Enter the window by hand.  This is a dubious thing to do.\n");
     printf("Enter E min: ");
     scanf("%lf",&E_min);
     printf("Enter E max: ");

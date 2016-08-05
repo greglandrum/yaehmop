@@ -75,7 +75,7 @@ void build_k_hamil_FAT(cell,hamilR,hamilK,overlapK,num_orbs)
 
     /* do the diagonal elements */
     hamilK.mat[itab+i] = hamilR.mat[itab+i]*(1-THE_CONST+
-				     THE_CONST*overlapK.mat[itab+i]);
+                                     THE_CONST*overlapK.mat[itab+i]);
 
     /* now the off diagonals */
     for(j=0;j<i;j++){
@@ -131,7 +131,7 @@ void build_k_hamil_THIN(cell,hamilR,hamilK,overlapK,num_orbs)
     for(j=0;j<i;j++){
       jtab = j*num_orbs;
       /******
-	The form of these is stolen straight from the new3 code
+        The form of these is stolen straight from the new3 code
       *******/
       temp = hamilR.mat[i]+hamilR.mat[j];
       temp2 = (hamilR.mat[i]-hamilR.mat[j])/temp;

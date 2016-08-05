@@ -58,7 +58,7 @@ int find_atom(atoms,num_atoms,which)
 
   /* we didn't find it... something's wrong, error out */
   sprintf(err_string,"Can't find atom %d (of %d) in find_atom.\n",
-	  which,num_atoms);
+          which,num_atoms);
   FATAL_BUG(err_string);
 }
 
@@ -181,8 +181,8 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     loc->y = 0.0;
     loc->z = atoms[which_atom].loc.z -
       bond_length*cos(alpha)*(atoms[atom->Zmat_loc.ref1].loc.z >
-			      atoms[atom->Zmat_loc.ref2].loc.z ?
-			      1 : -1);
+                              atoms[atom->Zmat_loc.ref2].loc.z ?
+                              1 : -1);
   }
 
   /* deal with any atoms which are left over */
@@ -197,13 +197,13 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
 
     /* determine the vector between ref1 and ref2 */
     vector_diff(&(atoms[Zmat_loc->ref1].loc),&(atoms[Zmat_loc->ref2].loc),
-	      &V_ref1_ref2);
+              &V_ref1_ref2);
     /* normalize that vector */
     normalize_vector(&V_ref1_ref2,&N_V_ref1_ref2);
 
     /* determine the vector between ref2 and ref3 */
     vector_diff(&(atoms[Zmat_loc->ref2].loc),&(atoms[Zmat_loc->ref3].loc),
-	      &V_ref2_ref3);
+              &V_ref2_ref3);
     /* normalize that vector */
     normalize_vector(&V_ref2_ref3,&N_V_ref2_ref3);
 
@@ -223,14 +223,14 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     cross_prod(&(N_V1_X_V2),&(N_V_ref1_ref2),&(V_last));
 
     V_ref3_newpos.x = bond_length*(-N_V_ref1_ref2.x*cos(alpha)
-				   +V_last.x*sin(alpha)*cos(beta)
-				   +N_V1_X_V2.x*sin(alpha)*sin(beta));
+                                   +V_last.x*sin(alpha)*cos(beta)
+                                   +N_V1_X_V2.x*sin(alpha)*sin(beta));
     V_ref3_newpos.y = bond_length*(-N_V_ref1_ref2.y*cos(alpha)
-				   +V_last.y*sin(alpha)*cos(beta)
-				   +N_V1_X_V2.y*sin(alpha)*sin(beta));
+                                   +V_last.y*sin(alpha)*cos(beta)
+                                   +N_V1_X_V2.y*sin(alpha)*sin(beta));
     V_ref3_newpos.z = bond_length*(-N_V_ref1_ref2.z*cos(alpha)
-				   +V_last.z*sin(alpha)*cos(beta)
-				   +N_V1_X_V2.z*sin(alpha)*sin(beta));
+                                   +V_last.z*sin(alpha)*cos(beta)
+                                   +N_V1_X_V2.z*sin(alpha)*sin(beta));
 
     /* now figure out the actual coordinates of the new atom */
     atom->loc.x = atoms[Zmat_loc->ref1].loc.x + V_ref3_newpos.x;
@@ -245,8 +245,8 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     fprintf(output_file,"# Positions of atoms from Z-matrix\n");
     for(i=0;i<num_atoms;i++){
       fprintf(output_file,"% 4d % 4s % 8.4lf % 8.4lf % 8.4lf\n",
-	      i+1,atoms[i].symb,atoms[i].loc.x,
-	      atoms[i].loc.y,atoms[i].loc.z);
+              i+1,atoms[i].symb,atoms[i].loc.x,
+              atoms[i].loc.y,atoms[i].loc.z);
     }
   }
 }

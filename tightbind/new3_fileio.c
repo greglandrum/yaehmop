@@ -96,7 +96,7 @@ void read_NEW3file(cell,details,infile)
 
   skipcomments(infile,instring,FATAL);
   sscanf(instring,"%lf %d %d %d",&(details->rho),&(cell->num_atoms),
-	 &(details->just_geom),&(details->save_energies));
+         &(details->just_geom),&(details->save_energies));
 
   /* allocate space for the atoms */
   cell->atoms = (atom_type *)calloc(cell->num_atoms,sizeof(atom_type));
@@ -109,9 +109,9 @@ void read_NEW3file(cell,details,infile)
   for(i=0;i<cell->num_atoms;i++){
     skipcomments(infile,instring,FATAL);
     sscanf(instring,"%c%c  %lf %lf %lf",
-	   &(cell->atoms[i].symb[0]),&(cell->atoms[i].symb[1]),
-	   &(cell->atoms[i].loc.x),&(cell->atoms[i].loc.y),
-	   &(cell->atoms[i].loc.z));
+           &(cell->atoms[i].symb[0]),&(cell->atoms[i].symb[1]),
+           &(cell->atoms[i].loc.x),&(cell->atoms[i].loc.y),
+           &(cell->atoms[i].loc.z));
   }
   cell->atoms[i].symb[2] = 0;
 
@@ -120,10 +120,10 @@ void read_NEW3file(cell,details,infile)
   /* more details */
   skipcomments(infile,instring,FATAL);
   sscanf(instring,"%d %d %d %d %d %d %d %d %d %d",&(cell->dim),
-	 &(cell->overlaps[0]),&(cell->overlaps[1]),&(cell->overlaps[2]),
-	 &(cell->tvects[0].begin),&(cell->tvects[0].end),
-	 &(cell->tvects[1].begin),&(cell->tvects[1].end),
-    	 &(cell->tvects[2].begin),&(cell->tvects[2].end));
+         &(cell->overlaps[0]),&(cell->overlaps[1]),&(cell->overlaps[2]),
+         &(cell->tvects[0].begin),&(cell->tvects[0].end),
+         &(cell->tvects[1].begin),&(cell->tvects[1].end),
+             &(cell->tvects[2].begin),&(cell->tvects[2].end));
 
   /* check to see if this is specifying a molecular calculation */
   if(unit_cell->dim == 0){
@@ -145,7 +145,7 @@ void read_NEW3file(cell,details,infile)
       cell->tvects[j].begin = temp;
     }
     else if(cell->tvects[j].end == cell->tvects[j].begin &&
-	    cell->tvects[j].end ){
+            cell->tvects[j].end ){
       /* both ends of the vector are the same */
       fatal("Begin and end of a translation vector are the same.");
     }
@@ -154,7 +154,7 @@ void read_NEW3file(cell,details,infile)
   /* fill in the atomic parameters */
   fill_atomic_parms(cell->atoms,cell->num_atoms,infile);
   write_atom_coords(cell->atoms,cell->num_atoms,cell->using_Zmat,
-		    cell->using_xtal_coords);
+                    cell->using_xtal_coords);
   write_atom_parms(details,cell->atoms,cell->num_atoms,1);
 
 
@@ -165,11 +165,11 @@ void read_NEW3file(cell,details,infile)
   skipcomments(infile,instring,FATAL);
 /*
   sscanf(instring,"%d %d %lf %d %d %d %d %d %d %d %lf %lf",
-	 &(details->lower_level_PRT),&(details->upper_level_PRT),
-	 &(cell->num_electrons),&(details->num_bonds_OOP),
-	 &use_gradients,&(details->num_FMO),
-	 &(details->num_frags_FMO),&(details->num_occup_AVG),
-	 &avg_props,&idle,&ecut,&eerr);
+         &(details->lower_level_PRT),&(details->upper_level_PRT),
+         &(cell->num_electrons),&(details->num_bonds_OOP),
+         &use_gradients,&(details->num_FMO),
+         &(details->num_frags_FMO),&(details->num_occup_AVG),
+         &avg_props,&idle,&ecut,&eerr);
 */
   details->gradients = (char)use_gradients;
   details->avg_props = (char)avg_props;
@@ -248,19 +248,19 @@ contributions.");
     while(skipcomments(infile,instring,IGNORE)>-1){
       /* read in the K point, ignoring the printing options */
       sscanf(instring,"%s %lf %lf %lf %d %d",
-	     foo_string,
-	     &(points[num_k_points].loc.x),&(points[num_k_points].loc.y),
-	     &(points[num_k_points].loc.z),
-	     &(points[num_k_points].weight),&(points[num_k_points].num_filled_bands));
+             foo_string,
+             &(points[num_k_points].loc.x),&(points[num_k_points].loc.y),
+             &(points[num_k_points].loc.z),
+             &(points[num_k_points].weight),&(points[num_k_points].num_filled_bands));
       num_k_points++;
 
       /* check to see if there's still enough memory */
       if( num_k_points == max_k_points ){
-	/* not enough space, reallocate the array */
-	max_k_points += 256;
-	points=(k_point_type *)realloc((char *)points,
-				       (unsigned)max_k_points*sizeof(k_point_type));
-	if( !points )fatal("Can't reallocate k point array to get more space.");
+        /* not enough space, reallocate the array */
+        max_k_points += 256;
+        points=(k_point_type *)realloc((char *)points,
+                                       (unsigned)max_k_points*sizeof(k_point_type));
+        if( !points )fatal("Can't reallocate k point array to get more space.");
       }
     }
     fprintf(status_file,"Read: %d k points\n",num_k_points);
@@ -279,10 +279,10 @@ contributions.");
 
     num_k_points = 0;
     sscanf(instring,"%s %lf %lf %lf %d %d",
-	   foo_string,
-	   &(points[num_k_points].loc.x),&(points[num_k_points].loc.y),
-	   &(points[num_k_points].loc.z),
-	   &(points[num_k_points].weight),&(points[num_k_points].num_filled_bands));
+           foo_string,
+           &(points[num_k_points].loc.x),&(points[num_k_points].loc.y),
+           &(points[num_k_points].loc.z),
+           &(points[num_k_points].weight),&(points[num_k_points].num_filled_bands));
 
     details->num_KPOINTS = 1;
     details->K_POINTS = points;

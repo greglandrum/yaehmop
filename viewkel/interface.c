@@ -219,20 +219,20 @@ void do_keypress(EventRecord *event)
   case 'A':
   case 'a':
       if( mainmode == CHOOSE ){
-	if( num_selected > 0 && (whichobj->prim->molec ||
-	 (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
-	  adjust_style(num_selected,whichobj);
-	  unselect_all_atoms(num_selected,whichobj);
-	  num_selected = 0;
-	} else if (whichobj->prim->label){
-	  adjust_label(whichobj->prim->label);
-	}
+        if( num_selected > 0 && (whichobj->prim->molec ||
+         (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
+          adjust_style(num_selected,whichobj);
+          unselect_all_atoms(num_selected,whichobj);
+          num_selected = 0;
+        } else if (whichobj->prim->label){
+          adjust_label(whichobj->prim->label);
+        }
       }
       break;
   case 'C':
   case 'c':
     if( mainmode == CHOOSE && num_selected == 1 && (whichobj->prim->molec ||
-	(whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
+        (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
       adjust_color(num_selected,whichobj,ATOM_COLOR_FILL);
       unselect_all_atoms(num_selected,whichobj);
       num_selected = 0;
@@ -336,17 +336,17 @@ void do_keypress(EventRecord *event)
   case 'S':
   case 's':
       if( mainmode == CHOOSE && num_selected == 1 && (whichobj->prim->molec ||
-	  (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
-	adjust_color(num_selected,whichobj,ATOM_SHADE_FILL);
+          (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
+        adjust_color(num_selected,whichobj,ATOM_SHADE_FILL);
         unselect_all_atoms(num_selected,whichobj);
         num_selected = 0;
       }
       else if(mainmode == SCALE && whichobj->prim->cont_plot){
-	whichobj->scale.y = whichobj->scale.x *
-	  (whichobj->prim->cont_plot->max_y-whichobj->prim->cont_plot->min_y) /
-	  (whichobj->prim->cont_plot->max_x-whichobj->prim->cont_plot->min_x);
+        whichobj->scale.y = whichobj->scale.x *
+          (whichobj->prim->cont_plot->max_y-whichobj->prim->cont_plot->min_y) /
+          (whichobj->prim->cont_plot->max_x-whichobj->prim->cont_plot->min_x);
       } else{
-	mainmode=SCALE;
+        mainmode=SCALE;
       }
 #ifdef X_GRAPHICS
     g_draw_all_buttons(button_wins);
@@ -391,10 +391,10 @@ void do_keypress(EventRecord *event)
     if( whichobj->prim->prop_graph){
       printf("Curve names:\n");
       for(i=0;i<whichobj->prim->prop_graph->the_data->num_curves;i++){
-	if( whichobj->prim->prop_graph->the_data->curve_names[i*NORMAL_STR_LEN] ){
-	  printf("\t%d: %s\n",i+1,
-		 &(whichobj->prim->prop_graph->the_data->curve_names[i*NORMAL_STR_LEN]));
-	}
+        if( whichobj->prim->prop_graph->the_data->curve_names[i*NORMAL_STR_LEN] ){
+          printf("\t%d: %s\n",i+1,
+                 &(whichobj->prim->prop_graph->the_data->curve_names[i*NORMAL_STR_LEN]));
+        }
       }
     }
     break;
@@ -402,8 +402,8 @@ void do_keypress(EventRecord *event)
   case 'H':
     if( mainmode == CHOOSE ){
       if( num_selected > 0 && (whichobj->prim->molec ||
-	 (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
-	hide_selected_atoms(num_selected,whichobj);
+         (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
+        hide_selected_atoms(num_selected,whichobj);
         unselect_all_atoms(num_selected,whichobj);
         num_selected = 0;
       }
@@ -414,14 +414,14 @@ void do_keypress(EventRecord *event)
     if(mainmode == CHOOSE && whichobj &&
        whichobj->prim &&
        (whichobj->prim->molec || (whichobj->prim->MO_surf &&
-				  whichobj->prim->MO_surf->molec))){
+                                  whichobj->prim->MO_surf->molec))){
       invert_selected_atoms(&num_selected,whichobj);
     }
     break;
   case '+':
     if(whichobj && whichobj->prim &&
        (whichobj->prim->molec || (whichobj->prim->MO_surf &&
-				  whichobj->prim->MO_surf->molec))){
+                                  whichobj->prim->MO_surf->molec))){
       show_all_atoms(whichobj);
     }
     break;
@@ -430,30 +430,30 @@ void do_keypress(EventRecord *event)
     if(whichobj){
       free_obj(whichobj);
       if( head ){
-	if( head->obj == whichobj ){
-	  D_FREE(head->obj);
-	  if( head->next ){
-	    head1 = head->next;
-	    D_FREE(head);
-	    head = head1;
-	  } else{
-	    D_FREE(head);
-	    head = 0;
-	  }
-	} else {
-	  head1 = head->next;
-	  head2 = head;
-	  while(head1 && head1->obj != whichobj){
-	    head2 = head1;
-	    head1 = head1->next;
-	  }
-	  if( !head1 ) FATAL_BUG("headless object removed... ACK!");
-	  head2->next = head1->next;
-	  D_FREE(head1->obj);
-	  D_FREE(head1);
-	}
+        if( head->obj == whichobj ){
+          D_FREE(head->obj);
+          if( head->next ){
+            head1 = head->next;
+            D_FREE(head);
+            head = head1;
+          } else{
+            D_FREE(head);
+            head = 0;
+          }
+        } else {
+          head1 = head->next;
+          head2 = head;
+          while(head1 && head1->obj != whichobj){
+            head2 = head1;
+            head1 = head1->next;
+          }
+          if( !head1 ) FATAL_BUG("headless object removed... ACK!");
+          head2->next = head1->next;
+          D_FREE(head1->obj);
+          D_FREE(head1);
+        }
       } else {
-	FATAL_BUG("I just removed an object, but there's no head.");
+        FATAL_BUG("I just removed an object, but there's no head.");
       }
     }
     whichobj = 0;
@@ -463,15 +463,15 @@ void do_keypress(EventRecord *event)
        whichobj->prim->molec->num_frames > 1){
       whichobj->prim->molec->current_frame++;
       if(whichobj->prim->molec->current_frame >=
-	 whichobj->prim->molec->num_frames){
-	whichobj->prim->molec->current_frame =
-	  whichobj->prim->molec->current_frame %
-	  whichobj->prim->molec->num_frames;
+         whichobj->prim->molec->num_frames){
+        whichobj->prim->molec->current_frame =
+          whichobj->prim->molec->current_frame %
+          whichobj->prim->molec->num_frames;
       }
 #ifdef X_GRAPHICS
       if( doing_X ){
-	/* redraw the buttons */
-	g_draw_all_buttons(button_wins);
+        /* redraw the buttons */
+        g_draw_all_buttons(button_wins);
       }
 #endif
     }
@@ -481,18 +481,18 @@ void do_keypress(EventRecord *event)
        whichobj->prim->molec->num_frames > 1){
       whichobj->prim->molec->current_frame--;
       if(whichobj->prim->molec->current_frame >=
-	 whichobj->prim->molec->num_frames){
-	whichobj->prim->molec->current_frame =
-	  whichobj->prim->molec->current_frame %
-	  whichobj->prim->molec->num_frames;
+         whichobj->prim->molec->num_frames){
+        whichobj->prim->molec->current_frame =
+          whichobj->prim->molec->current_frame %
+          whichobj->prim->molec->num_frames;
       }
       if(whichobj->prim->molec->current_frame < 0)
-	whichobj->prim->molec->current_frame =
-	  whichobj->prim->molec->num_frames-1;
+        whichobj->prim->molec->current_frame =
+          whichobj->prim->molec->num_frames-1;
 #ifdef X_GRAPHICS
       if( doing_X ){
-	/* redraw the buttons */
-	g_draw_all_buttons(button_wins);
+        /* redraw the buttons */
+        g_draw_all_buttons(button_wins);
       }
 #endif
     }
@@ -500,9 +500,9 @@ void do_keypress(EventRecord *event)
   case '2':
     if( whichobj && whichobj->prim && whichobj->prim->molec ){
       if( num_selected == 0 ){
-	printf("You must select at least one atom first.\n");
+        printf("You must select at least one atom first.\n");
       } else {
-	gen_coord_polyhed(whichobj->prim->molec);
+        gen_coord_polyhed(whichobj->prim->molec);
       }
     }
     break;
@@ -515,7 +515,7 @@ void do_keypress(EventRecord *event)
   case '4':
     non_blocking_event_loop = !non_blocking_event_loop;
     if( non_blocking_event_loop && whichobj->prim->molec &&
-	whichobj->prim->molec->num_frames >1 ){
+        whichobj->prim->molec->num_frames >1 ){
       animating_molecule = 1;
     } else{
       animating_molecule = 0;
@@ -545,21 +545,21 @@ void do_keypress(EventRecord *event)
 #ifdef USE_LASSP_ROTATE
     if( whichobj && whichobj->prim && whichobj->prim->molec ){
       if( !rot_pipe ){
-	sprintf(command_string,
-		"/home/landrum/bin/aix3.x/rotate -initial %lf %lf %lf",
-		whichobj->rot.z,whichobj->rot.y,whichobj->rot.x);
-	rot_pipe = popen(command_string,"r");
-	non_blocking_event_loop = 1;
-	whichobj->prim->molec->rotate_tool_on = 1;
-	whichobj->prim->molec->rot_matrix.matrix[0][0] = 1.0;
-	whichobj->prim->molec->rot_matrix.matrix[1][1] = 1.0;
-	whichobj->prim->molec->rot_matrix.matrix[2][2] = 1.0;
-	whichobj->prim->molec->rot_matrix.matrix[3][3] = 1.0;
+        sprintf(command_string,
+                "/home/landrum/bin/aix3.x/rotate -initial %lf %lf %lf",
+                whichobj->rot.z,whichobj->rot.y,whichobj->rot.x);
+        rot_pipe = popen(command_string,"r");
+        non_blocking_event_loop = 1;
+        whichobj->prim->molec->rotate_tool_on = 1;
+        whichobj->prim->molec->rot_matrix.matrix[0][0] = 1.0;
+        whichobj->prim->molec->rot_matrix.matrix[1][1] = 1.0;
+        whichobj->prim->molec->rot_matrix.matrix[2][2] = 1.0;
+        whichobj->prim->molec->rot_matrix.matrix[3][3] = 1.0;
       } else{
-	pclose(rot_pipe);
-	rot_pipe = 0;
-	whichobj->prim->molec->rotate_tool_on = 0;
-	non_blocking_event_loop = 0;
+        pclose(rot_pipe);
+        rot_pipe = 0;
+        whichobj->prim->molec->rotate_tool_on = 0;
+        non_blocking_event_loop = 0;
       }
     }
 #endif
@@ -663,50 +663,50 @@ void do_button( XEvent event )
 
       switch(mainmode){
 #if 0
-	whichobj->rot.x = 6.28*(g_xmax-xpos)/g_xmax;
-	whichobj->rot.y = 6.28*(g_ymax-ypos)/g_ymax;
-	redrawgraph();
+        whichobj->rot.x = 6.28*(g_xmax-xpos)/g_xmax;
+        whichobj->rot.y = 6.28*(g_ymax-ypos)/g_ymax;
+        redrawgraph();
 #endif
       case ROT:
-	click_x = xpos;
-	click_y = ypos;
-	break;
+        click_x = xpos;
+        click_y = ypos;
+        break;
       case TRANS:
-	click_x = xpos;
-	click_y = ypos;
-	break;
+        click_x = xpos;
+        click_y = ypos;
+        break;
       case CENT:
-	if( whichobj ){
-	  whichobj->cent.x = (float)(xpos);
-	  whichobj->cent.y = (float)(ypos);
-	  redrawgraph();
-	}
-	break;
+        if( whichobj ){
+          whichobj->cent.x = (float)(xpos);
+          whichobj->cent.y = (float)(ypos);
+          redrawgraph();
+        }
+        break;
       case CHOOSE:
-	if( whichobj ){
-	  if( whichobj->prim->molec ){
-	    select_atom(whichobj->prim->molec,xpos,ypos);
-	    redraw();
-	  }
-	  else if( whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec ){
-	    select_atom(whichobj->prim->MO_surf->molec,xpos,ypos);
-	    redraw();
-	  } else{
-	    select_object(xpos,ypos);
-	  }
-	}
+        if( whichobj ){
+          if( whichobj->prim->molec ){
+            select_atom(whichobj->prim->molec,xpos,ypos);
+            redraw();
+          }
+          else if( whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec ){
+            select_atom(whichobj->prim->MO_surf->molec,xpos,ypos);
+            redraw();
+          } else{
+            select_object(xpos,ypos);
+          }
+        }
         break;
       }
     }
     else{
       find_button_win(button_wins,event.xany.window,xpos,ypos,1,
-		      event.xbutton.state);
+                      event.xbutton.state);
     }
     break;
   case 2:
     if( event.xany.window != gwin ){
       find_button_win(button_wins,event.xany.window,xpos,ypos,2,
-		      event.xbutton.state);
+                      event.xbutton.state);
     }
     redraw();
     break;
@@ -716,18 +716,18 @@ void do_button( XEvent event )
         select_object(xpos,ypos);
       }
       else{
-	if( whichobj && (whichobj->prim->molec ||
-	   (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
-	  show_selected_data(num_selected,whichobj,xpos,ypos);
-	  unselect_all_atoms(num_selected,whichobj);
-	  num_selected = 0;
-	  redrawgraph();
-	}
+        if( whichobj && (whichobj->prim->molec ||
+           (whichobj->prim->MO_surf && whichobj->prim->MO_surf->molec))){
+          show_selected_data(num_selected,whichobj,xpos,ypos);
+          unselect_all_atoms(num_selected,whichobj);
+          num_selected = 0;
+          redrawgraph();
+        }
       }
     }
     else{
       find_button_win(button_wins,event.xany.window,xpos,ypos,3,
-		      event.xbutton.state);
+                      event.xbutton.state);
     }
     break;
   default:
@@ -771,190 +771,190 @@ void do_events(void)
       XNextEvent(disp, &event);
       switch(event.type){
       case KeyPress:
-	do_keypress( event );
-	break;
+        do_keypress( event );
+        break;
 
       case ButtonPress:
-	do_button( event );
-	break;
+        do_button( event );
+        break;
 
       case ButtonRelease:
         if( drag_select && event.xany.window==gwin &&
-	    event.xbutton.button == 1 &&
-	    mainmode == CHOOSE &&
-	    (whichobj->prim->molec || (whichobj->prim->MO_surf &&
-				       whichobj->prim->MO_surf->molec))){
-	  drag_select = 0;
-	  if( click_x < xpos ) box_x = click_x;
-	  else box_x = xpos;
-	  if( click_y < ypos ) box_y = click_y;
-	  else box_y = ypos;
-	  box_width = ABS(click_x-xpos);
-	  box_height = ABS(click_y-ypos);
-	  if( whichobj->prim->molec ){
-	    select_atoms_in_region(whichobj->prim->molec,box_x,box_y,
-				   box_x+box_width,box_y+box_height);
-	  } else {
-	    select_atoms_in_region(whichobj->prim->MO_surf->molec,box_x,box_y,
-				   box_x+box_width,box_y+box_height);
-	  }
+            event.xbutton.button == 1 &&
+            mainmode == CHOOSE &&
+            (whichobj->prim->molec || (whichobj->prim->MO_surf &&
+                                       whichobj->prim->MO_surf->molec))){
+          drag_select = 0;
+          if( click_x < xpos ) box_x = click_x;
+          else box_x = xpos;
+          if( click_y < ypos ) box_y = click_y;
+          else box_y = ypos;
+          box_width = ABS(click_x-xpos);
+          box_height = ABS(click_y-ypos);
+          if( whichobj->prim->molec ){
+            select_atoms_in_region(whichobj->prim->molec,box_x,box_y,
+                                   box_x+box_width,box_y+box_height);
+          } else {
+            select_atoms_in_region(whichobj->prim->MO_surf->molec,box_x,box_y,
+                                   box_x+box_width,box_y+box_height);
+          }
 
-	  redrawgraph();
-	}
-	break;
+          redrawgraph();
+        }
+        break;
 
       case MotionNotify:
-	if( whichobj && event.xany.window==gwin &&
-	   event.xmotion.state & Button1Mask){
-	  num=0;
-	  /* make sure that we don't get trapped taking mouse motion events... */
-	  while(num<5){
-	    xpos = event.xmotion.x;
-	    ypos = event.xmotion.y;
+        if( whichobj && event.xany.window==gwin &&
+           event.xmotion.state & Button1Mask){
+          num=0;
+          /* make sure that we don't get trapped taking mouse motion events... */
+          while(num<5){
+            xpos = event.xmotion.x;
+            ypos = event.xmotion.y;
 
-	    XPeekEvent(disp,&event);
-	    if(event.type == MotionNotify)XNextEvent(disp,&event);
-	    else break;
-	    num++;
-	  }
+            XPeekEvent(disp,&event);
+            if(event.type == MotionNotify)XNextEvent(disp,&event);
+            else break;
+            num++;
+          }
 
-	  switch(mainmode){
-	  case ROT:
-	    whichobj->rot.x -= (float)(ypos - click_y)/(100.0*M_PI);
-	    whichobj->rot.y += (float)(xpos - click_x)/(100.0*M_PI);
-	    click_x = xpos;
-	    click_y = ypos;
-	    redrawgraph();
-	    break;
-	  case CENT:
-	    /*	    whichobj->cent.x = g_xmax/2 + (float)(xpos);
-	    whichobj->cent.y = (float)(ypos) - whichobj->trans.y;
-	    */
-	    click_x = xpos;
-	    click_y = ypos;
-	    redrawgraph();
-	    break;
-	  case TRANS:
-	    whichobj->trans.x += (float)(xpos - click_x)/10.0;
-	    whichobj->trans.y -= (float)(ypos - click_y)/10.0;
-	    click_x = xpos;
-	    click_y = ypos;
-	    redrawgraph();
-	    break;
-	  case CHOOSE:
-	    if( ABS(xpos - click_x) + ABS(ypos-click_y) > 10 ){
-	      drag_select = 1;
-	      redrawgraph();
-	      /***
-		!!!memo to self...
-		this is evil, please to be doing it properly RSN.
-	      ***/
-	      if( click_x < xpos ) box_x = click_x;
-	      else box_x = xpos;
-	      if( click_y < ypos ) box_y = click_y;
-	      else box_y = ypos;
-	      box_width = ABS(click_x-xpos);
-	      box_height = ABS(click_y-ypos);
-	      XSetLineAttributes( disp, graphgc, (short)0, LineSolid,
-				  CapRound, JoinRound);
-	      XDrawRectangle(disp,gwin,graphgc,box_x,box_y,
-			     box_width,box_height);
-	    }
+          switch(mainmode){
+          case ROT:
+            whichobj->rot.x -= (float)(ypos - click_y)/(100.0*M_PI);
+            whichobj->rot.y += (float)(xpos - click_x)/(100.0*M_PI);
+            click_x = xpos;
+            click_y = ypos;
+            redrawgraph();
+            break;
+          case CENT:
+            /*            whichobj->cent.x = g_xmax/2 + (float)(xpos);
+            whichobj->cent.y = (float)(ypos) - whichobj->trans.y;
+            */
+            click_x = xpos;
+            click_y = ypos;
+            redrawgraph();
+            break;
+          case TRANS:
+            whichobj->trans.x += (float)(xpos - click_x)/10.0;
+            whichobj->trans.y -= (float)(ypos - click_y)/10.0;
+            click_x = xpos;
+            click_y = ypos;
+            redrawgraph();
+            break;
+          case CHOOSE:
+            if( ABS(xpos - click_x) + ABS(ypos-click_y) > 10 ){
+              drag_select = 1;
+              redrawgraph();
+              /***
+                !!!memo to self...
+                this is evil, please to be doing it properly RSN.
+              ***/
+              if( click_x < xpos ) box_x = click_x;
+              else box_x = xpos;
+              if( click_y < ypos ) box_y = click_y;
+              else box_y = ypos;
+              box_width = ABS(click_x-xpos);
+              box_height = ABS(click_y-ypos);
+              XSetLineAttributes( disp, graphgc, (short)0, LineSolid,
+                                  CapRound, JoinRound);
+              XDrawRectangle(disp,gwin,graphgc,box_x,box_y,
+                             box_width,box_height);
+            }
 
-	    break;
+            break;
 
-	  }
-	}
-	break;
+          }
+        }
+        break;
 
 
       case ConfigureNotify:
-	/* must resize the window now.... */
-	g_xmax = event.xconfigure.width;
-	g_ymax = event.xconfigure.height;
-	/* we need a new sized pixmap */
-	XFreePixmap(disp,gpix);
+        /* must resize the window now.... */
+        g_xmax = event.xconfigure.width;
+        g_ymax = event.xconfigure.height;
+        /* we need a new sized pixmap */
+        XFreePixmap(disp,gpix);
 
-	gpix=XCreatePixmap(disp,gwin,g_xmax,g_ymax,screen_depth);
-	if(!gpix){
-	  fatal("Can't D_REALLOCate pixmap\n");
-	}
+        gpix=XCreatePixmap(disp,gwin,g_xmax,g_ymax,screen_depth);
+        if(!gpix){
+          fatal("Can't D_REALLOCate pixmap\n");
+        }
 
-	redo_projection = 1;
-	camera->yaspect = g_ymax/g_xmax;
-	redraw();
-	break;
+        redo_projection = 1;
+        camera->yaspect = g_ymax/g_xmax;
+        redraw();
+        break;
 
       case Expose:
-	num=0;
-	/* make sure that we don't get trapped taking exposure events... */
-	while(XCheckMaskEvent(disp,ExposureMask,&event));
-	redraw();
-	break;
+        num=0;
+        /* make sure that we don't get trapped taking exposure events... */
+        while(XCheckMaskEvent(disp,ExposureMask,&event));
+        redraw();
+        break;
 
       default:
-	break;
+        break;
       }
     } else {
 #ifdef USE_LASSP_ROTATE
       /********
 
-	if the rotation window is open, then check to see
-	if we need to read from that.
+        if the rotation window is open, then check to see
+        if we need to read from that.
 
       ********/
       if( rot_pipe ){
-	int nfds,readfds,writefds,exceptfds;
-	char instring[80];
-	struct timeval timeout;
+        int nfds,readfds,writefds,exceptfds;
+        char instring[80];
+        struct timeval timeout;
 
-	readfds = 1 << fileno(rot_pipe);
-	nfds = fileno(rot_pipe) + 1;
-	writefds = 0;
-	exceptfds = 0;
-	timeout.tv_sec = 0;
-	timeout.tv_usec = 0;
-	select(nfds,&readfds,&writefds,&exceptfds,&timeout);
-	if( readfds ){
-	  if( first_rot_pipe_read ){
-	    first_rot_pipe_read = 0;
-	  } else{
-	    fprintf(stderr,"Got one!\n");
-	    if( whichobj && whichobj->prim && whichobj->prim->molec ){
-	      fgets(instring,80,rot_pipe);
-	      sscanf(instring,"%lf %lf %lf",
-		     &(whichobj->prim->molec->rot_matrix.matrix[0][0]),
-		     &(whichobj->prim->molec->rot_matrix.matrix[0][1]),
-		     &(whichobj->prim->molec->rot_matrix.matrix[0][2]));
-	      fgets(instring,80,rot_pipe);
-	      sscanf(instring,"%lf %lf %lf",
-		     &(whichobj->prim->molec->rot_matrix.matrix[1][0]),
-		     &(whichobj->prim->molec->rot_matrix.matrix[1][1]),
-		     &(whichobj->prim->molec->rot_matrix.matrix[1][2]));
-	      fgets(instring,80,rot_pipe);
-	      sscanf(instring,"%lf %lf %lf",
-		     &(whichobj->prim->molec->rot_matrix.matrix[2][0]),
-		     &(whichobj->prim->molec->rot_matrix.matrix[2][1]),
-		     &(whichobj->prim->molec->rot_matrix.matrix[2][2]));
-	      fgets(instring,80,rot_pipe);
-	      redraw();
-	    } else{
-	      fgets(instring,80,rot_pipe);
-	      fprintf(stderr,"%s",instring);
-	      fgets(instring,80,rot_pipe);
-	      fprintf(stderr,"%s",instring);
-	      fgets(instring,80,rot_pipe);
-	      fprintf(stderr,"%s",instring);
-	      fgets(instring,80,rot_pipe);
-	      fprintf(stderr,"%s",instring);
-	    }
-	  }
-	}
+        readfds = 1 << fileno(rot_pipe);
+        nfds = fileno(rot_pipe) + 1;
+        writefds = 0;
+        exceptfds = 0;
+        timeout.tv_sec = 0;
+        timeout.tv_usec = 0;
+        select(nfds,&readfds,&writefds,&exceptfds,&timeout);
+        if( readfds ){
+          if( first_rot_pipe_read ){
+            first_rot_pipe_read = 0;
+          } else{
+            fprintf(stderr,"Got one!\n");
+            if( whichobj && whichobj->prim && whichobj->prim->molec ){
+              fgets(instring,80,rot_pipe);
+              sscanf(instring,"%lf %lf %lf",
+                     &(whichobj->prim->molec->rot_matrix.matrix[0][0]),
+                     &(whichobj->prim->molec->rot_matrix.matrix[0][1]),
+                     &(whichobj->prim->molec->rot_matrix.matrix[0][2]));
+              fgets(instring,80,rot_pipe);
+              sscanf(instring,"%lf %lf %lf",
+                     &(whichobj->prim->molec->rot_matrix.matrix[1][0]),
+                     &(whichobj->prim->molec->rot_matrix.matrix[1][1]),
+                     &(whichobj->prim->molec->rot_matrix.matrix[1][2]));
+              fgets(instring,80,rot_pipe);
+              sscanf(instring,"%lf %lf %lf",
+                     &(whichobj->prim->molec->rot_matrix.matrix[2][0]),
+                     &(whichobj->prim->molec->rot_matrix.matrix[2][1]),
+                     &(whichobj->prim->molec->rot_matrix.matrix[2][2]));
+              fgets(instring,80,rot_pipe);
+              redraw();
+            } else{
+              fgets(instring,80,rot_pipe);
+              fprintf(stderr,"%s",instring);
+              fgets(instring,80,rot_pipe);
+              fprintf(stderr,"%s",instring);
+              fgets(instring,80,rot_pipe);
+              fprintf(stderr,"%s",instring);
+              fgets(instring,80,rot_pipe);
+              fprintf(stderr,"%s",instring);
+            }
+          }
+        }
       }
 #endif
       /******
-	 there are no events waiting, and we may need to be
-	 updating a surface
+         there are no events waiting, and we may need to be
+         updating a surface
       *******/
       redrawgraph();
     }
@@ -997,18 +997,18 @@ void parse_commands(void)
     if( whichobj && whichobj->prim){
       switch(whichobj->prim->which){
       case GRAPH:
-	the_graph = whichobj->prim->graph;
-	break;
+        the_graph = whichobj->prim->graph;
+        break;
       case PROP_GRAPH:
-	the_graph =  whichobj->prim->prop_graph->the_data;
-	prop_graph = whichobj->prim->prop_graph;
-	break;
+        the_graph =  whichobj->prim->prop_graph->the_data;
+        prop_graph = whichobj->prim->prop_graph;
+        break;
       case BAND_GRAPH:
-	the_graph = whichobj->prim->band_graph->the_data;
-	break;
+        the_graph = whichobj->prim->band_graph->the_data;
+        break;
       case WALSH_GRAPH:
-	the_graph =  whichobj->prim->walsh_graph->the_data;
-	break;
+        the_graph =  whichobj->prim->walsh_graph->the_data;
+        break;
       }
     } else{
       the_graph = 0;
@@ -1054,136 +1054,136 @@ void parse_commands(void)
     }
     else if(!strncmp(instring,"XTIC",4)){
       if(the_graph){
-	the_graph->do_x_tics = !the_graph->do_x_tics;
-	redraw();
-	fgets(instring,80,stdin);
+        the_graph->do_x_tics = !the_graph->do_x_tics;
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"YTIC",4)){
       if(the_graph){
-	the_graph->do_y_tics = !the_graph->do_y_tics;
-	redraw();
-	fgets(instring,80,stdin);
+        the_graph->do_y_tics = !the_graph->do_y_tics;
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"XLEG",4)){
       if(the_graph){
-	string_to_change[0] = the_graph->xlegend;
-	readstringparm("X legend",string_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        string_to_change[0] = the_graph->xlegend;
+        readstringparm("X legend",string_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"YLEG",4)){
       if(the_graph){
-	string_to_change[0] = the_graph->ylegend;
-	readstringparm("Y legend",string_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        string_to_change[0] = the_graph->ylegend;
+        readstringparm("Y legend",string_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"XMAX",4)){
       if(the_graph){
-	if( prop_graph ){
-	  float_to_change = &(prop_graph->max_x);
-	} else{
-	  float_to_change = &(the_graph->max_x);
-	}
-	readfloatparm("x max",float_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        if( prop_graph ){
+          float_to_change = &(prop_graph->max_x);
+        } else{
+          float_to_change = &(the_graph->max_x);
+        }
+        readfloatparm("x max",float_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"XMIN",4)){
       if(the_graph){
-	if( prop_graph ){
-	  float_to_change = &(prop_graph->min_x);
-	} else{
-	  float_to_change = &(the_graph->min_x);
-	}
-	readfloatparm("x min",float_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        if( prop_graph ){
+          float_to_change = &(prop_graph->min_x);
+        } else{
+          float_to_change = &(the_graph->min_x);
+        }
+        readfloatparm("x min",float_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"YMAX",4)){
       if(the_graph){
-	if( prop_graph ){
-	  float_to_change = &(prop_graph->max_y);
-	} else{
-	  float_to_change = &(the_graph->max_y);
-	}
-	readfloatparm("y max",float_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        if( prop_graph ){
+          float_to_change = &(prop_graph->max_y);
+        } else{
+          float_to_change = &(the_graph->max_y);
+        }
+        readfloatparm("y max",float_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
       else if( prim->FMO_diagram ){
-	float_to_change = &(prim->FMO_diagram->max_y);
-	readfloatparm("y max",float_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        float_to_change = &(prim->FMO_diagram->max_y);
+        readfloatparm("y max",float_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"YMIN",4)){
       if(the_graph){
-	if( prop_graph ){
-	  float_to_change = &(prop_graph->min_y);
-	} else{
-	  float_to_change = &(the_graph->min_y);
-	}
-	readfloatparm("y min",float_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        if( prop_graph ){
+          float_to_change = &(prop_graph->min_y);
+        } else{
+          float_to_change = &(the_graph->min_y);
+        }
+        readfloatparm("y min",float_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
       else if( prim->FMO_diagram ){
-	float_to_change = &(prim->FMO_diagram->min_y);
-	readfloatparm("y min",float_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        float_to_change = &(prim->FMO_diagram->min_y);
+        readfloatparm("y min",float_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
 
     }
     else if(!strncmp(instring,"XSCAL",5)){
       if( whichobj ){
-	readfloatparm("X scaling",&(whichobj->scale.x));
+        readfloatparm("X scaling",&(whichobj->scale.x));
       }
     }
     else if(!strncmp(instring,"YSCAL",5)){
       if( whichobj ){
-	readfloatparm("Y scaling",&(whichobj->scale.y));
+        readfloatparm("Y scaling",&(whichobj->scale.y));
       }
     }
     else if(!strncmp(instring,"XTRANS",6)){
       if( whichobj ){
-	readfloatparm("X translation",&(whichobj->trans.x));
+        readfloatparm("X translation",&(whichobj->trans.x));
       }
     }
     else if(!strncmp(instring,"YTRANS",6)){
       if( whichobj ){
-	readfloatparm("Y translation",&(whichobj->trans.y));
+        readfloatparm("Y translation",&(whichobj->trans.y));
       }
     }
     else if(!strncmp(instring,"YMAX",4)){
       if(the_graph){
-	if( prop_graph ){
-	  float_to_change = &(prop_graph->max_y);
-	} else{
-	  float_to_change = &(the_graph->max_y);
-	}
-	readfloatparm("y max",float_to_change);
-	redraw();
-	fgets(instring,80,stdin);
+        if( prop_graph ){
+          float_to_change = &(prop_graph->max_y);
+        } else{
+          float_to_change = &(the_graph->max_y);
+        }
+        readfloatparm("y max",float_to_change);
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"TITL",4)){
       if(the_graph){
-	for(i=0;i<NUM_TITLE_LINES;i++){
-	  string_to_change[i] = the_graph->title[i];
-	}
-	readmultistringparm("Title",NUM_TITLE_LINES,string_to_change);
-	the_graph->do_title = 1;
-	redraw();
-	fgets(instring,80,stdin);
+        for(i=0;i<NUM_TITLE_LINES;i++){
+          string_to_change[i] = the_graph->title[i];
+        }
+        readmultistringparm("Title",NUM_TITLE_LINES,string_to_change);
+        the_graph->do_title = 1;
+        redraw();
+        fgets(instring,80,stdin);
       }
     }
     else if(!strncmp(instring,"PRIN",4)){
@@ -1191,95 +1191,95 @@ void parse_commands(void)
     }
     else if(!strncmp(instring,"CURVE",5)){
       if( the_graph ){
-	/* figure out which curve to use */
-	sscanf(instring,"%s %d",tempstring,&which_curve);
+        /* figure out which curve to use */
+        sscanf(instring,"%s %d",tempstring,&which_curve);
 
-	if( which_curve <= the_graph->num_curves ){
-	  the_graph->curves_to_display[which_curve-1] =
-	    !(the_graph->curves_to_display[which_curve-1]);
-	}else{
-	  fprintf(stderr,"There are only %d curves in the data set!\n",
-		  the_graph->num_curves);
-	}
+        if( which_curve <= the_graph->num_curves ){
+          the_graph->curves_to_display[which_curve-1] =
+            !(the_graph->curves_to_display[which_curve-1]);
+        }else{
+          fprintf(stderr,"There are only %d curves in the data set!\n",
+                  the_graph->num_curves);
+        }
       }
     }
     else if(!strncmp(instring,"LINESTY",7)){
       if( the_graph ){
-	/* figure out which curve and which style to use */
-	sscanf(instring,"%s %d %d",tempstring,&which_curve,&which_style);
+        /* figure out which curve and which style to use */
+        sscanf(instring,"%s %d %d",tempstring,&which_curve,&which_style);
 
-	if( which_curve <= the_graph->num_curves ){
-	  the_graph->styles[which_curve-1] = which_style;
-	}else{
-	  fprintf(stderr,"There are only %d curves in the data set!\n",
-		  the_graph->num_curves);
-	}
+        if( which_curve <= the_graph->num_curves ){
+          the_graph->styles[which_curve-1] = which_style;
+        }else{
+          fprintf(stderr,"There are only %d curves in the data set!\n",
+                  the_graph->num_curves);
+        }
       }
     }
 
     else if(!strncmp(instring,"INTEGSTY",8)){
       if( whichobj->prim->which != PROP_GRAPH ){
-	fprintf(stderr,"This type of graph doesn't have an integration.\n");
+        fprintf(stderr,"This type of graph doesn't have an integration.\n");
       }
       else{
-	the_graph = prop_graph->the_integration;
+        the_graph = prop_graph->the_integration;
 
-	if( the_graph ){
-	  /* figure out which curve to use */
-	  sscanf(instring,"%s %d %d",tempstring,&which_curve,&which_style);
+        if( the_graph ){
+          /* figure out which curve to use */
+          sscanf(instring,"%s %d %d",tempstring,&which_curve,&which_style);
 
-	  if( which_curve <= the_graph->num_curves ){
-	    the_graph->styles[which_curve-1] = which_style;
-	  }else{
-	    fprintf(stderr,"There are only %d curves in the data set!\n",
-		    the_graph->num_curves);
-	  }
-	}
+          if( which_curve <= the_graph->num_curves ){
+            the_graph->styles[which_curve-1] = which_style;
+          }else{
+            fprintf(stderr,"There are only %d curves in the data set!\n",
+                    the_graph->num_curves);
+          }
+        }
       }
     }
 
     else if(!strncmp(instring,"INTEGSC",7)){
       if( whichobj->prim->which != PROP_GRAPH ){
-	fprintf(stderr,"This type of graph doesn't have an integration.\n");
+        fprintf(stderr,"This type of graph doesn't have an integration.\n");
       }
       else{
-	if(prop_graph->the_integration){
-	  prop_graph->integs_for_tics = !(prop_graph->integs_for_tics);
-	}
+        if(prop_graph->the_integration){
+          prop_graph->integs_for_tics = !(prop_graph->integs_for_tics);
+        }
       }
     }
     else if(!strncmp(instring,"INTEG",5)){
       if( whichobj->prim->which != PROP_GRAPH ){
-	fprintf(stderr,"This type of graph doesn't have an integration.\n");
+        fprintf(stderr,"This type of graph doesn't have an integration.\n");
       }
       else{
-	the_graph = prop_graph->the_integration;
+        the_graph = prop_graph->the_integration;
 
-	if( the_graph ){
-	  /* figure out which curve to use */
-	  sscanf(instring,"%s %d",tempstring,&which_curve);
+        if( the_graph ){
+          /* figure out which curve to use */
+          sscanf(instring,"%s %d",tempstring,&which_curve);
 
-	  if( which_curve <= the_graph->num_curves ){
-	    the_graph->curves_to_display[which_curve-1] =
-	      !(the_graph->curves_to_display[which_curve-1]);
-	  }else{
-	    fprintf(stderr,"There are only %d curves in the data set!\n",
-		    the_graph->num_curves);
-	  }
-	}
+          if( which_curve <= the_graph->num_curves ){
+            the_graph->curves_to_display[which_curve-1] =
+              !(the_graph->curves_to_display[which_curve-1]);
+          }else{
+            fprintf(stderr,"There are only %d curves in the data set!\n",
+                    the_graph->num_curves);
+          }
+        }
       }
     }
     else if(!strncmp(instring,"KILL",4)){
       if(whichobj){
-	free_obj(whichobj);
-	D_FREE(whichobj);
-	whichobj = 0;
+        free_obj(whichobj);
+        D_FREE(whichobj);
+        whichobj = 0;
       }
       if( head->next ){
-	head = head->next;
+        head = head->next;
       }
       else{
-	head = 0;
+        head = 0;
       }
     }
     else if(!strncmp(instring,"PURGE",5)){
@@ -1287,76 +1287,76 @@ void parse_commands(void)
     }
     else if(!strncmp(instring,"FILL",4)){
       if( fill_projections ){
-	fill_projections = 0;
-	printf("Filling of DOS Projections is off.\n");
+        fill_projections = 0;
+        printf("Filling of DOS Projections is off.\n");
       }
       else{
-	fill_projections = 1;
-	printf("Filling of DOS Projections is on.\n");
+        fill_projections = 1;
+        printf("Filling of DOS Projections is on.\n");
       }
     }
     else if(!strncmp(instring,"FERMI",5)){
       if(whichobj && whichobj->prim ){
-	switch(whichobj->prim->which){
-	case BAND_GRAPH:
-	  whichobj->prim->band_graph->show_fermi =
-	    !(whichobj->prim->band_graph->show_fermi);
-	  redraw();
-	  break;
-	case PROP_GRAPH:
-	  whichobj->prim->prop_graph->show_fermi =
-	    !(whichobj->prim->prop_graph->show_fermi);
-	  redraw();
-	  break;
-	default:
-	  fprintf(stderr,"This kind of graph doesn't have a Fermi level.\n");
-	  break;
-	}
+        switch(whichobj->prim->which){
+        case BAND_GRAPH:
+          whichobj->prim->band_graph->show_fermi =
+            !(whichobj->prim->band_graph->show_fermi);
+          redraw();
+          break;
+        case PROP_GRAPH:
+          whichobj->prim->prop_graph->show_fermi =
+            !(whichobj->prim->prop_graph->show_fermi);
+          redraw();
+          break;
+        default:
+          fprintf(stderr,"This kind of graph doesn't have a Fermi level.\n");
+          break;
+        }
       }
     }
     else if(!strncmp(instring,"CHANGE FER",10)){
       if(whichobj && whichobj->prim ){
-	switch(whichobj->prim->which){
-	case BAND_GRAPH:
-	  readfloatparm("Fermi Level",&(whichobj->prim->band_graph->Fermi_E));
-	  whichobj->prim->band_graph->show_fermi = 1;
-	  redraw();
-	  break;
-	case PROP_GRAPH:
-	  readfloatparm("Fermi Level",&(whichobj->prim->prop_graph->Fermi_E));
-	  whichobj->prim->prop_graph->show_fermi = 1;
-	  redraw();
-	  break;
-	default:
-	  fprintf(stderr,"This kind of graph doesn't have a Fermi level.\n");
-	  break;
-	}
+        switch(whichobj->prim->which){
+        case BAND_GRAPH:
+          readfloatparm("Fermi Level",&(whichobj->prim->band_graph->Fermi_E));
+          whichobj->prim->band_graph->show_fermi = 1;
+          redraw();
+          break;
+        case PROP_GRAPH:
+          readfloatparm("Fermi Level",&(whichobj->prim->prop_graph->Fermi_E));
+          whichobj->prim->prop_graph->show_fermi = 1;
+          redraw();
+          break;
+        default:
+          fprintf(stderr,"This kind of graph doesn't have a Fermi level.\n");
+          break;
+        }
       }
     }
     else if(!strncmp(instring,"SHOW",4)){
       if(whichobj && prim ){
-	if( prim->which == FMO_DIAGRAM ){
-	  if( strstr(instring,"HOMO") ){
-	    prim->FMO_diagram->electron_filling_mode = FMO_FILL_HOMO;
-	  }else if( strstr(instring,"ALL") ){
-	    prim->FMO_diagram->electron_filling_mode = FMO_FILL_ALL;
-	  }else if( strstr(instring,"NONE") ){
-	    prim->FMO_diagram->electron_filling_mode = FMO_FILL_NONE;
-	  }
-	}
+        if( prim->which == FMO_DIAGRAM ){
+          if( strstr(instring,"HOMO") ){
+            prim->FMO_diagram->electron_filling_mode = FMO_FILL_HOMO;
+          }else if( strstr(instring,"ALL") ){
+            prim->FMO_diagram->electron_filling_mode = FMO_FILL_ALL;
+          }else if( strstr(instring,"NONE") ){
+            prim->FMO_diagram->electron_filling_mode = FMO_FILL_NONE;
+          }
+        }
       }
     }
     else if(strstr(instring,"FRAG")){
       if(whichobj && prim ){
-	if( prim->which == FMO_DIAGRAM ){
-	  if( strstr(instring,"LEFT") ){
-	    int_to_change = &(prim->FMO_diagram->left_fragment);
-	    readintparm("left fragment",int_to_change);
-	  } else if(strstr(instring,"RIGHT")){
-	    int_to_change = &(prim->FMO_diagram->right_fragment);
-	    readintparm("right fragment",int_to_change);
-	  }
-	}
+        if( prim->which == FMO_DIAGRAM ){
+          if( strstr(instring,"LEFT") ){
+            int_to_change = &(prim->FMO_diagram->left_fragment);
+            readintparm("left fragment",int_to_change);
+          } else if(strstr(instring,"RIGHT")){
+            int_to_change = &(prim->FMO_diagram->right_fragment);
+            readintparm("right fragment",int_to_change);
+          }
+        }
       }
     }
     else if(!strncmp(instring,"HELP",4)){

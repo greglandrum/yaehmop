@@ -106,16 +106,16 @@ void find_princ_axes(atoms,locs,princ_axes,moments,num_atoms)
     if( mass >= 0 ){
 
       MOI_tensor->me[0][0] += mass*(atom->loc.z*atom->loc.z +
-				    atom->loc.y*atom->loc.y);
+                                    atom->loc.y*atom->loc.y);
       MOI_tensor->me[0][1] -= mass*(atom->loc.x*atom->loc.y);
       MOI_tensor->me[0][2] -= mass*(atom->loc.x*atom->loc.z);
 
       MOI_tensor->me[1][1] += mass*(atom->loc.z*atom->loc.z +
-				    atom->loc.x*atom->loc.x);
+                                    atom->loc.x*atom->loc.x);
       MOI_tensor->me[1][2] -= mass*(atom->loc.y*atom->loc.z);
 
       MOI_tensor->me[2][2] += mass*(atom->loc.y*atom->loc.y +
-				    atom->loc.x*atom->loc.x);
+                                    atom->loc.x*atom->loc.x);
     }
   }
 

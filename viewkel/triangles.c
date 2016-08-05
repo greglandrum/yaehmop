@@ -70,9 +70,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 void convert_explicit_triangles(explicit_triangle_type *explicit,
-				int num_explicit,triangle_type **triangles,
-				int *num_tri,point_type **points,
-				int *num_points)
+                                int num_explicit,triangle_type **triangles,
+                                int *num_tri,point_type **points,
+                                int *num_points)
 {
   int i,j,k;
   int done;
@@ -114,34 +114,34 @@ void convert_explicit_triangles(explicit_triangle_type *explicit,
       /* check to see if this vertex is already in the list */
       done = 0;
       for(k=0;k<(*num_points)&&!done;k++){
-	if( (*points)[k].x == explicit[i].vertices[j].x &&
-	   (*points)[k].y == explicit[i].vertices[j].y &&
-	   (*points)[k].z == explicit[i].vertices[j].z ){
+        if( (*points)[k].x == explicit[i].vertices[j].x &&
+           (*points)[k].y == explicit[i].vertices[j].y &&
+           (*points)[k].z == explicit[i].vertices[j].z ){
 
-	  /* okay, this is a match, set the vertex number */
-	  done = 1;
-	  which_vert = k;
-	}
+          /* okay, this is a match, set the vertex number */
+          done = 1;
+          which_vert = k;
+        }
       }
 
       if( !done ){
-	/* add this vertex to the points list */
-	(*points)[*num_points].x = explicit[i].vertices[j].x;
-	(*points)[*num_points].y = explicit[i].vertices[j].y;
-	(*points)[*num_points].z = explicit[i].vertices[j].z;
+        /* add this vertex to the points list */
+        (*points)[*num_points].x = explicit[i].vertices[j].x;
+        (*points)[*num_points].y = explicit[i].vertices[j].y;
+        (*points)[*num_points].z = explicit[i].vertices[j].z;
 
-	/* set the vertex number */
-	which_vert = (*num_points);
-	(*num_points)++;
+        /* set the vertex number */
+        which_vert = (*num_points);
+        (*num_points)++;
 
-	/* do we need more memory? */
-	if( (*num_points) == max_points ){
-	  max_points += 512;
-	  *points = (point_type *)D_REALLOC((void *)(*points),
-					  max_points*sizeof(point_type));
-	  if( !(*points) )
-	    fatal("Can't D_REALLOC points in convert_explicit_triangles");
-	}
+        /* do we need more memory? */
+        if( (*num_points) == max_points ){
+          max_points += 512;
+          *points = (point_type *)D_REALLOC((void *)(*points),
+                                          max_points*sizeof(point_type));
+          if( !(*points) )
+            fatal("Can't D_REALLOC points in convert_explicit_triangles");
+        }
       }
 
       /* now set up the triangle vertex */
@@ -179,9 +179,9 @@ void convert_explicit_triangles(explicit_triangle_type *explicit,
     if( (*num_tri) == max_tri ){
       max_tri += 512;
       (*triangles) = (triangle_type *)D_REALLOC((void *)(*triangles),
-					      max_tri*sizeof(triangle_type));
+                                              max_tri*sizeof(triangle_type));
       if( !(*triangles) )
-	fatal("Can't D_REALLOC triangles in convert_explicit_triangles.");
+        fatal("Can't D_REALLOC triangles in convert_explicit_triangles.");
     }
   }
 
@@ -230,35 +230,35 @@ void remove_degen_triangles(MO_surface_type *MO_surf)
       c1 = &curr_tri->center;
 
       for( j=i+1; j<MO_surf->num_triangles; j++ ){
-	if( !ditched[j] ){
-	  /* check the distance between the centers */
-	  c2 = &(MO_surf->triangles[j].center);
-	  if( V3SquaredLength(V3Sub(c1,c2,&temp_v)) <= .00001 ){
-	    ditched[j] = 1;
-	  }
-	}
+        if( !ditched[j] ){
+          /* check the distance between the centers */
+          c2 = &(MO_surf->triangles[j].center);
+          if( V3SquaredLength(V3Sub(c1,c2,&temp_v)) <= .00001 ){
+            ditched[j] = 1;
+          }
+        }
       }
 
       /* check the sides of triangle i to see if we should ditch them */
       V3Sub(&(vertices[curr_tri->vertices[1]].position),
-	    &(vertices[curr_tri->vertices[0]].position),
-	    &edge1);
+            &(vertices[curr_tri->vertices[0]].position),
+            &edge1);
       V3Sub(&(vertices[curr_tri->vertices[2]].position),
-	    &(vertices[curr_tri->vertices[0]].position),
-	    &edge2);
+            &(vertices[curr_tri->vertices[0]].position),
+            &edge2);
 
       /******
 
-	do the cross product between the two edges and see if it's
-	zero.
+        do the cross product between the two edges and see if it's
+        zero.
 
       *******/
       if( V3SquaredLength(V3Cross(&edge1,&edge2,&temp_v)) > .000001 ){
-	bcopy(&(MO_surf->triangles[i]), &(triangle_store[num_kept]),
-	      sizeof(triangle_type));
-	num_kept++;
+        bcopy(&(MO_surf->triangles[i]), &(triangle_store[num_kept]),
+              sizeof(triangle_type));
+        num_kept++;
       }else{
-	ditched[i] = 1;
+        ditched[i] = 1;
       }
     }
   }
@@ -272,8 +272,8 @@ void remove_degen_triangles(MO_surface_type *MO_surf)
   if( !MO_surf->triangles ) fatal("Can't D_REALLOC triangle array.  This is weird.");
 
   fprintf(stderr,"%d of %d triangles were kept (%4.2lf %%).\n",num_kept,
-	  MO_surf->num_triangles,
-	  100.0*(float)num_kept/(float)MO_surf->num_triangles);
+          MO_surf->num_triangles,
+          100.0*(float)num_kept/(float)MO_surf->num_triangles);
   MO_surf->num_triangles = num_kept;
 
 
@@ -316,11 +316,11 @@ void calc_triangle_centers(MO_surface_type *MO_surf)
 
     if( temp_tri->color != -1 ){
       temp_tri->center.x =
-	(verts[0]->x + verts[1]->x + verts[2]->x)/3.0;
+        (verts[0]->x + verts[1]->x + verts[2]->x)/3.0;
       temp_tri->center.y =
-	(verts[0]->y + verts[1]->y + verts[2]->y)/3.0;
+        (verts[0]->y + verts[1]->y + verts[2]->y)/3.0;
       temp_tri->center.z =
-	(verts[0]->z + verts[1]->z + verts[2]->z)/3.0;
+        (verts[0]->z + verts[1]->z + verts[2]->z)/3.0;
     }
   }
 }
@@ -368,14 +368,14 @@ void save_triangle_locs(int num_args,char *MO_surf_p[MAX_ARGS])
 
   /* write the vertices */
   write(outfile,MO_surf->triangle_vertices,
-	MO_surf->num_vertices*sizeof(vertex_type));
+        MO_surf->num_vertices*sizeof(vertex_type));
 
   /* write the triangles */
   write(outfile,MO_surf->triangles,
-	MO_surf->num_triangles*sizeof(triangle_type));
+        MO_surf->num_triangles*sizeof(triangle_type));
 
   printf("Wrote %d vertices and %d triangles\n",MO_surf->num_vertices,
-	 MO_surf->num_triangles);
+         MO_surf->num_triangles);
 
   close(outfile);
 #else
@@ -443,14 +443,14 @@ void read_triangle_locs(int num_args, char *MO_surf_p[MAX_ARGS])
 
   /* read the vertices */
   read(infile,MO_surf->triangle_vertices,
-	MO_surf->num_vertices*sizeof(vertex_type));
+        MO_surf->num_vertices*sizeof(vertex_type));
 
   /* write the triangles */
   read(infile,MO_surf->triangles,
-	MO_surf->num_triangles*sizeof(triangle_type));
+        MO_surf->num_triangles*sizeof(triangle_type));
 
   printf("Read in %d vertices and %d triangles\n",MO_surf->num_vertices,
-	 MO_surf->num_triangles);
+         MO_surf->num_triangles);
 
   close(infile);
 #else

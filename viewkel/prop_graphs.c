@@ -120,16 +120,16 @@ void new_prop_graph(char *filename)
     failed = 1;
   }
 #else
-	if(!filename){
-		infile = choose_mac_file(file_name,MAC_FOPEN_OPEN_CD);
-	} else{
-		strcpy(file_name,filename);
-		infile = fopen(file_name,"r");
-	}
-	if( !infile ){
+        if(!filename){
+                infile = choose_mac_file(file_name,MAC_FOPEN_OPEN_CD);
+        } else{
+                strcpy(file_name,filename);
+                infile = fopen(file_name,"r");
+        }
+        if( !infile ){
     printf("Problems opening file: %s\n",file_name);
- 	 	display("oooooops!");
-   	failed = 1;
+                  display("oooooops!");
+           failed = 1;
   }
 #endif
 
@@ -184,31 +184,31 @@ void new_prop_graph(char *filename)
       upcase(instring);
       if( instring[0] == '#' && strstr(instring,"INTEGRATION") ){
 
-	/* there is, get space for it, then read in the data */
-	whichobj->prim->prop_graph->the_integration =
-	  (graph_type *)D_CALLOC(1,sizeof(graph_type));
-	if( !whichobj->prim->prop_graph->the_integration )
-	  fatal("Can't get space for prop_graph->the_integration.");
+        /* there is, get space for it, then read in the data */
+        whichobj->prim->prop_graph->the_integration =
+          (graph_type *)D_CALLOC(1,sizeof(graph_type));
+        if( !whichobj->prim->prop_graph->the_integration )
+          fatal("Can't get space for prop_graph->the_integration.");
 
-	read_graph_data(infile,whichobj->prim->prop_graph->the_integration,1,0);
+        read_graph_data(infile,whichobj->prim->prop_graph->the_integration,1,0);
 
-	/*******
-	  scale the integration data
-	  *******/
-	if( whichobj->prim->prop_graph->type == COOP_PROP ){
-	  the_graph = whichobj->prim->prop_graph->the_integration;
-	  the_graph->max_x = whichobj->prim->prop_graph->max_x;
-	  the_graph->max_y = whichobj->prim->prop_graph->max_y;
-	  the_graph->min_x = whichobj->prim->prop_graph->min_x;
-	  the_graph->min_y = whichobj->prim->prop_graph->min_y;
-	} else{
-	  /* for DOS curves the integration data should start on a scale of 0 to 1 */
-	  the_graph = whichobj->prim->prop_graph->the_integration;
-	  the_graph->min_x = 0.0;
-	  the_graph->max_x = 1.0;
-	}
+        /*******
+          scale the integration data
+          *******/
+        if( whichobj->prim->prop_graph->type == COOP_PROP ){
+          the_graph = whichobj->prim->prop_graph->the_integration;
+          the_graph->max_x = whichobj->prim->prop_graph->max_x;
+          the_graph->max_y = whichobj->prim->prop_graph->max_y;
+          the_graph->min_x = whichobj->prim->prop_graph->min_x;
+          the_graph->min_y = whichobj->prim->prop_graph->min_y;
+        } else{
+          /* for DOS curves the integration data should start on a scale of 0 to 1 */
+          the_graph = whichobj->prim->prop_graph->the_integration;
+          the_graph->min_x = 0.0;
+          the_graph->max_x = 1.0;
+        }
 
-	preprocess_graph_data(whichobj->prim->prop_graph->the_integration);
+        preprocess_graph_data(whichobj->prim->prop_graph->the_integration);
       }
     }
 

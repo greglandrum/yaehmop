@@ -235,18 +235,18 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
       check each coordinate to see if it is variable
 
         NOTE: this assumes that there can't be any initial values greater
-	 than 1000
+         than 1000
     **********/
     if( cell->using_Zmat ){
       which_var = floor( fabs(atom->Zmat_loc.bond_length / 1000.0) );
       if( which_var ) atom->Zmat_loc.bond_length =
-	values[(which_var-1)*num_steps + step];
+        values[(which_var-1)*num_steps + step];
       which_var = floor( fabs(atom->Zmat_loc.alpha / 1000.0) );
       if( which_var ) atom->Zmat_loc.alpha =
-	values[(which_var-1)*num_steps + step];
+        values[(which_var-1)*num_steps + step];
       which_var = floor( fabs(atom->Zmat_loc.beta / 1000.0) );
       if( which_var ) atom->Zmat_loc.beta =
-	values[(which_var-1)*num_steps + step];
+        values[(which_var-1)*num_steps + step];
     }
     else{
       which_var = floor( fabs(atom->loc.x / 1000.0) );
@@ -352,7 +352,7 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
     for(i=0;i<cell->num_atoms;i++){
       atom = &(cell->atoms[i]);
       fprintf(output_file,"%d %s %8.4f %8.4f %8.4g\n",
-	      i+1,atom->symb,atom->loc.x,atom->loc.y,atom->loc.z);
+              i+1,atom->symb,atom->loc.x,atom->loc.y,atom->loc.z);
     }
 
     /* that's it! */
@@ -383,7 +383,7 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
 *
 *****************************************************************************/
 void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
-		  properties,orbital_lookup_table,step)
+                  properties,orbital_lookup_table,step)
   detail_type *details;
   cell_type *cell;
   int num_orbs;
@@ -421,133 +421,133 @@ void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
     while(p_info){
       switch(p_info->which_to_print){
       case PRT_OP:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(status_file,"Atom Projection for Overlap Population ignored.\n");
-	  break;
-	case P_DOS_ORB:
-	  fprintf(walsh_file,"# %d Overlap Population between orbitals %d and %d\n",
-		  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	  things_so_far++;
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(status_file,"Atom Projection for Overlap Population ignored.\n");
+          break;
+        case P_DOS_ORB:
+          fprintf(walsh_file,"# %d Overlap Population between orbitals %d and %d\n",
+                  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+          things_so_far++;
+          break;
+        }
+        break;
       case PRT_ROP:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(walsh_file,"# %d Reduced Overlap Population between atoms %d and %d\n",
-		  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	  things_so_far++;
-	  break;
-	case P_DOS_ORB:
-	  fprintf(status_file,"Orbital Projection for Reduced Overlap Population ignored.\n");
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(walsh_file,"# %d Reduced Overlap Population between atoms %d and %d\n",
+                  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+          things_so_far++;
+          break;
+        case P_DOS_ORB:
+          fprintf(status_file,"Orbital Projection for Reduced Overlap Population ignored.\n");
+          break;
+        }
+        break;
       case PRT_OVERLAP:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(status_file,"Atom Projection for Overlap matrix ignored.\n");
-	  break;
-	case P_DOS_ORB:
-	  fprintf(walsh_file,"# %d Overlap matrix element between orbitals %d and %d\n",
-		  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	  things_so_far++;
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(status_file,"Atom Projection for Overlap matrix ignored.\n");
+          break;
+        case P_DOS_ORB:
+          fprintf(walsh_file,"# %d Overlap matrix element between orbitals %d and %d\n",
+                  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+          things_so_far++;
+          break;
+        }
+        break;
       case PRT_HAMIL:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(status_file,"Atom Projection for Hamiltonian matrix ignored.\n");
-	  break;
-	case P_DOS_ORB:
-	  fprintf(walsh_file,"# %d Hamiltonian matrix element between orbitals %d and %d\n",
-		  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	  things_so_far++;
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(status_file,"Atom Projection for Hamiltonian matrix ignored.\n");
+          break;
+        case P_DOS_ORB:
+          fprintf(walsh_file,"# %d Hamiltonian matrix element between orbitals %d and %d\n",
+                  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+          things_so_far++;
+          break;
+        }
+        break;
       case PRT_CHG_MAT:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(status_file,"Atom Projection for charge matrix ignored.\n");
-	  break;
-	case P_DOS_ORB:
-	  fprintf(walsh_file,"# %d Charge matrix element between orbitals %d and %d\n",
-		  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	  things_so_far++;
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(status_file,"Atom Projection for charge matrix ignored.\n");
+          break;
+        case P_DOS_ORB:
+          fprintf(walsh_file,"# %d Charge matrix element between orbitals %d and %d\n",
+                  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+          things_so_far++;
+          break;
+        }
+        break;
       case PRT_RCHG_MAT:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(walsh_file,"# %d Reduced charge matrix element between atoms %d and %d\n",
-		  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	  things_so_far++;
-	  break;
-	case P_DOS_ORB:
-	  fprintf(status_file,"Orbital Projection for Reduced charge matrix ignored.\n");
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(walsh_file,"# %d Reduced charge matrix element between atoms %d and %d\n",
+                  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+          things_so_far++;
+          break;
+        case P_DOS_ORB:
+          fprintf(status_file,"Orbital Projection for Reduced charge matrix ignored.\n");
+          break;
+        }
+        break;
       case PRT_NET_CHG:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(walsh_file,"# %d Net charge on atom: %d \n",
-		  things_so_far,p_info->contrib1+1);
-	  things_so_far++;
-	  break;
-	case P_DOS_ORB:
-	  fprintf(status_file,"Orbital Projection for net charge\n");
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(walsh_file,"# %d Net charge on atom: %d \n",
+                  things_so_far,p_info->contrib1+1);
+          things_so_far++;
+          break;
+        case P_DOS_ORB:
+          fprintf(status_file,"Orbital Projection for net charge\n");
+          break;
+        }
+        break;
       case PRT_WAVE_FUNC:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(status_file,"Atom Projection for wave functions ignored.\n");
-	  break;
-	case P_DOS_ORB:
-	  fprintf(walsh_file,"# %d Coefficient of AO %d in MO %d\n",
-		  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	  things_so_far++;
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(status_file,"Atom Projection for wave functions ignored.\n");
+          break;
+        case P_DOS_ORB:
+          fprintf(walsh_file,"# %d Coefficient of AO %d in MO %d\n",
+                  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+          things_so_far++;
+          break;
+        }
+        break;
       case PRT_DIST:
-	switch(p_info->type){
-	case P_DOS_ATOM:
-	  fprintf(walsh_file,"# %d Distance between atoms %d and %d\n",
-		  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	  things_so_far++;
-	  break;
-	case P_DOS_ORB:
-	  fprintf(status_file,"Orbital Projection for distance matrix ignored.\n");
-	  break;
-	}
-	break;
+        switch(p_info->type){
+        case P_DOS_ATOM:
+          fprintf(walsh_file,"# %d Distance between atoms %d and %d\n",
+                  things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+          things_so_far++;
+          break;
+        case P_DOS_ORB:
+          fprintf(status_file,"Orbital Projection for distance matrix ignored.\n");
+          break;
+        }
+        break;
       case PRT_ELECTROSTAT:
-	fprintf(walsh_file,"# %d Electrostatic Repulsion Energy.\n",
-		things_so_far);
-	things_so_far++;
-	break;
+        fprintf(walsh_file,"# %d Electrostatic Repulsion Energy.\n",
+                things_so_far);
+        things_so_far++;
+        break;
       case PRT_ENERGIES:
-	fprintf(walsh_file,"# %d Total Energy.\n",
-		things_so_far);
-	things_so_far++;
-	break;
+        fprintf(walsh_file,"# %d Total Energy.\n",
+                things_so_far);
+        things_so_far++;
+        break;
       case PRT_ORB_ENERGY:
-	fprintf(walsh_file,"# %d Energy of Orbital: %d.\n",
-		things_so_far,p_info->contrib1+1);
-	things_so_far++;
-	break;
+        fprintf(walsh_file,"# %d Energy of Orbital: %d.\n",
+                things_so_far,p_info->contrib1+1);
+        things_so_far++;
+        break;
       case PRT_ORB_COEFF:
-	fprintf(walsh_file,"# %d Coefficient of AO: %d in MO: %d.\n",
-		things_so_far,p_info->contrib1+1,p_info->contrib2+1);
-	things_so_far++;
-	break;
+        fprintf(walsh_file,"# %d Coefficient of AO: %d in MO: %d.\n",
+                things_so_far,p_info->contrib1+1,p_info->contrib2+1);
+        things_so_far++;
+        break;
       }
       p_info = p_info->next;
     }
@@ -561,7 +561,7 @@ void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
   /* print out the values of the Walsh variables */
   for(i=0;i<details->walsh_details.num_vars;i++){
     fprintf(walsh_file,"%8.6lf ",
-	    details->walsh_details.values[i*details->walsh_details.num_steps+step]);
+            details->walsh_details.values[i*details->walsh_details.num_steps+step]);
   }
 
   /* Now step through the elements of the printing_info linked list */
@@ -572,90 +572,90 @@ void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
     case PRT_OP:
       switch(p_info->type){
       case P_DOS_ORB:
-	fprintf(walsh_file,"%8.6lf ",properties.OP_mat[p_info->contrib1*num_orbs+
-							p_info->contrib2]);
-	break;
+        fprintf(walsh_file,"%8.6lf ",properties.OP_mat[p_info->contrib1*num_orbs+
+                                                        p_info->contrib2]);
+        break;
       }
       break;
     case PRT_ROP:
       switch(p_info->type){
       case P_DOS_ATOM:
-	if( p_info->contrib1 > p_info->contrib2 ){
-	  fprintf(walsh_file,"%8.6lf ",
-		  properties.ROP_mat[p_info->contrib1*(p_info->contrib1+1)/2
-				     + p_info->contrib2]);
-	} else{
-	  fprintf(walsh_file,"%8.6lf ",
-		  properties.ROP_mat[p_info->contrib2*(p_info->contrib2+1)/2
-				     + p_info->contrib1]);
-	}
-	break;
+        if( p_info->contrib1 > p_info->contrib2 ){
+          fprintf(walsh_file,"%8.6lf ",
+                  properties.ROP_mat[p_info->contrib1*(p_info->contrib1+1)/2
+                                     + p_info->contrib2]);
+        } else{
+          fprintf(walsh_file,"%8.6lf ",
+                  properties.ROP_mat[p_info->contrib2*(p_info->contrib2+1)/2
+                                     + p_info->contrib1]);
+        }
+        break;
       }
       break;
     case PRT_OVERLAP:
       switch(p_info->type){
       case P_DOS_ORB:
-	fprintf(walsh_file,"%8.6lf ",
-		HERMETIAN_R(overlap,(p_info->contrib1),(p_info->contrib2)));
-		break;
+        fprintf(walsh_file,"%8.6lf ",
+                HERMETIAN_R(overlap,(p_info->contrib1),(p_info->contrib2)));
+                break;
       }
       break;
     case PRT_HAMIL:
       switch(p_info->type){
       case P_DOS_ORB:
-	fprintf(walsh_file,"%8.6lf ",
-		HERMETIAN_R(hamil,(p_info->contrib1),(p_info->contrib2)));
-		break;
+        fprintf(walsh_file,"%8.6lf ",
+                HERMETIAN_R(hamil,(p_info->contrib1),(p_info->contrib2)));
+                break;
       }
       break;
     case PRT_CHG_MAT:
       switch(p_info->type){
       case P_DOS_ORB:
-	fprintf(walsh_file,"%8.6lf ",properties.chg_mat[p_info->contrib1*num_orbs+
-							 p_info->contrib2]);
-	break;
+        fprintf(walsh_file,"%8.6lf ",properties.chg_mat[p_info->contrib1*num_orbs+
+                                                         p_info->contrib2]);
+        break;
       }
       break;
     case PRT_RCHG_MAT:
       switch(p_info->type){
       case P_DOS_ATOM:
-	fprintf(walsh_file,"%8.6lf ",properties.Rchg_mat[p_info->contrib1*cell->num_atoms
-							  +p_info->contrib2]);
-	  break;
+        fprintf(walsh_file,"%8.6lf ",properties.Rchg_mat[p_info->contrib1*cell->num_atoms
+                                                          +p_info->contrib2]);
+          break;
       }
       break;
     case PRT_NET_CHG:
       switch(p_info->type){
       case P_DOS_ATOM:
-	fprintf(walsh_file,"%8.6lf ",properties.net_chgs[p_info->contrib1]);
-	break;
+        fprintf(walsh_file,"%8.6lf ",properties.net_chgs[p_info->contrib1]);
+        break;
       }
       break;
     case PRT_WAVE_FUNC:
       switch(p_info->type){
       case P_DOS_ORB:
-	fprintf(walsh_file,"%8.6lf ",EIGENVECT_R(eigenset,p_info->contrib2,
-						 p_info->contrib1));
-	break;
+        fprintf(walsh_file,"%8.6lf ",EIGENVECT_R(eigenset,p_info->contrib2,
+                                                 p_info->contrib1));
+        break;
       }
       break;
     case PRT_DIST:
       switch(p_info->type){
       case P_DOS_ATOM:
-	/********
-	  since the distance mat is stored as a symmetric matrix, we have to do
-	  a little extra work to get the element out
-	  ********/
-	if( p_info->contrib1 < p_info->contrib2 ){
-	  atom1 = p_info->contrib1;
-	  atom2 = p_info->contrib2;
-	} else{
-	  atom1 = p_info->contrib2;
-	  atom2 = p_info->contrib1;
-	}
-	fprintf(walsh_file,"%8.6lf ",
-		cell->distance_mat[(atom2*(atom2+1))/2 + atom1]);
-	break;
+        /********
+          since the distance mat is stored as a symmetric matrix, we have to do
+          a little extra work to get the element out
+          ********/
+        if( p_info->contrib1 < p_info->contrib2 ){
+          atom1 = p_info->contrib1;
+          atom2 = p_info->contrib2;
+        } else{
+          atom1 = p_info->contrib2;
+          atom2 = p_info->contrib1;
+        }
+        fprintf(walsh_file,"%8.6lf ",
+                cell->distance_mat[(atom2*(atom2+1))/2 + atom1]);
+        break;
       }
       break;
     case PRT_ENERGIES:
@@ -666,7 +666,7 @@ void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
       break;
     case PRT_ORB_COEFF:
       fprintf(walsh_file,"%8.6lf ",
-	      EIGENVECT_R(eigenset,p_info->contrib2,p_info->contrib1));
+              EIGENVECT_R(eigenset,p_info->contrib2,p_info->contrib1));
       break;
     case PRT_ELECTROSTAT:
       fprintf(walsh_file,"%8.6lf ",properties.electrostat_E);

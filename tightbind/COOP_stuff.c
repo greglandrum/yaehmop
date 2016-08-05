@@ -71,7 +71,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ****************************************************************************/
  real eval_COOP(COOP,details,cell,num_orbs,prop_info,R_overlaps,orbital_ordering,
-		 orbital_lookup_table)
+                 orbital_lookup_table)
    COOP_type *COOP;
    detail_type *details;
    cell_type *cell;
@@ -168,11 +168,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    case P_DOS_ORB:
      /* this is the sum of the coefficients */
      accum = ((real)MO_ptr[COOP->contrib1] * MO_ptr[COOP->contrib2] +
-	      (real)MO_ptrI[COOP->contrib1] * MO_ptrI[COOP->contrib2]) /
-		((real)MULTIPLIER*(real)MULTIPLIER);
+              (real)MO_ptrI[COOP->contrib1] * MO_ptrI[COOP->contrib2]) /
+                ((real)MULTIPLIER*(real)MULTIPLIER);
      accumI = ((real)MO_ptr[COOP->contrib1] * MO_ptrI[COOP->contrib2] -
-	       (real)MO_ptrI[COOP->contrib1] * MO_ptr[COOP->contrib2]) /
-		 ((real)MULTIPLIER*(real)MULTIPLIER);
+               (real)MO_ptrI[COOP->contrib1] * MO_ptr[COOP->contrib2]) /
+                 ((real)MULTIPLIER*(real)MULTIPLIER);
      /*****
 
        now multiply on the overlap matrix and phase factor
@@ -182,42 +182,42 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      ******/
      if(COOP->contrib1 != COOP->contrib2){
        if( details->Execution_Mode != MOLECULAR ){
-	 if( !doing_unit_cell ){
-	   if( COOP->contrib2 > COOP->contrib1 ){
-	     answer = 2.0*(accum*phaseR - accumI*phaseI)*
-	       (overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]+
-		overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]);
-	   } else{
-	     answer = 2.0*(accum*phaseR - accumI*phaseI)*
-	       (overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]-
-		overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]);
-	   }
-	 } else{
-	   if( COOP->contrib1 > COOP->contrib2 ){
-	     answer = 4.0*overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]*
-	       (accum*phaseR - accumI*phaseI);
-	   } else{
-	     answer = 4.0*overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]*
-	       (accum*phaseR - accumI*phaseI);
-	   }
-	 }
+         if( !doing_unit_cell ){
+           if( COOP->contrib2 > COOP->contrib1 ){
+             answer = 2.0*(accum*phaseR - accumI*phaseI)*
+               (overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]+
+                overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]);
+           } else{
+             answer = 2.0*(accum*phaseR - accumI*phaseI)*
+               (overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]-
+                overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]);
+           }
+         } else{
+           if( COOP->contrib1 > COOP->contrib2 ){
+             answer = 4.0*overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]*
+               (accum*phaseR - accumI*phaseI);
+           } else{
+             answer = 4.0*overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]*
+               (accum*phaseR - accumI*phaseI);
+           }
+         }
        } else{
-	 answer = 4.0*overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]*
-	   (accum*phaseR - accumI*phaseI);
+         answer = 4.0*overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]*
+           (accum*phaseR - accumI*phaseI);
        }
      }
      else{
        if( details->Execution_Mode != MOLECULAR ){
-	 if( !doing_unit_cell ){
-	   answer = 2.0*overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]*
-	     (accum*phaseR + accumI*phaseI);
-	 } else{
-	   answer = 2.0*overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]*
-	     (accum*phaseR + accumI*phaseI);
-	 }
+         if( !doing_unit_cell ){
+           answer = 2.0*overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]*
+             (accum*phaseR + accumI*phaseI);
+         } else{
+           answer = 2.0*overlap.mat[COOP->contrib2*num_orbs+COOP->contrib1]*
+             (accum*phaseR + accumI*phaseI);
+         }
        } else{
-	 answer = 2.0*overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]*
-	   (accum*phaseR + accumI*phaseI);
+         answer = 2.0*overlap.mat[COOP->contrib1*num_orbs+COOP->contrib2]*
+           (accum*phaseR + accumI*phaseI);
        }
      }
 
@@ -229,67 +229,67 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        found1=0;found2=0;offset1=0;
 
        for(ii=0; ii < cell->num_atoms; ii++)
-	 {
-	   find_atoms_orbs(num_orbs,cell->num_atoms,ii,orbital_lookup_table,&begin1,&end1);
+         {
+           find_atoms_orbs(num_orbs,cell->num_atoms,ii,orbital_lookup_table,&begin1,&end1);
 
-	   if((COOP->contrib1>=begin1)&&(COOP->contrib1<end1)){
+           if((COOP->contrib1>=begin1)&&(COOP->contrib1<end1)){
 
-	     found1=1;
-	     offset1=COOP->contrib1 - begin1;
+             found1=1;
+             offset1=COOP->contrib1 - begin1;
 
-	     if(offset1<1){
-	       Hii_1=cell->atoms[ii].coul_s;
-	     }
-	     if(offset1>0 && offset1<4){
-	       Hii_1=cell->atoms[ii].coul_p;
-	     }
-	     if(offset1>3 && offset1<9){
-	       Hii_1=cell->atoms[ii].coul_d;
-	     }
-	     if(offset1>8){
-	       Hii_1=cell->atoms[ii].coul_f;
-	     }
-	   }
+             if(offset1<1){
+               Hii_1=cell->atoms[ii].coul_s;
+             }
+             if(offset1>0 && offset1<4){
+               Hii_1=cell->atoms[ii].coul_p;
+             }
+             if(offset1>3 && offset1<9){
+               Hii_1=cell->atoms[ii].coul_d;
+             }
+             if(offset1>8){
+               Hii_1=cell->atoms[ii].coul_f;
+             }
+           }
 
-	   if((COOP->contrib2>=begin1)&&(COOP->contrib2<end1)){
+           if((COOP->contrib2>=begin1)&&(COOP->contrib2<end1)){
 
-	     found2=1;
-	     offset1=COOP->contrib2 - begin1;
+             found2=1;
+             offset1=COOP->contrib2 - begin1;
 
-	     if(offset1<1){
-	       Hii_2=cell->atoms[ii].coul_s;
-	     }
-	     if(offset1>0 && offset1<4){
-	       Hii_2=cell->atoms[ii].coul_p;
-	     }
-	     if(offset1>3 && offset1<9){
-	       Hii_2=cell->atoms[ii].coul_d;
-	     }
-	     if(offset1>8){
-	       Hii_2=cell->atoms[ii].coul_f;
-	     }
-	   }
-	 }
+             if(offset1<1){
+               Hii_2=cell->atoms[ii].coul_s;
+             }
+             if(offset1>0 && offset1<4){
+               Hii_2=cell->atoms[ii].coul_p;
+             }
+             if(offset1>3 && offset1<9){
+               Hii_2=cell->atoms[ii].coul_d;
+             }
+             if(offset1>8){
+               Hii_2=cell->atoms[ii].coul_f;
+             }
+           }
+         }
        if(!(found1 && found2)){
-	 FATAL_BUG("Can't find Hii's");
+         FATAL_BUG("Can't find Hii's");
        }
 
        if(doing_unit_cell && (COOP->contrib1 == COOP->contrib2)){
-	 answer *= Hii_1;
+         answer *= Hii_1;
        }
        else{
-	 if(details->weighted_Hij){
+         if(details->weighted_Hij){
 
-	   /* stuff for weighted constant */
-	   temp = Hii_1 + Hii_2;
-	   temp2 = (Hii_1 - Hii_2)/temp;
-	   temp2 *= temp2;
-	   temp2 = 0.5*(details->the_const + temp2 + temp2*temp2*(1-details->the_const));
-	   answer *= temp2*temp;
-	 }
-	 else{
-	   answer *=(0.5*details->the_const*(Hii_1+Hii_2));
-	 }
+           /* stuff for weighted constant */
+           temp = Hii_1 + Hii_2;
+           temp2 = (Hii_1 - Hii_2)/temp;
+           temp2 *= temp2;
+           temp2 = 0.5*(details->the_const + temp2 + temp2*temp2*(1-details->the_const));
+           answer *= temp2*temp;
+         }
+         else{
+           answer *=(0.5*details->the_const*(Hii_1+Hii_2));
+         }
        }
      }
      break;
@@ -299,123 +299,123 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
      /* find the orbitals */
      find_atoms_orbs(num_orbs,cell->num_atoms,COOP->contrib1,orbital_lookup_table,
-		     &begin1,&end1);
+                     &begin1,&end1);
      if( begin1 >= 0 ){
        find_atoms_orbs(num_orbs,cell->num_atoms,COOP->contrib2,orbital_lookup_table,
-		       &begin2,&end2);
+                       &begin2,&end2);
 
        if( begin2 >= 0 ){
 
-	 offset1=0; /* set counter for orbitals of 1st atom */
-	 for(i=begin1; i<end1; i++){
+         offset1=0; /* set counter for orbitals of 1st atom */
+         for(i=begin1; i<end1; i++){
 
-	   if(COOP->energy_weight){
-	     if(offset1<1){
-	       Hii_1=cell->atoms[COOP->contrib1].coul_s;
-	     }
-	     if(offset1>0 && offset1<4){
-	       Hii_1=cell->atoms[COOP->contrib1].coul_p;
-	     }
-	     if(offset1>3 && offset1<9){
-	       Hii_1=cell->atoms[COOP->contrib1].coul_d;
-	     }
-	     if(offset1>8){
-	       Hii_1=cell->atoms[COOP->contrib1].coul_f;
-	     }
-	   }
+           if(COOP->energy_weight){
+             if(offset1<1){
+               Hii_1=cell->atoms[COOP->contrib1].coul_s;
+             }
+             if(offset1>0 && offset1<4){
+               Hii_1=cell->atoms[COOP->contrib1].coul_p;
+             }
+             if(offset1>3 && offset1<9){
+               Hii_1=cell->atoms[COOP->contrib1].coul_d;
+             }
+             if(offset1>8){
+               Hii_1=cell->atoms[COOP->contrib1].coul_f;
+             }
+           }
 
-	   offset2=0; /* reset counter for orbitals of 2nd atom */
-	   for(j=begin2; j<end2; j++){
+           offset2=0; /* reset counter for orbitals of 2nd atom */
+           for(j=begin2; j<end2; j++){
 
-	     if(COOP->energy_weight){
-	       if(offset2<1){
-		 Hii_2=cell->atoms[COOP->contrib2].coul_s;
-	       }
-	       if(offset2>0 && offset2<4){
-		 Hii_2=cell->atoms[COOP->contrib2].coul_p;
-	       }
-	       if(offset2>3 && offset2<9){
-		 Hii_2=cell->atoms[COOP->contrib2].coul_d;
-	       }
-	       if(offset2>8){
-		 Hii_2=cell->atoms[COOP->contrib2].coul_f;
-	       }
-	     }
-	     accum = ((real)MO_ptr[i] * MO_ptr[j] +
-		      (real)MO_ptrI[i] * MO_ptrI[j]) /
-			((real)MULTIPLIER*(real)MULTIPLIER);
-	     accumI = ((real)MO_ptr[i] * MO_ptrI[j] -
-		       (real)MO_ptrI[i] * MO_ptr[j]) /
-			 ((real)MULTIPLIER*(real)MULTIPLIER);
+             if(COOP->energy_weight){
+               if(offset2<1){
+                 Hii_2=cell->atoms[COOP->contrib2].coul_s;
+               }
+               if(offset2>0 && offset2<4){
+                 Hii_2=cell->atoms[COOP->contrib2].coul_p;
+               }
+               if(offset2>3 && offset2<9){
+                 Hii_2=cell->atoms[COOP->contrib2].coul_d;
+               }
+               if(offset2>8){
+                 Hii_2=cell->atoms[COOP->contrib2].coul_f;
+               }
+             }
+             accum = ((real)MO_ptr[i] * MO_ptr[j] +
+                      (real)MO_ptrI[i] * MO_ptrI[j]) /
+                        ((real)MULTIPLIER*(real)MULTIPLIER);
+             accumI = ((real)MO_ptr[i] * MO_ptrI[j] -
+                       (real)MO_ptrI[i] * MO_ptr[j]) /
+                         ((real)MULTIPLIER*(real)MULTIPLIER);
 
-	     if( i != j ){
-	       if( details->Execution_Mode != MOLECULAR ){
-		 if( !doing_unit_cell ){
+             if( i != j ){
+               if( details->Execution_Mode != MOLECULAR ){
+                 if( !doing_unit_cell ){
 
-		   if( j > i ){
-		     answer_contrib = 2.0*(overlap.mat[j*num_orbs+i] +
-				    overlap.mat[i*num_orbs+j])*
-				      (accum*phaseR -  accumI*phaseI);
-		   } else{
-		     answer_contrib = 2.0*(overlap.mat[j*num_orbs+i] -
-				    overlap.mat[i*num_orbs+j])*
-				      (accum*phaseR -  accumI*phaseI);
-		   }
+                   if( j > i ){
+                     answer_contrib = 2.0*(overlap.mat[j*num_orbs+i] +
+                                    overlap.mat[i*num_orbs+j])*
+                                      (accum*phaseR -  accumI*phaseI);
+                   } else{
+                     answer_contrib = 2.0*(overlap.mat[j*num_orbs+i] -
+                                    overlap.mat[i*num_orbs+j])*
+                                      (accum*phaseR -  accumI*phaseI);
+                   }
 
-		 } else{
-		   if( i > j ){
-		     answer_contrib = 4.0*overlap.mat[j*num_orbs+i] *
-		       (accum*phaseR -  accumI*phaseI);
-		   } else{
-		     answer_contrib = 4.0*overlap.mat[i*num_orbs+j] *
-		       (accum*phaseR -  accumI*phaseI);
-		   }
-		 }
-	       }else{
-		 if( i > j ){
-		   answer_contrib = 4.0*overlap.mat[j*num_orbs+i] *
-		     (accum*phaseR -  accumI*phaseI);
-		 } else{
-		   answer_contrib = 4.0*overlap.mat[i*num_orbs+j] *
-		     (accum*phaseR -  accumI*phaseI);
-		 }
-	       }
-	     }
-	     else{
-	       if( details->Execution_Mode != MOLECULAR ){
-		 answer_contrib = 2.0*overlap.mat[j*num_orbs+i] *
-		   (accum*phaseR -  accumI*phaseI);
-	       }else{
-		 answer_contrib = 2.0*overlap.mat[i*num_orbs+j] *
-		   (accum*phaseR -  accumI*phaseI);
-	       }
-	     }
+                 } else{
+                   if( i > j ){
+                     answer_contrib = 4.0*overlap.mat[j*num_orbs+i] *
+                       (accum*phaseR -  accumI*phaseI);
+                   } else{
+                     answer_contrib = 4.0*overlap.mat[i*num_orbs+j] *
+                       (accum*phaseR -  accumI*phaseI);
+                   }
+                 }
+               }else{
+                 if( i > j ){
+                   answer_contrib = 4.0*overlap.mat[j*num_orbs+i] *
+                     (accum*phaseR -  accumI*phaseI);
+                 } else{
+                   answer_contrib = 4.0*overlap.mat[i*num_orbs+j] *
+                     (accum*phaseR -  accumI*phaseI);
+                 }
+               }
+             }
+             else{
+               if( details->Execution_Mode != MOLECULAR ){
+                 answer_contrib = 2.0*overlap.mat[j*num_orbs+i] *
+                   (accum*phaseR -  accumI*phaseI);
+               }else{
+                 answer_contrib = 2.0*overlap.mat[i*num_orbs+j] *
+                   (accum*phaseR -  accumI*phaseI);
+               }
+             }
 
-	     /* add energy weighting factor (if appropriate) */
-	     if(COOP->energy_weight){
+             /* add energy weighting factor (if appropriate) */
+             if(COOP->energy_weight){
 
-	       if(doing_unit_cell && (COOP->contrib1 == COOP->contrib2)){
-		 answer_contrib *= Hii_1;
-	       }
-	       else{
-		 if(details->weighted_Hij){
+               if(doing_unit_cell && (COOP->contrib1 == COOP->contrib2)){
+                 answer_contrib *= Hii_1;
+               }
+               else{
+                 if(details->weighted_Hij){
 
-		   temp = Hii_1 + Hii_2;
-		   temp2 = (Hii_1 - Hii_2)/temp;
-		   temp2 *= temp2;
-		   temp2 = 0.5*(details->the_const + temp2 + temp2*temp2*(1-details->the_const));
-		   answer_contrib *= temp2*temp;
-		 }
-		 else{
-		   answer_contrib *= 0.5*details->the_const*(Hii_1+Hii_2);
-		 }
-	       }
-	     }
-	     answer += answer_contrib; answer_contrib=0;
-	     offset2++;
-	   }
-	   offset1++;
-	 }
+                   temp = Hii_1 + Hii_2;
+                   temp2 = (Hii_1 - Hii_2)/temp;
+                   temp2 *= temp2;
+                   temp2 = 0.5*(details->the_const + temp2 + temp2*temp2*(1-details->the_const));
+                   answer_contrib *= temp2*temp;
+                 }
+                 else{
+                   answer_contrib *= 0.5*details->the_const*(Hii_1+Hii_2);
+                 }
+               }
+             }
+             answer += answer_contrib; answer_contrib=0;
+             offset2++;
+           }
+           offset1++;
+         }
        }
      }
      break;
@@ -429,12 +429,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
      /* eval sum of coefficients in FMO expansion */
      accum = ((real)FMO_ptr[COOP->contrib1]*FMO_ptr[COOP->contrib2]
-	      + (real)FMO_ptrI[COOP->contrib1]*FMO_ptrI[COOP->contrib2]) /
-		((real)MULTIPLIER*(real)MULTIPLIER);
+              + (real)FMO_ptrI[COOP->contrib1]*FMO_ptrI[COOP->contrib2]) /
+                ((real)MULTIPLIER*(real)MULTIPLIER);
 
      accumI = ((real)FMO_ptr[COOP->contrib1]*FMO_ptrI[COOP->contrib2]
-	       - (real)FMO_ptrI[COOP->contrib1]*FMO_ptr[COOP->contrib2]) /
-		 ((real)MULTIPLIER*(real)MULTIPLIER);
+               - (real)FMO_ptrI[COOP->contrib1]*FMO_ptr[COOP->contrib2]) /
+                 ((real)MULTIPLIER*(real)MULTIPLIER);
 
      /* identify fragments for FMO to AO projection of overlap */
 
@@ -443,12 +443,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      for(i=0;i<details->num_FMO_frags;i++){
        increment = details->FMO_frags[i].num_orbs;
        if((COOP->contrib1 < (orbital_sum + increment))&&(!set1)){
-	 frag_1=i; set1=1;
-	 fmo_index1=(COOP->contrib1 - orbital_sum);
+         frag_1=i; set1=1;
+         fmo_index1=(COOP->contrib1 - orbital_sum);
        }
        if((COOP->contrib2 < (orbital_sum + increment))&&(!set2)){
-	 frag_2=i; set2=1;
-	 fmo_index2=(COOP->contrib2 - orbital_sum);
+         frag_2=i; set2=1;
+         fmo_index2=(COOP->contrib2 - orbital_sum);
        }
        orbital_sum += increment;
      }
@@ -465,16 +465,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      for(i=0;i<details->FMO_frags[frag_1].num_atoms;i++){
 
        find_atoms_orbs(num_orbs,cell->num_atoms,details->FMO_frags[frag_1].atoms_in_frag[i],
-		       orbital_lookup_table,&begin1,&end1);
+                       orbital_lookup_table,&begin1,&end1);
 
        while(begin1<end1)
-	 {
-	   FMO_map1[increment]=begin1;
-	   begin1++; increment++;
-	 }
+         {
+           FMO_map1[increment]=begin1;
+           begin1++; increment++;
+         }
 
        if(increment > details->FMO_frags[frag_1].num_orbs){
-	 FATAL_BUG("FMO to AO map exceeds number of orbitals in fragment");
+         FATAL_BUG("FMO to AO map exceeds number of orbitals in fragment");
        }
      }
 
@@ -487,17 +487,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
        /* loop over atoms in fragment 2 */
        for(i=0;i<details->FMO_frags[frag_2].num_atoms;i++){
-	 find_atoms_orbs(num_orbs,cell->num_atoms,details->FMO_frags[frag_2].atoms_in_frag[i],
-			 orbital_lookup_table,&begin2,&end2);
-	 while(begin2<end2)
-	   {
-	     FMO_map2[increment]=begin2;
-	     begin2++; increment++;
-	   }
+         find_atoms_orbs(num_orbs,cell->num_atoms,details->FMO_frags[frag_2].atoms_in_frag[i],
+                         orbital_lookup_table,&begin2,&end2);
+         while(begin2<end2)
+           {
+             FMO_map2[increment]=begin2;
+             begin2++; increment++;
+           }
 
-	 if(increment > details->FMO_frags[frag_2].num_orbs){
-	   FATAL_BUG("FMO to AO map exceeds number of fragment orbitals");
-	 }
+         if(increment > details->FMO_frags[frag_2].num_orbs){
+           FATAL_BUG("FMO to AO map exceeds number of fragment orbitals");
+         }
        }
      }
 
@@ -505,134 +505,134 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      for(i=0;i<details->FMO_frags[frag_1].num_orbs;i++){
        for(j=0;j<details->FMO_frags[frag_2].num_orbs;j++){
 
-	 /* identify AO coefficients within each FMO */
-	 ao_term = FMO_AOptr1[fmo_index1*details->FMO_frags[frag_1].eigenset.dim + i]*
-	   FMO_AOptr2[fmo_index2*details->FMO_frags[frag_2].eigenset.dim + j];
+         /* identify AO coefficients within each FMO */
+         ao_term = FMO_AOptr1[fmo_index1*details->FMO_frags[frag_1].eigenset.dim + i]*
+           FMO_AOptr2[fmo_index2*details->FMO_frags[frag_2].eigenset.dim + j];
 
-	 if(ao_term){
-	   if(FMO_map1[i] != FMO_map2[j]){
-	     if(details->Execution_Mode != MOLECULAR){
-	       if(!doing_unit_cell){
-		 if(FMO_map2[j] > FMO_map1[i]){
-		   answer_contrib = 2.0*(accum*phaseR - accumI*phaseI)*ao_term*
-		     (overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]]+
-		      overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]]);
-		 }
-		 else{
-		   answer_contrib = 2.0*(accum*phaseR - accumI*phaseI)*ao_term*
-		     (overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]]-
-		      overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]]);
-		 }
-	       }
-	       else{
-		 if(FMO_map1[i] > FMO_map2[j]){
-		   answer_contrib = 2.0*(accum*phaseR - accumI*phaseI)*ao_term*
-		     overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]];
-		 }
-		 else{
-		   answer_contrib = 2.0*(accum*phaseR - accumI*phaseI)*ao_term*
-		     overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]];
-		 }
-		 if(details->num_FMO_frags){
-		   answer_contrib *= 2.0;
-		 }
-	       }
-	     }
-	     else{
-	       answer_contrib = 4.0*(accum*phaseR - accumI*phaseI)*ao_term;
+         if(ao_term){
+           if(FMO_map1[i] != FMO_map2[j]){
+             if(details->Execution_Mode != MOLECULAR){
+               if(!doing_unit_cell){
+                 if(FMO_map2[j] > FMO_map1[i]){
+                   answer_contrib = 2.0*(accum*phaseR - accumI*phaseI)*ao_term*
+                     (overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]]+
+                      overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]]);
+                 }
+                 else{
+                   answer_contrib = 2.0*(accum*phaseR - accumI*phaseI)*ao_term*
+                     (overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]]-
+                      overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]]);
+                 }
+               }
+               else{
+                 if(FMO_map1[i] > FMO_map2[j]){
+                   answer_contrib = 2.0*(accum*phaseR - accumI*phaseI)*ao_term*
+                     overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]];
+                 }
+                 else{
+                   answer_contrib = 2.0*(accum*phaseR - accumI*phaseI)*ao_term*
+                     overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]];
+                 }
+                 if(details->num_FMO_frags){
+                   answer_contrib *= 2.0;
+                 }
+               }
+             }
+             else{
+               answer_contrib = 4.0*(accum*phaseR - accumI*phaseI)*ao_term;
 
-	       if((FMO_map1[i] < FMO_map2[j])||(FMO_map1 == FMO_map2)){
-		 answer_contrib *= overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]];
-	       }
-	       else{
-		 answer_contrib *= overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]];
-	       }
-	     }
-	   }
-	   else{
-	     if(details->Execution_Mode != MOLECULAR){
-	       if(!doing_unit_cell){
-		 answer_contrib = 2.0*(accum*phaseR + accumI*phaseI)*ao_term*
-		   overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]];
-	       }
-	       else{
-		 answer_contrib = 2.0*(accum*phaseR + accumI*phaseI)*ao_term*
-		   overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]];
-	       }
-	     }
-	     else{
-	       answer_contrib = 2.0*(accum*phaseR + accumI*phaseI)*ao_term*
-		 overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]];
-	     }
-	   }
+               if((FMO_map1[i] < FMO_map2[j])||(FMO_map1 == FMO_map2)){
+                 answer_contrib *= overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]];
+               }
+               else{
+                 answer_contrib *= overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]];
+               }
+             }
+           }
+           else{
+             if(details->Execution_Mode != MOLECULAR){
+               if(!doing_unit_cell){
+                 answer_contrib = 2.0*(accum*phaseR + accumI*phaseI)*ao_term*
+                   overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]];
+               }
+               else{
+                 answer_contrib = 2.0*(accum*phaseR + accumI*phaseI)*ao_term*
+                   overlap.mat[FMO_map2[j]*num_orbs + FMO_map1[i]];
+               }
+             }
+             else{
+               answer_contrib = 2.0*(accum*phaseR + accumI*phaseI)*ao_term*
+                 overlap.mat[FMO_map1[i]*num_orbs + FMO_map2[j]];
+             }
+           }
 
-	   if(COOP->energy_weight){
-	     found1=0; found2=0; ii=0; offset1=0;
+           if(COOP->energy_weight){
+             found1=0; found2=0; ii=0; offset1=0;
 
-	     for(ii=0; ii < cell->num_atoms ; ii++)
-	       {
-		 find_atoms_orbs(num_orbs,cell->num_atoms,ii,orbital_lookup_table,&begin1,&end1);
+             for(ii=0; ii < cell->num_atoms ; ii++)
+               {
+                 find_atoms_orbs(num_orbs,cell->num_atoms,ii,orbital_lookup_table,&begin1,&end1);
 
-		 if((FMO_map1[i] >= begin1) && (FMO_map1[i] < end1)){
-		   found1=1;
-		   offset1=FMO_map1[i] - begin1;
+                 if((FMO_map1[i] >= begin1) && (FMO_map1[i] < end1)){
+                   found1=1;
+                   offset1=FMO_map1[i] - begin1;
 
-		   if(offset1<1){
-		     Hii_1=cell->atoms[ii].coul_s;
-		   }
-		   if(offset1>0 && offset1<4){
-		     Hii_1=cell->atoms[ii].coul_p;
-		   }
-		   if(offset1>3 && offset1<9){
-		     Hii_1=cell->atoms[ii].coul_d;
-		   }
-		   if(offset1>8){
-		     Hii_1=cell->atoms[ii].coul_f;
-		   }
-		 }
-		 if((FMO_map2[j] >= begin1) && (FMO_map2[j] < end1)){
-		   found2=1;
-		   offset1=FMO_map2[j] - begin1;
+                   if(offset1<1){
+                     Hii_1=cell->atoms[ii].coul_s;
+                   }
+                   if(offset1>0 && offset1<4){
+                     Hii_1=cell->atoms[ii].coul_p;
+                   }
+                   if(offset1>3 && offset1<9){
+                     Hii_1=cell->atoms[ii].coul_d;
+                   }
+                   if(offset1>8){
+                     Hii_1=cell->atoms[ii].coul_f;
+                   }
+                 }
+                 if((FMO_map2[j] >= begin1) && (FMO_map2[j] < end1)){
+                   found2=1;
+                   offset1=FMO_map2[j] - begin1;
 
-		   if(offset1<1){
-		     Hii_2=cell->atoms[ii].coul_s;
-		   }
-		   if(offset1>0 && offset1<4){
-		     Hii_2=cell->atoms[ii].coul_p;
-		   }
-		   if(offset1>3 && offset1<9){
-		     Hii_2=cell->atoms[ii].coul_d;
-		   }
-		   if(offset1>8){
-		     Hii_2=cell->atoms[ii].coul_f;
-		   }
-		 }
-	       }
-	     if(!(found1 && found2)){
-	       FATAL_BUG("Can't find Hii's in P_DOS_FMO block");
-	     }
+                   if(offset1<1){
+                     Hii_2=cell->atoms[ii].coul_s;
+                   }
+                   if(offset1>0 && offset1<4){
+                     Hii_2=cell->atoms[ii].coul_p;
+                   }
+                   if(offset1>3 && offset1<9){
+                     Hii_2=cell->atoms[ii].coul_d;
+                   }
+                   if(offset1>8){
+                     Hii_2=cell->atoms[ii].coul_f;
+                   }
+                 }
+               }
+             if(!(found1 && found2)){
+               FATAL_BUG("Can't find Hii's in P_DOS_FMO block");
+             }
 
-	     if(doing_unit_cell && (FMO_map1[i] == FMO_map2[j])){
-	       answer_contrib *= Hii_1;
-	     }
-	     else{
+             if(doing_unit_cell && (FMO_map1[i] == FMO_map2[j])){
+               answer_contrib *= Hii_1;
+             }
+             else{
 
-	       if(details->weighted_Hij){
+               if(details->weighted_Hij){
 
-		 /* weighted constant */
-		 temp = Hii_1 + Hii_2;
-		 temp2 = (Hii_1 - Hii_2)/temp;
-		 temp2 *= temp2;
-		 temp2 = 0.5*(details->the_const + temp2 + temp2*temp2*(1 - details->the_const));
-		 answer_contrib *= temp2*temp;
-	       }
-	       else{
-		 answer_contrib *= (0.5*details->the_const*(Hii_1 + Hii_2));
-	       }
-	     }
-	   }
-	   answer += answer_contrib; /* update COOP value */
-	 }
+                 /* weighted constant */
+                 temp = Hii_1 + Hii_2;
+                 temp2 = (Hii_1 - Hii_2)/temp;
+                 temp2 *= temp2;
+                 temp2 = 0.5*(details->the_const + temp2 + temp2*temp2*(1 - details->the_const));
+                 answer_contrib *= temp2*temp;
+               }
+               else{
+                 answer_contrib *= (0.5*details->the_const*(Hii_1 + Hii_2));
+               }
+             }
+           }
+           answer += answer_contrib; /* update COOP value */
+         }
        }
      }
      /* free FMO_map memory blocks */
@@ -674,7 +674,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ****************************************************************************/
  void gen_COOP(details,cell,num_orbs,avg_prop_info,R_overlaps,orbital_ordering,
-	       orbital_lookup_table)
+               orbital_lookup_table)
    detail_type *details;
    cell_type *cell;
    int num_orbs;
@@ -738,18 +738,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        num_to_avg++;
        fprintf(output_file,"; COOP between");
        if( COOP_ptr2->type == P_DOS_ORB ){
-	 fprintf(output_file," orbitals ");
+         fprintf(output_file," orbitals ");
        }
        else if( COOP_ptr2->type == P_DOS_ATOM ){
-	 fprintf(output_file," atoms ");
+         fprintf(output_file," atoms ");
        }
        else if( COOP_ptr2->type == P_DOS_FMO ){
-	 fprintf(output_file," FMO's ");
+         fprintf(output_file," FMO's ");
        }
        fprintf(output_file,"%d and %d in cell: ",COOP_ptr2->contrib1+1,
-	       COOP_ptr2->contrib2+1);
+               COOP_ptr2->contrib2+1);
        fprintf(output_file,"( %lg %lg %lg ).\n",COOP_ptr2->cell.x,COOP_ptr2->cell.y,
-	       COOP_ptr2->cell.z);
+               COOP_ptr2->cell.z);
        COOP_ptr2 = COOP_ptr2->next_to_avg;
      }
 
@@ -767,54 +767,54 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        COOP_ptr2 = COOP_ptr1;
        COOP_accum = 0.0;
        while(COOP_ptr2){
-	 temp = details->K_POINTS[orbital_ordering[i].Kpoint].weight *
-	   eval_COOP(COOP_ptr2,details,cell,num_orbs,
-		     &(avg_prop_info[orbital_ordering[i].Kpoint]),
-		     R_overlaps,
-		     &(orbital_ordering[i]),orbital_lookup_table);
-	 COOP_accum += temp;
+         temp = details->K_POINTS[orbital_ordering[i].Kpoint].weight *
+           eval_COOP(COOP_ptr2,details,cell,num_orbs,
+                     &(avg_prop_info[orbital_ordering[i].Kpoint]),
+                     R_overlaps,
+                     &(orbital_ordering[i]),orbital_lookup_table);
+         COOP_accum += temp;
 
-	 /*****
-	   accumulate the average value.  Since the calculation done in
-	   eval_COOP assumes that every orbital has 2 electrons in it, we
-	   need to divide temp by 2 and multiply by the number of
-	   electrons actually in the orbital.
-	 ******/
-	 COOP_ptr1->avg_value += orbital_ordering[i].occup * temp / 2.0;
+         /*****
+           accumulate the average value.  Since the calculation done in
+           eval_COOP assumes that every orbital has 2 electrons in it, we
+           need to divide temp by 2 and multiply by the number of
+           electrons actually in the orbital.
+         ******/
+         COOP_ptr1->avg_value += orbital_ordering[i].occup * temp / 2.0;
 
-	 COOP_ptr2 = COOP_ptr2->next_to_avg;
+         COOP_ptr2 = COOP_ptr2->next_to_avg;
        }
        this_E = (real)*(orbital_ordering[i].energy);
        j=i+1;
 
        if( j < tot_num_orbs ){
-	 diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
-	 while(fabs(diff) < DOS_DEGEN_TOL && j<tot_num_orbs){
-	   COOP_ptr2 = COOP_ptr1;
-	   while(COOP_ptr2){
-	     temp = details->K_POINTS[orbital_ordering[j].Kpoint].weight *
-	       eval_COOP(COOP_ptr2,details,cell,num_orbs,
-			 &(avg_prop_info[orbital_ordering[j].Kpoint]),
-			 R_overlaps,
-			 &(orbital_ordering[j]),orbital_lookup_table);
-	     COOP_accum += temp;
+         diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
+         while(fabs(diff) < DOS_DEGEN_TOL && j<tot_num_orbs){
+           COOP_ptr2 = COOP_ptr1;
+           while(COOP_ptr2){
+             temp = details->K_POINTS[orbital_ordering[j].Kpoint].weight *
+               eval_COOP(COOP_ptr2,details,cell,num_orbs,
+                         &(avg_prop_info[orbital_ordering[j].Kpoint]),
+                         R_overlaps,
+                         &(orbital_ordering[j]),orbital_lookup_table);
+             COOP_accum += temp;
 
-	     COOP_ptr1->avg_value += orbital_ordering[j].occup * temp / 2.0;
+             COOP_ptr1->avg_value += orbital_ordering[j].occup * temp / 2.0;
 
-	     COOP_ptr2 = COOP_ptr2->next_to_avg;
-	   }
-	   j++;
+             COOP_ptr2 = COOP_ptr2->next_to_avg;
+           }
+           j++;
 
-	   if( j < tot_num_orbs ){
-	     diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
-	   }
-	 }
+           if( j < tot_num_orbs ){
+             diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
+           }
+         }
        }
        i = j;
        /* write out the result */
        fprintf(output_file,"%lg %lg\n",COOP_accum*num_occup_bands /
-	       (num_to_avg*details->num_KPOINTS*tot_num_K),
-	       this_E);
+               (num_to_avg*details->num_KPOINTS*tot_num_K),
+               this_E);
      }
 
      /* now correct the accumulated value to make it the AVERAGE value */
@@ -850,7 +850,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ****************************************************************************/
  void gen_avg_COOPs(details,cell,num_orbs,avg_prop_info,R_overlaps,orbital_ordering,
-		    orbital_lookup_table)
+                    orbital_lookup_table)
    detail_type *details;
    cell_type *cell;
    int num_orbs;
@@ -915,48 +915,48 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        COOP_ptr2 = COOP_ptr1;
        COOP_accum = 0.0;
        while(COOP_ptr2){
-	 temp = details->K_POINTS[orbital_ordering[i].Kpoint].weight *
-	   eval_COOP(COOP_ptr2,details,cell,num_orbs,
-		     &(avg_prop_info[orbital_ordering[i].Kpoint]),
-		     R_overlaps,
-		     &(orbital_ordering[i]),orbital_lookup_table);
-	 COOP_accum += temp;
+         temp = details->K_POINTS[orbital_ordering[i].Kpoint].weight *
+           eval_COOP(COOP_ptr2,details,cell,num_orbs,
+                     &(avg_prop_info[orbital_ordering[i].Kpoint]),
+                     R_overlaps,
+                     &(orbital_ordering[i]),orbital_lookup_table);
+         COOP_accum += temp;
 
-	 /*****
-	   accumulate the average value.  Since the calculation done in
-	   eval_COOP assumes that every orbital has 2 electrons in it, we
-	   need to divide temp by 2 and multiply by the number of
-	   electrons actually in the orbital.
-	 ******/
-	 COOP_ptr1->avg_value += orbital_ordering[i].occup * temp / 2.0;
+         /*****
+           accumulate the average value.  Since the calculation done in
+           eval_COOP assumes that every orbital has 2 electrons in it, we
+           need to divide temp by 2 and multiply by the number of
+           electrons actually in the orbital.
+         ******/
+         COOP_ptr1->avg_value += orbital_ordering[i].occup * temp / 2.0;
 
-	 COOP_ptr2 = COOP_ptr2->next_to_avg;
+         COOP_ptr2 = COOP_ptr2->next_to_avg;
        }
        this_E = (real)*(orbital_ordering[i].energy);
        j=i+1;
 
        if( j < tot_num_orbs ){
-	 diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
-	 while(fabs(diff) < DOS_DEGEN_TOL && j<tot_num_orbs){
-	   COOP_ptr2 = COOP_ptr1;
-	   while(COOP_ptr2){
-	     temp = details->K_POINTS[orbital_ordering[j].Kpoint].weight *
-	       eval_COOP(COOP_ptr2,details,cell,num_orbs,
-			 &(avg_prop_info[orbital_ordering[j].Kpoint]),
-			 R_overlaps,
-			 &(orbital_ordering[j]),orbital_lookup_table);
-	     COOP_accum += temp;
+         diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
+         while(fabs(diff) < DOS_DEGEN_TOL && j<tot_num_orbs){
+           COOP_ptr2 = COOP_ptr1;
+           while(COOP_ptr2){
+             temp = details->K_POINTS[orbital_ordering[j].Kpoint].weight *
+               eval_COOP(COOP_ptr2,details,cell,num_orbs,
+                         &(avg_prop_info[orbital_ordering[j].Kpoint]),
+                         R_overlaps,
+                         &(orbital_ordering[j]),orbital_lookup_table);
+             COOP_accum += temp;
 
-	     COOP_ptr1->avg_value += orbital_ordering[j].occup * temp / 2.0;
+             COOP_ptr1->avg_value += orbital_ordering[j].occup * temp / 2.0;
 
-	     COOP_ptr2 = COOP_ptr2->next_to_avg;
-	   }
-	   j++;
+             COOP_ptr2 = COOP_ptr2->next_to_avg;
+           }
+           j++;
 
-	   if( j < tot_num_orbs ){
-	     diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
-	   }
-	 }
+           if( j < tot_num_orbs ){
+             diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
+           }
+         }
        }
        i = j;
      }

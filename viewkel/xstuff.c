@@ -121,13 +121,13 @@ void X_initgraphics(int xsize,int ysize)
 
   /* Create the windows, and make sure they were created */
   graph_win = XCreateSimpleWindow(disp,root,0,0,
-				  width,height,1,fcolor,bcolor );
+                                  width,height,1,fcolor,bcolor );
   /* These are the events that the window will have to deal with */
   xswa.event_mask = ExposureMask | StructureNotifyMask;
   /* Change the event mask for the window */
   XChangeWindowAttributes( disp, graph_win, CWEventMask, &xswa );
   XSetStandardProperties( disp,graph_win,name,name,None,
-			 0,0,0);
+                         0,0,0);
   /* change the cursor */
   XDefineCursor(disp,graph_win,XCreateFontCursor(disp,34));
 
@@ -136,7 +136,7 @@ void X_initgraphics(int xsize,int ysize)
   xgcv.foreground = fcolor;
   xgcv.function = GXcopy;
   graphgc = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
   XSetGraphicsExposures( disp, graphgc, 1 );
   XSetLineAttributes( disp, graphgc, 0, LineSolid, CapRound, JoinRound);
 
@@ -153,7 +153,7 @@ void X_initgraphics(int xsize,int ysize)
     xgcv.foreground = thecolor.pixel;
     xgcv.background = bcolor;
     colorgc = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
     thecolor.red = 25000;
     thecolor.green = 25000;
     thecolor.blue = 25000;
@@ -161,7 +161,7 @@ void X_initgraphics(int xsize,int ysize)
     xgcv.foreground = thecolor.pixel;
     xgcv.background = bcolor;
     graygc[0] = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
     thecolor.red = 50000;
     thecolor.green = 50000;
     thecolor.blue = 50000;
@@ -169,7 +169,7 @@ void X_initgraphics(int xsize,int ysize)
     xgcv.foreground = thecolor.pixel;
     xgcv.background = bcolor;
     graygc[1] = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
     thecolor.red = 75000;
     thecolor.green = 75000;
     thecolor.blue = 75000;
@@ -177,7 +177,7 @@ void X_initgraphics(int xsize,int ysize)
     xgcv.foreground = thecolor.pixel;
     xgcv.background = bcolor;
     graygc[2] = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
     thecolor.red = 95000;
     thecolor.green = 95000;
     thecolor.blue = 95000;
@@ -189,13 +189,13 @@ void X_initgraphics(int xsize,int ysize)
       xgcv.foreground = thecolor.pixel;
       xgcv.background = bcolor;
       graygc[3] = XCreateGC( disp, graph_win,
-			    GCForeground|GCBackground|GCFunction, &xgcv );
+                            GCForeground|GCBackground|GCFunction, &xgcv );
     }
   }
   else{
     printf("No color here.....");
     colorgc = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
 
   }
 #endif
@@ -207,67 +207,67 @@ void X_initgraphics(int xsize,int ysize)
 
   xgcv.fill_style = FillOpaqueStippled;
   xgcv.stipple = XCreateBitmapFromData(disp,graph_win,gray0_bits,
-					     gray0_width,gray0_height);
+                                             gray0_width,gray0_height);
   graygc[0] = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
-			&xgcv );
+                        GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
+                        &xgcv );
 
   xgcv.stipple = XCreatePixmapFromBitmapData(disp,graph_win,gray1_bits,
-					     gray1_width,gray1_height,fcolor,
-					     bcolor,1);
+                                             gray1_width,gray1_height,fcolor,
+                                             bcolor,1);
   graygc[1] = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
-			&xgcv );
+                        GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
+                        &xgcv );
 
   xgcv.stipple = XCreatePixmapFromBitmapData(disp,graph_win,gray2_bits,
-					     gray2_width,gray2_height,fcolor,
-					     bcolor,1);
+                                             gray2_width,gray2_height,fcolor,
+                                             bcolor,1);
   graygc[2] = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
-			&xgcv );
+                        GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
+                        &xgcv );
 
   xgcv.stipple = XCreatePixmapFromBitmapData(disp,graph_win,gray3_bits,
-					     gray3_width,gray3_height,fcolor,
-					     bcolor,1);
+                                             gray3_width,gray3_height,fcolor,
+                                             bcolor,1);
   graygc[3] = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
-			&xgcv );
+                        GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
+                        &xgcv );
 
   xgcv.stipple = XCreatePixmapFromBitmapData(disp,graph_win,gray4_bits,
-					     gray4_width,gray4_height,fcolor,
-					     bcolor,1);
+                                             gray4_width,gray4_height,fcolor,
+                                             bcolor,1);
   graygc[4] = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
-			&xgcv );
+                        GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
+                        &xgcv );
 
   xgcv.stipple = XCreatePixmapFromBitmapData(disp,graph_win,gray5_bits,
-					     gray5_width,gray5_height,fcolor,
-					     bcolor,1);
+                                             gray5_width,gray5_height,fcolor,
+                                             bcolor,1);
   graygc[5] = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
-			&xgcv );
+                        GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
+                        &xgcv );
 
   xgcv.stipple = XCreatePixmapFromBitmapData(disp,graph_win,gray6_bits,
-					     gray6_width,gray6_height,fcolor,
-					     bcolor,1);
+                                             gray6_width,gray6_height,fcolor,
+                                             bcolor,1);
   graygc[6] = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
-			&xgcv );
+                        GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
+                        &xgcv );
 
   xgcv.stipple = XCreatePixmapFromBitmapData(disp,graph_win,gray7_bits,
-					     gray7_width,gray7_height,fcolor,
-					     bcolor,1);
+                                             gray7_width,gray7_height,fcolor,
+                                             bcolor,1);
   graygc[7] = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
-			&xgcv );
+                        GCForeground|GCBackground|GCFunction|GCStipple|GCFillStyle,
+                        &xgcv );
 
   xgcv.background=fcolor;
   xgcv.foreground=bcolor;
   blackgc = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
 
   widegc = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
   XSetLineAttributes( disp, widegc, 5, LineSolid, CapRound, JoinRound);
 
 colormap = DefaultColormap(disp,screen);
@@ -279,7 +279,7 @@ xgcv.foreground = fcolor;
 xgcv.background = bcolor;
 }
 colorgc = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
 if(XAllocNamedColor(disp,colormap,"blue",&thecolor,&foocolor)){
 xgcv.foreground = thecolor.pixel;
 xgcv.background = bcolor;
@@ -289,25 +289,25 @@ xgcv.background = bcolor;
 }
 
 colorgc2 = XCreateGC( disp, graph_win,
-		      GCForeground|GCBackground|GCFunction, &xgcv );
+                      GCForeground|GCBackground|GCFunction, &xgcv );
 
   /* now create the children */
 #if 0
   gwin = XCreateSimpleWindow(disp,graph_win,BUTWIDTH,0,
-			     GWINWIDTH,GWINHEIGHT,2,fcolor,bcolor);
+                             GWINWIDTH,GWINHEIGHT,2,fcolor,bcolor);
   butwin = XCreateSimpleWindow(disp,graph_win,0,0,
-			       BUTWIDTH,BUTHEIGHT,1,fcolor,bcolor);
+                               BUTWIDTH,BUTHEIGHT,1,fcolor,bcolor);
 #endif
   gwin = graph_win;
   /* set up the font gc's */
   xgcv.background = bcolor;
   xgcv.foreground=fcolor;
   bigtextgc = XCreateGC( disp, graph_win,
-			GCForeground|GCBackground|GCFunction, &xgcv );
+                        GCForeground|GCBackground|GCFunction, &xgcv );
   smalltextgc = XCreateGC( disp, graph_win,
-			  GCForeground|GCBackground|GCFunction, &xgcv );
+                          GCForeground|GCBackground|GCFunction, &xgcv );
   XSelectInput(disp,gwin,KeyPressMask|ButtonPressMask|ButtonReleaseMask|
-	       ButtonMotionMask|ExposureMask|StructureNotifyMask);
+               ButtonMotionMask|ExposureMask|StructureNotifyMask);
 #if 0
   XSelectInput(disp,butwin,KeyPressMask|ButtonPressMask|ButtonMotionMask|ExposureMask);
 

@@ -75,9 +75,9 @@ void sparsify_hermetian_matrix(value,mat,num_orbs)
       imag_part = mat.mat[jtab+i];
       mag = real_part*real_part + imag_part*imag_part;
       if( mag <= val_squared ){
-	mat.mat[itab+j] = 0.0;
-	mat.mat[jtab+i] = 0.0;
-	num_zeroed++;
+        mat.mat[itab+j] = 0.0;
+        mat.mat[jtab+i] = 0.0;
+        num_zeroed++;
       }
     }
     real_part = mat.mat[itab+i];
@@ -88,7 +88,7 @@ void sparsify_hermetian_matrix(value,mat,num_orbs)
 
   }
   fprintf(stderr,"\t %d of %d zeroed (%4.2lf%% nonzero)\n",num_zeroed,num_orbs*num_orbs,
-	  100.0*((real)(num_orbs*num_orbs)-(real)2*num_zeroed)/(real)(num_orbs*num_orbs));
+          100.0*((real)(num_orbs*num_orbs)-(real)2*num_zeroed)/(real)(num_orbs*num_orbs));
 }
 
 
@@ -126,19 +126,19 @@ void sparsify_matrix(value,mat_R,mat_I,num_orbs)
       jtab = j*num_orbs;
       real_part = mat_R[itab+j];
       if( mat_I ){
-	imag_part = mat_I[jtab+i];
+        imag_part = mat_I[jtab+i];
       }else{
-	imag_part = 0.0;
+        imag_part = 0.0;
       }
       mag = real_part*real_part + imag_part*imag_part;
       if( mag <= val_squared ){
-	mat_R[itab+j] = 0.0;
-	if( mat_I ) mat_I[itab+j] = 0.0;
-	num_zeroed++;
+        mat_R[itab+j] = 0.0;
+        if( mat_I ) mat_I[itab+j] = 0.0;
+        num_zeroed++;
       }
     }
   }
   fprintf(stderr,"\t %d of %d zeroed (%4.2lf%% nonzero)\n",num_zeroed,num_orbs*num_orbs,
-	  100.0*((real)(num_orbs*num_orbs)-(real)num_zeroed)/(real)(num_orbs*num_orbs));
+          100.0*((real)(num_orbs*num_orbs)-(real)num_zeroed)/(real)(num_orbs*num_orbs));
 }
 
