@@ -102,9 +102,13 @@ char test_string[80];
 #endif
   /* make sure the program was called with the right arguments */
   if( argc < 2){
-    fprintf(stderr,"Usage: bind <inputfile>\n");
-    exit(666);
+    fprintf(stderr,"Usage: bind <inputfile> [paramfile]\n");
+    exit(-1);
   }
+  // If there is a third argument, it is the parameter file
+  char* parm_file_name = NULL;
+  if (argc > 2)
+    parm_file_name = argv[2];
 
   /* install the sig_int handler */
   signal(SIGINT,handle_sigint);
@@ -150,7 +154,7 @@ char test_string[80];
     read in the data
 
   *********/
-  read_inputfile(unit_cell,details,argv[1],&num_orbs,&orbital_lookup_table,the_file);
+  read_inputfile(unit_cell,details,argv[1],&num_orbs,&orbital_lookup_table,the_file,parm_file_name);
 
   /* copy the file name into the details structure */
   strcpy(details->filename,argv[1]);

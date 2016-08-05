@@ -48,16 +48,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Arguments:  cell: pointer to cell_type
 *          details: pointer to detail_type
 *             name: pointer to type char
+*   parm_file_name: name of the parm file. NULL if none given in arguments
 *
 * Returns: none
 *
 * Action: reads all the data out of the file 'infile
 *
 *****************************************************************************/
-void read_NEW3file(cell,details,infile)
+void read_NEW3file(cell,details,infile,parm_file_name)
   cell_type *cell;
   detail_type *details;
   FILE *infile;
+  char *parm_file_name;
 {
   char err_string[240];
   char instring[90];
@@ -152,7 +154,7 @@ void read_NEW3file(cell,details,infile)
   }
 
   /* fill in the atomic parameters */
-  fill_atomic_parms(cell->atoms,cell->num_atoms,infile);
+  fill_atomic_parms(cell->atoms,cell->num_atoms,infile,parm_file_name);
   write_atom_coords(cell->atoms,cell->num_atoms,cell->using_Zmat,
                     cell->using_xtal_coords);
   write_atom_parms(details,cell->atoms,cell->num_atoms,1);
