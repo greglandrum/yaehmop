@@ -120,29 +120,29 @@ long int calls_to_exp = 0;
  #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
-  
-	/* set up some stuff for Sioux */
-	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;	
-	SIOUXSettings.autocloseonquit = FALSE;
-	printf("Starting fit_FCO.\n");
-	
+
+        /* set up some stuff for Sioux */
+        //SIOUXSettings.standalone = FALSE;
+        SIOUXSettings.asktosaveonclose = FALSE;
+        SIOUXSettings.autocloseonquit = FALSE;
+        printf("Starting fit_FCO.\n");
+
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
-  	fatal("User cancelled intial file open");
+          fatal("User cancelled intial file open");
   } else{
-  	argc = 2;
+          argc = 2;
   }
 
   /* get the command line arguments */
 //  argc = ccommand(&argv);
 
 #endif
- 
+
   if(argc < 2){
     fatal("Usage: fit_FCO <infile>");
   }
-  
+
 
   /* open the input file */
   sprintf(filename,"%s.FCO",argv[1]);
@@ -183,10 +183,10 @@ long int calls_to_exp = 0;
   frag_vals = (real *)calloc(num_FCO_frags,sizeof(real));
   FCO_num_orbs = (int *)calloc(num_FCO_frags,sizeof(int));
   if( !FCO_num_orbs || !frag_vals) fatal("Can't get memory for FCO_num_orbs");
-  
+
   read(FCO_file,(const char *)FCO_num_orbs,num_FCO_frags*sizeof(int));
 
-  
+
   /* get memory to store everything we're gonna need */
   total_Es = (real *)calloc(num_orbs,sizeof(real));
   frag_Es = (real *)calloc(num_orbs,sizeof(real));
@@ -194,9 +194,9 @@ long int calls_to_exp = 0;
   if( !charge_mat || !frag_Es ) fatal("Can't get K point memory");
 
   FCO_point_array = (FCO_point_type *)calloc(num_orbs*num_orbs*num_Kpoints,
-					     sizeof(FCO_point_type));
+                                             sizeof(FCO_point_type));
   if(!FCO_point_array)fatal("Can't get memory for FCO_point_array");
-  
+
 
   /* prompt for the energy window */
   printf("\nEnter E min: ");
@@ -207,13 +207,13 @@ long int calls_to_exp = 0;
   scanf("%lf",&broadening);
   printf("Enter Energy Step: ");
   scanf("%lf",&E_step);
-  
+
   fprintf(stderr,"Reading...\n");
 
   /*******
 
      okay, go ahead, read out all the data and store it in the FCO_point_array...
-     woo hoo! 
+     woo hoo!
 
   ********/
   FCO_points_so_far=0;
@@ -229,33 +229,33 @@ long int calls_to_exp = 0;
       which_frag = 0;
       orbs_this_frag = 0;
       for(j=0;j<num_orbs;j++){
-	if( orbs_this_frag >= FCO_num_orbs[which_frag] ){
-	  which_frag++;
-	  orbs_this_frag = 0;
-	}
+        if( orbs_this_frag >= FCO_num_orbs[which_frag] ){
+          which_frag++;
+          orbs_this_frag = 0;
+        }
 
-	/* make sure the point falls in our energy window */
-	if( total_Es[i] <= E_max && total_Es[i] >= E_min &&
-	   frag_Es[j] <= E_max && frag_Es[j] >= E_min ){
-	  FCO_point_array[FCO_points_so_far].which_frag = which_frag;
-	  FCO_point_array[FCO_points_so_far].total_E =
-	    total_Es[i];
-	  FCO_point_array[FCO_points_so_far].frag_E =
-	    frag_Es[j];
-	  FCO_point_array[FCO_points_so_far].value = 
-	    charge_mat[itab+j];
-	  FCO_points_so_far++;
-	}
-	orbs_this_frag++;
+        /* make sure the point falls in our energy window */
+        if( total_Es[i] <= E_max && total_Es[i] >= E_min &&
+           frag_Es[j] <= E_max && frag_Es[j] >= E_min ){
+          FCO_point_array[FCO_points_so_far].which_frag = which_frag;
+          FCO_point_array[FCO_points_so_far].total_E =
+            total_Es[i];
+          FCO_point_array[FCO_points_so_far].frag_E =
+            frag_Es[j];
+          FCO_point_array[FCO_points_so_far].value =
+            charge_mat[itab+j];
+          FCO_points_so_far++;
+        }
+        orbs_this_frag++;
       }
     }
-  }    
+  }
 #if 0
   fprintf(stderr,"Sorting...\n");
   /* okay, we've got all the data, now sort it */
   qsort((void *)FCO_point_array,FCO_points_so_far,
-	sizeof(FCO_point_type),sort_FCO_helper);
-  
+        sizeof(FCO_point_type),sort_FCO_helper);
+
   /**************
 
     the data is now sorted in order of increasing total_E, with
@@ -295,7 +295,7 @@ long int calls_to_exp = 0;
 
 
   fprintf(outfile,"\n#BEGIN_DATA\n");
-  
+
   /********
 
     get space to store the results.
@@ -310,7 +310,7 @@ long int calls_to_exp = 0;
 
   ********/
   results = (real *)calloc(points_per_side*points_per_side*num_FCO_frags,
-			   sizeof(real));
+                           sizeof(real));
   if( !results ) fatal("Can't allocate results matrix.");
 
 
@@ -326,25 +326,25 @@ long int calls_to_exp = 0;
     for(k=0;k<points_per_side;k++,curr_tot_E += E_step){
       tot_E_diff = fabs(tp_total_E - curr_tot_E);
       if( tot_E_diff < E_CUTOFF ){
-	ktab = itab + k*points_per_side;	
-	/* loop over frag_E until we're within the E cutoff window */
-	curr_frag_E = E_min;
-	for(j=0;j<points_per_side;j++,curr_frag_E += E_step){
-	  E_diff = tot_E_diff + fabs(tp_frag_E - curr_frag_E);
+        ktab = itab + k*points_per_side;
+        /* loop over frag_E until we're within the E cutoff window */
+        curr_frag_E = E_min;
+        for(j=0;j<points_per_side;j++,curr_frag_E += E_step){
+          E_diff = tot_E_diff + fabs(tp_frag_E - curr_frag_E);
 
-	  if( E_diff <= E_CUTOFF ){
-	    tempval = broadening*E_diff*E_diff;
-	    if (tempval < lookup_max && tempval > 0 ){
-	      results[ktab + j] += norm_val *
-		lookup_values[(int)floor(tempval*lookup_inv_step+ 0.5)];
-	    }
+          if( E_diff <= E_CUTOFF ){
+            tempval = broadening*E_diff*E_diff;
+            if (tempval < lookup_max && tempval > 0 ){
+              results[ktab + j] += norm_val *
+                lookup_values[(int)floor(tempval*lookup_inv_step+ 0.5)];
+            }
 calls_to_exp++;
-	  }
-	}	
-      }  else if( curr_tot_E > this_point->total_E) break; 
+          }
+        }
+      }  else if( curr_tot_E > this_point->total_E) break;
     }
   }
-	
+
 fprintf(stderr,"num_calls_to_exp: %ld\n",calls_to_exp);
   /*******
 
@@ -355,12 +355,12 @@ fprintf(stderr,"num_calls_to_exp: %ld\n",calls_to_exp);
   for(i=0;i<points_per_side;i++){
     for(j=0;j<points_per_side;j++){
       for(k=0;k<num_FCO_frags;k++){
-	value = results[(k*points_per_side + j)*points_per_side + i];
-	if( value >= ZERO_TOL ){
-	  fprintf(outfile,"%lf ",value);
-	}else{
-	  fprintf(outfile,"-.001 ");
-	}
+        value = results[(k*points_per_side + j)*points_per_side + i];
+        if( value >= ZERO_TOL ){
+          fprintf(outfile,"%lf ",value);
+        }else{
+          fprintf(outfile,"-.001 ");
+        }
       }
       fprintf(outfile,"\n");
     }
@@ -378,28 +378,28 @@ fprintf(stderr,"num_calls_to_exp: %ld\n",calls_to_exp);
     for(i=0;i<FCO_points_so_far;i++){
       E_diff = fabs(FCO_point_array[i].total_E - curr_tot_E);
       if( E_diff < 3.0 ){
-	total_DOS += norm_fact * exp(-broadening*E_diff*E_diff);
+        total_DOS += norm_fact * exp(-broadening*E_diff*E_diff);
       }
       E_diff = fabs(FCO_point_array[i].frag_E - curr_tot_E);
       if( E_diff < 3.0 ){
-	frag_vals[FCO_point_array[i].which_frag] +=
-	    norm_fact * exp(-broadening*E_diff*E_diff);
+        frag_vals[FCO_point_array[i].which_frag] +=
+            norm_fact * exp(-broadening*E_diff*E_diff);
       }
     }
-    if( total_DOS > 0.0001 ) 
+    if( total_DOS > 0.0001 )
       fprintf(outfile,"%6.3lg ",total_DOS);
     else
       fprintf(outfile,"0 ");
 
     for(i=0;i<num_FCO_frags;i++){
       if( fabs(frag_vals[i]) > 0.0001 )
-	fprintf(outfile,"%6.3lg ",frag_vals[i]);
+        fprintf(outfile,"%6.3lg ",frag_vals[i]);
       else
-	fprintf(outfile,"0 ");
-    
+        fprintf(outfile,"0 ");
+
     }
     fprintf(outfile,"\n");
-    
+
     curr_tot_E += E_step;
   }
   fprintf(outfile,"\n");
@@ -407,5 +407,5 @@ fprintf(stderr,"num_calls_to_exp: %ld\n",calls_to_exp);
   fclose(outfile);
 }
 
-      
+
 

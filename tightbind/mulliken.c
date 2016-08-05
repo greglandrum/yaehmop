@@ -58,7 +58,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *         the information in
  *         details->orbital_occups will be used to CHANGE the occupations of the
  *         specified orbitals.
- *  
+ *
  ****************************************************************************/
 void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
   detail_type *details;
@@ -70,7 +70,7 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
   int i,begin_degen,end_degen,num_degen_levels,last_occup;
   real num_degen_electrons;
   real electrons_left,electrons_per_level;
-  
+
   electrons_left = num_electrons;
 
   /* just loop until we run out of electrons */
@@ -84,17 +84,17 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
       electrons_left = 0.0;
     }
   }
-  
+
   /* now check for degeneracies */
   last_occup = i-1;
   end_degen = i;
   while( fabs(EIGENVAL(eigenset,last_occup) - EIGENVAL(eigenset,end_degen)) < DEGEN_TOL
-	&& end_degen < num_orbs ){
+        && end_degen < num_orbs ){
     end_degen++;
   }
-  begin_degen = last_occup - 1; 
+  begin_degen = last_occup - 1;
   while( fabs(EIGENVAL(eigenset,last_occup) - EIGENVAL(eigenset,begin_degen)) < DEGEN_TOL
-	&& begin_degen > -1){
+        && begin_degen > -1){
     begin_degen--;
   }
   /* we went one step too far, so increment begin_degen */
@@ -107,9 +107,9 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
     /********
       now adjust the occupation numbers for the degenerate orbitals
         do this by finding the number of electrons in degenerate levels and
-	distributing them equally amongst those levels.
+        distributing them equally amongst those levels.
     ******/
-    num_degen_electrons = 0; 
+    num_degen_electrons = 0;
     for(i=begin_degen;i<end_degen;i++){
       num_degen_electrons += occupations[i];
     }
@@ -125,9 +125,9 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
       occupations[details->orbital_occups[i].orb] = details->orbital_occups[i].occup;
     }
   }
-}      
-      
-    
+}
+
+
 /****************************************************************************
  *
  *                   Procedure reduced_mulliken
@@ -146,7 +146,7 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
  *
  *   the results are stored in 'ROP_matrix which should be at least
  *     num_atoms * num_atoms
- *  
+ *
  ****************************************************************************/
 void reduced_mulliken(num_atoms,num_orbs,orbital_lookup_table,OP_matrix,ROP_matrix)
   int num_atoms,num_orbs,*orbital_lookup_table;
@@ -172,31 +172,31 @@ void reduced_mulliken(num_atoms,num_orbs,orbital_lookup_table,OP_matrix,ROP_matr
     if( i_orb_tab >= 0 ){
       /* first do the cross terms involving this atom */
       for(j=0;j<i;j++){
-	find_atoms_orbs(num_orbs,num_atoms,j,orbital_lookup_table,&j_orb_tab,
-			&j_orb_end);
-	if( j_orb_tab >= 0 ){
-	  temp = 0;
-	  for(k=i_orb_tab; k<i_orb_end; k++){
-	    ktab = k*num_orbs;
-	    for(l=j_orb_tab; l<j_orb_end; l++){
-	      temp += OP_matrix[ktab+l];
-	    }
-	  }
+        find_atoms_orbs(num_orbs,num_atoms,j,orbital_lookup_table,&j_orb_tab,
+                        &j_orb_end);
+        if( j_orb_tab >= 0 ){
+          temp = 0;
+          for(k=i_orb_tab; k<i_orb_end; k++){
+            ktab = k*num_orbs;
+            for(l=j_orb_tab; l<j_orb_end; l++){
+              temp += OP_matrix[ktab+l];
+            }
+          }
 
-	  /*********
-	    store the element....
-	    treat the matrix as a symmetrical matrix (see notes.outl for the format)
-	    **********/
-	  ROP_matrix[num_elements++] = temp;
-	}
+          /*********
+            store the element....
+            treat the matrix as a symmetrical matrix (see notes.outl for the format)
+            **********/
+          ROP_matrix[num_elements++] = temp;
+        }
       }
-      
+
       /* now add up the diagonal elements which arise from this atom */
       temp = 0;
       for(j=i_orb_tab; j<i_orb_end; j++){
-	temp += OP_matrix[j*num_orbs+j];
+        temp += OP_matrix[j*num_orbs+j];
       }
-      
+
       ROP_matrix[num_elements++] = temp;
     }
   }
@@ -220,7 +220,7 @@ void reduced_mulliken(num_atoms,num_orbs,orbital_lookup_table,OP_matrix,ROP_matr
  *
  *   the results are stored in 'ROP_matrix which should be at least
  *     details->num_FMO_frags * details->num_FMO_frags
- *  
+ *
  ****************************************************************************/
 void FMO_reduced_mulliken(details,num_atoms,num_orbs,OP_matrix,ROP_matrix)
   detail_type *details;
@@ -259,42 +259,42 @@ void FMO_reduced_mulliken(details,num_atoms,num_orbs,OP_matrix,ROP_matrix)
 #if 0
       /* loop over the orbitals on each fragment */
       for(atom1 = 0; atom1<FMO_frag1->num_atoms; atom1++){
-	find_atoms_orbs(num_orbs,num_atoms,FMO_frag1->atoms_in_frag[atom1],
-			FMO_frag1->orbital_lookup_table,
-			&begin_atom1,&end_atom1);
+        find_atoms_orbs(num_orbs,num_atoms,FMO_frag1->atoms_in_frag[atom1],
+                        FMO_frag1->orbital_lookup_table,
+                        &begin_atom1,&end_atom1);
 
-	if( begin_atom1 >= 0 ){
-	  for(atom2 = 0; atom2<FMO_frag2->num_atoms; atom2++){
-	    find_atoms_orbs(num_orbs,num_atoms,FMO_frag2->atoms_in_frag[atom2],
-			    FMO_frag2->orbital_lookup_table,
-			    &begin_atom2,&end_atom2);
-	  
-	    if( begin_atom2 >= 0 ){
+        if( begin_atom1 >= 0 ){
+          for(atom2 = 0; atom2<FMO_frag2->num_atoms; atom2++){
+            find_atoms_orbs(num_orbs,num_atoms,FMO_frag2->atoms_in_frag[atom2],
+                            FMO_frag2->orbital_lookup_table,
+                            &begin_atom2,&end_atom2);
 
-	      for(k=begin_atom1; k<end_atom1; k++){
-		ktab = k*num_orbs;
-		for(l=begin_atom2; l<end_atom2; l++){
-		  temp += OP_matrix[ktab+l];
-		}
-	      }
-	    }
-	  }
-	}
+            if( begin_atom2 >= 0 ){
+
+              for(k=begin_atom1; k<end_atom1; k++){
+                ktab = k*num_orbs;
+                for(l=begin_atom2; l<end_atom2; l++){
+                  temp += OP_matrix[ktab+l];
+                }
+              }
+            }
+          }
+        }
       }
 #endif
 
       /* loop over the orbitals on each fragment */
       for(k=0; k<FMO_frag1->num_orbs; k++){
-	ktab = (k+orbs_so_far1)*num_orbs;
-	for(l=0; l<FMO_frag2->num_orbs; l++){
-	  temp += OP_matrix[ktab+orbs_so_far2+l];
-	}
+        ktab = (k+orbs_so_far1)*num_orbs;
+        for(l=0; l<FMO_frag2->num_orbs; l++){
+          temp += OP_matrix[ktab+orbs_so_far2+l];
+        }
       }
 
       /*********
-	store the element....
-	treat the matrix as a symmetric matrix
-	(see notes.outl for the format)
+        store the element....
+        treat the matrix as a symmetric matrix
+        (see notes.outl for the format)
       **********/
       ROP_matrix[num_elements++] = temp;
       orbs_so_far2 += FMO_frag2->num_orbs;
@@ -304,11 +304,11 @@ void FMO_reduced_mulliken(details,num_atoms,num_orbs,OP_matrix,ROP_matrix)
     temp = 0;
     for(atom1 = 0; atom1<FMO_frag1->num_atoms; atom1++){
       find_atoms_orbs(num_orbs,num_atoms,FMO_frag1->atoms_in_frag[atom1],
-		      orbital_lookup_table,&begin_atom1,&end_atom1);
+                      orbital_lookup_table,&begin_atom1,&end_atom1);
       if( begin_atom1 >= 0 ){
-	for(j=begin_atom1; j<end_atom1; j++){
-	  temp += OP_matrix[j*num_orbs+j];
-	}
+        for(j=begin_atom1; j<end_atom1; j++){
+          temp += OP_matrix[j*num_orbs+j];
+        }
       }
     }
 #endif
@@ -357,7 +357,7 @@ void FMO_reduced_mulliken(details,num_atoms,num_orbs,OP_matrix,ROP_matrix)
  *
  ****************************************************************************/
 void eval_mulliken(cell,eigenset,overlap,num_orbs,
-		   occupations,orbital_lookup_table,OP_matrix,net_chgs,accum)
+                   occupations,orbital_lookup_table,OP_matrix,net_chgs,accum)
   cell_type *cell;
   eigenset_type eigenset;
   hermetian_matrix_type overlap;
@@ -370,13 +370,13 @@ void eval_mulliken(cell,eigenset,overlap,num_orbs,
   int begin_of_atom,end_of_atom;
   real OP_accum,net_chg,tot_chg;
   real OP_accumI;
-  
+
   num_atoms = cell->num_atoms;
-  
+
   /* zero out arrays which will be used */
   bzero((char *)accum,num_orbs*sizeof(real));
   bzero((char *)OP_matrix,num_orbs*num_orbs*sizeof(real));
-  
+
   /********
 
     this is using the following formula:
@@ -386,11 +386,11 @@ void eval_mulliken(cell,eigenset,overlap,num_orbs,
                    \
     OP[i][j] = 2 * /     occupations[k] * c[k][i] * c[k][j] * S[i][j]
                    ---/
-                     k     
-      
+                     k
 
-   for off diagonal elements.... diagonal elements are obtained by using the above 
-     and dividing by 2		     
+
+   for off diagonal elements.... diagonal elements are obtained by using the above
+     and dividing by 2
   *********/
 
   /* i indexes atomic orbitals */
@@ -405,20 +405,20 @@ void eval_mulliken(cell,eigenset,overlap,num_orbs,
       OP_accum = 0.0;
       OP_accumI = 0.0;
       for(k=0;k<num_orbs;k++){
-	ktab = k;
+        ktab = k;
 
-	OP_accum += occupations[k]*EIGENVECT_R(eigenset,k,i)*EIGENVECT_R(eigenset,k,j);
-	OP_accum += occupations[k]*EIGENVECT_I(eigenset,k,i)*EIGENVECT_I(eigenset,k,j);
-	OP_accumI -= occupations[k]*EIGENVECT_R(eigenset,k,i)*EIGENVECT_I(eigenset,k,j);
-	OP_accumI += occupations[k]*EIGENVECT_I(eigenset,k,i)*EIGENVECT_R(eigenset,k,j);
+        OP_accum += occupations[k]*EIGENVECT_R(eigenset,k,i)*EIGENVECT_R(eigenset,k,j);
+        OP_accum += occupations[k]*EIGENVECT_I(eigenset,k,i)*EIGENVECT_I(eigenset,k,j);
+        OP_accumI -= occupations[k]*EIGENVECT_R(eigenset,k,i)*EIGENVECT_I(eigenset,k,j);
+        OP_accumI += occupations[k]*EIGENVECT_I(eigenset,k,i)*EIGENVECT_R(eigenset,k,j);
       }
 
       if( i != j ){
-	OP_matrix[itab+j] = 2.0 * OP_accum * HERMETIAN_R(overlap,i,j);
+        OP_matrix[itab+j] = 2.0 * OP_accum * HERMETIAN_R(overlap,i,j);
 
       }
       else{
-	OP_matrix[itab+j] =  OP_accum * HERMETIAN_R(overlap,i,j);
+        OP_matrix[itab+j] =  OP_accum * HERMETIAN_R(overlap,i,j);
       }
 
       /* this is used later to find net charges */
@@ -434,17 +434,17 @@ void eval_mulliken(cell,eigenset,overlap,num_orbs,
   ********/
   for(i=0;i<cell->num_atoms;i++){
     find_atoms_orbs(num_orbs,cell->num_atoms,i,orbital_lookup_table,
-		    &begin_of_atom,&end_of_atom);
+                    &begin_of_atom,&end_of_atom);
     if( begin_of_atom >= 0 ){
       net_chg = 0.0;
-      
+
       for(j = begin_of_atom;j<end_of_atom;j++){
-	net_chg -= accum[j];
+        net_chg -= accum[j];
       }
-      
+
       /* subtract off the number of valence electrons */
       net_chg += cell->atoms[i].num_valence;
-      
+
       net_chgs[i] = net_chg;
     }
   }

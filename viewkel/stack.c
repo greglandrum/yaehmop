@@ -64,7 +64,7 @@ void loadmatrix( matrix_type *mat )
 {
   if( stack ){
     mat->next = stack->next;
-    
+
     /* deallocate the old current matrix */
     D_FREE( stack );
   }
@@ -74,7 +74,7 @@ void loadmatrix( matrix_type *mat )
 
 /****************************************************************************
 *
-*		    Procedure pushmatrix
+*                    Procedure pushmatrix
 *
 * Arguments: mat: pointer to matrix_type
 * Returns: none
@@ -90,7 +90,7 @@ void pushmatrix(matrix_type *mat)
 
   newmat = (matrix_type *)D_CALLOC(1,sizeof(matrix_type));
   if( !newmat )fatal( "Memory Allocation" );
-  
+
   /* fill in the new matrix */
   if( mat == 0 ){
     bcopy(stack->matrix,newmat->matrix,DIM*DIM*sizeof(float));
@@ -153,9 +153,9 @@ void multmatrix( matrix_type *mat )
   for(i=0; i<DIM; i++ )
     for( j=0; j<DIM; j++ )
       storage[i][j]=stack->matrix[i][0]*mat->matrix[0][j]+
-	            stack->matrix[i][1]*mat->matrix[1][j]+
-	            stack->matrix[i][2]*mat->matrix[2][j]+
-		    stack->matrix[i][3]*mat->matrix[3][j];
+                    stack->matrix[i][1]*mat->matrix[1][j]+
+                    stack->matrix[i][2]*mat->matrix[2][j]+
+                    stack->matrix[i][3]*mat->matrix[3][j];
 
   /* put the result at the top of the stack */
 #if 0
@@ -186,9 +186,9 @@ void premultmatrix( matrix_type *mat )
   for(i=0; i<DIM; i++ )
     for( j=0; j<DIM; j++ )
       storage[i][j]=mat->matrix[i][0]*stack->matrix[0][j]+
-	            mat->matrix[i][1]*stack->matrix[1][j]+
-	            mat->matrix[i][2]*stack->matrix[2][j]+
-		    mat->matrix[i][3]*stack->matrix[3][j];
+                    mat->matrix[i][1]*stack->matrix[1][j]+
+                    mat->matrix[i][2]*stack->matrix[2][j]+
+                    mat->matrix[i][3]*stack->matrix[3][j];
 
   /* put the result at the top of the stack */
 #if 0
@@ -221,8 +221,8 @@ void transform( point_type *point )
   for( i=0;i<DIM;i++ )
     storage[i] = stack->matrix[i][0]*point->x+
                    stack->matrix[i][1]*point->y+
-		   stack->matrix[i][2]*point->z+
-		   stack->matrix[i][3];
+                   stack->matrix[i][2]*point->z+
+                   stack->matrix[i][3];
 
   /* now copy the result into point */
   point->x=storage[0]/storage[3];
@@ -240,7 +240,7 @@ void transform( point_type *point )
 * Action:  multiplies the current matrix by point and replaces point with the
 *          *normalized* result.
 *          (the assumption is made that the last element of point is
-*          1.0 ).  
+*          1.0 ).
 *
 *****************************************************************************/
 void transform_norm( point_type *point )
@@ -252,8 +252,8 @@ void transform_norm( point_type *point )
   for( i=0;i<DIM;i++ )
     storage[i] = stack->matrix[i][0]*point->x+
                    stack->matrix[i][1]*point->y+
-		   stack->matrix[i][2]*point->z+
-		   stack->matrix[i][3];
+                   stack->matrix[i][2]*point->z+
+                   stack->matrix[i][3];
 
   /* now copy the raw result into point */
   point->x=storage[0];
@@ -312,7 +312,7 @@ void xrot( float theta )
     stack->matrix[i][1] = temp*cosvar - stack->matrix[i][2]*sinvar;
     stack->matrix[i][2] = temp*sinvar + stack->matrix[i][2]*cosvar;
   }
-}  
+}
 
 /****************************************************************************
 *
@@ -338,8 +338,8 @@ void yrot( float theta )
     stack->matrix[i][0] = temp*cosvar + stack->matrix[i][2]*sinvar;
     stack->matrix[i][2] = stack->matrix[i][2]*cosvar - temp*sinvar;
   }
-}  
-  
+}
+
 /****************************************************************************
 *
 *                   Procedure zrot
@@ -364,7 +364,7 @@ void zrot( float theta )
     stack->matrix[i][0] = temp*cosvar - stack->matrix[i][1]*sinvar;
     stack->matrix[i][1] = stack->matrix[i][1]*cosvar + temp*sinvar;
   }
-}  
+}
 
 /****************************************************************************
 *
@@ -382,8 +382,8 @@ void translate( float xtrans,float ytrans,float ztrans )
 
   for(i=0;i<4;i++){
     stack->matrix[i][3] += (stack->matrix[i][0]*xtrans +
-			    stack->matrix[i][1]*ytrans +
-			    stack->matrix[i][2]*ztrans);
+                            stack->matrix[i][1]*ytrans +
+                            stack->matrix[i][2]*ztrans);
   }
 }
 
@@ -404,7 +404,7 @@ void scale( float xscale, float yscale, float zscale )
     stack->matrix[i][0] *= xscale;
     stack->matrix[i][1] *= yscale;
     stack->matrix[i][2] *= zscale;
-  }    
+  }
 }
 
 /****************************************************************************
@@ -429,7 +429,7 @@ void shear(float sh1,float sh2,int which)
   else bzero(shearmat,sizeof(matrix_type));
 
 
-  /* set up the diagonal elements of the shear matrix */  
+  /* set up the diagonal elements of the shear matrix */
   shearmat->matrix[0][0] = 1;
   shearmat->matrix[1][1] = 1;
   shearmat->matrix[2][2] = 1;
@@ -455,7 +455,7 @@ void shear(float sh1,float sh2,int which)
   }
   multmatrix( shearmat );
 
-}  
+}
 
 
 /****************************************************************************
@@ -477,9 +477,9 @@ void ortho2( float left,float right,float bottom,float top )
   xtemp = g_xmax / (right - left);
   ytemp = g_ymax / (top - bottom);
   scale( xtemp, -ytemp, 0.0 );
- 
+
  /* do the translation */
   translate( -left, top, 0.0 );
 }
-  
+
 

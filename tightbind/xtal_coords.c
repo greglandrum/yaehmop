@@ -87,22 +87,22 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
     fprintf(output_file,"# beta: % 6.4lf\n",cell->xtal_defn.angles[1]);
     fprintf(output_file,"# gamma: % 6.4lf\n",cell->xtal_defn.angles[2]);
   }
-      
-  
+
+
   /* set up the transformation matrix */
   cos_alpha = cos(cell->xtal_defn.angles[0]*PI/180.0);
   cos_beta = cos(cell->xtal_defn.angles[1]*PI/180.0);
   cos_gamma = cos(cell->xtal_defn.angles[2]*PI/180.0);
   sin_gamma = sin(cell->xtal_defn.angles[2]*PI/180.0);
   weird_term = sqrt(1-cos_alpha*cos_alpha-cos_beta*cos_beta-
-		    cos_gamma*cos_gamma + 2.0*cos_alpha*cos_beta*cos_gamma);
+                    cos_gamma*cos_gamma + 2.0*cos_alpha*cos_beta*cos_gamma);
   cell_volume = weird_term*cell->xtal_defn.axis_lengths[0]*
     cell->xtal_defn.axis_lengths[1]*cell->xtal_defn.axis_lengths[2];
 
   if( printing ){
     fprintf(output_file,"#Cell Volume: %6.4lf cubic Angstroms\n",cell_volume);
   }
-	    
+
 
   /* first do the diagonal terms */
   tform_mat[0][0] = cell->xtal_defn.axis_lengths[0];
@@ -117,7 +117,7 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
   tform_mat[1][0] = 0.0;
   tform_mat[2][0] = 0.0;
   tform_mat[2][1] = 0.0;
-  
+
   /* now transform all the atomic locations */
   transform_atoms(cell->atoms,tform_mat,cell->num_raw_atoms);
 
@@ -130,11 +130,11 @@ void eval_xtal_coord_locs(cell_type *cell,char printing)
 
     fprintf(output_file,"# Positions of atoms from crystal coordinates\n");
     for(i=0;i<cell->num_raw_atoms;i++){
-      fprintf(output_file,"% 4d % 4s % 8.4lf % 8.4lf % 8.4lf\n",
-	      i+1,cell->atoms[i].symb,cell->atoms[i].loc.x,
-	      cell->atoms[i].loc.y,cell->atoms[i].loc.z);
+      fprintf(output_file,"%4d %4s %8.4lf %8.4lf %8.4lf\n",
+              i+1,cell->atoms[i].symb,cell->atoms[i].loc.x,
+              cell->atoms[i].loc.y,cell->atoms[i].loc.z);
     }
   }
 }
 
-    
+

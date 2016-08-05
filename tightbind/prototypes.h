@@ -152,10 +152,10 @@ PROTO((cell_type *, int, eigenset_type, real *, real *, int *, real *, real *,
 extern void read_geom_frag PROTO((FILE *, geom_frag_type *));
 extern void write_atom_parms PROTO((detail_type *, atom_type *, int, char));
 extern void write_atom_coords PROTO((atom_type *, int, char, char));
-extern void fill_atomic_parms PROTO((atom_type *, int, FILE *));
+extern void fill_atomic_parms PROTO((atom_type *, int, FILE *, char *));
 extern void parse_printing_options PROTO((FILE *, detail_type *, cell_type *));
 extern void read_inputfile
-PROTO((cell_type *, detail_type *, char *, int *, int **, FILE *));
+PROTO((cell_type *, detail_type *, char *, int *, int **, FILE *, char *));
 extern void fatal PROTO((char *));
 extern void fatal_bug PROTO((char *, char *, int));
 extern void nonfatal_bug PROTO((char *, char *, int));
@@ -211,7 +211,7 @@ PROTO((cell_type *, eigenset_type, hermetian_matrix_type, int, real *, int *,
 extern void modified_mulliken
 PROTO((cell_type *, eigenset_type, hermetian_matrix_type, int, real *, int *,
        real *, real *, real *, real *));
-extern void read_NEW3file PROTO((cell_type *, detail_type *, FILE *));
+extern void read_NEW3file PROTO((cell_type *, detail_type *, FILE *, char *));
 extern void find_princ_axes
 PROTO((atom_type *, point_type *, real[3][3], real[3], int));
 

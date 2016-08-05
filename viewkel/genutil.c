@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       that big of a deal.  Changed the fatal_bug to an
       info message.
    09.07.98 gL:
-      added code to generate rotation angles for bonds in VRML 
+      added code to generate rotation angles for bonds in VRML
    07.09.98 gL:
       dump_molecular_coords no longer dumps the coordinates of
       hidden atoms.
@@ -79,7 +79,7 @@ void fatal_bug( char *errorstring, char *file, int line )
 #ifndef USING_THE_MAC
   exit(-12);
 #else
-	scanf("/n/n/n");
+        scanf("/n/n/n");
 #endif
 }
 
@@ -94,7 +94,7 @@ void fatal( char *errorstring )
 #ifndef USING_THE_MAC
   exit(-1);
 #else
-	scanf("/n/n/n");
+        scanf("/n/n/n");
 #endif
 }
 
@@ -147,13 +147,13 @@ void display( char *string )
     if( doing_X ){
       /* first clear out anything that was there */
       XFillRectangle(disp,gwin,blackgc,0,
-		     g_ymax-BUTTONOFF-30,BUTWIDTH+30,30);
-      
+                     g_ymax-BUTTONOFF-30,BUTWIDTH+30,30);
+
       /* now draw in the string (centered) */
       pos = BUTWIDTH / 2 - XTextWidth(big_font,string,strlen(string))/2;
       XDrawImageString(disp,gwin,bigtextgc,pos,g_ymax-BUTTONOFF,
-		       string,strlen(string));
-      
+                       string,strlen(string));
+
       /* flush the buffer to make sure that the string is displayed */
       XFlush(disp);
     }
@@ -202,7 +202,7 @@ void readfloatparm( char *string, float *parm )
     strcpy(outstring,"No change to ");
     strcat(outstring,string);
   }
-  display(outstring); 
+  display(outstring);
 }
 /****************************************************************************
  *
@@ -237,7 +237,7 @@ void readintparm( char *string, int *parm )
     strcpy(outstring,"No change to ");
     strcat(outstring,string);
   }
-  display(outstring); 
+  display(outstring);
 }
 
 
@@ -274,7 +274,7 @@ void readcharparm( char *string, char *parm )
     strcpy(outstring,"No change to ");
     strcat(outstring,string);
   }
-  display(outstring); 
+  display(outstring);
 }
 
 
@@ -298,7 +298,7 @@ void readstringparm( char *string, char **stringparm )
   printf("Enter the new value for %s [%s]: ",string,stringparm[0]);
 
   fgets(instring,240,stdin);
-    
+
   /* check to see if we are done */
   if(instring[0] == '\n' || instring[0] == 0) return;
   else{
@@ -338,7 +338,7 @@ void readmultistringparm( char *string, int num_lines, char **stringparm )
   for(i=0;i<num_lines;i++){
     /* read in the string */
     if( more ) fgets(instring,NORMAL_STR_LEN,stdin);
-    
+
     /* check to see if we are done */
     if(instring[0] == '\n' || instring[0] == 0) more = 0;
 
@@ -357,7 +357,7 @@ void readmultistringparm( char *string, int num_lines, char **stringparm )
 
   printf("<done>\n");
   display("Got it!");
-  
+
 }
 
 /****************************************************************************
@@ -378,7 +378,7 @@ char *safe_strcpy(char *str1,char *str2)
   if( !str2 ){
     str1[0] = 0;
   } else{
-    strcpy(str1,str2);    
+    strcpy(str1,str2);
   }
   return(str1);
 }
@@ -400,12 +400,12 @@ char *safe_strcpy(char *str1,char *str2)
 int skipcomments(FILE *file,char *string)
 {
   char *error;
-  
+
   /* use the first element of string to check for EOF */
   string[0] = 0;
   error = fgets(string,MAX_STR_LEN,file);
-  while( error && (string[0] == '\n' || string[0] == ';') 
-	&& string[0] != 0 ){
+  while( error && (string[0] == '\n' || string[0] == ';')
+        && string[0] != 0 ){
     string[0] = 0;
     error = fgets(string,MAX_STR_LEN,file);
   }
@@ -414,11 +414,11 @@ int skipcomments(FILE *file,char *string)
   else{
     return(-1);
   }
-    
+
 }
 
 /*********
-  converts a string to all uppercase 
+  converts a string to all uppercase
 **********/
 void upcase(char *string)
 {
@@ -448,11 +448,11 @@ void dump_molecular_coords(molec_type *molec)
   for(i=0;i<molec->num_atoms;i++){
     if(!atoms[i].exclude &&
        (molec->hydrogens_on || atoms[i].type[0] != 'H' ||
-	atoms[i].type[1] != 0) &&
+        atoms[i].type[1] != 0) &&
        (molec->dummies_on || atoms[i].type[0] != '&') ){
       printf("%d %s % -6.4lf % -6.4lf % -6.4lf\n",i+1,
-	     atoms[i].type,
-	     atoms[i].loc.x,atoms[i].loc.y,atoms[i].loc.z);
+             atoms[i].type,
+             atoms[i].loc.x,atoms[i].loc.y,atoms[i].loc.z);
     }
   }
 }
@@ -504,7 +504,7 @@ void parse_integer_string(char *string,int **values,int *num_values)
   /* get some initial memory */
   *values = (int *)D_CALLOC(max_values,sizeof(int));
   if( !(*values )) fatal("Can't allocate values in parse_integer_string");
-  
+
   /* first copy the input string */
   safe_strcpy(local_string,string);
 
@@ -523,15 +523,15 @@ void parse_integer_string(char *string,int **values,int *num_values)
       (*values)[*num_values] = i;
       (*num_values)++;
       if(*num_values == max_values){
-	max_values += 10;
-	*values = (int *)D_REALLOC(*values,max_values*sizeof(int));
-	if( !(*values )) fatal("Can't D_REALLOCate values in parse_integer_string");
+        max_values += 10;
+        *values = (int *)D_REALLOC(*values,max_values*sizeof(int));
+        if( !(*values )) fatal("Can't D_REALLOCate values in parse_integer_string");
       }
     }
     safe_strcpy(num_string,(char *)strtok(0,",\n"));
   }
 }
-	
+
 
 /****************************************************************************
  *
@@ -564,16 +564,16 @@ void hide_selected_atoms(int num_selected,object_type *obj)
   selected_atoms = (atom_type **)D_CALLOC(num_selected,
                                         sizeof(atom_type *));
   if(!selected_atoms)fatal("Can't get memory for selected atoms array");
-  
+
   num_found = 0;
   for(i=0;i<molec->num_atoms && num_found < num_selected;i++){
     if(molec->atoms[i].is_selected){
       /******
-        
+
         insert a pointer to the atom into the selected_atoms
         array.  Put it in the slot corresponding to its selection
         order.
-        
+
         ******/
       selected_atoms[molec->atoms[i].is_selected-1] = &(molec->atoms[i]);
       num_found++;
@@ -592,7 +592,7 @@ void hide_selected_atoms(int num_selected,object_type *obj)
   }
 
   D_FREE(selected_atoms);
-}      
+}
 
 
 /****************************************************************************
@@ -628,7 +628,7 @@ void show_all_atoms(object_type *obj)
     molec->atoms[i].exclude = 0;
     if( obj->prim->MO_surf ) obj->prim->MO_surf->MO_centers[i].exclude = 0;
   }
-}      
+}
 
 
 /****************************************************************************
@@ -657,8 +657,8 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
   int i,num_found;
   double val;
   float R0_val,valence;
-  
-  if(!num_selected) return; 
+
+  if(!num_selected) return;
   if(obj->prim->molec){
     molec = obj->prim->molec;
     if(molec->num_frames > 1)
@@ -674,16 +674,16 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
   selected_atoms = (atom_type **)D_CALLOC(num_selected,
                                         sizeof(atom_type *));
   if(!selected_atoms)fatal("Can't get memory for selected atoms array");
-  
+
   num_found = 0;
   for(i=0;i<molec->num_atoms && num_found < num_selected;i++){
     if(atoms[i].is_selected){
       /******
-        
+
         insert a pointer to the atom into the selected_atoms
         array.  Put it in the slot corresponding to its selection
         order.
-        
+
         ******/
       selected_atoms[atoms[i].is_selected-1] = &(atoms[i]);
       num_found++;
@@ -693,7 +693,7 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
     num_selected = num_found;
     fprintf(stderr,"Info: number of selected atoms has changed.\n");
   }
-  
+
   /* now process the selected atoms... */
   switch(num_selected){
   case 1:
@@ -712,7 +712,7 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
     /* calculate the bond valence too, because we can */
     R0_val = 0.0;
     bond_length_to_bond_valence(selected_atoms[0],selected_atoms[1],
-				val,&R0_val,&valence);
+                                val,&R0_val,&valence);
     printf("\tBond valence: %6.3lf based on R0= %6.3lf\n",valence,R0_val);
 #endif
     sprintf(label_string,"%6.3lf \\AA",val);
@@ -737,7 +737,7 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
            selected_atoms[1]->type,selected_atoms[1]->num+1,
            selected_atoms[2]->type,selected_atoms[2]->num+1,
            val);
-    
+
     sprintf(label_string,"%6.1lf deg",val);
     new_label(label_string);
     label = head->obj->prim->label;
@@ -749,8 +749,8 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
     label->atoms_to_label[0] = selected_atoms[0];
     label->atoms_to_label[1] = selected_atoms[1];
     label->atoms_to_label[2] = selected_atoms[2];
-    label->show_lines = 1;    
-    
+    label->show_lines = 1;
+
     break;
   case 4:
     val = V3DihedralAngle(&selected_atoms[0]->loc,
@@ -764,7 +764,7 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
            selected_atoms[2]->type,selected_atoms[2]->num+1,
            selected_atoms[3]->type,selected_atoms[3]->num+1,
            val);
-    
+
     sprintf(label_string,"%6.1lf deg",val);
     new_label(label_string);
     label = head->obj->prim->label;
@@ -777,17 +777,17 @@ void show_selected_data(int num_selected,object_type *obj,int xloc,int yloc)
     label->atoms_to_label[1] = selected_atoms[1];
     label->atoms_to_label[2] = selected_atoms[2];
     label->atoms_to_label[3] = selected_atoms[3];
-    label->show_lines = 1;    
+    label->show_lines = 1;
     break;
-    
+
   default:
     printf("Too many atoms selected, I'm confused.\n");
   }
   if( selected_atoms ) D_FREE(selected_atoms);
 
 }
-      
-          
+
+
 /****************************************************************************
  *
  *                   Procedure unselect_all_atoms
@@ -818,12 +818,12 @@ void unselect_all_atoms(int num_selected,object_type *obj)
     num_atoms = molec->num_atoms;
   }
   else if( obj->prim->MO_surf && obj->prim->MO_surf->molec){
-    atoms = obj->prim->MO_surf->molec->atoms;    
+    atoms = obj->prim->MO_surf->molec->atoms;
     num_atoms = obj->prim->MO_surf->molec->num_atoms;
   } else{
     FATAL_BUG("unselect_all_atoms called without a molecule");
   }
-    
+
   for(i=0;i<num_atoms;i++){
     atoms[i].is_selected = 0;
   }
@@ -848,7 +848,7 @@ void invert_selected_atoms(int *num_selected,object_type *obj)
   int i;
   int num,num_atoms;
   atom_type *atoms;
-  molec_type *molec;  
+  molec_type *molec;
 
   if( obj->prim->molec){
     molec = obj->prim->molec;
@@ -856,7 +856,7 @@ void invert_selected_atoms(int *num_selected,object_type *obj)
   }
   else if( obj->prim->MO_surf && obj->prim->MO_surf->molec){
     molec = obj->prim->MO_surf->molec;
-    atoms = obj->prim->MO_surf->molec->atoms;    
+    atoms = obj->prim->MO_surf->molec->atoms;
   } else{
     FATAL_BUG("unselect_all_atoms called without a molecule");
   }
@@ -885,13 +885,13 @@ void invert_selected_atoms(int *num_selected,object_type *obj)
 
 #ifdef INCLUDE_ADF_PLOTS
 void map_AO_number_to_center(int AO_num,MO_surface_type *MO_surf,
-			     MO_center_list_type **center_p,int *offset)
+                             MO_center_list_type **center_p,int *offset)
 {
   int i;
   int center_begin;
   int AOs_passed;
   MO_center_list_type *center;
-  
+
   i=0;
   AOs_passed = 0;
   center = &MO_surf->MO_centers[i];
@@ -914,8 +914,8 @@ void map_AO_number_to_center(int AO_num,MO_surface_type *MO_surf,
 #endif
 
 void angles_from_bond_vect(point_type *p1,point_type *p2,
-			   float *theta_y,float *theta_z,
-			   float *len)
+                           float *theta_y,float *theta_z,
+                           float *len)
 {
   point_type V;
   float dtot,dxz;
@@ -925,10 +925,10 @@ void angles_from_bond_vect(point_type *p1,point_type *p2,
   V.x = p2->x-p1->x;
   V.y = p2->y-p1->y;
   V.z = p2->z-p1->z;
-  
+
   dtot = V3Length(&V);
   dxz = sqrt(V.x*V.x+V.z*V.z);
-  
+
   if( dxz > 0 ){
     acos_y = V.x / dxz;
     t_y = acos(acos_y);
@@ -947,4 +947,4 @@ void angles_from_bond_vect(point_type *p1,point_type *p2,
   *len = dtot;
   *theta_y = t_y;
   *theta_z = t_z;
-}  
+}

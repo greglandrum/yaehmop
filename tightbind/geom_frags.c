@@ -33,8 +33,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /****************************************************************************
  *
  *     this file contains everything needed to deal with systems
- *      containing geom_frags 
- * 
+ *      containing geom_frags
+ *
  *
  *  created:  greg landrum  August 1996
  *
@@ -60,16 +60,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *     it replaces.  When the insertion is done, the atom to be
  *     replaced (which logically should be a dummy) is used to
  *     determine the translation of the geom_frag.  No orientation
- *     changes of the geom_frags are handled.  All changes in 
+ *     changes of the geom_frags are handled.  All changes in
  *     orientation must be handled *within* the definition of each fragment.
- *  
+ *
  *  NOTE:  everything must be in CARTESIAN COORDINATES by the time
  *     this function is called.
  *  NOTE 2:  If cell->atoms has not been reallocated to hold
  *     the fragment atoms, this will be done here.
  *  NOTE 3:  The lattice vectors (if any) are moved to the end of
  *     the array of atoms within this function.
- *  
+ *
  ****************************************************************************/
 void insert_geom_frags(cell_type *cell)
 {
@@ -102,7 +102,7 @@ void insert_geom_frags(cell_type *cell)
     }
     cell->num_atoms = num_atoms;
   }
-   
+
   geom_frag = cell->geom_frags;
   next_atom = cell->num_raw_atoms;
   while(geom_frag){
@@ -126,10 +126,10 @@ fprintf(stderr,"Inserting a geom_frag at atom %d\n",geom_frag->which+1);
 }
 
 
-    
 
 
-  
+
+
 /****************************************************************************
  *
  *                   Procedure process_geom_frags
@@ -150,7 +150,7 @@ void process_geom_frags(cell_type *cell)
 
   if( !cell->geom_frags )
     FATAL_BUG("process_geom_frags called without geom_frags.");
-  
+
   geom_frag = cell->geom_frags;
   while(geom_frag){
     if( geom_frag->using_Z_mat )
@@ -158,7 +158,7 @@ void process_geom_frags(cell_type *cell)
 
     geom_frag = geom_frag->next;
   }
-  
+
   /* now insert the geom frags */
   insert_geom_frags(cell);
 }

@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   This file contains stuff for dealing with Tektronix terminal emulators
 
     It was liberally hacked from the gnuplot vttek terminal driver.
-    
+
       Created by greg Landrum  September, 1994
 
 **************************************************/
@@ -52,7 +52,7 @@ static int last_vt_linetype = 0;
 #define TEK_XLAST (TEK_XMAX - 1)
 #define TEK_YLAST (TEK_YMAX - 1)
 
-#define HX 0x20		/* bit pattern to OR over 5-bit data */
+#define HX 0x20                /* bit pattern to OR over 5-bit data */
 #define HY 0x20
 #define LX 0x40
 #define LY 0x60
@@ -81,11 +81,11 @@ void TEK_graphics(void)
 {
   fprintf(Tek_file,"\033\014");
   /*                   1
-		       1. clear screen
-		       */
+                       1. clear screen
+                       */
   (void) fflush(Tek_file);
-  sleep(1);  
-  /* sleep 1 second to allow screen time to clear on real 
+  sleep(1);
+  /* sleep 1 second to allow screen time to clear on real
      tektronix terminals */
 }
 
@@ -94,14 +94,14 @@ void TEK_text(void)
   TEK_move(0,12);
   fprintf(Tek_file,"\037");
   /*                   1
-		       1. into alphanumerics
-		       */
+                       1. into alphanumerics
+                       */
 }
 
 
 void TEK_move( unsigned int x,unsigned int y)
 {
-  (void) putc('\035', Tek_file);	/* into graphics */
+  (void) putc('\035', Tek_file);        /* into graphics */
   TEK_vector(x,y);
 }
 
@@ -118,7 +118,7 @@ void TEK_vector(unsigned int x,unsigned int y)
 
 /******************
   These are the linetypes for VT-type terminals in tektronix emulator mode:
-  
+
   `=solid
   a=fine dots
   b=short dashes
@@ -128,7 +128,7 @@ void TEK_vector(unsigned int x,unsigned int y)
   i=bold fine dots
   j=bold short dashes,
   k=bold dash dot
-  l=bold long dash dot 
+  l=bold long dash dot
   ********************/
 void TEK_linetype(int linetype)
 {
@@ -152,7 +152,7 @@ void TEK_center_text(unsigned int x,unsigned int y,char *str)
 {
   TEK_put_text(x-strlen(str)*TEK_HCHAR/2,y,str);
 }
-  
+
 void TEK_right_text(unsigned int x,unsigned int y,char *str)
 {
   TEK_put_text(x-strlen(str)*TEK_HCHAR,y,str);

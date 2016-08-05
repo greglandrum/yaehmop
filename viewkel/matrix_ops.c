@@ -137,7 +137,7 @@ Vector3 *V3Lerp(Vector3 *lo, Vector3 *hi, double alpha, Vector3 *result)
 /* make a linear combination of two vectors and return the result. */
 /* result = (a * ascl) + (b * bscl) */
 Vector3 *V3Combine (Vector3 *a, Vector3 *b, Vector3 *result,
-		    double ascl,double bscl)
+                    double ascl,double bscl)
 {
   result->x = (ascl * a->x) + (bscl * b->x);
   result->y = (ascl * a->y) + (bscl * b->y);
@@ -174,8 +174,8 @@ double V3AngleBetween3Points(Point3 *a, Point3 *b, Point3 *c)
 
   /*********
 
-    we're using: 
-  
+    we're using:
+
       q = acos( (a . b) / (|a| |b|) )
 
   **********/
@@ -204,9 +204,9 @@ double V3DihedralAngle(Point3 *a, Point3 *b, Point3 *c, Point3 *d)
   V3Normalize(&V3xV2);
 
   /*********
-    now figure out the angle between them 
-    we're using: 
-  
+    now figure out the angle between them
+    we're using:
+
       q = acos( (a . b) )
     since a and b are normalized
 

@@ -49,5 +49,5 @@ void draworthoviews( prim )
 {
   int i, j;
   prim_type tprim;
-  
+
 }
