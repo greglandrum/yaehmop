@@ -78,7 +78,7 @@ extern double drand48();
 
 *************/
 void eval_ADF_ang(point_type *loc,int kx,int ky,int kz,float *ang_val,
-		  point_type *ang_grad)
+                  point_type *ang_grad)
 {
   int i;
   float accum;
@@ -95,7 +95,7 @@ void eval_ADF_ang(point_type *loc,int kx,int ky,int kz,float *ang_val,
     accum = y;
     for(i=1;i<ky;i++)accum *= y;
     *ang_val *= accum;
-  } 
+  }
   if( kz > 0 ){
     accum = z;
     for(i=1;i<kz;i++)accum *= z;
@@ -104,7 +104,7 @@ void eval_ADF_ang(point_type *loc,int kx,int ky,int kz,float *ang_val,
 }
 
 void eval_ADF_rad(point_type *loc,float r,int kr,float zeta,float *rad_val,
-		  point_type *rad_grad)
+                  point_type *rad_grad)
 {
   int i;
   float accum;
@@ -116,7 +116,7 @@ void eval_ADF_rad(point_type *loc,float r,int kr,float zeta,float *rad_val,
 
   *rad_val = accum*exp(-zeta*r);
 }
-#endif  
+#endif
 
 
 /************************************
@@ -140,9 +140,9 @@ void eval_ADF_rad(point_type *loc,float r,int kr,float zeta,float *rad_val,
 
 
 void eval_s_ang(point_type *loc,float r,float r2,float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
-  
+
   /* this one is easy.... */
   *val = 1.0;
 
@@ -150,13 +150,13 @@ void eval_s_ang(point_type *loc,float r,float r2,float *val,
   gradient->x = 0.0;
   gradient->y = 0.0;
   gradient->z = 0.0;
-#endif  
+#endif
 }
 
 void eval_px_ang(point_type *loc,float r,float r2,float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
-  
+
   *val = sqrt3*loc->x/r;
 
 #if 0
@@ -167,7 +167,7 @@ void eval_px_ang(point_type *loc,float r,float r2,float *val,
 }
 
 void eval_py_ang(point_type *loc,float r,float r2,float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
   *val = sqrt3*loc->y/r;
 
@@ -180,9 +180,9 @@ void eval_py_ang(point_type *loc,float r,float r2,float *val,
 }
 
 void eval_pz_ang(point_type *loc,float r,float r2,float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
-  
+
   *val = sqrt3*loc->z/r;
 
 #if 0
@@ -193,7 +193,7 @@ void eval_pz_ang(point_type *loc,float r,float r2,float *val,
 }
 
 void eval_dx2y2_ang(point_type *loc,float r,float r2,float *val,
-		    point_type *gradient)
+                    point_type *gradient)
 {
   *val = 0.5*sqrt15*(loc->x*loc->x-loc->y*loc->y)/r2;
 
@@ -206,19 +206,19 @@ void eval_dx2y2_ang(point_type *loc,float r,float r2,float *val,
 }
 
 void eval_dz2_ang(point_type *loc,float r,float r2,float *val,
-		  point_type *gradient)
+                  point_type *gradient)
 {
   *val = sqrt5*(loc->z*loc->z - 0.5*(loc->x*loc->x+loc->y*loc->y))/r2;
 
 #if 0
   gradient->x = -loc->x/r2*(sqrt5 + 2.0*(*val));
-  gradient->y = -loc->y/r2*(sqrt5 + 2.0*(*val));  
+  gradient->y = -loc->y/r2*(sqrt5 + 2.0*(*val));
   gradient->z = 2.0*loc->z/r2*(sqrt5 - *val);
 #endif
 }
 
 void eval_dxy_ang(point_type *loc,float r,float r2,float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt15*(loc->x*loc->y)/r2;
@@ -231,10 +231,10 @@ void eval_dxy_ang(point_type *loc,float r,float r2,float *val,
 }
 
 void eval_dxz_ang(point_type *loc,float r,float r2,float *val,
-		  point_type *gradient)
+                  point_type *gradient)
 {
 
-  *val = sqrt15*(loc->x*loc->z)/r2;  
+  *val = sqrt15*(loc->x*loc->z)/r2;
 
 #if 0
   gradient->x = (sqrt15*loc->z - 2*loc->x*(*val))/r2;
@@ -244,7 +244,7 @@ void eval_dxz_ang(point_type *loc,float r,float r2,float *val,
 }
 
 void eval_dyz_ang(point_type *loc,float r,float r2,float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt15*(loc->y*loc->z)/r2;
@@ -257,7 +257,7 @@ void eval_dyz_ang(point_type *loc,float r,float r2,float *val,
 }
 
 void eval_fz3_ang(point_type *loc, float r, float r2, float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt7*loc->z*(loc->z*loc->z - 1.5*(loc->x*loc->x + loc->y*loc->y))/(r*r2);
@@ -265,7 +265,7 @@ void eval_fz3_ang(point_type *loc, float r, float r2, float *val,
 }
 
 void eval_fxz2_ang(point_type *loc, float r, float r2, float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt42*loc->x*(loc->z*loc->z - 0.25*(loc->x*loc->x + loc->y*loc->y))/(r*r2);
@@ -273,7 +273,7 @@ void eval_fxz2_ang(point_type *loc, float r, float r2, float *val,
 }
 
 void eval_fyz2_ang(point_type *loc, float r, float r2, float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt42*loc->y*(loc->z*loc->z - 0.25*(loc->x*loc->x + loc->y*loc->y))/(r*r2);
@@ -281,7 +281,7 @@ void eval_fyz2_ang(point_type *loc, float r, float r2, float *val,
 }
 
 void eval_fxyz_ang(point_type *loc, float r, float r2, float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt105*loc->x*loc->y*loc->z/(2*r*r2);
@@ -289,7 +289,7 @@ void eval_fxyz_ang(point_type *loc, float r, float r2, float *val,
 }
 
 void eval_fzx2_zy2_ang(point_type *loc, float r, float r2, float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt105*loc->z*(loc->x*loc->x - loc->y*loc->y)/(2*r*r2);
@@ -297,7 +297,7 @@ void eval_fzx2_zy2_ang(point_type *loc, float r, float r2, float *val,
 }
 
 void eval_fx3_ang(point_type *loc, float r, float r2, float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt70*loc->x*(loc->x*loc->x - 3*loc->y*loc->y)/(4*r*r2);
@@ -305,7 +305,7 @@ void eval_fx3_ang(point_type *loc, float r, float r2, float *val,
 }
 
 void eval_fy3_ang(point_type *loc, float r, float r2, float *val,
-		point_type *gradient)
+                point_type *gradient)
 {
 
   *val = sqrt70*loc->y*(3*loc->x*loc->x - loc->y*loc->y)/(4*r*r2);
@@ -321,8 +321,8 @@ void eval_fy3_ang(point_type *loc, float r, float r2, float *val,
 
              loc: pointer to point_type
             r,r2: floats
-	    zeta1,zeta2: floats
-	    C1,C2: floats
+            zeta1,zeta2: floats
+            C1,C2: floats
              val: pointer to float
         gradient: pointer to point_type
 
@@ -339,19 +339,19 @@ void eval_fy3_ang(point_type *loc, float r, float r2, float *val,
  *
  * Rnl(r) = ( sqrt((2*zeta) ** (2n+1)) / sqrt(fact(2*n)) )/4*pi * r**(n-1) * exp(-zeta*r)
  *
- * Thanks to Bob Kematick (kmatick@binghamton.edu) for providing this code 
+ * Thanks to Bob Kematick (kmatick@binghamton.edu) for providing this code
  *
 ************************************************************************************/
 void eval_n_rad(int n,point_type *loc,float r,float r2,
-           		float zeta1,float zeta2,float C1,
-        		float C2,float *val,point_type *gradient)
+                           float zeta1,float zeta2,float C1,
+                        float C2,float *val,point_type *gradient)
 {
   float norm_factor,v1,v2;
   /*****  a factorial table  *****/
   double f[21]={ 1.0, 1.0, 2.0,6.0,24.0,120.0,720.0,5040.0,40320.0,
-		 362880.0,3628800.0,39916800.0,479001600.0,6227020800.0 ,
-		 87178291200.0 ,1307674368000.0 ,20922789888000.0 ,355687428096000.0 ,
-		 6402373705728000.0 ,121645100408832000.0 ,2432902008176640000.0 };
+                 362880.0,3628800.0,39916800.0,479001600.0,6227020800.0 ,
+                 87178291200.0 ,1307674368000.0 ,20922789888000.0 ,355687428096000.0 ,
+                 6402373705728000.0 ,121645100408832000.0 ,2432902008176640000.0 };
 
 
 
@@ -375,55 +375,55 @@ void eval_n_rad(int n,point_type *loc,float r,float r2,
 
 #ifndef ORIG_NORMALIZATION
 void eval_1_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   eval_n_rad(1,loc,r, r2, zeta1,zeta2, C1, C2,val,gradient);
 
 }
 
 void eval_2_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   eval_n_rad(2,loc,r, r2, zeta1,zeta2, C1, C2,val,gradient);
 
 }
 
 void eval_3_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   eval_n_rad(3,loc,r, r2, zeta1,zeta2, C1, C2,val,gradient);
 
 }
 
 void eval_4_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   eval_n_rad(4,loc,r, r2, zeta1,zeta2, C1, C2,val,gradient);
 
 }
 
 void eval_5_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   eval_n_rad(5,loc,r, r2, zeta1,zeta2, C1, C2,val,gradient);
 
 }
 void eval_6_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   eval_n_rad(6,loc,r, r2, zeta1,zeta2, C1, C2,val,gradient);
 
 }
 
 void eval_7_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   eval_n_rad(7,loc,r, r2, zeta1,zeta2, C1, C2,val,gradient);
 }
@@ -431,14 +431,14 @@ void eval_7_rad(point_type *loc,float r,float r2,
 
 
 void eval_1_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   float norm_factor = 2.0*sqrt(zeta1*zeta1*zeta1);
-  
+
   *val = norm_factor*exp(-zeta1*r);
 
-#if 0  
+#if 0
   gradient->x = -zeta1*loc->x/r*(*val);
   gradient->y = -zeta1*loc->y/r*(*val);
   gradient->z = -zeta1*loc->z/r*(*val);
@@ -446,12 +446,12 @@ void eval_1_rad(point_type *loc,float r,float r2,
 }
 
 void eval_2_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   float norm_factor = 2.0*sqrt(pow(zeta1,5.0)/3.0)/fourpi;
   *val = norm_factor*r*exp(-zeta1*r);
-  
+
 #if 0
   gradient->x = (*val)*loc->x/r*(1.0/r - zeta1);
   gradient->y = (*val)*loc->y/r*(1.0/r - zeta1);
@@ -461,14 +461,14 @@ void eval_2_rad(point_type *loc,float r,float r2,
 
 
 void eval_3_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   float norm_factor;
 
   if( C1 == 0.0 || C2 == 0.0 ){
     norm_factor = 2.0*sqrt(pow(zeta1,7.0)*10.0)/(15.0*fourpi);
-    *val = norm_factor*r*r*exp(-zeta1*r);    
+    *val = norm_factor*r*r*exp(-zeta1*r);
   } else{
     *val = (sqrt(8.0/45.0)/fourpi)*r*r*(C1*pow(zeta1,3.5)*exp(-zeta1*r) + C2*pow(zeta2,3.5)*exp(-zeta2*r));
   }
@@ -482,19 +482,19 @@ void eval_3_rad(point_type *loc,float r,float r2,
 }
 
 void eval_4_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   float norm_factor;
-  
+
   if( C1 == 0.0 || C2 == 0.0 ){
     norm_factor = 2.0*sqrt(pow(zeta1,9.0)*35.0)/(105.0*fourpi);
     *val = norm_factor*pow(r,3.0)*exp(-zeta1*r);
   } else{
     *val = 2.0*sqrt(35.0)*pow(r,3.0)*(C1*pow(zeta1,4.5)*exp(-zeta1*r) +
-				      C2*pow(zeta2,4.5)*exp(-zeta2*r))/(105.0*fourpi);
+                                      C2*pow(zeta2,4.5)*exp(-zeta2*r))/(105.0*fourpi);
 
-  }  
+  }
 #if 0
   gradient->x = (*val)*loc->x/r*(2.0/r - zeta1);
   gradient->y = (*val)*loc->y/r*(2.0/r - zeta1);
@@ -503,17 +503,17 @@ void eval_4_rad(point_type *loc,float r,float r2,
 }
 
 void eval_5_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   float norm_factor;
-  
+
   if( C1==0.0 || C2==0.0 ){
     norm_factor = 2.0*sqrt(pow(zeta1,11.0)*14.0)/(315*fourpi);
     *val = norm_factor*pow(r,4.0)*exp(-zeta1*r);
   } else{
     *val = 2.0*sqrt(14.0)*pow(r,4.0)*(C1*pow(zeta1,5.5)*exp(-zeta1*r) +
-				      C2*pow(zeta2,5.5)*exp(-zeta2*r))/(315.0*fourpi);
+                                      C2*pow(zeta2,5.5)*exp(-zeta2*r))/(315.0*fourpi);
 
   }
 #if 0
@@ -545,8 +545,8 @@ void eval_6_rad(point_type *loc,float r,float r2,
 }
 
 void eval_7_rad(point_type *loc,float r,float r2,
-		float zeta1,float zeta2,float C1,
-		float C2,float *val,point_type *gradient)
+                float zeta1,float zeta2,float C1,
+                float C2,float *val,point_type *gradient)
 {
   eval_n_rad(7,loc,r, r2, zeta1,zeta2, C1, C2,val,gradient);
 }
@@ -559,12 +559,12 @@ void eval_7_rad(point_type *loc,float r,float r2,
  *                   Procedure build_radial_lookup_table
  *
  * Arguments: MO_surf: pointer to MO_surface_type
- *            
+ *
  * Returns: none
  *
  * Action:  loops through all the AOs in 'MO_surf and builds
  *    their radial lookup tables
- *  
+ *
  ****************************************************************************/
 void build_radial_lookup_table(MO_surface_type *MO_surf)
 {
@@ -572,7 +572,7 @@ void build_radial_lookup_table(MO_surface_type *MO_surf)
   float r_gap,r;
   float rad_val;
   point_type rad_grad,loc;
-  
+
   AO_list_type *AO;
   MO_center_list_type *center;
   lookup_table_type *lookup_tbl;
@@ -595,41 +595,41 @@ void build_radial_lookup_table(MO_surface_type *MO_surf)
       /* first make sure that it hasn't been filled yet */
       if( !(lookup_tbl->filled) ){
 fprintf(stderr,".");
-	r_gap = (lookup_tbl->max_val - lookup_tbl->min_val) /
-	  (float)lookup_tbl->num_entries;
-	for(step=0; step<lookup_tbl->num_entries; step++){
-	  r  = lookup_tbl->min_val + (float)step*r_gap;
+        r_gap = (lookup_tbl->max_val - lookup_tbl->min_val) /
+          (float)lookup_tbl->num_entries;
+        for(step=0; step<lookup_tbl->num_entries; step++){
+          r  = lookup_tbl->min_val + (float)step*r_gap;
 
           /*********
 
-	    we need to convert r into atomic units
+            we need to convert r into atomic units
 
-	    AUI is 1/BOHR where BOHR is the Bohr radius
+            AUI is 1/BOHR where BOHR is the Bohr radius
 
-	  *********/
+          *********/
           r *= AUI;
 
 #ifndef INCLUDE_ADF_PLOTS
-	  AO->rad_func(&loc,r,r*r,AO->zeta1,AO->zeta2,
-		       AO->C1,AO->C2,&rad_val,&rad_grad);
+          AO->rad_func(&loc,r,r*r,AO->zeta1,AO->zeta2,
+                       AO->C1,AO->C2,&rad_val,&rad_grad);
 #else
-	  if(!MO_surf->adf_plot){
-	    AO->rad_func(&loc,r,r*r,AO->zeta1,AO->zeta2,
-			 AO->C1,AO->C2,&rad_val,&rad_grad);
-	  }else{
-	    eval_ADF_rad(&loc,r,AO->kr,AO->zeta1,&rad_val,&rad_grad);
-	  }
-#endif	    
+          if(!MO_surf->adf_plot){
+            AO->rad_func(&loc,r,r*r,AO->zeta1,AO->zeta2,
+                         AO->C1,AO->C2,&rad_val,&rad_grad);
+          }else{
+            eval_ADF_rad(&loc,r,AO->kr,AO->zeta1,&rad_val,&rad_grad);
+          }
+#endif
 
-	  lookup_tbl->values[step] = rad_val;
-	}
-	lookup_tbl->filled = 1;
+          lookup_tbl->values[step] = rad_val;
+        }
+        lookup_tbl->filled = 1;
       }
     }
 fprintf(stderr,"\n");
   }
 }
-	  
+
 
 
 /****************************************************************************
@@ -640,16 +640,16 @@ fprintf(stderr,"\n");
  *            MO_info: pointer to MO_info_type
  *            centers: pointer to MO_center_list_type
  *        num_centers: int
- *            
+ *
  * Returns: none
  *
  * Action:  Calculates the value and gradient of the MO defined by
  *     'centers at 'MO_info->loc.
- *  
+ *
  ****************************************************************************/
 void calc_MO_value(int which_MO,MO_info_type *MO_info,
-		   MO_center_list_type *centers,int num_centers,
-		   char ADF_plot)
+                   MO_center_list_type *centers,int num_centers,
+                   char ADF_plot)
 {
   static int first_call = 1;
   int i,j;
@@ -680,57 +680,57 @@ void calc_MO_value(int which_MO,MO_info_type *MO_info,
   for(i=0;i<num_centers;i++){
     if( !centers[i].exclude ){
       /*****
-	
-	figure out the location of the particle relative to this
-	center.
-	
-	******/
+
+        figure out the location of the particle relative to this
+        center.
+
+        ******/
       loc.x = MO_info->loc.x - centers[i].loc->x;
       loc.y = MO_info->loc.y - centers[i].loc->y;
       loc.z = MO_info->loc.z - centers[i].loc->z;
-      
+
       r2 = loc.x*loc.x + loc.y*loc.y + loc.z*loc.z;
       r = sqrt(r2);
-      
+
       /* loop over AO's on this center */
       if( r != 0.0 ){
-	for(j=0;j<centers[i].num_AOs;j++){
-	  AO = &(centers[i].AO_list[j]);
-	  /*****
-	    
-	    evaluate the contributions of this AO to the MO and the
-	    gradient of the MO.
-	    
-	    ******/
-	  if( fabs(AO->coeff[which_MO]) > .001 ){
+        for(j=0;j<centers[i].num_AOs;j++){
+          AO = &(centers[i].AO_list[j]);
+          /*****
+
+            evaluate the contributions of this AO to the MO and the
+            gradient of the MO.
+
+            ******/
+          if( fabs(AO->coeff[which_MO]) > .001 ){
 #ifndef INCLUDE_ADF_PLOTS
-	    AO->ang_func(&loc,r,r2,&ang_val,&ang_grad);
+            AO->ang_func(&loc,r,r2,&ang_val,&ang_grad);
 #else
-	    if( !ADF_plot ) AO->ang_func(&loc,r,r2,&ang_val,&ang_grad);
-	    else{
-	      /* evaluate the angular part */
-	      eval_ADF_ang(&loc,AO->kx,AO->ky,AO->kz,&ang_val,&ang_grad);
-	      /* multiply it by the normalization term */
-	      ang_val *= AO->norm_fact;
-	    }
+            if( !ADF_plot ) AO->ang_func(&loc,r,r2,&ang_val,&ang_grad);
+            else{
+              /* evaluate the angular part */
+              eval_ADF_ang(&loc,AO->kx,AO->ky,AO->kz,&ang_val,&ang_grad);
+              /* multiply it by the normalization term */
+              ang_val *= AO->norm_fact;
+            }
 #endif
-	      
-	    /* pull the radial value out of the lookup table */
-	    rad_val =
-	      READ_FROM_LOOKUP_TBL(AO->rad_lookup_tbl,r);
-	    val += AO->coeff[which_MO]*ang_val*rad_val;
-	    if(!ADF_plot) valI += AO->coeffI[which_MO]*ang_val*rad_val;
+
+            /* pull the radial value out of the lookup table */
+            rad_val =
+              READ_FROM_LOOKUP_TBL(AO->rad_lookup_tbl,r);
+            val += AO->coeff[which_MO]*ang_val*rad_val;
+            if(!ADF_plot) valI += AO->coeffI[which_MO]*ang_val*rad_val;
 #if 0
-	    MO_info->grad.x += AO->coeff*(ang_val*rad_grad.x +
-					  rad_val*ang_grad.x);
-	    MO_info->grad.y += AO->coeff*(ang_val*rad_grad.y +
-					  rad_val*ang_grad.y);
-	    MO_info->grad.z += AO->coeff*(ang_val*rad_grad.z +
-					  rad_val*ang_grad.z);
+            MO_info->grad.x += AO->coeff*(ang_val*rad_grad.x +
+                                          rad_val*ang_grad.x);
+            MO_info->grad.y += AO->coeff*(ang_val*rad_grad.y +
+                                          rad_val*ang_grad.y);
+            MO_info->grad.z += AO->coeff*(ang_val*rad_grad.z +
+                                          rad_val*ang_grad.z);
 
 #endif
-	  }
-	}
+          }
+        }
       }
     }
   }

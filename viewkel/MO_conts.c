@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   this has got the stuff for dealing with contour plots of MOs
    (the 3D kind)
-*********/  
+*********/
 
 /***
   Recent Edit History:
@@ -77,7 +77,7 @@ extern void g_clines PROTO((XPoint *,point_type2D *,int,char));
  *                 atoms: pointer to atom_type
  *             num_atoms: int
  *   width,height,offset: floats
- *            
+ *
  * Returns: int
  *
  * Action:  Determines the bounding box for the arbitrary plane
@@ -96,8 +96,8 @@ extern void g_clines PROTO((XPoint *,point_type2D *,int,char));
  *
  ****************************************************************************/
 int determine_plane_bounds( MO_contour_plot_type *cont_plot,
-			    atom_type *atoms, int num_atoms,
-			    float width, float height, float offset)
+                            atom_type *atoms, int num_atoms,
+                            float width, float height, float offset)
 {
   int i;
   atom_type *selected_atoms[3];
@@ -125,9 +125,9 @@ int determine_plane_bounds( MO_contour_plot_type *cont_plot,
 
   /* determine the vectors connecting the atoms */
   V3Sub(&(selected_atoms[0]->loc),&(selected_atoms[1]->loc),
-	&V1);
+        &V1);
   V3Sub(&(selected_atoms[2]->loc),&(selected_atoms[1]->loc),
-	&V2);
+        &V2);
   /* normalize them */
   V3Normalize(&V1);
   V3Normalize(&V2);
@@ -204,12 +204,12 @@ int determine_plane_bounds( MO_contour_plot_type *cont_plot,
  *                   Procedure eval_MO_volume
  *
  * Arguments:  surf: pointer to MO_surface_type
- *           
- *            
+ *
+ *
  * Returns: none
  *
  * Action:  Calculates the value of an MO in a user specified volume
- *   and dumps it to a binary file on disk.  
+ *   and dumps it to a binary file on disk.
  *
  *  File format:
  *   Header:
@@ -252,10 +252,10 @@ void eval_MO_volume(MO_surface_type *surf)
 #ifndef USING_THE_MAC
 #include <sys/mode.h>
   outfile = open(tempfilename,
-		 O_RDWR|O_TRUNC|O_CREAT,S_IRUSR|S_IWUSR);
+                 O_RDWR|O_TRUNC|O_CREAT,S_IRUSR|S_IWUSR);
 #else
   outfile = open(tempfilename,O_RDWR|O_TRUNC|O_CREAT);
-#endif	
+#endif
 
   strcpy(confirm_string,CONFIRM_STRING);
 
@@ -280,9 +280,9 @@ void eval_MO_volume(MO_surface_type *surf)
   BIN_WRITE(outfile,&yr,size);
   BIN_WRITE(outfile,&zr,size);
   size = sizeof(int);
-  BIN_WRITE(outfile,&numx,size);  
-  BIN_WRITE(outfile,&numy,size);  
-  BIN_WRITE(outfile,&numz,size);  
+  BIN_WRITE(outfile,&numx,size);
+  BIN_WRITE(outfile,&numy,size);
+  BIN_WRITE(outfile,&numz,size);
 
 
   /* the header is written... allocate the data array and go */
@@ -300,12 +300,12 @@ void eval_MO_volume(MO_surface_type *surf)
     printf("X=%lf\n",MO_info.loc.x);
     MO_info.loc.y = -yr / 2.0;
     for(j=0;j<numy;j++,MO_info.loc.y += stepy){
-      
+
       MO_info.loc.z = -zr / 2.0;
       for(k=0;k<numy;k++,MO_info.loc.z += stepz){
         calc_MO_value(surf->active_MO,&MO_info,surf->MO_centers,
                       surf->num_centers,surf->adf_plot);
-	data[k] = MO_info.val;
+        data[k] = MO_info.val;
       }
       BIN_WRITE(outfile,data,size);
     }
@@ -320,8 +320,8 @@ void eval_MO_volume(MO_surface_type *surf)
  *                   Procedure eval_MO_plane
  *
  * Arguments:  surf: pointer to MO_surface_type
- *           
- *            
+ *
+ *
  * Returns: none
  *
  * Action:  Evaluates the value of the MO in the plane
@@ -370,7 +370,7 @@ void eval_MO_plane(MO_surface_type *surf)
     cont_plot->data = data;
     num_isocurves++;
   }
-    
+
   /**************
 
     hokay, we've got space to store the isocurves now... so
@@ -381,9 +381,9 @@ void eval_MO_plane(MO_surface_type *surf)
   switch(cont_plot->orientation){
   case ORIENT_Z:
     step.x = (cont_plot->right_bottom_corner.x -
-	      cont_plot->left_top_corner.x) / (float)(cont_plot->num_a-1);
+              cont_plot->left_top_corner.x) / (float)(cont_plot->num_a-1);
     step.y = (cont_plot->right_bottom_corner.y -
-	      cont_plot->left_top_corner.y) / (float)(cont_plot->num_b-1);
+              cont_plot->left_top_corner.y) / (float)(cont_plot->num_b-1);
     step.z = 0;
 
     /* check the character, it will be zero if we're not using symmetry */
@@ -391,13 +391,13 @@ void eval_MO_plane(MO_surface_type *surf)
     if( use_symm_a ){
 #ifdef REALLY_CHATTY_SYMMETRY
       fprintf(stderr,"Oh good, there's an X mirror with character: %d\n",
-	      use_symm_a);
+              use_symm_a);
 #endif
       /* find the end of the list */
       back_ptr = cont_plot->data;
       for(i=0;i<cont_plot->num_a-1;i++){
-	back_ptr = back_ptr->next;
-	if( !back_ptr )FATAL_BUG("back_ptr ran off the end of the list!");
+        back_ptr = back_ptr->next;
+        if( !back_ptr )FATAL_BUG("back_ptr ran off the end of the list!");
       }
       num_a_to_do = cont_plot->num_a / 2;
     } else{
@@ -407,13 +407,13 @@ void eval_MO_plane(MO_surface_type *surf)
     if( use_symm_b ){
 #ifdef REALLY_CHATTY_SYMMETRY
       fprintf(stderr,"Oh good, there's a Y mirror with character: %d\n",
-	      use_symm_b);
+              use_symm_b);
 #endif
       num_b_to_do = cont_plot->num_b / 2;
     } else{
       num_b_to_do = cont_plot->num_b;
     }
-    
+
 
     /*****
       Memo to self:
@@ -434,24 +434,24 @@ void eval_MO_plane(MO_surface_type *surf)
         data->points[j].x = MO_info.loc.x;
         data->points[j].y = MO_info.loc.y;
         data->points[j].z = MO_info.val;
-	if( use_symm_b ){
-	  symm_j = cont_plot->num_b-(j+1);
-	  data->points[symm_j].x = MO_info.loc.x;
-	  data->points[symm_j].y = origin->y + (float)symm_j*step.y;
-	  data->points[symm_j].z =
-	    MO_info.val*(float)use_symm_b;
-	}
+        if( use_symm_b ){
+          symm_j = cont_plot->num_b-(j+1);
+          data->points[symm_j].x = MO_info.loc.x;
+          data->points[symm_j].y = origin->y + (float)symm_j*step.y;
+          data->points[symm_j].z =
+            MO_info.val*(float)use_symm_b;
+        }
       }
       data->p_count = cont_plot->num_b;
       if( use_symm_a ){
-	symm_i = cont_plot->num_a-(i+1);
-	for(j=0;j<cont_plot->num_b;j++){
-	  back_ptr->points[j].x = origin->x + (float)symm_i*step.x;
-	  back_ptr->points[j].y = data->points[j].y;
-	  back_ptr->points[j].z = data->points[j].z*(float)use_symm_a;
-	}
-	back_ptr->p_count = cont_plot->num_b;
-	back_ptr = back_ptr->prev;
+        symm_i = cont_plot->num_a-(i+1);
+        for(j=0;j<cont_plot->num_b;j++){
+          back_ptr->points[j].x = origin->x + (float)symm_i*step.x;
+          back_ptr->points[j].y = data->points[j].y;
+          back_ptr->points[j].z = data->points[j].z*(float)use_symm_a;
+        }
+        back_ptr->p_count = cont_plot->num_b;
+        back_ptr = back_ptr->prev;
       }
       data = data->next;
     }
@@ -469,13 +469,13 @@ void eval_MO_plane(MO_surface_type *surf)
     if( use_symm_a ){
 #ifdef REALLY_CHATTY_SYMMETRY
       fprintf(stderr,"Oh good, there's a Y mirror with character: %d\n",
-	      use_symm_a);
+              use_symm_a);
 #endif
       /* find the end of the list */
       back_ptr = cont_plot->data;
       for(i=0;i<cont_plot->num_a-1;i++){
-	back_ptr = back_ptr->next;
-	if( !back_ptr )FATAL_BUG("back_ptr ran off the end of the list!");
+        back_ptr = back_ptr->next;
+        if( !back_ptr )FATAL_BUG("back_ptr ran off the end of the list!");
       }
       num_a_to_do = cont_plot->num_a / 2;
     } else{
@@ -485,7 +485,7 @@ void eval_MO_plane(MO_surface_type *surf)
     if( use_symm_b ){
 #ifdef REALLY_CHATTY_SYMMETRY
       fprintf(stderr,"Oh good, there's a Z mirror with character: %d\n",
-	      use_symm_b);
+              use_symm_b);
 #endif
       num_b_to_do = cont_plot->num_b / 2;
     } else{
@@ -503,24 +503,24 @@ void eval_MO_plane(MO_surface_type *surf)
         data->points[j].x = MO_info.loc.y;
         data->points[j].y = MO_info.loc.z;
         data->points[j].z = MO_info.val;
-	if( use_symm_b ){
-	  symm_j = cont_plot->num_b-(j+1);
-	  data->points[symm_j].x = MO_info.loc.y;
-	  data->points[symm_j].y = origin->z + (float)symm_j*step.z;
-	  data->points[symm_j].z =
-	    MO_info.val*(float)use_symm_b;
-	}
+        if( use_symm_b ){
+          symm_j = cont_plot->num_b-(j+1);
+          data->points[symm_j].x = MO_info.loc.y;
+          data->points[symm_j].y = origin->z + (float)symm_j*step.z;
+          data->points[symm_j].z =
+            MO_info.val*(float)use_symm_b;
+        }
       }
       data->p_count = cont_plot->num_b;
       if( use_symm_a ){
-	symm_i = cont_plot->num_a-(i+1);
-	for(j=0;j<cont_plot->num_b;j++){
-	  back_ptr->points[j].x = origin->y + (float)symm_i*step.y;
-	  back_ptr->points[j].y = data->points[j].y;
-	  back_ptr->points[j].z = data->points[j].z*(float)use_symm_a;
-	}
-	back_ptr->p_count = cont_plot->num_b;
-	back_ptr = back_ptr->prev;
+        symm_i = cont_plot->num_a-(i+1);
+        for(j=0;j<cont_plot->num_b;j++){
+          back_ptr->points[j].x = origin->y + (float)symm_i*step.y;
+          back_ptr->points[j].y = data->points[j].y;
+          back_ptr->points[j].z = data->points[j].z*(float)use_symm_a;
+        }
+        back_ptr->p_count = cont_plot->num_b;
+        back_ptr = back_ptr->prev;
       }
       data = data->next;
     }
@@ -538,13 +538,13 @@ void eval_MO_plane(MO_surface_type *surf)
     if( use_symm_a ){
 #ifdef REALLY_CHATTY_SYMMETRY
       fprintf(stderr,"Oh good, there's an X mirror with character: %d\n",
-	      use_symm_a);
+              use_symm_a);
 #endif
       /* find the end of the list */
       back_ptr = cont_plot->data;
       for(i=0;i<cont_plot->num_a-1;i++){
-	back_ptr = back_ptr->next;
-	if( !back_ptr )FATAL_BUG("back_ptr ran off the end of the list!");
+        back_ptr = back_ptr->next;
+        if( !back_ptr )FATAL_BUG("back_ptr ran off the end of the list!");
       }
       num_a_to_do = cont_plot->num_a / 2;
     } else{
@@ -554,7 +554,7 @@ void eval_MO_plane(MO_surface_type *surf)
     if( use_symm_b ){
 #ifdef REALLY_CHATTY_SYMMETRY
       fprintf(stderr,"Oh good, there's a Z mirror with character: %d\n",
-	      use_symm_b);
+              use_symm_b);
 #endif
       num_b_to_do = cont_plot->num_b / 2;
     } else{
@@ -572,24 +572,24 @@ void eval_MO_plane(MO_surface_type *surf)
         data->points[j].x = MO_info.loc.x;
         data->points[j].y = MO_info.loc.z;
         data->points[j].z = MO_info.val;
-	if( use_symm_b ){
-	  symm_j = cont_plot->num_b-(j+1);
-	  data->points[symm_j].x = MO_info.loc.x;
-	  data->points[symm_j].y = origin->z + (float)symm_j*step.z;
-	  data->points[symm_j].z =
-	    MO_info.val*(float)use_symm_b;
-	}
+        if( use_symm_b ){
+          symm_j = cont_plot->num_b-(j+1);
+          data->points[symm_j].x = MO_info.loc.x;
+          data->points[symm_j].y = origin->z + (float)symm_j*step.z;
+          data->points[symm_j].z =
+            MO_info.val*(float)use_symm_b;
+        }
       }
       data->p_count = cont_plot->num_b;
       if( use_symm_a ){
-	symm_i = cont_plot->num_a-(i+1);
-	for(j=0;j<cont_plot->num_b;j++){
-	  back_ptr->points[j].x = origin->x + (float)symm_i*step.x;
-	  back_ptr->points[j].y = data->points[j].y;
-	  back_ptr->points[j].z = data->points[j].z*(float)use_symm_a;
-	}
-	back_ptr->p_count = cont_plot->num_b;
-	back_ptr = back_ptr->prev;
+        symm_i = cont_plot->num_a-(i+1);
+        for(j=0;j<cont_plot->num_b;j++){
+          back_ptr->points[j].x = origin->x + (float)symm_i*step.x;
+          back_ptr->points[j].y = data->points[j].y;
+          back_ptr->points[j].z = data->points[j].z*(float)use_symm_a;
+        }
+        back_ptr->p_count = cont_plot->num_b;
+        back_ptr = back_ptr->prev;
       }
       data = data->next;
     }
@@ -598,12 +598,12 @@ void eval_MO_plane(MO_surface_type *surf)
     data = cont_plot->data;
     for(i=0;i<cont_plot->num_a;i++){
       for(j=0;j<cont_plot->num_b;j++){
-	MO_info.loc.x = origin->x + (float)i*(cont_plot->Bas1.x)+
-	  (float)j*(cont_plot->Bas2.x);
-	MO_info.loc.y = origin->y + (float)i*(cont_plot->Bas1.y)+
-	  (float)j*(cont_plot->Bas2.y);
-	MO_info.loc.z = origin->z + (float)i*(cont_plot->Bas1.z)+
-	  (float)j*(cont_plot->Bas2.z);
+        MO_info.loc.x = origin->x + (float)i*(cont_plot->Bas1.x)+
+          (float)j*(cont_plot->Bas2.x);
+        MO_info.loc.y = origin->y + (float)i*(cont_plot->Bas1.y)+
+          (float)j*(cont_plot->Bas2.y);
+        MO_info.loc.z = origin->z + (float)i*(cont_plot->Bas1.z)+
+          (float)j*(cont_plot->Bas2.z);
 
 
         calc_MO_value(surf->active_MO,&MO_info,surf->MO_centers,
@@ -616,22 +616,22 @@ void eval_MO_plane(MO_surface_type *surf)
       data=data->next;
     }
     break;
-    
+
   default:
     FATAL_BUG("bogus plane orientation in eval_MO_plane");
   }
 }
-    
-  
 
-  
+
+
+
 /****************************************************************************
  *
  *                   Procedure construct_MO_contours
  *
  * Arguments:  surf: pointer to MO_surface_type
- *           
- *            
+ *
+ *
  * Returns: none
  *
  * Action:  Sets up and runs everything needed to slap a set of contours
@@ -641,7 +641,7 @@ void eval_MO_plane(MO_surface_type *surf)
 void construct_MO_contours(int num_args,char **MO_surf_ptr)
 {
   static char contour_string[240]="-.1 -.09 -.08 -.07 -.06 -.05 -.04 -.03 -.02 -.01 .01 .02 .03 .04 .05 .06 .07 .08 .09 .1\n";
-  static float width=10.0,height=10.0;  
+  static float width=10.0,height=10.0;
   static int num_levels=DEFAULT_NUM_OF_ZLEVELS;
   static float offset=0.0;
   static int first_call = 1;
@@ -667,17 +667,17 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
   char do_stack;
   float startx,starty,endx,endy,stepx,stepy;
   float last_val;
-  
+
   surf = (MO_surface_type *)MO_surf_ptr[0];
-  
+
 #ifdef DEBUG
   for(i=0;i<surf->num_centers;i++){
     printf("Center: %d\n",i);
     for(j=0;j<surf->MO_centers[i].num_AOs;j++){
       printf("% 4d % 4d % 4d % 4d % -6.4lf % -6.4lf\n",
-	     surf->MO_centers[i].AO_list[j].kx,surf->MO_centers[i].AO_list[j].ky,
-	     surf->MO_centers[i].AO_list[j].kz,surf->MO_centers[i].AO_list[j].kr,
-	     surf->MO_centers[i].AO_list[j].zeta1,surf->MO_centers[i].AO_list[j].norm_fact);
+             surf->MO_centers[i].AO_list[j].kx,surf->MO_centers[i].AO_list[j].ky,
+             surf->MO_centers[i].AO_list[j].kz,surf->MO_centers[i].AO_list[j].kr,
+             surf->MO_centers[i].AO_list[j].zeta1,surf->MO_centers[i].AO_list[j].norm_fact);
     }
     printf("----\n");
     for(j=0;j<surf->MO_centers[i].num_AOs;j++){
@@ -686,7 +686,7 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
     }
     printf("\n");
   }
-#endif  
+#endif
 
 
   /* get memory for the contour plot if we need it */
@@ -695,14 +695,14 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
     if( !cont_plot ) fatal("Can't get space for cont_plot");
     surf->MO_contours = cont_plot;
   }
-  
+
   cont_plot = surf->MO_contours;
-  
+
   /*******
-    
+
     just read everything in from the user..... mmmmmmm
     quick hack.
-    
+
   ********/
   if( first_call ){
     cont_plot->orientation = ORIENT_Z;
@@ -712,7 +712,7 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
   if(num_selected == 3 ){
     readintparm("Orientation (0:X 1:Y 2:Z 3:Other)",&cont_plot->orientation);
     if(cont_plot->orientation < ORIENT_X ||
-       cont_plot->orientation > ORIENT_ARBITRARY){ 
+       cont_plot->orientation > ORIENT_ARBITRARY){
       printf("Bogus value... setting to Z\n");
       cont_plot->orientation = ORIENT_Z;
     }
@@ -723,7 +723,7 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
       printf("Bogus value... setting to Z\n");
       cont_plot->orientation = ORIENT_Z;
     }
-  }    
+  }
   readfloatparm("Plane Width",&width);
   readfloatparm("Plane Height",&height);
   readfloatparm("Offset",&offset);
@@ -777,7 +777,7 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
     } else{
       instring[0] = 0;
       while (instring[0] == '\n' || instring[0] == 0)
-	fgets(instring,240,stdin);
+        fgets(instring,240,stdin);
       strcpy(contour_string,instring);
     }
     str_ptr = strtok(instring," ");
@@ -785,11 +785,11 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
     sscanf(str_ptr,"%lf",&(cont_plot->levels_list[num_read++]));
     while(num_read < num_levels){
       if(!str_ptr){
-	while(!str_ptr){
-	  fgets(instring,240,stdin);
-	  if(instring[0] != '\n' && instring[0] != 0)
-	    str_ptr = strtok(instring," ");
-	}
+        while(!str_ptr){
+          fgets(instring,240,stdin);
+          if(instring[0] != '\n' && instring[0] != 0)
+            str_ptr = strtok(instring," ");
+        }
       }else str_ptr = strtok(NULL," ");
       sscanf(str_ptr,"%lf",&(cont_plot->levels_list[num_read]));
       num_read++;
@@ -853,14 +853,14 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
       break;
     case ORIENT_ARBITRARY:
       if( determine_plane_bounds(cont_plot,surf->molec->atoms,
-				 surf->molec->num_atoms,width,height,
-				 offset) == 0 ){
-	break;
+                                 surf->molec->num_atoms,width,height,
+                                 offset) == 0 ){
+        break;
       }else{
-	fprintf(stderr,"Problems determining arbitrary plane.\n");
-	fprintf(stderr,"Z orientation used instead.\n");
-	cont_plot->orientation = ORIENT_Z;
-	/* we'll just slide gently into the ORIENT_Z case now */
+        fprintf(stderr,"Problems determining arbitrary plane.\n");
+        fprintf(stderr,"Z orientation used instead.\n");
+        cont_plot->orientation = ORIENT_Z;
+        /* we'll just slide gently into the ORIENT_Z case now */
       }
     case ORIENT_Z:
       cont_plot->left_top_corner.x = -width/2.0;
@@ -870,16 +870,16 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
       cont_plot->right_bottom_corner.y = -height/2.0;
       cont_plot->right_bottom_corner.z = offset;
       break;
-      
+
     }
 
     grid_file = 0;
 
-    /******** 
-      
-      okay... we've got everything set up.  First evaluate the 
+    /********
+
+      okay... we've got everything set up.  First evaluate the
       MO in the plane, then contour
-      
+
       ********/
     printf("Evaluating plane\n");
     eval_MO_plane(surf);
@@ -892,73 +892,73 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
       theinline= readline("Enter the grid file name: ");
       add_history(theinline);
       if( theinline ){
-	sscanf(theinline,"%s",filename);
-	free(theinline);
+        sscanf(theinline,"%s",filename);
+        free(theinline);
       } else {
-	error("Bad file name");
-	filename[0] = 0;
+        error("Bad file name");
+        filename[0] = 0;
       }
 #endif
       if( filename[0] ){
-	grid_file = fopen(filename,"w+");
-	if( grid_file ){
-	  fprintf(grid_file,"#MO_DATA\n");
-	  fprintf(grid_file,"#NUM_CURVES: 1\n");
-	  fprintf(grid_file,"#LEFT_TOP: %lf %lf %lf\n",cont_plot->left_top_corner.x,
-		  cont_plot->left_top_corner.y,cont_plot->left_top_corner.z);
-	  fprintf(grid_file,"#RIGHT_BOTTOM: %lf %lf %lf\n",cont_plot->right_bottom_corner.x,
-		  cont_plot->right_bottom_corner.y,cont_plot->right_bottom_corner.z);
-	  fprintf(grid_file,"#STEPS: %d %d\n",cont_plot->num_a,cont_plot->num_b);
-	  fprintf(grid_file,"#NUM_X: %d\n",cont_plot->num_a);
-	  fprintf(grid_file,"#NUM_Y: %d\n",cont_plot->num_b);
-	  switch(cont_plot->orientation){
-	  case ORIENT_X:
-	    startx = cont_plot->left_top_corner.y;
-	    endx = cont_plot->right_bottom_corner.y;
-	    starty = cont_plot->left_top_corner.z;
-	    endy = cont_plot->right_bottom_corner.z;
-	    break;
-	  case ORIENT_Y:
-	    startx = cont_plot->left_top_corner.x;
-	    endx = cont_plot->right_bottom_corner.x;
-	    starty = cont_plot->left_top_corner.z;
-	    endy = cont_plot->right_bottom_corner.z;
-	    break;
-	  case ORIENT_Z:
-	    startx = cont_plot->left_top_corner.x;
-	    endx = cont_plot->right_bottom_corner.x;
-	    starty = cont_plot->left_top_corner.y;
-	    endy = cont_plot->right_bottom_corner.y;
-	    break;
-	  }
-	  stepx = (endx - startx)/(float)cont_plot->num_a;
-	  stepy = (endy - starty)/(float)cont_plot->num_b;
-	  fprintf(grid_file,"#MIN_X: %lf\n",startx);
-	  fprintf(grid_file,"#MAX_X: %lf\n",endx);
-	  fprintf(grid_file,"#STEP_X: %lf\n",stepx);
-	  fprintf(grid_file,"#MIN_Y: %lf\n",starty);
-	  fprintf(grid_file,"#MAX_Y: %lf\n",endy);
-	  fprintf(grid_file,"#STEP_Y: %lf\n",stepy);
+        grid_file = fopen(filename,"w+");
+        if( grid_file ){
+          fprintf(grid_file,"#MO_DATA\n");
+          fprintf(grid_file,"#NUM_CURVES: 1\n");
+          fprintf(grid_file,"#LEFT_TOP: %lf %lf %lf\n",cont_plot->left_top_corner.x,
+                  cont_plot->left_top_corner.y,cont_plot->left_top_corner.z);
+          fprintf(grid_file,"#RIGHT_BOTTOM: %lf %lf %lf\n",cont_plot->right_bottom_corner.x,
+                  cont_plot->right_bottom_corner.y,cont_plot->right_bottom_corner.z);
+          fprintf(grid_file,"#STEPS: %d %d\n",cont_plot->num_a,cont_plot->num_b);
+          fprintf(grid_file,"#NUM_X: %d\n",cont_plot->num_a);
+          fprintf(grid_file,"#NUM_Y: %d\n",cont_plot->num_b);
+          switch(cont_plot->orientation){
+          case ORIENT_X:
+            startx = cont_plot->left_top_corner.y;
+            endx = cont_plot->right_bottom_corner.y;
+            starty = cont_plot->left_top_corner.z;
+            endy = cont_plot->right_bottom_corner.z;
+            break;
+          case ORIENT_Y:
+            startx = cont_plot->left_top_corner.x;
+            endx = cont_plot->right_bottom_corner.x;
+            starty = cont_plot->left_top_corner.z;
+            endy = cont_plot->right_bottom_corner.z;
+            break;
+          case ORIENT_Z:
+            startx = cont_plot->left_top_corner.x;
+            endx = cont_plot->right_bottom_corner.x;
+            starty = cont_plot->left_top_corner.y;
+            endy = cont_plot->right_bottom_corner.y;
+            break;
+          }
+          stepx = (endx - startx)/(float)cont_plot->num_a;
+          stepy = (endy - starty)/(float)cont_plot->num_b;
+          fprintf(grid_file,"#MIN_X: %lf\n",startx);
+          fprintf(grid_file,"#MAX_X: %lf\n",endx);
+          fprintf(grid_file,"#STEP_X: %lf\n",stepx);
+          fprintf(grid_file,"#MIN_Y: %lf\n",starty);
+          fprintf(grid_file,"#MAX_Y: %lf\n",endy);
+          fprintf(grid_file,"#STEP_Y: %lf\n",stepy);
 
-	  fprintf(grid_file,"\n#BEGIN_DATA\n");		    
-	  data = cont_plot->data;
-	  for(j=0;j<cont_plot->num_a;j++){
-	    for(k=0;k<cont_plot->num_b;k++){
-	      fprintf(grid_file,"% -12.8lg\n",data->points[k].z);
-	    }
-	    fprintf(grid_file,"\n");
-	    data = data->next;
-	  }
-	  fprintf(grid_file,"#that's all folks\n");
-	  fclose(grid_file);
-	}else{
-	  error("Can't open output file.");
-	}
+          fprintf(grid_file,"\n#BEGIN_DATA\n");
+          data = cont_plot->data;
+          for(j=0;j<cont_plot->num_a;j++){
+            for(k=0;k<cont_plot->num_b;k++){
+              fprintf(grid_file,"% -12.8lg\n",data->points[k].z);
+            }
+            fprintf(grid_file,"\n");
+            data = data->next;
+          }
+          fprintf(grid_file,"#that's all folks\n");
+          fclose(grid_file);
+        }else{
+          error("Can't open output file.");
+        }
       }
     }
 
 
-    
+
     printf("Contouring\n");
     cont_plot->gnu_contours = contour_data(cont_plot->num_a,0,cont_plot->data,
                                            cont_plot->num_levels,
@@ -967,11 +967,11 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
                                            cont_plot->order,
                                            cont_plot->levels_kind,
                                            cont_plot->levels_list);
-    
+
     /**********
-      
+
       now postprocess the data so that we can actually plot it
-      
+
       **********/
     printf("Postprocessing\n");
     gnu_cont = cont_plot->gnu_contours;
@@ -994,9 +994,9 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
         }
       }
       MO_cont->coords = (point_type *)
-	D_CALLOC(MO_cont->num_pts,sizeof(point_type));
+        D_CALLOC(MO_cont->num_pts,sizeof(point_type));
       if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
-      
+
       for(j=0;j<gnu_cont->num_pts;j++){
         switch(cont_plot->orientation){
         case ORIENT_X:
@@ -1008,7 +1008,7 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
           MO_cont->coords[j].x = gnu_cont->coords[j].x;
           MO_cont->coords[j].y = cont_plot->left_top_corner.y;
           MO_cont->coords[j].z = gnu_cont->coords[j].y;
-	  break;
+          break;
         case ORIENT_Z:
           MO_cont->coords[j].x = gnu_cont->coords[j].x;
           MO_cont->coords[j].y = gnu_cont->coords[j].y;
@@ -1016,14 +1016,14 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
           break;
         case ORIENT_ARBITRARY:
           MO_cont->coords[j].x = origin->x +
-	    gnu_cont->coords[j].x*(cont_plot->Bas1.x) +
-	    gnu_cont->coords[j].y*(cont_plot->Bas2.x);
+            gnu_cont->coords[j].x*(cont_plot->Bas1.x) +
+            gnu_cont->coords[j].y*(cont_plot->Bas2.x);
           MO_cont->coords[j].y = origin->y +
-	    gnu_cont->coords[j].x*(cont_plot->Bas1.y) +
-	    gnu_cont->coords[j].y*(cont_plot->Bas2.y);
+            gnu_cont->coords[j].x*(cont_plot->Bas1.y) +
+            gnu_cont->coords[j].y*(cont_plot->Bas2.y);
           MO_cont->coords[j].z = origin->z +
-	    gnu_cont->coords[j].x*(cont_plot->Bas1.z) +
-	    gnu_cont->coords[j].y*(cont_plot->Bas2.z);
+            gnu_cont->coords[j].x*(cont_plot->Bas1.z) +
+            gnu_cont->coords[j].y*(cont_plot->Bas2.z);
 
           break;
         }
@@ -1036,7 +1036,7 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
       cont_plot->gnu_contours = gnu_cont;
       gnu_cont = gnu_cont->next;
       D_FREE(cont_plot->gnu_contours);
-      
+
       cont_plot->num_conts++;
     }
     cont_plot->gnu_contours = 0;
@@ -1059,8 +1059,8 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
  *                   Procedure MO_contour_surf
  *
  * Arguments:  surf: pointer to MO_surface_type
- *           
- *            
+ *
+ *
  * Returns: none
  *
  * Action:  Sets up and runs everything needed to slap a set of contours
@@ -1069,7 +1069,7 @@ void construct_MO_contours(int num_args,char **MO_surf_ptr)
  ****************************************************************************/
 void MO_contour_surf(int num_args,char **MO_surf_ptr)
 {
-  static float width=10.0,height=10.0;  
+  static float width=10.0,height=10.0;
   static int num_levels=DEFAULT_NUM_OF_ZLEVELS;
   static float offset=-1.0;
   static int stack_num = 10;
@@ -1083,14 +1083,14 @@ void MO_contour_surf(int num_args,char **MO_surf_ptr)
   int i,j;
   int num_stacks_to_do,use_symm;
   surf = (MO_surface_type *)MO_surf_ptr[0];
-  
+
   /* get memory for the contour plot if we need it */
   if(!surf->MO_contours){
     cont_plot = (MO_contour_plot_type *)D_CALLOC(1,sizeof(MO_contour_plot_type));
     if( !cont_plot ) fatal("Can't get space for cont_plot");
     surf->MO_contours = cont_plot;
   }
-  
+
   cont_plot = surf->MO_contours;
 
   /* if there's already data stored, blow that out too */
@@ -1104,8 +1104,8 @@ void MO_contour_surf(int num_args,char **MO_surf_ptr)
     }
     cont_plot->data = 0;
   }
-  
-  
+
+
   /* if we already have some contours, blow them out now */
   MO_cont = cont_plot->contours;
   while(MO_cont){
@@ -1120,15 +1120,15 @@ void MO_contour_surf(int num_args,char **MO_surf_ptr)
   cont_plot->contours = 0;
 
   num_levels = cont_plot->num_levels = 2;
-  
+
   /*******
-    
+
     just read everything in from the user..... mmmmmmm
     quick hack.
-    
+
    ********/
 
-  
+
   readfloatparm("Plane Width",&width);
   readfloatparm("Plane Height",&height);
 
@@ -1155,7 +1155,7 @@ void MO_contour_surf(int num_args,char **MO_surf_ptr)
   cont_plot->levels_list[1] = surf->surface_value;
 
   cont_plot->gnu_contours = 0;
-  
+
   readintparm("Stack num",&stack_num);
   if( stack_num % 2 ){
     printf("I'm making that an even number, that's happier.\n");
@@ -1188,74 +1188,74 @@ void MO_contour_surf(int num_args,char **MO_surf_ptr)
       cont_plot->right_bottom_corner.y = -height/2.0;
       cont_plot->right_bottom_corner.z = offset;
 
-      /******** 
-      
-	okay... we've got everything set up.  First evaluate the 
-	MO in the plane, then contour
-	
-	********/
+      /********
+
+        okay... we've got everything set up.  First evaluate the
+        MO in the plane, then contour
+
+        ********/
       printf("Evaluating plane\n");
       eval_MO_plane(surf);
-      
+
       printf("Contouring\n");
       cont_plot->gnu_contours = contour_data(cont_plot->num_a,0,cont_plot->data,
-					     cont_plot->num_levels,
-					     cont_plot->num_approx_pts,
-					     cont_plot->interp_kind,
-					     cont_plot->order,
-					     cont_plot->levels_kind,
-					     cont_plot->levels_list);
-      
+                                             cont_plot->num_levels,
+                                             cont_plot->num_approx_pts,
+                                             cont_plot->interp_kind,
+                                             cont_plot->order,
+                                             cont_plot->levels_kind,
+                                             cont_plot->levels_list);
+
       /**********
-	
-	now postprocess the data so that we can actually plot it
-	
-	**********/
+
+        now postprocess the data so that we can actually plot it
+
+        **********/
       printf("Postprocessing\n");
       gnu_cont = cont_plot->gnu_contours;
-      
+
       while(gnu_cont){
-	MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
-	if(!MO_cont)fatal("Can't allocate MO_cont");
-	MO_cont->num_pts = gnu_cont->num_pts;
-	MO_cont->value = gnu_cont->coords[0].z;
-	MO_cont->orientation = cont_plot->orientation;
-	MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
-	if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
-	
-	for(j=0;j<gnu_cont->num_pts;j++){
-	  MO_cont->coords[j].x = gnu_cont->coords[j].x;
-	  MO_cont->coords[j].y = gnu_cont->coords[j].y;
-	  MO_cont->coords[j].z = cont_plot->left_top_corner.z;
-	}
-	MO_cont->next = surf->MO_contours->contours;
-	surf->MO_contours->contours = MO_cont;
-	cont_plot->num_conts++;
-	
-	if( use_symm ){
-	  MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
-	  if(!MO_cont)fatal("Can't allocate MO_cont");
-	  MO_cont->num_pts = gnu_cont->num_pts;
-	  MO_cont->value = gnu_cont->coords[0].z*use_symm;
-	  MO_cont->orientation = cont_plot->orientation;
-	  MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
-	  if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
-	
-	  for(j=0;j<gnu_cont->num_pts;j++){
-	    MO_cont->coords[j].x = gnu_cont->coords[j].x;
-	    MO_cont->coords[j].y = gnu_cont->coords[j].y;
-	    MO_cont->coords[j].z = start_stack +
-	      (float)(stack_num - (i+1))*stack_step;
-	  }
-	  MO_cont->next = surf->MO_contours->contours;
-	  surf->MO_contours->contours = MO_cont;
-	  cont_plot->num_conts++;
-	}
-	/* since we don't need it anymore, free up the gnu contour */
-	D_FREE(gnu_cont->coords);
-	cont_plot->gnu_contours = gnu_cont;
-	gnu_cont = gnu_cont->next;
-	D_FREE(cont_plot->gnu_contours);
+        MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
+        if(!MO_cont)fatal("Can't allocate MO_cont");
+        MO_cont->num_pts = gnu_cont->num_pts;
+        MO_cont->value = gnu_cont->coords[0].z;
+        MO_cont->orientation = cont_plot->orientation;
+        MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
+        if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
+
+        for(j=0;j<gnu_cont->num_pts;j++){
+          MO_cont->coords[j].x = gnu_cont->coords[j].x;
+          MO_cont->coords[j].y = gnu_cont->coords[j].y;
+          MO_cont->coords[j].z = cont_plot->left_top_corner.z;
+        }
+        MO_cont->next = surf->MO_contours->contours;
+        surf->MO_contours->contours = MO_cont;
+        cont_plot->num_conts++;
+
+        if( use_symm ){
+          MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
+          if(!MO_cont)fatal("Can't allocate MO_cont");
+          MO_cont->num_pts = gnu_cont->num_pts;
+          MO_cont->value = gnu_cont->coords[0].z*use_symm;
+          MO_cont->orientation = cont_plot->orientation;
+          MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
+          if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
+
+          for(j=0;j<gnu_cont->num_pts;j++){
+            MO_cont->coords[j].x = gnu_cont->coords[j].x;
+            MO_cont->coords[j].y = gnu_cont->coords[j].y;
+            MO_cont->coords[j].z = start_stack +
+              (float)(stack_num - (i+1))*stack_step;
+          }
+          MO_cont->next = surf->MO_contours->contours;
+          surf->MO_contours->contours = MO_cont;
+          cont_plot->num_conts++;
+        }
+        /* since we don't need it anymore, free up the gnu contour */
+        D_FREE(gnu_cont->coords);
+        cont_plot->gnu_contours = gnu_cont;
+        gnu_cont = gnu_cont->next;
+        D_FREE(cont_plot->gnu_contours);
       }
       cont_plot->gnu_contours = 0;
     }
@@ -1282,60 +1282,60 @@ void MO_contour_surf(int num_args,char **MO_surf_ptr)
 
       printf("Evaluating plane\n");
       eval_MO_plane(surf);
-    
+
       printf("Contouring\n");
       cont_plot->gnu_contours = contour_data(cont_plot->num_a,0,cont_plot->data,
-					     cont_plot->num_levels,
-					     cont_plot->num_approx_pts,
-					     cont_plot->interp_kind,
-					     cont_plot->order,
-					     cont_plot->levels_kind,
-					     cont_plot->levels_list);
+                                             cont_plot->num_levels,
+                                             cont_plot->num_approx_pts,
+                                             cont_plot->interp_kind,
+                                             cont_plot->order,
+                                             cont_plot->levels_kind,
+                                             cont_plot->levels_list);
       printf("Postprocessing\n");
       gnu_cont = cont_plot->gnu_contours;
 
       while(gnu_cont){
-	MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
-	if(!MO_cont)fatal("Can't allocate MO_cont");
-	MO_cont->num_pts = gnu_cont->num_pts;
-	MO_cont->value = gnu_cont->coords[0].z;
-	MO_cont->orientation = cont_plot->orientation;      
-	MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
-	if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
-	
-	for(j=0;j<gnu_cont->num_pts;j++){
+        MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
+        if(!MO_cont)fatal("Can't allocate MO_cont");
+        MO_cont->num_pts = gnu_cont->num_pts;
+        MO_cont->value = gnu_cont->coords[0].z;
+        MO_cont->orientation = cont_plot->orientation;
+        MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
+        if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
+
+        for(j=0;j<gnu_cont->num_pts;j++){
           MO_cont->coords[j].x = gnu_cont->coords[j].x;
           MO_cont->coords[j].y = cont_plot->left_top_corner.y;
           MO_cont->coords[j].z = gnu_cont->coords[j].y;
-	}
-	MO_cont->next = surf->MO_contours->contours;
-	surf->MO_contours->contours = MO_cont;
-	cont_plot->num_conts++;
+        }
+        MO_cont->next = surf->MO_contours->contours;
+        surf->MO_contours->contours = MO_cont;
+        cont_plot->num_conts++;
 
-	if( use_symm ){
-	  MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
-	  if(!MO_cont)fatal("Can't allocate MO_cont");
-	  MO_cont->num_pts = gnu_cont->num_pts;
-	  MO_cont->value = gnu_cont->coords[0].z*use_symm;
-	  MO_cont->orientation = cont_plot->orientation;
-	  MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
-	  if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
-	
-	  for(j=0;j<gnu_cont->num_pts;j++){
-	    MO_cont->coords[j].x = gnu_cont->coords[j].x;
-	    MO_cont->coords[j].y = start_stack +
-	      (float)(stack_num - (i+1))*stack_step;
-	    MO_cont->coords[j].z = gnu_cont->coords[j].y;
-	  }
-	  MO_cont->next = surf->MO_contours->contours;
-	  surf->MO_contours->contours = MO_cont;
-	  cont_plot->num_conts++;
-	}
-	
-	D_FREE(gnu_cont->coords);
-	cont_plot->gnu_contours = gnu_cont;
-	gnu_cont = gnu_cont->next;
-	D_FREE(cont_plot->gnu_contours);
+        if( use_symm ){
+          MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
+          if(!MO_cont)fatal("Can't allocate MO_cont");
+          MO_cont->num_pts = gnu_cont->num_pts;
+          MO_cont->value = gnu_cont->coords[0].z*use_symm;
+          MO_cont->orientation = cont_plot->orientation;
+          MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
+          if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
+
+          for(j=0;j<gnu_cont->num_pts;j++){
+            MO_cont->coords[j].x = gnu_cont->coords[j].x;
+            MO_cont->coords[j].y = start_stack +
+              (float)(stack_num - (i+1))*stack_step;
+            MO_cont->coords[j].z = gnu_cont->coords[j].y;
+          }
+          MO_cont->next = surf->MO_contours->contours;
+          surf->MO_contours->contours = MO_cont;
+          cont_plot->num_conts++;
+        }
+
+        D_FREE(gnu_cont->coords);
+        cont_plot->gnu_contours = gnu_cont;
+        gnu_cont = gnu_cont->next;
+        D_FREE(cont_plot->gnu_contours);
       }
       cont_plot->gnu_contours = 0;
     }
@@ -1360,73 +1360,73 @@ void MO_contour_surf(int num_args,char **MO_surf_ptr)
       cont_plot->right_bottom_corner.x = offset;
       cont_plot->right_bottom_corner.y = width/2.0;
       cont_plot->right_bottom_corner.z = -height/2.0;
-      
+
       printf("Evaluating plane\n");
       eval_MO_plane(surf);
-    
+
       printf("Contouring\n");
       cont_plot->gnu_contours = contour_data(cont_plot->num_a,0,cont_plot->data,
-					     cont_plot->num_levels,
-					     cont_plot->num_approx_pts,
-					     cont_plot->interp_kind,
-					     cont_plot->order,
-					     cont_plot->levels_kind,
-					     cont_plot->levels_list);
+                                             cont_plot->num_levels,
+                                             cont_plot->num_approx_pts,
+                                             cont_plot->interp_kind,
+                                             cont_plot->order,
+                                             cont_plot->levels_kind,
+                                             cont_plot->levels_list);
       printf("Postprocessing\n");
       gnu_cont = cont_plot->gnu_contours;
 
       while(gnu_cont){
-	MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
-	if(!MO_cont)fatal("Can't allocate MO_cont");
-	MO_cont->num_pts = gnu_cont->num_pts;
-	MO_cont->value = gnu_cont->coords[0].z;
-	MO_cont->orientation = cont_plot->orientation;      
-	MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
-	if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
+        MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
+        if(!MO_cont)fatal("Can't allocate MO_cont");
+        MO_cont->num_pts = gnu_cont->num_pts;
+        MO_cont->value = gnu_cont->coords[0].z;
+        MO_cont->orientation = cont_plot->orientation;
+        MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
+        if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
 
-	for(j=0;j<gnu_cont->num_pts;j++){
-	  MO_cont->coords[j].x = cont_plot->left_top_corner.x;
-	  MO_cont->coords[j].y = gnu_cont->coords[j].x;
-	  MO_cont->coords[j].z = gnu_cont->coords[j].y;
-	}
-	MO_cont->next = surf->MO_contours->contours;
-	surf->MO_contours->contours = MO_cont;
-	cont_plot->num_conts++;
-	if( use_symm ){
-	  MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
-	  if(!MO_cont)fatal("Can't allocate MO_cont");
-	  MO_cont->num_pts = gnu_cont->num_pts;
-	  MO_cont->value = gnu_cont->coords[0].z*use_symm;
-	  MO_cont->orientation = cont_plot->orientation;
-	  MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
-	  if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
-	
-	  for(j=0;j<gnu_cont->num_pts;j++){
-	    MO_cont->coords[j].x = start_stack +
-	      (float)(stack_num - (i+1))*stack_step;
-	    MO_cont->coords[j].y = gnu_cont->coords[j].x;
-	    MO_cont->coords[j].z = gnu_cont->coords[j].y;
-	  }
-	  MO_cont->next = surf->MO_contours->contours;
-	  surf->MO_contours->contours = MO_cont;
-	  cont_plot->num_conts++;
-	}
-	
-	/* since we don't need it anymore, free up the gnu contour */
-	D_FREE(gnu_cont->coords);
-	cont_plot->gnu_contours = gnu_cont;
-	gnu_cont = gnu_cont->next;
-	D_FREE(cont_plot->gnu_contours);
-	
+        for(j=0;j<gnu_cont->num_pts;j++){
+          MO_cont->coords[j].x = cont_plot->left_top_corner.x;
+          MO_cont->coords[j].y = gnu_cont->coords[j].x;
+          MO_cont->coords[j].z = gnu_cont->coords[j].y;
+        }
+        MO_cont->next = surf->MO_contours->contours;
+        surf->MO_contours->contours = MO_cont;
+        cont_plot->num_conts++;
+        if( use_symm ){
+          MO_cont = (MO_contours_type *)D_CALLOC(1,sizeof(MO_contours_type));
+          if(!MO_cont)fatal("Can't allocate MO_cont");
+          MO_cont->num_pts = gnu_cont->num_pts;
+          MO_cont->value = gnu_cont->coords[0].z*use_symm;
+          MO_cont->orientation = cont_plot->orientation;
+          MO_cont->coords = (point_type *)D_CALLOC(MO_cont->num_pts,sizeof(point_type));
+          if(!MO_cont->coords) fatal("can't allocate MO_cont->coords");
+
+          for(j=0;j<gnu_cont->num_pts;j++){
+            MO_cont->coords[j].x = start_stack +
+              (float)(stack_num - (i+1))*stack_step;
+            MO_cont->coords[j].y = gnu_cont->coords[j].x;
+            MO_cont->coords[j].z = gnu_cont->coords[j].y;
+          }
+          MO_cont->next = surf->MO_contours->contours;
+          surf->MO_contours->contours = MO_cont;
+          cont_plot->num_conts++;
+        }
+
+        /* since we don't need it anymore, free up the gnu contour */
+        D_FREE(gnu_cont->coords);
+        cont_plot->gnu_contours = gnu_cont;
+        gnu_cont = gnu_cont->next;
+        D_FREE(cont_plot->gnu_contours);
+
 
       }
       cont_plot->gnu_contours = 0;
     }
   }
-  
-  
+
+
   printf("Done!\n");
-  
+
   /* figure out what the contour levels are */
   cont_plot->num_levels = num_levels;
   printf("There are %d contours at values:\n",cont_plot->num_levels);
@@ -1442,11 +1442,11 @@ void MO_contour_surf(int num_args,char **MO_surf_ptr)
  *
  * Arguments: surf: pointer to MO_surface_type
  *        contours: pointer to MO_contours_type
- *            
+ *
  * Returns: none
  *
- * Action: 
- *   Draws in the contours in 'surf.  
+ * Action:
+ *   Draws in the contours in 'surf.
  *
  *   If hidden line removal is being used, uses Jorgensen's algorithm
  *      (from psi88) to do the removal.
@@ -1500,9 +1500,9 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
         if(!Xpoints || !points_to_draw) fatal("can't get memory for Xpoints\n");
         num_Xpoints_allocated = contour->num_pts;
 #ifdef DEBUG_HIDDEN_LINE
-	if(Xhidpoints) free(Xhidpoints);
-	Xhidpoints = (XPoint *)calloc(contour->num_pts,sizeof(XPoint));
-	if(!Xhidpoints) fatal("can't get memory for Xpoints\n");
+        if(Xhidpoints) free(Xhidpoints);
+        Xhidpoints = (XPoint *)calloc(contour->num_pts,sizeof(XPoint));
+        if(!Xhidpoints) fatal("can't get memory for Xpoints\n");
 #endif
 
       }
@@ -1528,16 +1528,16 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
     }
   } else{
     /* okay, we're doing the REAL-STUFF (TM) */
-    
+
     /*******
-      
+
       start out by looping over the contours and filling in the
       equations for their planes. and their max and min vals.
-      
+
       The planes are defined as:
-      z = -( A_C X + B_C Y + D_C )  where 
+      z = -( A_C X + B_C Y + D_C )  where
       A_C = A/C, B_C = B/C, D_C = D/C
-                                    
+
       ********/
 #ifdef CONT_DEBUG
     printf("Points per contour (hidden):\n");
@@ -1547,23 +1547,23 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
     printf("\n");
 #endif
     for(i=0;i<num_conts;i++){
-      
+
       contour = &contours[i];
       find_contour_plane(contour);
-      
+
       contour->min_vals.x = contour->min_vals.y = contour->min_vals.z = 1000.0;
       contour->max_vals.x = contour->max_vals.y = contour->max_vals.z = -1000.0;
-      
+
       if( !contour->inv_slope ){
 #ifdef CONT_DEBUG
-	printf("allocating inv_slope\n");
+        printf("allocating inv_slope\n");
 #endif
-	contour->inv_slope = (float *)calloc(contour->num_pts,sizeof(float));
-	contour->intercept = (float *)calloc(contour->num_pts,sizeof(float));
-	if(!contour->intercept) fatal("can't get memory for contour->intercept");
+        contour->inv_slope = (float *)calloc(contour->num_pts,sizeof(float));
+        contour->intercept = (float *)calloc(contour->num_pts,sizeof(float));
+        if(!contour->intercept) fatal("can't get memory for contour->intercept");
       }
-      
-      
+
+
       for(j=0;j<contour->num_pts;j++){
         contour->max_vals.x = MY_MAX(contour->max_vals.x,contour->coords[j].x);
         contour->max_vals.y = MY_MAX(contour->max_vals.y,contour->coords[j].y);
@@ -1571,7 +1571,7 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
         contour->min_vals.x = MY_MIN(contour->min_vals.x,contour->coords[j].x);
         contour->min_vals.y = MY_MIN(contour->min_vals.y,contour->coords[j].y);
         contour->min_vals.z = MY_MIN(contour->min_vals.z,contour->coords[j].z);
-        
+
         /* while we're at it, set the intercepts and inverse slopes too (used later) */
         if( j != 0 ){
           denom = contour->coords[j].y - contour->coords[j-1].y;
@@ -1581,34 +1581,34 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
             contour->inv_slope[j] = 1e4;
           }
           if(fabs(contour->inv_slope[j]) > 1e-4){
-	    contour->intercept[j] = contour->coords[j].y -
-	      contour->coords[j].x/contour->inv_slope[j];
-	  }else{
-	    /*	    contour->intercept[j] = -1e4;*/
-	    contour->intercept[j] = contour->coords[j].y;
-	  }
+            contour->intercept[j] = contour->coords[j].y -
+              contour->coords[j].x/contour->inv_slope[j];
+          }else{
+            /*            contour->intercept[j] = -1e4;*/
+            contour->intercept[j] = contour->coords[j].y;
+          }
         }
       }
       /*  set the intercept and inverse slope of first point */
       j = contour->num_pts-1;
       denom = contour->coords[0].y - contour->coords[j].y;
       if( fabs(denom) > 1e-4 ){
-	contour->inv_slope[0] = (contour->coords[0].x - contour->coords[j].x)/denom;
+        contour->inv_slope[0] = (contour->coords[0].x - contour->coords[j].x)/denom;
       }else{
-	contour->inv_slope[0] = 1e4;
+        contour->inv_slope[0] = 1e4;
       }
       if(fabs(contour->inv_slope[0]) > 1e-4){
-	contour->intercept[0] = contour->coords[0].y -
-	  contour->coords[0].x/contour->inv_slope[0];
+        contour->intercept[0] = contour->coords[0].y -
+          contour->coords[0].x/contour->inv_slope[0];
       }else{
-	/*	    contour->intercept[0] = -1e4;*/
-	contour->intercept[0] = contour->coords[0].y;
+        /*            contour->intercept[0] = -1e4;*/
+        contour->intercept[0] = contour->coords[0].y;
       }
 
     }
-    
+
     /***************
-      
+
       okay... everything is set to do the hidden line removal stuff
       now.  Here's how it works...
       -loop over each contour i
@@ -1616,11 +1616,11 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
       -if contour j is parallel to i and has a higher z value
       at (1,1), or if the min and max of j are outside those of i
       we know that it can't be hidden by i.
-      -else  contour j may have parts hidden by i.  
+      -else  contour j may have parts hidden by i.
       swing through the points in j and check to
       see which are hidden (using the equation of i's plane).
       mark any points which are hidden.
-      
+
       *****************/
     points_culled = 0;
     for(i=0;i<num_conts;i++){
@@ -1628,60 +1628,60 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
       contour = &contours[i];
       if( !contour->hidden_points ){
 #ifdef CONT_DEBUG
-	printf("allocating hidden_points\n");
+        printf("allocating hidden_points\n");
 #endif
-	contour->hidden_points = (char *)calloc(contour->num_pts,sizeof(char));
-	if(!contour->hidden_points) fatal("Can't get memory for contour->hidden_points");
+        contour->hidden_points = (char *)calloc(contour->num_pts,sizeof(char));
+        if(!contour->hidden_points) fatal("Can't get memory for contour->hidden_points");
       } else{
-	bzero(contour->hidden_points,contour->num_pts*sizeof(char));
+        bzero(contour->hidden_points,contour->num_pts*sizeof(char));
       }
-      
+
       /* figure out the z value at (1,1) */
       z1 = (contour->A_C + contour->B_C + contour->D_C);
-      
+
       for(j=0;j<num_conts;j++){
         if( j != i ){
           contour2 = &contours[j];
           /* figure out the z value at (1,1) */
           z2 = (contour2->A_C + contour2->B_C + contour2->D_C);
-          
+
           /*******
-            
+
             check the z, max and min values
-            
+
             the max and min check is for totally disjoint planes.
-            
+
             *******/
           if( (z2 < z1 || contour->orientation!=contour2->orientation) &&
              !( contour2->min_vals.x-contour->max_vals.x > CLOSE_TO_ZERO ||
                contour2->min_vals.y-contour->max_vals.y > CLOSE_TO_ZERO ) &&
              !(contour2->max_vals.x - contour->min_vals.x < -CLOSE_TO_ZERO||
                contour2->max_vals.y - contour->min_vals.y < -CLOSE_TO_ZERO)){
-            
+
             /* okay... if we got this far, it means that there's a chance of overlap */
             for(k=0;k<contour->num_pts;k++){
               loc = &contour->coords[k];
-              
+
               /******
-                
+
                 before we evaluate the equation of the plane, or, god forbid,
                 have to go in and do the nasty (compare point-wise),
                 check max and min values on this guy
-                
+
                 *******/
               if( !contour->hidden_points[k] &&
-		 loc->x <= contour2->max_vals.x && loc->x >= contour2->min_vals.x && 
+                 loc->x <= contour2->max_vals.x && loc->x >= contour2->min_vals.x &&
                  loc->y <= contour2->max_vals.y && loc->y >= contour2->min_vals.y ){
-                
+
                 /********
-                  
+
                   use the equation of the plane to try and avoid culling
                   this point...
-                  
+
                   ********/
                 plane_z = (contour2->A_C * loc->x + contour2->B_C * loc->y+
                             contour2->D_C);
-                
+
                 if( plane_z < loc->z ){
                   even = 1;
                   hidden = 0;
@@ -1689,29 +1689,29 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
                   for(l=1;l<contour2->num_pts;l++){
                     bool2 = bool1;
                     bool1 = (loc->y - contour2->coords[l].y) < -CLOSE_TO_ZERO;
-                    
+
                     /* if we're between the y values of the points */
                     if( (bool1 || bool2) && !(bool1 && bool2) ){
                       even = !even;
                       if( fabs(contour2->inv_slope[l]) > 1e-4 ){
-			xp = (loc->y - contour2->intercept[l])*contour2->inv_slope[l];
-			if( loc->x - xp >= -CLOSE_TO_ZERO/1000.0 ){
-			  hidden = !hidden;
-			}
-		      } else{
-			hidden = !hidden;
-		      }
+                        xp = (loc->y - contour2->intercept[l])*contour2->inv_slope[l];
+                        if( loc->x - xp >= -CLOSE_TO_ZERO/1000.0 ){
+                          hidden = !hidden;
+                        }
+                      } else{
+                        hidden = !hidden;
+                      }
                     }
                   }
                   hidden = hidden && even;
                   if( hidden ){
-		    contour->hidden_points[k]=1;
-/*printf("Curve %d, point %d clipped by curve %d\n",i,k,j);		    */
-		    points_culled++;
-		  }
+                    contour->hidden_points[k]=1;
+/*printf("Curve %d, point %d clipped by curve %d\n",i,k,j);                    */
+                    points_culled++;
+                  }
                 }
-	      }
-	    }
+              }
+            }
           }
         }
       }
@@ -1722,113 +1722,113 @@ void draw_contours(MO_surface_type  *surf,MO_contours_type *contours)
     for(i=0;i<num_conts;i++){
       contour = &contours[i];
       if( contour->num_pts > num_Xpoints_allocated ){
-	if(Xpoints) free(Xpoints);
-	if(points_to_draw) free(points_to_draw);
-	Xpoints = (XPoint *)calloc(contour->num_pts,sizeof(XPoint));
-	points_to_draw = (point_type2D *)calloc(contour->num_pts,
-						sizeof(point_type2D));
-	if(!Xpoints || !points_to_draw) fatal("can't get memory for Xpoints\n");
-	num_Xpoints_allocated = contour->num_pts;
+        if(Xpoints) free(Xpoints);
+        if(points_to_draw) free(points_to_draw);
+        Xpoints = (XPoint *)calloc(contour->num_pts,sizeof(XPoint));
+        points_to_draw = (point_type2D *)calloc(contour->num_pts,
+                                                sizeof(point_type2D));
+        if(!Xpoints || !points_to_draw) fatal("can't get memory for Xpoints\n");
+        num_Xpoints_allocated = contour->num_pts;
 #ifdef DEBUG_HIDDEN_LINE
-	if(Xhidpoints) free(Xhidpoints);
-	Xhidpoints = (XPoint *)calloc(contour->num_pts,sizeof(XPoint));
-	if(!Xhidpoints) fatal("can't get memory for Xpoints\n");
+        if(Xhidpoints) free(Xhidpoints);
+        Xhidpoints = (XPoint *)calloc(contour->num_pts,sizeof(XPoint));
+        if(!Xhidpoints) fatal("can't get memory for Xpoints\n");
 #endif
       }
-      
+
       g_change_linewidth(1);
       points_drawn = 0;
 #ifdef DEBUG_HIDDEN_LINE
       hidpoints_drawn = 0;
 #endif
       for(j=0;j<contour->num_pts;j++){
-	if( !contour->hidden_points[j] ){
+        if( !contour->hidden_points[j] ){
 #ifdef DEBUG_HIDDEN_LINE
-	  if( hidpoints_drawn ){
-	    if( contour->value > 0 ){
-	      if( !surf->invert_phase )
-		g_change_linestyle(0);
-	      else
-		g_change_linestyle(2);
-	    }else if( contour->value < 0 ){
-	      if( !surf->invert_phase )
-		g_change_linestyle(2);
-	      else
-		g_change_linestyle(0);
-	    } else{
-	      g_change_linestyle(1);
-	    }
-	    g_clines(Xhidpoints,points_to_draw,hidpoints_drawn,0);
-	    hidpoints_drawn = 0;
-	  }
+          if( hidpoints_drawn ){
+            if( contour->value > 0 ){
+              if( !surf->invert_phase )
+                g_change_linestyle(0);
+              else
+                g_change_linestyle(2);
+            }else if( contour->value < 0 ){
+              if( !surf->invert_phase )
+                g_change_linestyle(2);
+              else
+                g_change_linestyle(0);
+            } else{
+              g_change_linestyle(1);
+            }
+            g_clines(Xhidpoints,points_to_draw,hidpoints_drawn,0);
+            hidpoints_drawn = 0;
+          }
 #endif
-	  Xpoints[points_drawn].x = points_to_draw[points_drawn].x =
-	    contour->coords[j].x;
-	  Xpoints[points_drawn].y = points_to_draw[points_drawn].y =
-	    contour->coords[j].y;
+          Xpoints[points_drawn].x = points_to_draw[points_drawn].x =
+            contour->coords[j].x;
+          Xpoints[points_drawn].y = points_to_draw[points_drawn].y =
+            contour->coords[j].y;
 #ifdef DEBUG_HIDDEN_LINE
-	  XFillArc(disp,gpix,graphgc,Xpoints[points_drawn].x-3,Xpoints[points_drawn].y-3,
-		   6,6,0,23040);
+          XFillArc(disp,gpix,graphgc,Xpoints[points_drawn].x-3,Xpoints[points_drawn].y-3,
+                   6,6,0,23040);
 #endif
-	  points_drawn++;
-	} else{
+          points_drawn++;
+        } else{
 #ifdef DEBUG_HIDDEN_LINE
-	  Xhidpoints[hidpoints_drawn].x = contour->coords[j].x;
-	  Xhidpoints[hidpoints_drawn].y = contour->coords[j].y;
-	  hidpoints_drawn++;
+          Xhidpoints[hidpoints_drawn].x = contour->coords[j].x;
+          Xhidpoints[hidpoints_drawn].y = contour->coords[j].y;
+          hidpoints_drawn++;
 #endif
-	  if( points_drawn ){
-	    if( contour->value > 0 ){
-	      if( !surf->invert_phase )
-		g_change_linestyle(0);
-	      else
-		g_change_linestyle(2);
-	    }else if( contour->value < 0 ){
-	      if( !surf->invert_phase )
-		g_change_linestyle(2);
-	      else
-		g_change_linestyle(0);
-	    } else{
-	      g_change_linestyle(1);
-	    }
-	    g_lines(Xpoints,points_to_draw,points_drawn,0);
-	    points_drawn = 0;
-	  }
-	}
+          if( points_drawn ){
+            if( contour->value > 0 ){
+              if( !surf->invert_phase )
+                g_change_linestyle(0);
+              else
+                g_change_linestyle(2);
+            }else if( contour->value < 0 ){
+              if( !surf->invert_phase )
+                g_change_linestyle(2);
+              else
+                g_change_linestyle(0);
+            } else{
+              g_change_linestyle(1);
+            }
+            g_lines(Xpoints,points_to_draw,points_drawn,0);
+            points_drawn = 0;
+          }
+        }
       }
       if( points_drawn ){
-	if( contour->value > 0 ){
-	  if( !surf->invert_phase )
-	    g_change_linestyle(0);
-	  else
-	    g_change_linestyle(2);
-	}else if( contour->value < 0 ){
-	  if( !surf->invert_phase )
-	    g_change_linestyle(2);
-	  else
-	    g_change_linestyle(0);
-	} else{
-	  g_change_linestyle(1);
-	}
-	g_lines(Xpoints,points_to_draw,points_drawn,0);
+        if( contour->value > 0 ){
+          if( !surf->invert_phase )
+            g_change_linestyle(0);
+          else
+            g_change_linestyle(2);
+        }else if( contour->value < 0 ){
+          if( !surf->invert_phase )
+            g_change_linestyle(2);
+          else
+            g_change_linestyle(0);
+        } else{
+          g_change_linestyle(1);
+        }
+        g_lines(Xpoints,points_to_draw,points_drawn,0);
       }
 #ifdef DEBUG_HIDDEN_LINE
       if( hidpoints_drawn ){
-	if( contour->value > 0 ){
-	  if( !surf->invert_phase )
-	    g_change_linestyle(0);
-	  else
-	    g_change_linestyle(2);
-	}else if( contour->value < 0 ){
-	  if( !surf->invert_phase )
-	    g_change_linestyle(2);
-	  else
-	    g_change_linestyle(0);
-	} else{
-	  g_change_linestyle(1);
-	}
-	g_clines(Xhidpoints,points_to_draw,hidpoints_drawn,0);
-	hidpoints_drawn = 0;
+        if( contour->value > 0 ){
+          if( !surf->invert_phase )
+            g_change_linestyle(0);
+          else
+            g_change_linestyle(2);
+        }else if( contour->value < 0 ){
+          if( !surf->invert_phase )
+            g_change_linestyle(2);
+          else
+            g_change_linestyle(0);
+        } else{
+          g_change_linestyle(1);
+        }
+        g_clines(Xhidpoints,points_to_draw,hidpoints_drawn,0);
+        hidpoints_drawn = 0;
       }
 #endif
 
@@ -1841,18 +1841,18 @@ void find_contour_plane(MO_contours_type *contour)
   point_type V1,V2,V3;
   float D;
   point_type *a,*b,*c;
-  
+
   a = &(contour->coords[0]);
-  b = &(contour->coords[contour->num_pts/3+1]);   
-  c = &(contour->coords[2*contour->num_pts/3+1]);       
+  b = &(contour->coords[contour->num_pts/3+1]);
+  c = &(contour->coords[2*contour->num_pts/3+1]);
 
   V1.x = b->x-a->x;V1.y = b->y-a->y;V1.z = b->z-a->z;
   V2.x = c->x-a->x;V2.y = c->y-a->y;V2.z = c->z-a->z;
-  
-  
+
+
   V3Cross(&V1,&V2,&V3);
   D = (V3.x*a->x + V3.y*a->y + V3.z*a->z);
-  
+
   if( fabs(V3.z) < 1e-8 ){
     contour->A_C = 0;
     contour->B_C = 0;
@@ -1862,7 +1862,7 @@ void find_contour_plane(MO_contours_type *contour)
     contour->B_C = -V3.y/V3.z;
     contour->D_C = D/V3.z;
   }
-    
-}  
-  
-    
+
+}
+
+

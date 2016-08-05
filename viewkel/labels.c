@@ -64,11 +64,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *                   Procedure new_label
  *
  * Arguments: none
- *            
+ *
  * Returns: none
  *
  * Action: sets up a new label for the graph
- *        
+ *
  ****************************************************************************/
 void new_label(char *text)
 {
@@ -93,7 +93,7 @@ void new_label(char *text)
   new_label->prim = (prim_type *)D_CALLOC(1,sizeof(prim_type));
   if( !new_label->prim )fatal("Can't get space for label primitive.");
   new_label->prim->which = LABEL;
-  
+
   new_label->prim->label = (label_type *)D_CALLOC(1,sizeof(label_type));
   if( !new_label->prim->label )
     fatal("Can't get space for label.");
@@ -124,7 +124,7 @@ void new_label(char *text)
  *
  * Arguments: prim: pointer to primitive_type
  *             obj: pointer to object_type
- *            
+ *
  * Returns: none
  *
  * Action: Draws in a label
@@ -153,7 +153,7 @@ void draw_label(prim,obj)
  *                   Procedure adjust_label
  *
  * Arguments: label: pointer to label_type
- *            
+ *
  * Returns: none
  *
  * Action: Adjusts parameters for a label

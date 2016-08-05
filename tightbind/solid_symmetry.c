@@ -55,27 +55,27 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 * Returns: none
 *
-* Action: uses the symmetry operations of 'cell 
-*   to reduce the number 
+* Action: uses the symmetry operations of 'cell
+*   to reduce the number
 *   of k points in 'raw_points.  the multiplicity of each point is returned
 *   in 'multiplicity.  If a point has an initial multiplicity of -1, it
-*   will be ignored here.  
+*   will be ignored here.
 *  The final number of points is returned in 'num_points.
 *
 *  If 'nonortho_axes is non-zero then the points are transformed
 *   into the cartesian basis before the comparisons are done.
 *
 *  NOTE:  This code is actually not correct in the general case where the
-*   three lattice vectors do not point along the cartesian axes.  Luckily, 
+*   three lattice vectors do not point along the cartesian axes.  Luckily,
 *   since the code which finds the symmetry elements is too stupid to find
 *   any elements that don't lie along axes, this will work.
 *   ah... the joys of stupid code.  :-)
 *
 ****************************************************************************/
 void reduce_kpoints(detail_type *details,cell_type *cell,
-		    point_type *raw_points,int num_raw_points,
-		    real *multiplicity,int *num_points,
-		    int nonortho_axes)
+                    point_type *raw_points,int num_raw_points,
+                    real *multiplicity,int *num_points,
+                    int nonortho_axes)
 {
   int p1,p2;
   int i,j;
@@ -95,18 +95,18 @@ void reduce_kpoints(detail_type *details,cell_type *cell,
     orig_points = (point_type *)my_calloc(num_raw_points,sizeof(point_type));
     if(!new_points) fatal("reduce_orthogonal_kpoints can't allocate orig_points");
     bcopy((char *)raw_points,(char *)orig_points,
-	  num_raw_points*sizeof(point_type));	  
+          num_raw_points*sizeof(point_type));
     for(p1=0;p1<num_raw_points;p1++){
       if(multiplicity[p1] != -1){
-	raw_points[p1].x = orig_points[p1].x * cell->recip_vects[0].x +
-	   orig_points[p1].y * cell->recip_vects[1].x +
-	     orig_points[p1].z * cell->recip_vects[2].x; 
-	raw_points[p1].y = orig_points[p1].x * cell->recip_vects[0].y +
-	   orig_points[p1].y * cell->recip_vects[1].y +
-	     orig_points[p1].z * cell->recip_vects[2].y; 
-	raw_points[p1].z = orig_points[p1].x * cell->recip_vects[0].z +
-	   orig_points[p1].y * cell->recip_vects[1].z +
-	     orig_points[p1].z * cell->recip_vects[2].z;
+        raw_points[p1].x = orig_points[p1].x * cell->recip_vects[0].x +
+           orig_points[p1].y * cell->recip_vects[1].x +
+             orig_points[p1].z * cell->recip_vects[2].x;
+        raw_points[p1].y = orig_points[p1].x * cell->recip_vects[0].y +
+           orig_points[p1].y * cell->recip_vects[1].y +
+             orig_points[p1].z * cell->recip_vects[2].y;
+        raw_points[p1].z = orig_points[p1].x * cell->recip_vects[0].z +
+           orig_points[p1].y * cell->recip_vects[1].z +
+             orig_points[p1].z * cell->recip_vects[2].z;
       }
     }
   }
@@ -116,37 +116,37 @@ void reduce_kpoints(detail_type *details,cell_type *cell,
   while(this_op){
     if( this_op->type != Identity && !this_op->redundant ){
       bcopy((char *)raw_points,(char *)new_points,
-	    num_raw_points*sizeof(point_type));
+            num_raw_points*sizeof(point_type));
       for(p1 = 0;p1<num_raw_points;p1++){
-	if( multiplicity[p1] > 0 ){
-	  if( this_op->type == Rotation || this_op->type == Improper_Rotation ){
-	    /* do all the rotations */
-	    for(i=1;i<this_op->order;i++){
-	      transform_one_point(&(new_points[p1]),this_op->t_mat);
-	      /* loop over the other points and see if we can find a match */
-	      for(p2 = p1+1;p2<num_raw_points;p2++){
-		if( multiplicity[p2] > 0 &&
-		   POINTS_ARE_THE_SAME(&(new_points[p1]),&(raw_points[p2]),
-				       details->symm_tol)){
-		  multiplicity[p1] += multiplicity[p2];
-		  multiplicity[p2] = 0;
-		}
-	      }
-	    }
-	  } else {
-	    /* it's not a rotation, so we just need to do one transformation */
-	    transform_one_point(&(new_points[p1]),this_op->t_mat);
-	    /* loop over the other points and see if we can find a match */
-	    for(p2 = p1+1;p2<num_raw_points;p2++){
-	      if( multiplicity[p2] > 0 &&
-		 POINTS_ARE_THE_SAME(&(new_points[p1]),&(raw_points[p2]),
-				     details->symm_tol)){
-		multiplicity[p1] += multiplicity[p2];
-		multiplicity[p2] = 0;
-	      }
-	    }
-	  }
-	}
+        if( multiplicity[p1] > 0 ){
+          if( this_op->type == Rotation || this_op->type == Improper_Rotation ){
+            /* do all the rotations */
+            for(i=1;i<this_op->order;i++){
+              transform_one_point(&(new_points[p1]),this_op->t_mat);
+              /* loop over the other points and see if we can find a match */
+              for(p2 = p1+1;p2<num_raw_points;p2++){
+                if( multiplicity[p2] > 0 &&
+                   POINTS_ARE_THE_SAME(&(new_points[p1]),&(raw_points[p2]),
+                                       details->symm_tol)){
+                  multiplicity[p1] += multiplicity[p2];
+                  multiplicity[p2] = 0;
+                }
+              }
+            }
+          } else {
+            /* it's not a rotation, so we just need to do one transformation */
+            transform_one_point(&(new_points[p1]),this_op->t_mat);
+            /* loop over the other points and see if we can find a match */
+            for(p2 = p1+1;p2<num_raw_points;p2++){
+              if( multiplicity[p2] > 0 &&
+                 POINTS_ARE_THE_SAME(&(new_points[p1]),&(raw_points[p2]),
+                                     details->symm_tol)){
+                multiplicity[p1] += multiplicity[p2];
+                multiplicity[p2] = 0;
+              }
+            }
+          }
+        }
       }
     }
     this_op = this_op->next;
@@ -154,23 +154,23 @@ void reduce_kpoints(detail_type *details,cell_type *cell,
   /* copy back in the original coordinates if needed */
   if( nonortho_axes ){
     bcopy((char *)orig_points,(char *)raw_points,
-	  num_raw_points*sizeof(point_type));
+          num_raw_points*sizeof(point_type));
   }
   /* run through, eliminate -k if k is present, and count the points */
   *num_points = 0;
   for(p1 = 0; p1<num_raw_points; p1++){
     if( multiplicity[p1] > 0 ){
       for(p2 = p1+1; p2<num_raw_points; p2++){
-	if( multiplicity[p2] > 0 ){
-	  new_points[0].x = -raw_points[p2].x;
-	  new_points[0].y = -raw_points[p2].y;
-	  new_points[0].z = -raw_points[p2].z;
-	  if( POINTS_ARE_THE_SAME(&(raw_points[p1]),&(new_points[0]),
-				  details->symm_tol)){
-	    multiplicity[p1] += multiplicity[p2];
-	    multiplicity[p2] = 0;
-	  }
-	}
+        if( multiplicity[p2] > 0 ){
+          new_points[0].x = -raw_points[p2].x;
+          new_points[0].y = -raw_points[p2].y;
+          new_points[0].z = -raw_points[p2].z;
+          if( POINTS_ARE_THE_SAME(&(raw_points[p1]),&(new_points[0]),
+                                  details->symm_tol)){
+            multiplicity[p1] += multiplicity[p2];
+            multiplicity[p2] = 0;
+          }
+        }
       }
       (*num_points)++;
     }
@@ -182,9 +182,9 @@ void reduce_kpoints(detail_type *details,cell_type *cell,
   if(details->use_high_symm_p){
     for(p1=0;p1<num_raw_points;p1++){
       if( multiplicity[p1] > 0 ){
-	if( fabs(raw_points[p1].x) == 0.5 ) multiplicity[p1] /= 2.0;
-	if( fabs(raw_points[p1].y) == 0.5 ) multiplicity[p1] /= 2.0;
-	if( fabs(raw_points[p1].z) == 0.5 ) multiplicity[p1] /= 2.0;
+        if( fabs(raw_points[p1].x) == 0.5 ) multiplicity[p1] /= 2.0;
+        if( fabs(raw_points[p1].y) == 0.5 ) multiplicity[p1] /= 2.0;
+        if( fabs(raw_points[p1].z) == 0.5 ) multiplicity[p1] /= 2.0;
       }
     }
   }
@@ -222,10 +222,10 @@ int check_for_orthogonal_basis(point_type vects[3],int dim,real tol)
     }
     if( dim == 3 ){
       if(fabs(dot_prod(&(vects[0]),&(vects[2]))) > tol){
-	result = result | 2;
+        result = result | 2;
       }
       if(fabs(dot_prod(&(vects[1]),&(vects[2]))) > tol){
-	result = result | 4;
+        result = result | 4;
       }
     }
   }
@@ -267,13 +267,13 @@ int check_for_orthogonal_basis(point_type vects[3],int dim,real tol)
 *
 ****************************************************************************/
 int atoms_are_equiv(cell_type *cell,point_type *loc1,point_type *loc2,
-		    int *which_cell,real symm_tol,point_type *cell_dim)
+                    int *which_cell,real symm_tol,point_type *cell_dim)
 {
   int a_loc,b_loc,c_loc;
   int i,j,k,itab,jtab;
   point_type temploc;
   int result;
-  
+
 
   /* start simply, just compare the positions */
   if( POINTS_ARE_THE_SAME(loc1,loc2,symm_tol) ){
@@ -293,33 +293,33 @@ int atoms_are_equiv(cell_type *cell,point_type *loc1,point_type *loc2,
       temploc.y = loc2->y + i*cell_dim[0].y;
       temploc.z = loc2->z + i*cell_dim[0].z;
       if( POINTS_ARE_THE_SAME(loc1,&temploc,symm_tol) ){
-	which_cell[0] = i;which_cell[1] = 0;which_cell[2] = 0;
-	return(1);
+        which_cell[0] = i;which_cell[1] = 0;which_cell[2] = 0;
+        return(1);
       }
       if( cell->dim > 1 ){
-	for(j=-1;j<2;j++){
-	  temploc.x = loc2->x + i*cell_dim[0].x+ j*cell_dim[1].x;
-	  temploc.y = loc2->y + i*cell_dim[0].y+ j*cell_dim[1].y;
-	  temploc.z = loc2->z + i*cell_dim[0].z+ j*cell_dim[1].z;
-	  if( POINTS_ARE_THE_SAME(loc1,&temploc,symm_tol) ){
-	    which_cell[0] = i;which_cell[1] = j;which_cell[2] = 0;
-	    return(1);
-	  }
-	  if( cell->dim == 3 ){
-	    for(k=-1;k<2;k++){
-	      temploc.x = loc2->x + i*cell_dim[0].x +
-		j*cell_dim[1].x+ k*cell_dim[2].x; 
-	      temploc.y = loc2->y + i*cell_dim[0].y +
-		j*cell_dim[1].y+ k*cell_dim[2].y;
-	      temploc.z = loc2->z + i*cell_dim[0].z +
-		j*cell_dim[1].z+ k*cell_dim[2].z;
-	      if( POINTS_ARE_THE_SAME(loc1,&temploc,symm_tol) ){
-		which_cell[0] = i;which_cell[1] = j;which_cell[2] = k;
-		return(1);
-	      }
-	    }
-	  }
-	}
+        for(j=-1;j<2;j++){
+          temploc.x = loc2->x + i*cell_dim[0].x+ j*cell_dim[1].x;
+          temploc.y = loc2->y + i*cell_dim[0].y+ j*cell_dim[1].y;
+          temploc.z = loc2->z + i*cell_dim[0].z+ j*cell_dim[1].z;
+          if( POINTS_ARE_THE_SAME(loc1,&temploc,symm_tol) ){
+            which_cell[0] = i;which_cell[1] = j;which_cell[2] = 0;
+            return(1);
+          }
+          if( cell->dim == 3 ){
+            for(k=-1;k<2;k++){
+              temploc.x = loc2->x + i*cell_dim[0].x +
+                j*cell_dim[1].x+ k*cell_dim[2].x;
+              temploc.y = loc2->y + i*cell_dim[0].y +
+                j*cell_dim[1].y+ k*cell_dim[2].y;
+              temploc.z = loc2->z + i*cell_dim[0].z +
+                j*cell_dim[1].z+ k*cell_dim[2].z;
+              if( POINTS_ARE_THE_SAME(loc1,&temploc,symm_tol) ){
+                which_cell[0] = i;which_cell[1] = j;which_cell[2] = k;
+                return(1);
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -342,7 +342,7 @@ int atoms_are_equiv(cell_type *cell,point_type *loc1,point_type *loc2,
 *
 * Action:  checks to see if the two sets of lattice vectors
 *    are the same
-*  
+*
 *   if they are then 'present is  set to be nonzero
 *
 *   the mapping between vectors is passed back in 'mapping, which should
@@ -350,7 +350,7 @@ int atoms_are_equiv(cell_type *cell,point_type *loc1,point_type *loc2,
 *
 *****************************************************************************/
 void compare_crystal_lattice(cell_type *cell,point_type *vects1,point_type *vects2,
-			   char *present,real symm_tol,real *mapping)
+                           char *present,real symm_tol,real *mapping)
 {
   int i,j,k,l,m;
   char found;
@@ -390,84 +390,84 @@ void compare_crystal_lattice(cell_type *cell,point_type *vects1,point_type *vect
       temp_vect.y = vects1[j].y;
       temp_vect.z = vects1[j].z;
       if(POINTS_ARE_THE_SAME(&(temp_vect),&(vects2[i]),symm_tol)){
-	found = 1;
-	mapping[i*3+j] = 1;
+        found = 1;
+        mapping[i*3+j] = 1;
       }
       if( !found ){
-	temp_vect.x = -vects1[j].x;
-	temp_vect.y = -vects1[j].y;
-	temp_vect.z = -vects1[j].z;
-	if(POINTS_ARE_THE_SAME(&(temp_vect),&(vects2[i]),symm_tol)){
-	  found = 1;
-	  mapping[i*3+j] = -1;
-	}
+        temp_vect.x = -vects1[j].x;
+        temp_vect.y = -vects1[j].y;
+        temp_vect.z = -vects1[j].z;
+        if(POINTS_ARE_THE_SAME(&(temp_vect),&(vects2[i]),symm_tol)){
+          found = 1;
+          mapping[i*3+j] = -1;
+        }
       }
     }
     if( !found ){
       /********
 
-	okay, we did not find it... sooooo that means we have
-	to explore sums and differences of lattice vectors... ick.
+        okay, we did not find it... sooooo that means we have
+        to explore sums and differences of lattice vectors... ick.
 
-	We'll use dot products here to eliminate vectors from
-	consideration... a zero dot product indicates no possibility
-	of contribution.
+        We'll use dot products here to eliminate vectors from
+        consideration... a zero dot product indicates no possibility
+        of contribution.
 
       ********/
       dota = dot_prod(&vects1[0],&vects2[i]);
       if( cell->dim > 1 ){
-	dotb = dot_prod(&vects1[1],&vects2[i]);
-	if(cell->dim > 2 ){
-	  dotc = dot_prod(&vects1[2],&vects2[i]);
-	}else dotc = 0;
+        dotb = dot_prod(&vects1[1],&vects2[i]);
+        if(cell->dim > 2 ){
+          dotc = dot_prod(&vects1[2],&vects2[i]);
+        }else dotc = 0;
       }else dotb = 0;
 
       if( fabs(dota) > symm_tol){
-	if( fabs(dotb) > symm_tol ){
-	  /* this does all possible combinations of +/-a +/- b */
-	  for(k=-1;k<2 && !found ;k++){
-	    for(l=-1;l<2 && !found ;l++){
-	      temp_vect.x = k*vects1[0].x + l*vects1[1].x;
-	      temp_vect.y = k*vects1[0].y + l*vects1[1].y;
-	      temp_vect.z = k*vects1[0].z + l*vects1[1].z;
-	      if(POINTS_ARE_THE_SAME(&(vects2[i]),&(temp_vect),symm_tol)){
-		found = 1;
-		mapping[i*3] = k;
-		mapping[i*3+1] = l;
-	      }
-	    }
-	  }
-	}
-	if( !found && fabs(dotc) > symm_tol ){
-	  /* this does all possible combinations of +/-a +/- c */
-	  for(k=-1;k<2 && !found ;k++){
-	    for(l=-1;l<2 && !found ;l++){
-	      temp_vect.x = k*vects1[0].x + l*vects1[2].x;
-	      temp_vect.y = k*vects1[0].y + l*vects1[2].y;
-	      temp_vect.z = k*vects1[0].z + l*vects1[2].z;
-	      if(POINTS_ARE_THE_SAME(&(vects2[i]),&(temp_vect),symm_tol)){
-		found = 1;
-		mapping[i*3] = k;
-		mapping[i*3+2] = l;
-	      }
-	    }
-	  }
-	}
+        if( fabs(dotb) > symm_tol ){
+          /* this does all possible combinations of +/-a +/- b */
+          for(k=-1;k<2 && !found ;k++){
+            for(l=-1;l<2 && !found ;l++){
+              temp_vect.x = k*vects1[0].x + l*vects1[1].x;
+              temp_vect.y = k*vects1[0].y + l*vects1[1].y;
+              temp_vect.z = k*vects1[0].z + l*vects1[1].z;
+              if(POINTS_ARE_THE_SAME(&(vects2[i]),&(temp_vect),symm_tol)){
+                found = 1;
+                mapping[i*3] = k;
+                mapping[i*3+1] = l;
+              }
+            }
+          }
+        }
+        if( !found && fabs(dotc) > symm_tol ){
+          /* this does all possible combinations of +/-a +/- c */
+          for(k=-1;k<2 && !found ;k++){
+            for(l=-1;l<2 && !found ;l++){
+              temp_vect.x = k*vects1[0].x + l*vects1[2].x;
+              temp_vect.y = k*vects1[0].y + l*vects1[2].y;
+              temp_vect.z = k*vects1[0].z + l*vects1[2].z;
+              if(POINTS_ARE_THE_SAME(&(vects2[i]),&(temp_vect),symm_tol)){
+                found = 1;
+                mapping[i*3] = k;
+                mapping[i*3+2] = l;
+              }
+            }
+          }
+        }
       }
       if( !found && fabs(dotb) > symm_tol && fabs(dotc) > symm_tol ){
-	/* this does all possible combinations of +/-b +/- c */
-	for(k=-1;k<2 && !found ;k++){
-	  for(l=-1;l<2 && !found ;l++){
-	    temp_vect.x = k*vects1[1].x + l*vects1[2].x;
-	    temp_vect.y = k*vects1[1].y + l*vects1[2].y;
-	    temp_vect.z = k*vects1[1].z + l*vects1[2].z;
-	    if(POINTS_ARE_THE_SAME(&(vects2[i]),&(temp_vect),symm_tol)){
-	      found = 1;
-	      mapping[i*3+1] = k;
-	      mapping[i*3+2] = l;
-	    }
-	  }
-	}
+        /* this does all possible combinations of +/-b +/- c */
+        for(k=-1;k<2 && !found ;k++){
+          for(l=-1;l<2 && !found ;l++){
+            temp_vect.x = k*vects1[1].x + l*vects1[2].x;
+            temp_vect.y = k*vects1[1].y + l*vects1[2].y;
+            temp_vect.z = k*vects1[1].z + l*vects1[2].z;
+            if(POINTS_ARE_THE_SAME(&(vects2[i]),&(temp_vect),symm_tol)){
+              found = 1;
+              mapping[i*3+1] = k;
+              mapping[i*3+2] = l;
+            }
+          }
+        }
       }
     }
     /* if we didn't find the vector, return failure now */
@@ -493,7 +493,7 @@ void compare_crystal_lattice(cell_type *cell,point_type *vects1,point_type *vect
 * Action:  checks to see if the two sets of atomic positions
 *   in 'locs1 and 'locs2 are the same using the translation vectors
 *   defined in 'cell.
-*  
+*
 *   As the name implies, this just checks the basis, it is also
 *    important to make sure the lattice is invariant, you have
 *    to use compare_crystal_lattice to do this.
@@ -504,8 +504,8 @@ void compare_crystal_lattice(cell_type *cell,point_type *vects1,point_type *vect
 *
 *****************************************************************************/
 void compare_crystal_basis(cell_type *cell,point_type *locs1,point_type *locs2,
-			   point_type *cell_dim,
-			   int num_atoms,int *equiv_atoms,char *present,real symm_tol)
+                           point_type *cell_dim,
+                           int num_atoms,int *equiv_atoms,char *present,real symm_tol)
 {
   int i,j;
   char found;
@@ -525,25 +525,25 @@ void compare_crystal_basis(cell_type *cell,point_type *locs1,point_type *locs2,
     /* don't do dummy atoms */
     if( cell->atoms[i].at_number >= 0 ){
       for(j=0;j<num_atoms && !found;j++){
-	if( cell->atoms[j].at_number >= 0 ){
-	  /* check to see if they are the same atom type */
-	  if( cell->atoms[i].at_number == cell->atoms[j].at_number ){
-	    /* now check to see if they are in the same location */
-	    if( atoms_are_equiv(cell,&locs1[i],&locs2[j],which_cell,symm_tol,
-				cell_dim)){
-	      /* they are */
-	      found = 1;
-	      equiv_atoms[j] = i;
-	    }
-	  }
-	}
+        if( cell->atoms[j].at_number >= 0 ){
+          /* check to see if they are the same atom type */
+          if( cell->atoms[i].at_number == cell->atoms[j].at_number ){
+            /* now check to see if they are in the same location */
+            if( atoms_are_equiv(cell,&locs1[i],&locs2[j],which_cell,symm_tol,
+                                cell_dim)){
+              /* they are */
+              found = 1;
+              equiv_atoms[j] = i;
+            }
+          }
+        }
       }
     } else{
       /* it's a dummy atom, pretend we found it and put a -1 in the equiv_atoms array */
       found = 1;
       equiv_atoms[i] = -1;
     }
-    
+
     /* if we didn't find this atom, we might as well go ahead and return */
     if( !found ) return;
   }

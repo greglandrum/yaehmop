@@ -50,7 +50,7 @@ object_type *traverseobj(object_type *obj,int cor1,int cor2,Window win)
     int i, found;
     point_type *min, *max;
 #ifdef X_GRAPHICS
-    XEvent event;   
+    XEvent event;
     object_type *tempobj;
 
     tempobj=0;
@@ -88,8 +88,8 @@ object_type *traverseobj(object_type *obj,int cor1,int cor2,Window win)
             if(event.type==ButtonPress){
                 switch(event.xbutton.button){
                     case 1: display("Got it.");
-		      return(obj);
-		      break;
+                      return(obj);
+                      break;
                     case 2:
                     case 3: found=0; break;
                 }

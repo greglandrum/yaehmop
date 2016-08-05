@@ -61,32 +61,32 @@ void main()
  #ifdef USING_THE_MAC
   int argc;
   char argv[4][80];
-  
-	/* set up some stuff for Sioux */
-	//SIOUXSettings.standalone = FALSE;
-	SIOUXSettings.asktosaveonclose = FALSE;	
-	SIOUXSettings.autocloseonquit = FALSE;
-	printf("Starting bind.\n");
-	
+
+        /* set up some stuff for Sioux */
+        //SIOUXSettings.standalone = FALSE;
+        SIOUXSettings.asktosaveonclose = FALSE;
+        SIOUXSettings.autocloseonquit = FALSE;
+        printf("Starting bind.\n");
+
   the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
-  	fatal("User cancelled intial file open");
-  } 
+          fatal("User cancelled intial file open");
+  }
   the_file = choose_mac_file(argv[2],MAC_FOPEN_OPEN_CD);
   if( !the_file ) {
-  	fatal("User cancelled second file open");
-  } 
-  
+          fatal("User cancelled second file open");
+  }
+
   printf("Enter the name of the output file: ");
   scanf("%s",argv[3]);
- 
+
   argc = 4;
   /* get the command line arguments */
 //  argc = ccommand(&argv);
 
 #endif
- 
-  
+
+
   /* open the files */
   if( argc < 4 ){
     fprintf(stderr,"Usage: add_dos input_file1 input_file2 output_file\n");
@@ -118,7 +118,7 @@ void main()
     fprintf(stderr,"Can't open output file: %s\n", instring1);
     fatal("Can't open file.");
   }
-  
+
   /* get the numbers of the curves to subtract */
   printf("NOTE:  curve 0 is the total DOS, curve 1 is the first projection.\n");
   printf("Enter the number of the curve to use from file 1: ");
@@ -167,19 +167,19 @@ void main()
   }
   if( E_step != E_step2 ){
     fprintf(stderr,"Energy steps (%lf and %lf) aren't equal.\n",E_step,
-	    E_step2);
+            E_step2);
     window_by_hand = 1;
   }
 
   if( broad1 != broad2 ){
     fprintf(stderr,"The broadening values (%lf and %lf) aren't equal.\n",
-	    broad1,broad2);
+            broad1,broad2);
     fprintf(stderr,"It's okay to continue, but this is a questionably valid procedure.\n");
   }
 
   if( window_by_hand ){
     fprintf(stderr,
-	    "Enter the window by hand.  This is a dubious thing to do.\n");
+            "Enter the window by hand.  This is a dubious thing to do.\n");
     printf("Enter E min: ");
     scanf("%lf",&E_min);
     printf("Enter E max: ");
@@ -200,7 +200,7 @@ void main()
   skipcomments(infile2,instring2);
   while(instring2[0] == '#') skipcomments(infile2,instring2);
 
-  
+
   fprintf(outfile,"# Added Density of States data\n");
   fprintf(outfile,"#E_min: %lf\n",E_min);
   fprintf(outfile,"#E_max: %lf\n",E_max);
@@ -222,7 +222,7 @@ void main()
       strcpy(foostring2,strtok(0," "));
     sscanf(foostring2,"%lf",&val2);
 /*
-printf("%lf %lf %lf\n",val1,val2,curr_E);    
+printf("%lf %lf %lf\n",val1,val2,curr_E);
 */
     fprintf(outfile,"%lf %lf\n",val1+val2,curr_E);
     skipcomments(infile1,instring1);
@@ -254,14 +254,14 @@ printf("%lf %lf %lf\n",val1,val2,curr_E);
 
     sscanf(foostring1,"%lf",&val1);
     sscanf(foostring2,"%lf",&val2);
-    
+
     fprintf(outfile,"%lf %lf\n",val1+val2,curr_E);
     skipcomments(infile1,instring1);
     skipcomments(infile2,instring2);
     curr_E += E_step;
   }
 }
-    
+
 
 
 

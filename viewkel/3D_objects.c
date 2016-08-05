@@ -47,12 +47,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       there are still some problems that might be tracked down.
      The next thing that really should be done is stopping the white
       parts of breaking lines and tubes from penetrating the atom
-      they are drawn from.  
+      they are drawn from.
       This should be fairly straightforward, but I'm a little bit
       tired to worry about it right now.
    02.05.98 gL:
      Yeah, well, the bogus lines to deep atoms was fixed, but
-       it looked bad.  I cleared things up a bit and made 
+       it looked bad.  I cleared things up a bit and made
        everything simpler by using the "right" answer with a
        fudge factor.  So far things look okay.
    03.05.98 gL:
@@ -61,7 +61,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        fudge factor was introduced.
    18.05.98 gL:
      When doing PS code, polyhedra are outlined now.  This should
-     be made a toggle somehow.  
+     be made a toggle somehow.
 
      triangle normal z coordinates are now divided by the z scaling
       of the object to allow proper shading with scaling
@@ -99,7 +99,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   created by gL June 1995
 
-*********/  
+*********/
 #include "viewkel.h"
 
 point_type *displacements=0;
@@ -131,10 +131,10 @@ line_type *find_the_line(int num1,int num2,molec_type *molec)
   return(0);
 }
 
-    
+
 
 int find_numbered_atom_in_objects(generic_3D_object *array,int length,
-				  int number)
+                                  int number)
 {
   int i;
 
@@ -143,7 +143,7 @@ int find_numbered_atom_in_objects(generic_3D_object *array,int length,
       return i;
   }
   error("find_number_atom_in_objects can't find an atom for a connector.");
-  fprintf(stderr,"offending atom is: %d, length is %d\n",number,length);  
+  fprintf(stderr,"offending atom is: %d, length is %d\n",number,length);
 }
 
 
@@ -152,7 +152,7 @@ int find_numbered_atom_in_objects(generic_3D_object *array,int length,
  *                   Procedure draw_axes
  *
  * Arguments: axes: pointer to axis_type
- *            
+ *
  * Returns: none
  *
  * Action: Draws in the set of axes at the position indicated in 'axes
@@ -192,14 +192,14 @@ void draw_axes( axis_type *axes )
  *         objects: pointer to generic_3D_object type
  *     num_objects: int
  *           molec: pointer to molec_type
- *            
+ *
  * Returns: none
  *
  * Action: Draws in the atom pointed to by 'atom
  *
  ****************************************************************************/
 void draw_atom(atom_type *atom,int atom_num,generic_3D_object *objects,
-	       int num_objects,molec_type *molec)
+               int num_objects,molec_type *molec)
 {
   static char first_call=1, pix_copy_needed=1;
   static float base_radius_scale;
@@ -242,21 +242,21 @@ void draw_atom(atom_type *atom,int atom_num,generic_3D_object *objects,
   if( !atom->exclude && (molec->hydrogens_on ||
        atom->type[0] != 'H' || atom->type[1] != 0) &&
      (molec->dummies_on || atom->type[0] != '&') ){
-    
+
     zcoord = atom->loc.z;
     radius = (int)ceil(atom->rad*radius_scale/zcoord);
 
-    
+
     /********
       find the projected coordinates and translate them
       so that the circles appear in the right place.
-      
+
       (X takes the upper left corner of the rectangle around an
        arc as the argument)
     **********/
     xcoord =  atom->loc.x - radius;
     ycoord =  atom->loc.y - radius;
-    
+
 
     if( atom->custom ){
       shading_on = atom->shading_on;
@@ -267,7 +267,7 @@ void draw_atom(atom_type *atom,int atom_num,generic_3D_object *objects,
       crosses_on = molec->crosses_on;
       outlines_on = molec->outlines_on;
     }
-    
+
 
     /* choose a color */
     g_change_color(atom->color);
@@ -275,23 +275,23 @@ void draw_atom(atom_type *atom,int atom_num,generic_3D_object *objects,
     /* draw a filled circle */
     if( shading_on ){
       g_filled_circle(atom->loc.x,atom->loc.y,(float)radius,
-		      atom->atom_shade,atom->atom_color,
-		      atom->Gpixel_val,atom->Cpixel_val);
-#ifdef X_GRAPHICS 
+                      atom->atom_shade,atom->atom_color,
+                      atom->Gpixel_val,atom->Cpixel_val);
+#ifdef X_GRAPHICS
 #ifdef SUPPORT_COLOR_X
       if( refresh_all_colormaps || pix_copy_needed ){
-	memcpy(molec->atoms[atom->num].Gpixel_val,atom->Gpixel_val,
-	       NUM_X_SHADES*sizeof(long int));
-	memcpy(molec->atoms[atom->num].Cpixel_val,atom->Cpixel_val,
-	       NUM_X_SHADES*sizeof(long int));
-	pix_copy_needed = 1;
+        memcpy(molec->atoms[atom->num].Gpixel_val,atom->Gpixel_val,
+               NUM_X_SHADES*sizeof(long int));
+        memcpy(molec->atoms[atom->num].Cpixel_val,atom->Cpixel_val,
+               NUM_X_SHADES*sizeof(long int));
+        pix_copy_needed = 1;
       }
 #endif
 #endif
     }else if( crosses_on ){
       g_white_circle(atom->loc.x,atom->loc.y,(float)radius);
     }
-    
+
     /* draw in the outer circle */
     if( outlines_on ){
       g_change_linewidth(3);
@@ -304,7 +304,7 @@ void draw_atom(atom_type *atom,int atom_num,generic_3D_object *objects,
       } else{
         g_open_circle(atom->loc.x,atom->loc.y,(float)radius);
       }
-      g_change_linewidth(1);      
+      g_change_linewidth(1);
       g_change_linestyle(0);
     }
 
@@ -315,197 +315,197 @@ void draw_atom(atom_type *atom,int atom_num,generic_3D_object *objects,
 
     /* draw in a line (if we need to) */
     if( (molec->draw_connectors && atom->num_lines_out) ){
-      
+
       /* find the end point */
       for(j=0;j<atom->num_lines_out;j++){
-	tab2 = find_numbered_atom_in_objects(objects,num_objects,
-					     atom->linesto[j]);
+        tab2 = find_numbered_atom_in_objects(objects,num_objects,
+                                             atom->linesto[j]);
 
-	/* if the other end point is closer to the camera, then draw it */
-	if(tab2 < atom_num && !objects[tab2].object.atom->exclude &&
-	   ((molec->hydrogens_on ||
-	     objects[tab2].object.atom->type[0] != 'H' ||
-	     objects[tab2].object.atom->type[1] != 0) &&
-	    (molec->dummies_on ||
-	     objects[tab2].object.atom->type[0] != '&')) ){
+        /* if the other end point is closer to the camera, then draw it */
+        if(tab2 < atom_num && !objects[tab2].object.atom->exclude &&
+           ((molec->hydrogens_on ||
+             objects[tab2].object.atom->type[0] != 'H' ||
+             objects[tab2].object.atom->type[1] != 0) &&
+            (molec->dummies_on ||
+             objects[tab2].object.atom->type[0] != '&')) ){
 
-	  atom2 = objects[tab2].object.atom;
-	  radius2 = (int)ceil(atom2->rad*radius_scale/atom2->loc.z);
-	  sqr_rad = radius+radius2;
-	  sqr_rad *= sqr_rad;
+          atom2 = objects[tab2].object.atom;
+          radius2 = (int)ceil(atom2->rad*radius_scale/atom2->loc.z);
+          sqr_rad = radius+radius2;
+          sqr_rad *= sqr_rad;
 
-	  if( !near_plane_clipping_on ||
-	      !LOC_SHOULD_BE_CLIPPED(atom2->loc)){
-	    the_linestyle =0;
+          if( !near_plane_clipping_on ||
+              !LOC_SHOULD_BE_CLIPPED(atom2->loc)){
+            the_linestyle =0;
 
-	  /****
+          /****
 
-	    okay, if we need to determine which line this is
-	     to determine how to draw it... do so now
+            okay, if we need to determine which line this is
+             to determine how to draw it... do so now
 
-	  ****/
-	    the_line = find_the_line(atom->num,objects[tab2].object.atom->num,
-				     molec);
-	    if(the_line){
-	      if( the_line->custom ){
-		tube_on = the_line->tube;
-		breaking_on = the_line->breaking;
-		thickness = the_line->thickness;
-		dashed_on = the_line->dashed;
-	      } else{
-		tube_on = molec->tubes_on;
-		breaking_on = molec->breaking_lines;
-		thickness = molec->line_width;
-		dashed_on = 0;
+          ****/
+            the_line = find_the_line(atom->num,objects[tab2].object.atom->num,
+                                     molec);
+            if(the_line){
+              if( the_line->custom ){
+                tube_on = the_line->tube;
+                breaking_on = the_line->breaking;
+                thickness = the_line->thickness;
+                dashed_on = the_line->dashed;
+              } else{
+                tube_on = molec->tubes_on;
+                breaking_on = molec->breaking_lines;
+                thickness = molec->line_width;
+                dashed_on = 0;
 #ifdef INCLUDE_BOND_VALENCE
-		if( molec->valence_for_bonds ) dashed_on = 1;
+                if( molec->valence_for_bonds ) dashed_on = 1;
 #endif
-	      }	    
-	    
-	      if(dashed_on){
-		the_linestyle = the_line->type;
-	      }
+              }
 
-	      if( !the_line->custom || the_line->drawn ){
-		if( molec->fancy_lines ){
+              if(dashed_on){
+                the_linestyle = the_line->type;
+              }
 
-		  /****
-		    figure out how to break the line at the edge
-		    of the bottom atom
-		    *****/
+              if( !the_line->custom || the_line->drawn ){
+                if( molec->fancy_lines ){
+
+                  /****
+                    figure out how to break the line at the edge
+                    of the bottom atom
+                    *****/
 
 #if 0
-		  dx = atom2->loc.x-atom->loc.x;
-		  dy = atom2->loc.y-atom->loc.y;
-		  dxy = dx*dx+dy*dy;
-		  if( dxy > 1e-2 ){
-		    dz = objects[tab2].object.atom->loc.z-atom->loc.z;
-		    dtot = dxy + dz*dz;
-		    if( fabs(dz) < .1 ){
-		      dist = 1.05*radius;
-		    }else{
-		      dist = .8*radius*dxy/dtot;
-		    }
-		    if( dx != 0.0 ){
-		      slope = dy / dx;
-		      newx = dist/sqrt(1.0+slope*slope);
-		      if(dx < 0.0) newx *= -1.0;
-		      newy = slope*newx;
-		    }
-		    else{
-		      newx = 0.0;
-		      newy = dist;
-		      if( dy < 0.0 ) newy *= -1;
-		    }
-		  }
+                  dx = atom2->loc.x-atom->loc.x;
+                  dy = atom2->loc.y-atom->loc.y;
+                  dxy = dx*dx+dy*dy;
+                  if( dxy > 1e-2 ){
+                    dz = objects[tab2].object.atom->loc.z-atom->loc.z;
+                    dtot = dxy + dz*dz;
+                    if( fabs(dz) < .1 ){
+                      dist = 1.05*radius;
+                    }else{
+                      dist = .8*radius*dxy/dtot;
+                    }
+                    if( dx != 0.0 ){
+                      slope = dy / dx;
+                      newx = dist/sqrt(1.0+slope*slope);
+                      if(dx < 0.0) newx *= -1.0;
+                      newy = slope*newx;
+                    }
+                    else{
+                      newx = 0.0;
+                      newy = dist;
+                      if( dy < 0.0 ) newy *= -1;
+                    }
+                  }
 #else
-		  dx = atom2->loc.x - atom->loc.x;
-		  dy = atom2->loc.y - atom->loc.y;
-		  dxy = dx*dx+dy*dy;
-		  /****
+                  dx = atom2->loc.x - atom->loc.x;
+                  dy = atom2->loc.y - atom->loc.y;
+                  dxy = dx*dx+dy*dy;
+                  /****
 
-		    here we have a fudge factor to take into 
-		    account the fact that the z values we are working with
-		    have not been altered by the homogenous transformation.
-		    this is *wrong*, but it looks okay most of the time, so
-		    we'll keep it.
+                    here we have a fudge factor to take into
+                    account the fact that the z values we are working with
+                    have not been altered by the homogenous transformation.
+                    this is *wrong*, but it looks okay most of the time, so
+                    we'll keep it.
 
-		  ****/
-		  dz = fabs(atom->loc.z)*0.5*(atom2->loc.z - atom->loc.z);
-		  dist = sqrt(dx*dx+dy*dy+dz*dz);
-		  dxy = sqrt(dxy);
-		  newx = radius * dx / dist;
-		  newy = radius * dy / dist;
-		  /* calculate where the edge of the atom is */
-		  if( dxy < radius + radius2 ){
-		    xs = dx;
-		    ys = dy;
-		  }else{
-		    xs = 1.02*radius * dx / dxy;
-		    ys = 1.02*radius * dy / dxy;
-		  }
+                  ****/
+                  dz = fabs(atom->loc.z)*0.5*(atom2->loc.z - atom->loc.z);
+                  dist = sqrt(dx*dx+dy*dy+dz*dz);
+                  dxy = sqrt(dxy);
+                  newx = radius * dx / dist;
+                  newy = radius * dy / dist;
+                  /* calculate where the edge of the atom is */
+                  if( dxy < radius + radius2 ){
+                    xs = dx;
+                    ys = dy;
+                  }else{
+                    xs = 1.02*radius * dx / dxy;
+                    ys = 1.02*radius * dy / dxy;
+                  }
 
 #endif
-		}
-		else{
-		  newx = 0.0;
-		  newy = 0.0;
-		  dxy = 1.0;
-		}
-		/******
+                }
+                else{
+                  newx = 0.0;
+                  newy = 0.0;
+                  dxy = 1.0;
+                }
+                /******
 
-		  draw if there is sufficient xy change.
-		  the test for this is fairly simple, there's
-		  a lower limit and then a test to see if the front
-		  atom is inside the circle of the back one.
-		  in either of these cases, don't bother drawing.
+                  draw if there is sufficient xy change.
+                  the test for this is fairly simple, there's
+                  a lower limit and then a test to see if the front
+                  atom is inside the circle of the back one.
+                  in either of these cases, don't bother drawing.
 
-		****/
+                ****/
 #if 0
-		if( dxy > 1e-2 && dxy > sqr_rad ){
+                if( dxy > 1e-2 && dxy > sqr_rad ){
 #else
-		if( dxy > 1e-2 ){
+                if( dxy > 1e-2 ){
 #endif
-		  if( breaking_on ){
-		    if( !the_linestyle )
-		      g_draw_stop_line(atom->loc.x+newx,
-				       atom->loc.y+newy,
-				       atom2->loc.x,
-				       atom2->loc.y,
-				       thickness,
-				       atom->loc.x+xs,
-				       atom->loc.y+ys);
-		    else
-		      g_draw_dashed_stop_line(atom->loc.x+newx,
-					      atom->loc.y+newy,
-					      atom2->loc.x,
-					      atom2->loc.y,
-					      thickness,the_linestyle,
-					      atom->loc.x+xs,
-					      atom->loc.y+ys);
+                  if( breaking_on ){
+                    if( !the_linestyle )
+                      g_draw_stop_line(atom->loc.x+newx,
+                                       atom->loc.y+newy,
+                                       atom2->loc.x,
+                                       atom2->loc.y,
+                                       thickness,
+                                       atom->loc.x+xs,
+                                       atom->loc.y+ys);
+                    else
+                      g_draw_dashed_stop_line(atom->loc.x+newx,
+                                              atom->loc.y+newy,
+                                              atom2->loc.x,
+                                              atom2->loc.y,
+                                              thickness,the_linestyle,
+                                              atom->loc.x+xs,
+                                              atom->loc.y+ys);
 
-		  } else if( tube_on ){
-		    if(  !the_linestyle )
-		      g_draw_stop_tube(atom->loc.x+newx,
-				       atom->loc.y+newy,
-				       atom2->loc.x,
-				       atom2->loc.y,
-				       thickness,
-				       atom->loc.x+xs,
-				       atom->loc.y+ys);
-				       
-		    else{
-		      if( !the_line->custom )
-			g_draw_dashed_stop_line(atom->loc.x+newx,
-						atom->loc.y+newy,
-						atom2->loc.x,
-						atom2->loc.y,
-						thickness,the_linestyle,
-						atom->loc.x+xs,
-						atom->loc.y+ys);
-		      else
-			g_draw_dashed_stop_tube(atom->loc.x+newx,
-						atom->loc.y+newy,
-						atom2->loc.x,
-						atom2->loc.y,
-						thickness,the_linestyle,
-						atom->loc.x+xs,
-						atom->loc.y+ys);
-		    }
-		  }else{
-		    if( !the_linestyle )
-		      g_line(atom->loc.x+newx,
-			     atom->loc.y+newy,
-			     atom2->loc.x,
-			     atom2->loc.y);
-		  }
-		}
-	      }
-	    }
-	  }
-	}
+                  } else if( tube_on ){
+                    if(  !the_linestyle )
+                      g_draw_stop_tube(atom->loc.x+newx,
+                                       atom->loc.y+newy,
+                                       atom2->loc.x,
+                                       atom2->loc.y,
+                                       thickness,
+                                       atom->loc.x+xs,
+                                       atom->loc.y+ys);
+
+                    else{
+                      if( !the_line->custom )
+                        g_draw_dashed_stop_line(atom->loc.x+newx,
+                                                atom->loc.y+newy,
+                                                atom2->loc.x,
+                                                atom2->loc.y,
+                                                thickness,the_linestyle,
+                                                atom->loc.x+xs,
+                                                atom->loc.y+ys);
+                      else
+                        g_draw_dashed_stop_tube(atom->loc.x+newx,
+                                                atom->loc.y+newy,
+                                                atom2->loc.x,
+                                                atom2->loc.y,
+                                                thickness,the_linestyle,
+                                                atom->loc.x+xs,
+                                                atom->loc.y+ys);
+                    }
+                  }else{
+                    if( !the_linestyle )
+                      g_line(atom->loc.x+newx,
+                             atom->loc.y+newy,
+                             atom2->loc.x,
+                             atom2->loc.y);
+                  }
+                }
+              }
+            }
+          }
+        }
       }
-    } 
+    }
     g_change_color(0);
     /* draw in a number for the atom if it is needed */
     if(molec->numbers_on){
@@ -540,13 +540,13 @@ void draw_atom(atom_type *atom,int atom_num,generic_3D_object *objects,
  *
  ****************************************************************************/
 void draw_triangle(triangle_type *triangle,vertex_type *vertices,
-		   MO_surface_type *surf)
+                   MO_surface_type *surf)
 {
   static XPoint xpoints[4];
 
   vertex_type *v1,*v2,*v3;
   int num_vis_vertices;
-  
+
   v1 = &vertices[triangle->vertices[0]];
   v2 = &vertices[triangle->vertices[1]];
   v3 = &vertices[triangle->vertices[2]];
@@ -565,31 +565,31 @@ void draw_triangle(triangle_type *triangle,vertex_type *vertices,
 
     if( surf ){
       if( surf->do_shading ){
-	/* draw a filled triangle of the appropriate color */
-	if( triangle->color ){
-	  g_change_color(3);
-	}
-	else{
-	  g_change_color(6);
-	}
-	g_filled_polygon(xpoints,3);
+        /* draw a filled triangle of the appropriate color */
+        if( triangle->color ){
+          g_change_color(3);
+        }
+        else{
+          g_change_color(6);
+        }
+        g_filled_polygon(xpoints,3);
       }
-    
+
       if( surf->do_lines ){
-	g_change_color(0);
-	g_open_polygon(xpoints,3);
+        g_change_color(0);
+        g_open_polygon(xpoints,3);
       }
     } else{
 #ifdef CULL_POLYGONS
       if( triangle->normal.z < 0 ){
 #endif
-	g_shaded_polygon(xpoints,3,&triangle->normal);
+        g_shaded_polygon(xpoints,3,&triangle->normal);
 
-	if( outline_polyhed_on ){
-	  g_change_linewidth(2);
-	  g_change_color(0);
-	  g_open_polygon(xpoints,3);
-	}
+        if( outline_polyhed_on ){
+          g_change_linewidth(2);
+          g_change_color(0);
+          g_open_polygon(xpoints,3);
+        }
 #ifdef CULL_POLYGONS
       }
 #endif
@@ -616,7 +616,7 @@ int object_zcompare(const void *obj1p,const void *obj2p)
   case CONT_POINT_3D:z1=obj1->object.contour_point.loc->z;break;
   case LINE_3D:
     z1 = (obj1->object.line.end1->z > obj1->object.line.end2->z ?
-	  obj1->object.line.end1->z : obj1->object.line.end2->z);
+          obj1->object.line.end1->z : obj1->object.line.end2->z);
     break;
   default: FATAL_BUG("Invalid type in 3D_object_zcompare");
   }
@@ -626,7 +626,7 @@ int object_zcompare(const void *obj1p,const void *obj2p)
   case CONT_POINT_3D:z2=obj2->object.contour_point.loc->z;break;
   case LINE_3D:
     z2 = (obj2->object.line.end1->z > obj2->object.line.end2->z ?
-	  obj2->object.line.end1->z : obj2->object.line.end2->z);
+          obj2->object.line.end1->z : obj2->object.line.end2->z);
     break;
   default: FATAL_BUG("Invalid type in 3D_object_zcompare");
   }
@@ -648,7 +648,7 @@ int object_zcompare(const void *obj1p,const void *obj2p)
  *
  * Arguments: prim: pointer to prim_type
  *             obj: pointer to object_type
- *            
+ *
  * Returns: none
  *
  * Action: Draws in the 3D objects contained in 'prim.
@@ -660,7 +660,7 @@ int object_zcompare(const void *obj1p,const void *obj2p)
  *       back ones
  *        (primitive hidden surface removal).
  *
- *    <this is the Painter's algorithm> 
+ *    <this is the Painter's algorithm>
  *
  ****************************************************************************/
 void draw_3D_objects(prim_type *prim,object_type *obj)
@@ -668,7 +668,7 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
   static generic_3D_object *objects=0;
   static int num_objects_allocated=0;
   static atom_type *atom_store=0;
-  static triangle_type *triangle_store=0; 
+  static triangle_type *triangle_store=0;
   static vertex_type *vertex_store=0;
 
   static int num_atoms_allocated=0;
@@ -691,17 +691,17 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
   MO_contours_type *contour;
   int num_conts, num_cont_p;
   char do_axes=0;
-  
+
   /* initialize this object's bounding box */
   obj->bmin.x = obj->bmin.y = 10000;
   obj->bmax.x = obj->bmax.y = 0;
 
 
   /**********
-    
+
     figure out the total number of objects so we can get the correct
     amount of memory.
-    
+
   ***********/
   num_objects = 0;
   num_atoms = 0;
@@ -729,11 +729,11 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
     }
 
     if( molec->axes_on ) do_axes = 1;
-    
+
     /* do we need memory? */
 #ifdef INCLUDE_ADF_PLOTS
     if( num_atoms > num_atoms_allocated || !atom_store ||
-	(molec->num_vibrations && !displacements) ){
+        (molec->num_vibrations && !displacements) ){
 #else
     if( num_atoms > num_atoms_allocated || !atom_store ){
 #endif
@@ -742,15 +742,15 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
       if( !atom_store ) fatal("Can't get memory for atom_store.");
 #ifdef INCLUDE_ADF_PLOTS
       if( molec->num_vibrations ){
-	if( displacements ) free(displacements);
-	displacements = (point_type *)calloc(num_atoms,sizeof(point_type));
-	if(!displacements) fatal("can't allocated displacements");
+        if( displacements ) free(displacements);
+        displacements = (point_type *)calloc(num_atoms,sizeof(point_type));
+        if(!displacements) fatal("can't allocated displacements");
       }
-#endif      
+#endif
 
       num_atoms_allocated = num_atoms;
     }
-    
+
     /* copy the atoms over */
     memcpy((char *)atom_store,(char *)atoms,num_atoms*sizeof(atom_type));
 
@@ -758,40 +758,40 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
     /* copy in the displacement array of the vibrations if that is needed */
     if( molec->num_vibrations ){
       for(i=0;i<num_atoms;i++){
-	displacements[i].x = molec->atoms[i].loc.x +
-	  molec->atoms[i].displacements[molec->active_vibn-1].x *
-	    molec->vibration_scale;
-	displacements[i].y = molec->atoms[i].loc.y +
-	  molec->atoms[i].displacements[molec->active_vibn-1].y *
-	    molec->vibration_scale;
-	displacements[i].z = molec->atoms[i].loc.z +
-	  molec->atoms[i].displacements[molec->active_vibn-1].z *
-	    molec->vibration_scale;
+        displacements[i].x = molec->atoms[i].loc.x +
+          molec->atoms[i].displacements[molec->active_vibn-1].x *
+            molec->vibration_scale;
+        displacements[i].y = molec->atoms[i].loc.y +
+          molec->atoms[i].displacements[molec->active_vibn-1].y *
+            molec->vibration_scale;
+        displacements[i].z = molec->atoms[i].loc.z +
+          molec->atoms[i].displacements[molec->active_vibn-1].z *
+            molec->vibration_scale;
       }
     }
-#endif      
+#endif
     if( num_triangles > num_triangles_allocated ){
       if(triangle_store) free(triangle_store);
       triangle_store = (triangle_type *)
-	calloc(num_triangles,sizeof(triangle_type));
+        calloc(num_triangles,sizeof(triangle_type));
       if( !triangle_store ) fatal("Can't get memory for triangle_store.");
       num_triangles_allocated = num_triangles;
     }
-    
+
     if( num_vertices > num_vertices_allocated ){
       if(vertex_store) free(vertex_store);
       vertex_store = (vertex_type *)
-	calloc(num_vertices,sizeof(vertex_type));
+        calloc(num_vertices,sizeof(vertex_type));
       if( !vertex_store ) fatal("Can't get memory for vertex_store.");
       num_vertices_allocated = num_vertices;
     }
-      
+
     /* copy the triangles & vertices over */
     if(num_triangles){
       memcpy((void *)triangle_store,(void *)molec->triangles,
-	     num_triangles*sizeof(triangle_type));
+             num_triangles*sizeof(triangle_type));
       memcpy((void *)vertex_store,(void *)molec->polyhed_verts,
-	      num_vertices*sizeof(vertex_type));
+              num_vertices*sizeof(vertex_type));
     }
 
     surf = 0;
@@ -809,15 +809,15 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
 
       /* do we need memory? */
       if( num_atoms > num_atoms_allocated ){
-	if(atom_store) free(atom_store);
-	atom_store = (atom_type *)calloc(num_atoms,sizeof(atom_type));
-	if( !atom_store ) fatal("Can't get memory for atom_store.");
-	num_atoms_allocated = num_atoms;
+        if(atom_store) free(atom_store);
+        atom_store = (atom_type *)calloc(num_atoms,sizeof(atom_type));
+        if( !atom_store ) fatal("Can't get memory for atom_store.");
+        num_atoms_allocated = num_atoms;
       }
-      
+
       /* copy the atoms over */
       memcpy((char *)atom_store,(char *)atoms,num_atoms*sizeof(atom_type));
-      
+
     } else{
       molec = 0;
       num_atoms = 0;
@@ -830,26 +830,26 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
 
       /* do we need memory? */
       if( num_triangles > num_triangles_allocated ){
-	if(triangle_store) free(triangle_store);
-	triangle_store = (triangle_type *)
-	  calloc(num_triangles,sizeof(triangle_type));
-	if( !triangle_store ) fatal("Can't get memory for triangle_store.");
-	num_triangles_allocated = num_triangles;
+        if(triangle_store) free(triangle_store);
+        triangle_store = (triangle_type *)
+          calloc(num_triangles,sizeof(triangle_type));
+        if( !triangle_store ) fatal("Can't get memory for triangle_store.");
+        num_triangles_allocated = num_triangles;
       }
       if( num_vertices > num_vertices_allocated ){
-	if(vertex_store) free(vertex_store);
-	vertex_store = (vertex_type *)
-	  calloc(num_vertices,sizeof(vertex_type));
-	if( !vertex_store ) fatal("Can't get memory for vertex_store.");
-	num_vertices_allocated = num_vertices;
+        if(vertex_store) free(vertex_store);
+        vertex_store = (vertex_type *)
+          calloc(num_vertices,sizeof(vertex_type));
+        if( !vertex_store ) fatal("Can't get memory for vertex_store.");
+        num_vertices_allocated = num_vertices;
       }
-      
+
       /* copy the triangles & vertices over */
       memcpy((char *)triangle_store,(char *)surf->triangles,
-	     num_triangles*sizeof(triangle_type));
+             num_triangles*sizeof(triangle_type));
 
       memcpy((char *)vertex_store,(char *)surf->triangle_vertices,
-	     num_vertices*sizeof(vertex_type));
+             num_vertices*sizeof(vertex_type));
 
     } else{
       triangles = 0;
@@ -859,7 +859,7 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
       num_conts = surf->MO_contours->num_conts;
 #ifdef CONT_DEBUG
       fprintf(stderr,"surf from file: %s has %d contours\n",
-	      surf->filename,num_conts);
+              surf->filename,num_conts);
 #endif
       if( num_conts_allocated < num_conts ){
         if( contour_store ) free(contour_store);
@@ -883,20 +883,20 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
           if( !contour_store[i].coords )
             fatal("can't get memory for contour_store[i].coords");
           contour_store[i].num_pts = contour->num_pts;
-	  if( contour_store[i].inv_slope ){
-	    free(contour_store[i].inv_slope);
-	    contour_store[i].inv_slope = 0;
-	  }
-	  if( contour_store[i].intercept ){
-	    free(contour_store[i].intercept);
-	    contour_store[i].intercept = 0;
-	  }
-	  if( contour_store[i].hidden_points ){
-	    free(contour_store[i].hidden_points);
-	    contour_store[i].hidden_points = 0;
-	  }
-	}
-	contour_store[i].orientation = contour->orientation;
+          if( contour_store[i].inv_slope ){
+            free(contour_store[i].inv_slope);
+            contour_store[i].inv_slope = 0;
+          }
+          if( contour_store[i].intercept ){
+            free(contour_store[i].intercept);
+            contour_store[i].intercept = 0;
+          }
+          if( contour_store[i].hidden_points ){
+            free(contour_store[i].hidden_points);
+            contour_store[i].hidden_points = 0;
+          }
+        }
+        contour_store[i].orientation = contour->orientation;
         memcpy((char *)contour_store[i].coords,(char *)contour->coords,
                contour->num_pts*sizeof(point_type));
         contour_store[i].value = contour->value;
@@ -914,7 +914,7 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
   default:
     FATAL_BUG("Invalid primitive passed to draw_3D_objects");
   }
-  
+
 
   if( molec && molec->draw_lattice ){
     for(i=0;i<=molec->num_dim;i++){
@@ -929,40 +929,40 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
     V3POINT_ASSIGN(cell_box[1],molec->cell_box[1]);
     num_box_p = 2;
     if( molec->num_dim > 1 ){
-      V3POINT_ASSIGN(cell_box[2],cell_box[1]);	
+      V3POINT_ASSIGN(cell_box[2],cell_box[1]);
       V3POINT_ASSIGN(cell_box[3],molec->cell_box[2]);
-      V3POINT_ASSIGN(cell_box[4],cell_box[3]);	
+      V3POINT_ASSIGN(cell_box[4],cell_box[3]);
       V3POINT_ASSIGN(cell_box[5],molec->cell_box[3]);
-      V3POINT_ASSIGN(cell_box[6],cell_box[5]);	
+      V3POINT_ASSIGN(cell_box[6],cell_box[5]);
       V3POINT_ASSIGN(cell_box[7],molec->cell_box[0]);
       num_box_p = 8;
       if( molec->num_dim > 2 ){
-	V3POINT_ASSIGN(cell_box[8],cell_box[7]);	
-	V3POINT_ASSIGN(cell_box[9],molec->cell_box[4]);
-	V3POINT_ASSIGN(cell_box[10],cell_box[9]);	
-	V3POINT_ASSIGN(cell_box[11],molec->cell_box[5]);
-	V3POINT_ASSIGN(cell_box[12],cell_box[11]);	
-	V3POINT_ASSIGN(cell_box[13],molec->cell_box[1]);
-	V3POINT_ASSIGN(cell_box[14],cell_box[12]);	
-	V3POINT_ASSIGN(cell_box[15],molec->cell_box[6]);
-	V3POINT_ASSIGN(cell_box[16],cell_box[15]);	
-	V3POINT_ASSIGN(cell_box[17],molec->cell_box[2]);
-	V3POINT_ASSIGN(cell_box[18],cell_box[16]);	
-	V3POINT_ASSIGN(cell_box[19],molec->cell_box[7]);
-	V3POINT_ASSIGN(cell_box[20],cell_box[19]);	
-	V3POINT_ASSIGN(cell_box[21],molec->cell_box[3]);
-	V3POINT_ASSIGN(cell_box[22],cell_box[20]);	
-	V3POINT_ASSIGN(cell_box[23],molec->cell_box[4]);
-	num_box_p = 24;
+        V3POINT_ASSIGN(cell_box[8],cell_box[7]);
+        V3POINT_ASSIGN(cell_box[9],molec->cell_box[4]);
+        V3POINT_ASSIGN(cell_box[10],cell_box[9]);
+        V3POINT_ASSIGN(cell_box[11],molec->cell_box[5]);
+        V3POINT_ASSIGN(cell_box[12],cell_box[11]);
+        V3POINT_ASSIGN(cell_box[13],molec->cell_box[1]);
+        V3POINT_ASSIGN(cell_box[14],cell_box[12]);
+        V3POINT_ASSIGN(cell_box[15],molec->cell_box[6]);
+        V3POINT_ASSIGN(cell_box[16],cell_box[15]);
+        V3POINT_ASSIGN(cell_box[17],molec->cell_box[2]);
+        V3POINT_ASSIGN(cell_box[18],cell_box[16]);
+        V3POINT_ASSIGN(cell_box[19],molec->cell_box[7]);
+        V3POINT_ASSIGN(cell_box[20],cell_box[19]);
+        V3POINT_ASSIGN(cell_box[21],molec->cell_box[3]);
+        V3POINT_ASSIGN(cell_box[22],cell_box[20]);
+        V3POINT_ASSIGN(cell_box[23],molec->cell_box[4]);
+        num_box_p = 24;
       }
     }
     num_objects += num_box_p/2;
   }
   /******
-    
+
     okay, check to see if we need to get more memory
     for the 3D objects.
-    
+
   *******/
   if( num_objects > num_objects_allocated ){
     if( objects ) free(objects);
@@ -979,7 +979,7 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
   *********/
 #ifdef INCLUDE_BOND_VALENCE
   if(molec && (molec->bond_tol2 != molec->old_bond_tol2 ||
-	       molec->bond_tol != molec->old_bond_tol)){
+               molec->bond_tol != molec->old_bond_tol)){
     determine_connections(molec);
     molec->old_bond_tol = molec->bond_tol;
     molec->old_bond_tol2 = molec->bond_tol2;
@@ -992,42 +992,42 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
 #endif
 
   /**********
-    
+
     we're set, transform all the objects and set the
     pointers
-    
+
   **********/
   objects_so_far = 0;
   if( atoms ){
     for(i=0;i<num_atoms;i++,objects_so_far++){
       if( !atom_store[i].exclude && (molec->hydrogens_on ||
-				     atom_store[i].type[0] != 'H' ||
-				     atom_store[i].type[1] != 0) &&
-	  (molec->dummies_on || atom_store[i].type[0] != '&') ){
-	transform(&(atom_store[i].loc));
-	atom_store[i].loc.x += obj->cent.x;
-	atom_store[i].loc.y += obj->cent.y;
-	xcoord = atom_store[i].loc.x;
-	ycoord = atom_store[i].loc.y;
+                                     atom_store[i].type[0] != 'H' ||
+                                     atom_store[i].type[1] != 0) &&
+          (molec->dummies_on || atom_store[i].type[0] != '&') ){
+        transform(&(atom_store[i].loc));
+        atom_store[i].loc.x += obj->cent.x;
+        atom_store[i].loc.y += obj->cent.y;
+        xcoord = atom_store[i].loc.x;
+        ycoord = atom_store[i].loc.y;
 
 #ifdef INCLUDE_ADF_PLOTS
-	/* transform the displacement if that is needed */
-	if( molec->num_vibrations ){
-	  transform(&(displacements[i]));
-	  displacements[i].x += obj->cent.x;
-	  displacements[i].y += obj->cent.y;
-	}
+        /* transform the displacement if that is needed */
+        if( molec->num_vibrations ){
+          transform(&(displacements[i]));
+          displacements[i].x += obj->cent.x;
+          displacements[i].y += obj->cent.y;
+        }
 #endif
 
-	/* update the bounding box */
-	if( xcoord < obj->bmin.x ) obj->bmin.x = xcoord;
-	if( ycoord < obj->bmin.y ) obj->bmin.y = ycoord;
-	if( xcoord > obj->bmax.x ) obj->bmax.x = xcoord;
-	if( ycoord > obj->bmax.y ) obj->bmax.y = ycoord;
+        /* update the bounding box */
+        if( xcoord < obj->bmin.x ) obj->bmin.x = xcoord;
+        if( ycoord < obj->bmin.y ) obj->bmin.y = ycoord;
+        if( xcoord > obj->bmax.x ) obj->bmax.x = xcoord;
+        if( ycoord > obj->bmax.y ) obj->bmax.y = ycoord;
       }
       objects[objects_so_far].type = ATOM_3D;
       objects[objects_so_far].object.atom =
-	&(atom_store[i]);
+        &(atom_store[i]);
     }
   }
 
@@ -1063,7 +1063,7 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
 
 
   if( triangles ){
-    for(i=0;i<num_triangles;i++,objects_so_far++){    
+    for(i=0;i<num_triangles;i++,objects_so_far++){
       triangle_store[i].normal.x += triangle_store[i].center.x;
       triangle_store[i].normal.y += triangle_store[i].center.y;
       triangle_store[i].normal.z += triangle_store[i].center.z;
@@ -1073,14 +1073,14 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
       triangle_store[i].normal.y += obj->cent.y;
       triangle_store[i].center.x += obj->cent.x;
       triangle_store[i].center.y += obj->cent.y;
-      
+
       triangle_store[i].normal.z -= triangle_store[i].center.z;
       triangle_store[i].normal.z /= obj->scale.z;
 
       objects[objects_so_far].type = TRIANGLE_3D;
 
       objects[objects_so_far].object.triangle =
-	&(triangle_store[i]);
+        &(triangle_store[i]);
     }
 
     /* the vertices and normals need to be transformed too */
@@ -1090,7 +1090,7 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
       vertex_store[i].position.y += obj->cent.y;
     }
   }
-    
+
 
   if( num_conts && surf->display_conts ){
     for(i=0;i<num_conts;i++){
@@ -1134,8 +1134,8 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
 
   /* depth sort the objects */
   qsort(objects,num_objects,sizeof(generic_3D_object),
-	object_zcompare);
-  
+        object_zcompare);
+
   /* okay, everything is ready to draw.... do so */
   for(i=num_objects-1;i>=0;i--){
     switch(objects[i].type){
@@ -1169,12 +1169,12 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
     case LINE_3D:
       g_change_linestyle(0);
       g_draw_breaking_line(objects[i].object.line.end1->x,
-			   objects[i].object.line.end1->y,
-			   objects[i].object.line.end2->x,
-			   objects[i].object.line.end2->y,2);
+                           objects[i].object.line.end1->y,
+                           objects[i].object.line.end2->x,
+                           objects[i].object.line.end2->y,2);
       break;
-      
-    }    
+
+    }
 
   }
 
@@ -1204,7 +1204,7 @@ void draw_3D_objects(prim_type *prim,object_type *obj)
 #if 0
   if( molec && molec->draw_lattice ){
     g_change_linestyle(0);
-    g_change_linewidth(2);    
+    g_change_linewidth(2);
     for(i=1;i<num_lattice_p;i++){
       g_line(lattice[0].x,lattice[0].y,lattice[i].x,lattice[i].y);
     }
