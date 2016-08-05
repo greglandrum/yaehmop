@@ -70,6 +70,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define EHT_PARM_FILE "eht_parms.dat"
 #endif
 
+// Include the default data in case we need it
+#include "eht_parms.h"
+
+#include "stdbool.h" // standard booleans
+
 /* hopefully this will be way more than enough */
 #define MAX_CUSTOM_ATOMS 40
 atom_type custom_atoms[MAX_CUSTOM_ATOMS];
@@ -464,7 +469,7 @@ void fill_atomic_parms(atoms,num_atoms,infile)
   if(!parmfile){
     safe_strcpy(err_string,"Can't open parameter file: ");
     strcat(err_string,parm_file_name);
-    strcat(err_string," continuing anyway <watch out!>.");
+    strcat(err_string," using default data in eht_parms.h...");
     error(err_string);
   }
 #else
@@ -650,11 +655,32 @@ void fill_atomic_parms(atoms,num_atoms,infile)
       }
 
       /******
-        look for the parameters in the param file
+        look for the parameters in the param file if it exists
         *******/
-      rewind(parmfile);
+      if (parmfile)
+        rewind(parmfile);
 
-      while(!found && skipcomments(parmfile,instring,IGNORE)>=0 ){
+      bool atEnd = false;
+      size_t defaultParmsInd = 0;
+      while(!found && !atEnd) {
+        // If the parm file exists, read from that
+        if (parmfile) {
+          if (skipcomments(parmfile,instring,IGNORE) == -1) {
+            atEnd = true;
+            break;
+          }
+        }
+        // Else, read from the default data
+        else {
+          strcpy(instring, defaultParms[defaultParmsInd]);
+          // If the string says "END", then we have reached the end!
+          if (strcmp(instring, "END") == 0) {
+            atEnd = true;
+            break;
+          }
+          ++defaultParmsInd;
+        }
+
         /* compare two characters and see if this is the right atom */
         sscanf(instring,"%s",tstring);
         upcase(tstring);
@@ -741,11 +767,19 @@ void fill_atomic_parms(atoms,num_atoms,infile)
             now read in the next line to make sure that we have all the oribtals
             for this atom.
             ********/
-          skipcomments(parmfile,instring,IGNORE);
+          if (parmfile)
+            skipcomments(parmfile,instring,IGNORE);
+          else {
+            // Read next line from default data
+            strcpy(instring, defaultParms[defaultParmsInd]);
+            ++defaultParmsInd;
+          }
+
           sscanf(instring,"%s",tstring);
           found = 1;
         }
       }
+
       if(!found){
         fprintf(stderr,"Can't find parameters for atom: %s\n",atoms[i].symb);
         fatal("Parameter acquisition failure :-(");
