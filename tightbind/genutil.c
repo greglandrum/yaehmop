@@ -335,22 +335,22 @@ void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
 
   if(atom->ns){
     if( orb_offset == 0){
-      sprintf(name,"% 2s(% 3d) %ds",atom->symb,atom->which_atom+1,atom->ns);
+      sprintf(name,"%2s(%3d) %ds",atom->symb,atom->which_atom+1,atom->ns);
       return;
     } else orb_offset--;
   }
   if( atom->np ){
     switch(orb_offset){
     case 0:
-      sprintf(name,"% 2s(% 3d) %dpx",atom->symb,atom->which_atom+1,atom->np);
+      sprintf(name,"%2s(%3d) %dpx",atom->symb,atom->which_atom+1,atom->np);
       return;
       break;
     case 1:
-      sprintf(name,"% 2s(% 3d) %dpy",atom->symb,atom->which_atom+1,atom->np);
+      sprintf(name,"%2s(%3d) %dpy",atom->symb,atom->which_atom+1,atom->np);
       return;
       break;
     case 2:
-      sprintf(name,"% 2s(% 3d) %dpz",atom->symb,atom->which_atom+1,atom->np);
+      sprintf(name,"%2s(%3d) %dpz",atom->symb,atom->which_atom+1,atom->np);
       return;
       break;
     default:
@@ -360,23 +360,23 @@ void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
   if( atom->nd ){
     switch(orb_offset){
     case 0:
-      sprintf(name,"% 2s(% 3d) %ddx2y2",atom->symb,atom->which_atom+1,atom->nd);
+      sprintf(name,"%2s(%3d) %ddx2y2",atom->symb,atom->which_atom+1,atom->nd);
       return;
       break;
     case 1:
-      sprintf(name,"% 2s(% 3d) %dz2",atom->symb,atom->which_atom+1,atom->nd);
+      sprintf(name,"%2s(%3d) %dz2",atom->symb,atom->which_atom+1,atom->nd);
       return;
       break;
     case 2:
-      sprintf(name,"% 2s(% 3d) %ddxy",atom->symb,atom->which_atom+1,atom->nd);
+      sprintf(name,"%2s(%3d) %ddxy",atom->symb,atom->which_atom+1,atom->nd);
       return;
       break;
     case 3:
-      sprintf(name,"% 2s(% 3d) %ddxz",atom->symb,atom->which_atom+1,atom->nd);
+      sprintf(name,"%2s(%3d) %ddxz",atom->symb,atom->which_atom+1,atom->nd);
       return;
       break;
     case 4:
-      sprintf(name,"% 2s(% 3d) %ddyz",atom->symb,atom->which_atom+1,atom->nd);
+      sprintf(name,"%2s(%3d) %ddyz",atom->symb,atom->which_atom+1,atom->nd);
       return;
       break;
     default:
@@ -385,31 +385,31 @@ void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
     if( atom->nf ){
       switch(orb_offset){
       case 0:
-        sprintf(name,"% 2s(% 3d) %dz3",atom->symb,atom->which_atom+1,atom->nf);
+        sprintf(name,"%2s(%3d) %dz3",atom->symb,atom->which_atom+1,atom->nf);
         return;
         break;
       case 1:
-        sprintf(name,"% 2s(% 3d) %dxz2",atom->symb,atom->which_atom+1,atom->nf);
+        sprintf(name,"%2s(%3d) %dxz2",atom->symb,atom->which_atom+1,atom->nf);
         return;
         break;
       case 2:
-        sprintf(name,"% 2s(% 3d) %dyz2",atom->symb,atom->which_atom+1,atom->nf);
+        sprintf(name,"%2s(%3d) %dyz2",atom->symb,atom->which_atom+1,atom->nf);
         return;
         break;
       case 3:
-        sprintf(name,"% 2s(% 3d) %dxyz",atom->symb,atom->which_atom+1,atom->nf);
+        sprintf(name,"%2s(%3d) %dxyz",atom->symb,atom->which_atom+1,atom->nf);
         return;
         break;
       case 4:
-        sprintf(name,"% 2s(% 3d) %dz(x2-y2)",atom->symb,atom->which_atom+1,atom->nf);
+        sprintf(name,"%2s(%3d) %dz(x2-y2)",atom->symb,atom->which_atom+1,atom->nf);
         return;
         break;
       case 5:
-        sprintf(name,"% 2s(% 3d) %dx(x2-3y2)",atom->symb,atom->which_atom+1,atom->nf);
+        sprintf(name,"%2s(%3d) %dx(x2-3y2)",atom->symb,atom->which_atom+1,atom->nf);
         return;
         break;
       case 6:
-        sprintf(name,"% 2s(% 3d) %dy(3x2-y2)",atom->symb,atom->which_atom+1,atom->nf);
+        sprintf(name,"%2s(%3d) %dy(3x2-y2)",atom->symb,atom->which_atom+1,atom->nf);
         return;
         break;
       default:
@@ -469,12 +469,12 @@ void debugmat( mat, num_row, num_col, tol )
       for( j=beg_col; j<end_col && j< num_col; j++ ){
 
         /* begin each column with a header */
-        if( i == -1) fprintf(stdout,"  % -7d",j+1);
+        if( i == -1) fprintf(stdout,"  %-7d",j+1);
         else{
           val = mat[i*num_col+j];
           /* check to see if the value is less than the tolerance */
           if( fabs(val) <= tol ) val = 0.0;
-          fprintf(stdout,"  % -6.4g",val);
+          fprintf(stdout,"  %-6.4g",val);
         }
       }
       fprintf(stdout,"\n");
@@ -547,12 +547,12 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
         for( j=beg_col; j<end_col && j< num_col; j++ ){
 
           /* begin each column with a header */
-          if( i == -1) fprintf(outfile,"  % -7d",j+1);
+          if( i == -1) fprintf(outfile,"  %-7d",j+1);
           else{
             val = mat[i*num_col+j];
             /* check to see if the value is less than the tolerance */
             if( fabs(val) <= tol ) val = 0.0;
-            fprintf(outfile,"  % -6.4lf",val);
+            fprintf(outfile,"  %-6.4lf",val);
           }
         }
         fprintf(outfile,"\n");
@@ -582,12 +582,12 @@ void printmat( real *mat, int num_row, int num_col, FILE *outfile, real tol,
         for( j=beg_row; j<end_row && j< num_row; j++ ){
 
           /* begin each column with a header */
-          if( i == -1) fprintf(outfile,"  % -7d",j+1);
+          if( i == -1) fprintf(outfile,"  %-7d",j+1);
           else{
             val = mat[j*num_col+i];
             /* check to see if the value is less than the tolerance */
             if( fabs(val) <= tol ) val = 0.0;
-            fprintf(outfile,"  % -6.4lf",val);
+            fprintf(outfile,"  %-6.4lf",val);
           }
         }
         fprintf(outfile,"\n");
@@ -668,7 +668,7 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
             left_just_text_string(name_string,just_string,18);
             fprintf(outfile,"%s",just_string);
           }else{
-            fprintf(outfile,"% 18d",i+1);
+            fprintf(outfile,"%18d",i+1);
           }
         }
         else fprintf(outfile,"               ");
@@ -693,7 +693,7 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
             val = mat[i*num_col+j];
             /* check to see if the value is less than the tolerance */
             if( fabs(val) <= tol ) val = 0.0;
-            fprintf(outfile," % -18.4lf",val);
+            fprintf(outfile," %-18.4lf",val);
           }
         }
         fprintf(outfile,"\n");
@@ -723,7 +723,7 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
             left_just_text_string(name_string,just_string,18);
             fprintf(outfile,"%s",just_string);
           }else{
-            fprintf(outfile,"% 18d",i+1);
+            fprintf(outfile,"%18d",i+1);
           }
         }
         else fprintf(outfile,"               ");
@@ -746,7 +746,7 @@ void print_labelled_mat( real *mat, int num_row, int num_col, FILE *outfile, rea
             val = mat[j*num_col+i];
             /* check to see if the value is less than the tolerance */
             if( fabs(val) <= tol ) val = 0.0;
-            fprintf(outfile," % -18.4lf",val);
+            fprintf(outfile," %-18.4lf",val);
           }
         }
         fprintf(outfile,"\n");
@@ -826,14 +826,14 @@ void print_sym_mat( real *mat, int num_row, int num_col, FILE *outfile, char *le
       if( i >= beg_col ){
         if( titles ){
           if( i<9 ){
-            fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*i]),i+1);
+            fprintf(outfile,"%4s(%4d)  ",&(titles[4*i]),i+1);
           } else if(i<99){
-            fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*i]),i+1);
+            fprintf(outfile,"%4s(%4d)  ",&(titles[4*i]),i+1);
           } else {
-            fprintf(outfile,"% 4s(% 4d) ",&(titles[4*i]),i+1);
+            fprintf(outfile,"%4s(%4d) ",&(titles[4*i]),i+1);
           }
         }
-        else fprintf(outfile,"  % -7d",i+1);
+        else fprintf(outfile,"  %-7d",i+1);
       }
       else fprintf(outfile,"            ");
 
@@ -842,20 +842,20 @@ void print_sym_mat( real *mat, int num_row, int num_col, FILE *outfile, char *le
         for(j=beg_col; j<end_col; j++ ){
           if( titles ){
             if( j<9 ){
-              fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
+              fprintf(outfile,"%4s(%4d)  ",&(titles[4*j]),j+1);
             } else if(j<99){
-              fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
+              fprintf(outfile,"%4s(%4d)  ",&(titles[4*j]),j+1);
             } else {
-              fprintf(outfile,"% 4s(% 4d)  ",&(titles[4*j]),j+1);
+              fprintf(outfile,"%4s(%4d)  ",&(titles[4*j]),j+1);
             }
           }
-          else fprintf(outfile,"  % -7d",j+1);
+          else fprintf(outfile,"  %-7d",j+1);
         }
       }
       else{
         /* go ahead and print out the values for this row */
         for( j=beg_col; j<end_col && j<=i; j++ ){
-          fprintf(outfile,"  % -10.4f",mat[i*(i+1)/2 +j]);
+          fprintf(outfile,"  %-10.4f",mat[i*(i+1)/2 +j]);
         }
       }
       fprintf(outfile,"\n");
