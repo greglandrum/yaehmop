@@ -333,7 +333,8 @@ fprintf(stderr,">");
     overlapK.mat = mat_save;
   }
 
-
+  // Indicate that we have finished the band data
+  fprintf(band_file, "#END_BAND_DATA\n");
 }
 
 
