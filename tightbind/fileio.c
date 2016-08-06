@@ -73,8 +73,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Include the default data in case we need it
 #include "eht_parms.h"
 
-#include "stdbool.h" // standard booleans
-
 /* hopefully this will be way more than enough */
 #define MAX_CUSTOM_ATOMS 40
 atom_type custom_atoms[MAX_CUSTOM_ATOMS];
@@ -2695,6 +2693,12 @@ calculation.\n");
           skipcomments(infile,instring,FATAL);
           sscanf(instring,"%d",&details->line_width);
         }
+      }
+      // This is just for printing symbols to indicate where we are in our
+      // progress
+      else if(strstr(instring,"SHOW PROGRESS")){
+        fprintf(status_file,"Progress will be printed during calculations.\n");
+        print_progress = true;
       }
 
       /*----------------------------------------------------------------------*/

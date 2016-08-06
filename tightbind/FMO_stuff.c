@@ -410,7 +410,8 @@ void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_w
       itype = 1;
       if( details->just_avgE ){
         jobz = 'N';
-        fprintf(stdout,".");
+        if( print_progress )
+          fprintf(stdout,".");
       } else{
         jobz = 'V';
       }

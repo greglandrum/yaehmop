@@ -336,7 +336,9 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
         /* generate the transform matrices */
         gen_FMO_tform_matrices(details);
       }
-      fprintf(stdout,"%d >",i+1);
+
+      if ( print_progress )
+        fprintf(stdout,"%d >",i+1);
 
 #ifndef USE_LAPACK
       /******
@@ -438,13 +440,15 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       itype = 1;
       if( details->just_avgE ){
         jobz = 'N';
-        fprintf(stdout,".");
+        if( print_progress )
+          fprintf(stdout,".");
       } else{
         jobz = 'V';
       }
       uplo = 'L';
       num_orbs2 = num_orbs*num_orbs;
-      fprintf(stdout,"{");
+      if( print_progress )
+        fprintf(stdout,"{");
       if(!details->diag_wo_overlap){
         zhegv((long *)&(itype),&jobz,&uplo,(long *)&num_orbs,cmplx_hamil,
                                 (long *)&num_orbs,cmplx_overlap,
@@ -455,7 +459,8 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
               eigenset.val,cmplx_work,(long *)&num_orbs2,work3,
               (long *)&diag_error);
       }
-      fprintf(stdout,"}");
+      if( print_progress )
+        fprintf(stdout,"}");
 
       /* now copy stuff back out of the results */
       if( !details->just_avgE ){
@@ -470,7 +475,9 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       }
 #endif
 
-      fprintf(stdout,"<\n");
+      if( print_progress)
+        fprintf(stdout,"<\n");
+
       fprintf(status_file,"Error value from Diagonalization (0 is good): %d\n",
               diag_error);
       fflush(status_file);

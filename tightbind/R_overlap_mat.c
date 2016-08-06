@@ -847,8 +847,8 @@ printmat(overlap,num_orbs,num_orbs,status_file,1e-10,0,details->line_width);
                   orbital_lookup_table);
   }
 
-
-fprintf(stdout,".\n");
+if( print_progress)
+  fprintf(stdout,".\n");
 
 
 #if 0
