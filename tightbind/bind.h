@@ -71,11 +71,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <fcntl.h>
 #include <math.h>
 #include <signal.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #ifndef USING_THE_MAC
 #include <sys/types.h>
 #include <sys/stat.h>
 #else
-#include <unistd.h>
 #include <SIOUX.h>
 #endif
 

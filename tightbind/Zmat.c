@@ -244,7 +244,7 @@ void eval_Zmat_locs(atom_type *atoms,int num_atoms, int cell_dim,char printing)
     /* now print out the positions of the atoms */
     fprintf(output_file,"# Positions of atoms from Z-matrix\n");
     for(i=0;i<num_atoms;i++){
-      fprintf(output_file,"% 4d % 4s % 8.4lf % 8.4lf % 8.4lf\n",
+      fprintf(output_file,"%4d %4s %8.4lf %8.4lf %8.4lf\n",
               i+1,atoms[i].symb,atoms[i].loc.x,
               atoms[i].loc.y,atoms[i].loc.z);
     }

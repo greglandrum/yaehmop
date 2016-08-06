@@ -95,7 +95,7 @@ void read_NEW3file(cell,details,infile)
   fprintf(status_file,"  to using the newer input format.\n\n");
 
   skipcomments(infile,instring,FATAL);
-  sscanf(instring,"%lf %d %d %d",&(details->rho),&(cell->num_atoms),
+  sscanf(instring,"%lf %d %s %s",&(details->rho),&(cell->num_atoms),
          &(details->just_geom),&(details->save_energies));
 
   /* allocate space for the atoms */
@@ -247,7 +247,7 @@ contributions.");
 
     while(skipcomments(infile,instring,IGNORE)>-1){
       /* read in the K point, ignoring the printing options */
-      sscanf(instring,"%s %lf %lf %lf %d %d",
+      sscanf(instring,"%s %lf %lf %lf %lf %lf",
              foo_string,
              &(points[num_k_points].loc.x),&(points[num_k_points].loc.y),
              &(points[num_k_points].loc.z),
@@ -278,7 +278,7 @@ contributions.");
     if( !points ) fatal("Can't allocate space for printing options.");
 
     num_k_points = 0;
-    sscanf(instring,"%s %lf %lf %lf %d %d",
+    sscanf(instring,"%s %lf %lf %lf %lf %lf",
            foo_string,
            &(points[num_k_points].loc.x),&(points[num_k_points].loc.y),
            &(points[num_k_points].loc.z),
