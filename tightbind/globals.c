@@ -73,3 +73,5 @@ sym_op_type *sym_ops_present=0;
 prop_type properties;
 avg_prop_info_type *avg_prop_info;
 K_orb_ptr_type *orbital_ordering;
+
+bool print_progress = false;

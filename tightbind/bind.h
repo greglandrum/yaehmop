@@ -71,6 +71,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <fcntl.h>
 #include <math.h>
 #include <signal.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -930,5 +931,7 @@ extern avg_prop_info_type *avg_prop_info;
 extern K_orb_ptr_type *orbital_ordering;
 
 extern real electrostatic_term, eHMO_term, total_energy;
+
+extern bool print_progress; // Shall we print progress during calculations?
 
 #include "prototypes.h"

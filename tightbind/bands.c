@@ -255,7 +255,9 @@ void construct_band_structure(cell,details,overlapR,hamilR,overlapK,hamilK,
     default:
       FATAL_BUG("Somehow a bogus execution mode got passed to generate_band_structure.");
     }
-fprintf(stderr,">");
+
+if( print_progress )
+  fprintf(stderr,">");
 
     /******
       The matrix diagonalization routine destroys the overlap matrix,
@@ -302,7 +304,10 @@ fprintf(stderr,">");
     jobz = 'N';
     uplo = 'L';
     num_orbs2 = num_orbs*num_orbs;
-    fprintf(stderr,"{");
+
+    if( print_progress)
+      fprintf(stderr,"{");
+
     if(!details->diag_wo_overlap){
       zhegv((long *)&(itype),&jobz,&uplo,(long *)&num_orbs,cmplx_hamil,
                               (long *)&num_orbs,cmplx_overlap,
@@ -312,10 +317,14 @@ fprintf(stderr,">");
       zheev(&jobz,&uplo,(long *)&num_orbs,cmplx_hamil,(long *)&num_orbs,
                                     eigenset.val,cmplx_work,(long *)&num_orbs2,work3,(long *)&diag_error);
     }
-    fprintf(stderr,"}");
+
+    if( print_progress )
+      fprintf(stderr,"}");
 #endif
 
-    fprintf(stderr,"<\n");
+    if( print_progress )
+      fprintf(stderr,"<\n");
+
     fprintf(status_file,"Error value from Diagonalization (0 is good): %d\n",diag_error);
 
 
