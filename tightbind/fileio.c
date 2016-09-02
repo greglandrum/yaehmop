@@ -431,7 +431,7 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
   FILE *infile;
   char *parm_file_name;
 {
-  char err_string[240],instring[80];
+  char err_string[240],instring[240];
   point_type saveloc;
   Z_mat_type saveZloc;
   FILE *parmfile;
