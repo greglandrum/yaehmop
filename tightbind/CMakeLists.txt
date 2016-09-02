@@ -112,6 +112,10 @@ else(USE_F2C)
     )
   endif(NOT USE_BLAS_LAPACK)
 
+  # Link statically to the gfortran libraries if we need to
+  if (APPLE AND BUILD_STATIC)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgfortran")
+  endif(APPLE AND BUILD_STATIC)
 endif(USE_F2C)
 
 # We link to the static library to avoid an error
@@ -148,10 +152,21 @@ if(USE_BLAS_LAPACK)
 
   if(STATIC_BLAS_LAPACK)
     message("-- Using static linkage for blas and lapack")
-    message("-- Attempting to link to liblapack.a and libblas.a")
-    message("-- Note that we must also link to gfortran for static linking")
-    # We have to statically link to lapack and blas
-    target_link_libraries(bind liblapack.a libblas.a)
+
+    # Apple has to find the package regardless...
+    if(APPLE)
+      message("-- NOTE: For Apple, you may need to remove all libquadmath")
+      message("--       files except libquadmath.a to get it to link")
+      message("--       to libquadmath statically.")
+      find_package(LAPACK REQUIRED)
+      target_link_libraries(bind ${LAPACK_LIBRARIES})
+    else(APPLE)
+      message("-- Attempting to link to liblapack.a and libblas.a")
+      message("-- Note that we must also link to gfortran for static linking")
+      # We have to statically link to lapack and blas
+      target_link_libraries(bind liblapack.a libblas.a)
+    endif(APPLE)
+
     # Link these as well if we are not using MINGW
     if(NOT MINGW)
       target_link_libraries(bind libgfortran.a libquadmath.a)
@@ -174,7 +189,14 @@ if(BUILD_STATIC)
   # We are probably going to need to change this if we allow for MSVC
   # compilation. But we can cross that bridge later - we don't need MSVC
   # compilation right now.
-  set(CMAKE_EXE_LINKER_FLAGS "-static")
+
+  # Apple should not compile with the -static flag
+  if(APPLE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc")
+  else(APPLE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+  endif(APPLE)
+
 endif(BUILD_STATIC)
 
 # Link to the C Math library
