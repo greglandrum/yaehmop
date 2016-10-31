@@ -909,7 +909,7 @@ void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
   int overlap_tab;
 
   char found = 0;
-  point_type cell_dim[3];
+  static point_type cell_dim[3];
   point_type distances;
   real temp,min=100.0;
   int min_dir;
