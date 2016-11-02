@@ -1341,6 +1341,20 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
     MO_file = fopen(filename,"w+");
     if(!MO_file) fatal("Can't open MO file.");
 
+    /* If num MOs is empty, etc. we'll assume it's all MOs */
+    if (details->num_MOs_to_print <= 0) {
+      details->num_MOs_to_print = num_orbs;
+
+      /* get memory */
+      details->MOs_to_print = (int *)calloc(num_orbs, sizeof(int));
+      if(!details->MOs_to_print)fatal("Can't get memory for MOs_to_print.");
+
+      /* now read out the MOs that will be printed */
+      for(i=0;i<details->num_MOs_to_print;i++){
+        details->MOs_to_print[i] = i;
+      }
+    } /* end of num_MOs_to_print <= 0 */
+
     /* write the atomic parms */
     fprintf(MO_file,"#begin_parms\n");
     for(i=0;i<num_unique_atoms;i++){
