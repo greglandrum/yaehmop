@@ -286,16 +286,19 @@ void write_atom_parms(detail_type *details,atom_type *atoms,int num_atoms,
     }
     /* if we didn't find it... */
     if( !found_this_one ){
-      /* just copy the data into the unique_atoms array */
-      bcopy(&(atoms[i]),&(unique_atoms[num_unique_atoms]),
-            sizeof(atom_type));
-      num_unique_atoms++;
+      /* resize if needed -- WARNING: this region has seemingly been the
+         cause of some crashes. This may need to be changed */
       if( num_unique_atoms == max_num_unique ){
         max_num_unique += num_atoms;
         unique_atoms = (atom_type *)my_realloc((int *)unique_atoms,
                                             max_num_unique*sizeof(atom_type));
         if( !unique_atoms ) fatal("Can't realloc unique_atoms.");
       }
+
+      /* just copy the data into the unique_atoms array */
+      bcopy(&(atoms[i]),&(unique_atoms[num_unique_atoms]),
+            sizeof(atom_type));
+      num_unique_atoms++;
     }
     first_call = 0;
   }
