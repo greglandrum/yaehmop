@@ -1342,7 +1342,7 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
     if(!MO_file) fatal("Can't open MO file.");
 
     /* If num MOs is empty, etc. we'll assume it's all MOs */
-    if (details->num_MOs_to_print <= 0) {
+    if (details->num_MOs_to_print < 0) {
       details->num_MOs_to_print = num_orbs;
 
       /* get memory */

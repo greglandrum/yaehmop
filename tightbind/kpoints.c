@@ -493,9 +493,12 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
                             properties,avg_prop_info,
                             num_orbs,orbital_lookup_table);
 
-        print_MOs(details,num_orbs,eigenset,i,
+        if (details->num_MOs_to_print != 0) {
+          print_MOs(details,num_orbs,eigenset,i,
                   unique_atoms,num_unique_atoms,
                   cell->num_atoms,orbital_lookup_table);
+
+        }
 
         if(details->num_FMO_frags != 0 ){
           postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,

@@ -2361,7 +2361,12 @@ calculation.\n");
 
         /* first read out the number of MOs to print */
         skipcomments(infile,instring,FATAL);
-        sscanf(instring,"%d",&(details->num_MOs_to_print));
+        if ( strstr(instring,"all") ) {
+          /* special case for "all" */
+          details->num_MOs_to_print = -1;
+        } else {
+          sscanf(instring,"%d",&(details->num_MOs_to_print));
+        }
 
         if (details->num_MOs_to_print > 0) {
           /* If num MOs is empty, etc. we'll assume it's all MOs
