@@ -2361,19 +2361,30 @@ calculation.\n");
 
         /* first read out the number of MOs to print */
         skipcomments(infile,instring,FATAL);
-        sscanf(instring,"%d",&(details->num_MOs_to_print));
-
-        /* get memory */
-        details->MOs_to_print = (int *)calloc(details->num_MOs_to_print,
-                                              sizeof(int));
-        if(!details->MOs_to_print)fatal("Can't get memory for MOs_to_print.");
-
-        /* now read out the MOs that will be printed */
-        for(i=0;i<details->num_MOs_to_print;i++){
-          skipcomments(infile,instring,FATAL);
-          sscanf(instring,"%d",&(details->MOs_to_print[i]));
-          details->MOs_to_print[i]--;
+        if ( strstr(instring,"all") ) {
+          /* special case for "all" */
+          details->num_MOs_to_print = -1;
+        } else {
+          sscanf(instring,"%d",&(details->num_MOs_to_print));
         }
+
+        if (details->num_MOs_to_print > 0) {
+          /* If num MOs is empty, etc. we'll assume it's all MOs
+            and handle later once we know how many actually exist
+          */
+
+          /* get memory */
+          details->MOs_to_print = (int *)calloc(details->num_MOs_to_print,
+                                                sizeof(int));
+          if(!details->MOs_to_print)fatal("Can't get memory for MOs_to_print.");
+
+          /* now read out the MOs that will be printed */
+          for(i=0;i<details->num_MOs_to_print;i++){
+            skipcomments(infile,instring,FATAL);
+            sscanf(instring,"%d",&(details->MOs_to_print[i]));
+            details->MOs_to_print[i]--;
+          }
+        } /* end of num_MOs_to_print > 0 */
       } /* end of keyword MO PRINT */
       /*----------------------------------------------------------------------*/
       else if( strstr(instring,"PRINT") ){
@@ -2787,5 +2798,3 @@ calculation.\n");
 
    The preceding message was a big joke.
 ***************************************************************************************/
-
-
