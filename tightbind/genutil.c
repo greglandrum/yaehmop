@@ -1337,9 +1337,15 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
   if( first_call ){
     /* open the file */
     strcpy(filename,details->filename);
-    strcat(filename,".MO");
-    MO_file = fopen(filename,"w+");
-    if(!MO_file) fatal("Can't open MO file.");
+    /* If we are using stdin and stdout, do just that */
+    if (strcmp(filename, "--use_stdin_stdout") == 0) {
+      MO_file = stdout;
+    }
+    else {
+      strcat(filename,".MO");
+      MO_file = fopen(filename,"w+");
+      if(!MO_file) fatal("Can't open MO file.");
+    }
 
     /* If num MOs is empty, etc. we'll assume it's all MOs */
     if (details->num_MOs_to_print < 0) {
