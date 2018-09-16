@@ -1,0 +1,25 @@
+; the name of the job
+A silly example: a square of H atoms
+
+; specification that this is a molecular problem
+Molecular
+
+; the geometry
+geometry
+4
+1 H 0.0 0.0 0.0
+2 H 1.0 0.0 0.0
+3 H 1.0 1.0 0.0
+4 H 0.0 1.0 0.0
+
+; The number of electrons
+Electrons
+4
+
+; print options
+PRINT
+Overlap Population
+Reduced overlap population
+charge matrix
+wavefunction
+end_print
