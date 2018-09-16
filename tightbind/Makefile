@@ -8,7 +8,7 @@
 # to change where the program looks for the extended hueckel parameters
 #   change the following:
 # This is the one for isolobal
-PARM_FILE_LOC = \"/home/glandrum/yaehmop/tightbind/eht_parms.dat\"
+PARM_FILE_LOC = \"/yaehmop/tightbind/eht_parms.dat\"
 
 # to use floats instead of doubles, insert -DUSE_FLOATS here.
 #  to perform real symmetry analysis (with principle axis location), use
@@ -25,7 +25,7 @@ F77FLAGS = -O
 #A linux box w/o complib (using GNU compilers)
 #LIBS = -lm -lf2c 
 LIBS = -lm 
-LOCALLIBS = /usr/lib/liblapack.a /usr/lib/libblas.a -lg2c
+LOCALLIBS = /usr/lib/lapack/liblapack.a /usr/lib/blas/libblas.a -lf2c
 
 COBJS = main.o genutil.o fileio.o globals.o memory.o distance_mat.o \
  R_overlap_mat.o mov.o R_hamil.o K_hamil.o kpoints.o K_overlap_mat.o \
