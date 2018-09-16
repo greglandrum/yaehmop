@@ -25,7 +25,7 @@ F77FLAGS = -O
 #A linux box w/o complib (using GNU compilers)
 #LIBS = -lm -lf2c 
 LIBS = -lm 
-LOCALLIBS = /usr/lib/lapack/liblapack.a /usr/lib/blas/libblas.a -lf2c
+LOCALLIBS = /usr/lib/x86_64-linux-gnu/lapack/liblapack.a /usr/lib/x86_64-linux-gnu/blas/libblas.a -lf2c
 
 COBJS = main.o genutil.o fileio.o globals.o memory.o distance_mat.o \
  R_overlap_mat.o mov.o R_hamil.o K_hamil.o kpoints.o K_overlap_mat.o \
