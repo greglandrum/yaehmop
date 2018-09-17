@@ -64,8 +64,8 @@ veryclean:
 	rm -f $(COBJS) $(FOBJS) $(LAPACKOBJS)
 	cd utils;make clean
 
-.f.o: 
-	f77 $(F77FLAGS) -c $*.f
+.f90.o: 
+	gfortran $(F77FLAGS) -c $*.f90
 
 .c.o: 
 	cc $(CFLAGS) -c $*.c
