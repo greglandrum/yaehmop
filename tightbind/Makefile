@@ -33,11 +33,11 @@ COBJS = main.o genutil.o fileio.o globals.o memory.o distance_mat.o \
  transforms.o symmetry.o princ_axes.o avg_props.o DOS_stuff.o COOP_stuff.o \
  Zmat.o bands.o FMO_stuff.o xtal_coords.o matrices.o chg_it.o \
  mod_mulliken.o postprocess.o muller.o geom_frags.o solid_symmetry.o \
- recip_space.o netCDF_support.o lovlap.o abfns.o
+ recip_space.o netCDF_support.o lovlap.o abfns.o cboris.o diag.o
 
 
 #F2COBJS = lovlap.f2c.o abfns.f2c.o cboris.f2c.o diag.f2c.o
-FOBJS =  cboris.o diag.o
+FOBJS =  
 
 all: bind
 

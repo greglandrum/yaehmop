@@ -94,7 +94,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 **********/
 #ifndef USING_THE_MAC
-#include <malloc.h>
+#include <stdlib.h>
 #else
 #include <unix.h>
 #endif
@@ -269,7 +269,7 @@ the
 #ifdef UNDERSCORE_FORTRAN
 #define abfns abfns
 #define lovlap lovlap
-#define cboris cboris_
+#define cboris cboris
 #define zhegv zhegv_
 #define zheev zheev_
 #endif
