@@ -267,8 +267,8 @@ the
 
 ********/
 #ifdef UNDERSCORE_FORTRAN
-#define abfns abfns_
-#define lovlap lovlap_
+#define abfns abfns
+#define lovlap lovlap
 #define cboris cboris_
 #define zhegv zhegv_
 #define zheev zheev_
