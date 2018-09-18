@@ -440,6 +440,7 @@ Define the type preserving min and max functions
 #define fifi2max0(a,b) (((a) > (b)) ? (a) : (b))
 #define fifmin0(a,b)   (((a) < (b)) ? (a) : (b))
 #define fifi2min0(a,b) (((a) < (b)) ? (a) : (b))
+#define fdsign(a,b)  ((b) < 0 ? -(a) : (a))
 
 /*
 Define the Integer*8 functions. Note that these only work for LPROTOTYPE
