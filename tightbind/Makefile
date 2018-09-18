@@ -16,7 +16,7 @@ PARM_FILE_LOC = \"/yaehmop/tightbind/eht_parms.dat\"
 #     portions of the meschach libraries installed.
 
 #stripped down with optimization and LAPACK
-CFLAGS =  -g  -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DUNDERSCORE_FORTRAN -DANAL_ABOUT_PROTOTYPES
+CFLAGS =  -g  -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DANAL_ABOUT_PROTOTYPES
 
 # these are the flags that get passed to the fortran compiler
 #F77FLAGS = -g
@@ -25,7 +25,7 @@ F77FLAGS = -O
 #A linux box w/o complib (using GNU compilers)
 #LIBS = -lm -lf2c 
 LIBS = -lm 
-LOCALLIBS = /usr/lib/x86_64-linux-gnu/lapack/liblapack.a /usr/lib/x86_64-linux-gnu/blas/libblas.a -lf2c
+LOCALLIBS = /usr/lib/x86_64-linux-gnu/lapack/liblapack.a /usr/lib/x86_64-linux-gnu/blas/libblas.a
 
 COBJS = main.o genutil.o fileio.o globals.o memory.o distance_mat.o \
  R_overlap_mat.o mov.o R_hamil.o K_hamil.o kpoints.o K_overlap_mat.o \
