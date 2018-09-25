@@ -75,8 +75,8 @@ if(USE_F2C)
   if(NOT USE_BLAS_LAPACK)
     set(YAEHMOP_SRCS
       ${YAEHMOP_SRCS}
-      f2c_files/cboris.c
-      f2c_files/diag.c
+      cboris.c
+      diag.c
     )
   endif(NOT USE_BLAS_LAPACK)
 
