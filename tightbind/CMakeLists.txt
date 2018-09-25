@@ -11,6 +11,7 @@ set(YAEHMOP_SRCS
   chg_it.c
   COOP_stuff.c
   distance_mat.c
+  driver.c
   DOS_stuff.c
   electrostat.c
   fileio.c
