@@ -31,18 +31,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ********************************************************************/
 
 /****************************************************************************
-*
-*     this is the include file for the tightbinding program
-*
-*   contained herein are:
-*
-*       #include's and #define's that everyone needs
-*       type definitions
-*       extern definitions of global variables
-*
-*  created:  greg landrum  August 1993
-*
-*****************************************************************************/
+ *
+ *     this is the include file for the tightbinding program
+ *
+ *   contained herein are:
+ *
+ *       #include's and #define's that everyone needs
+ *       type definitions
+ *       extern definitions of global variables
+ *
+ *  created:  greg landrum  August 1993
+ *
+ *****************************************************************************/
 
 /***
   Edit History:
@@ -67,17 +67,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ***/
 
 /******  includes for everyone ******/
-#include <stdio.h>
 #include <fcntl.h>
 #include <math.h>
 #include <signal.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #ifndef USING_THE_MAC
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #else
 #include <SIOUX.h>
 #endif
@@ -267,9 +267,6 @@ the
 
 ********/
 #ifdef UNDERSCORE_FORTRAN
-#define abfns abfns
-#define lovlap lovlap
-#define cboris cboris
 #define zhegv zhegv_
 #define zheev zheev_
 #endif
@@ -303,7 +300,9 @@ typedef struct {
   a 3-D point
 
 *******/
-typedef struct { real x, y, z; } point_type;
+typedef struct {
+  real x, y, z;
+} point_type;
 
 /******
 
@@ -369,7 +368,9 @@ typedef struct {
 } xtal_defn_type;
 
 /* used to define translation vectors */
-typedef struct { int begin, end; } Tvect_type;
+typedef struct {
+  int begin, end;
+} Tvect_type;
 
 /* used to keep track of equivalent atoms for average properties */
 typedef struct equiv_atom_def equiv_atom_type;
@@ -900,9 +901,13 @@ typedef struct {
 } detail_type;
 
 /* these are for faking the Fortran complex and complex16 types */
-typedef struct { double r, i; } doublecomplex;
+typedef struct {
+  double r, i;
+} doublecomplex;
 
-typedef struct { float r, i; } floatcomplex;
+typedef struct {
+  float r, i;
+} floatcomplex;
 
 #ifdef USE_FLOATS
 typedef floatcomplex complex;
