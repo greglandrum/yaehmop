@@ -35,11 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // For booleans
 #include "stdbool.h"
 
-void inner_wrapper(){
-
-}
-
-void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
+void inner_wrapper(char *file_name, bool use_stdin_stdout){
   char temp_file_name[500],err_string[500];
   FILE *temp_file;
   FILE *the_file=0;
@@ -49,119 +45,6 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
   real new_num_electrons;
   COOP_type *COOP_ptr;
   int i;
-
-  /************
-
-    get space for the atomic data and experimental (numerical experiments!! YES!)
-    parameters...   (and make sure we got it)
-
-  **************/
-  unit_cell = (cell_type *)calloc(1,sizeof(cell_type));
-  details = (detail_type *)calloc(1,sizeof(detail_type));
-  if(!unit_cell || !details) fatal("Can't allocate initial memory.");
-
-  if (!use_stdin_stdout) {
-    /* check to see if we can open the input file */
-    temp_file = fopen(file_name,"r");
-    if( !temp_file ){
-      sprintf(err_string,"Can't open input file: %s",file_name);
-      fatal(err_string);
-    }
-    fclose(temp_file);
-  }
-
-  // If we are using stdin and stdout, then write all status to stdout
-  if (use_stdin_stdout) {
-    status_file = stdout;
-  }
-  else {
-    /* open the file that will be used to dump progress reports */
-    strcpy(temp_file_name,file_name);
-    strcat(temp_file_name,".status");
-    status_file = fopen(temp_file_name,"w+");
-  }
-  if(!status_file)fatal("Can't open status file!");
-
-  // If we are using stdin and stdout, then write all output to stdout
-  if (use_stdin_stdout) {
-    output_file = stdout;
-  }
-  else {
-    /* open the file that will be used for results */
-    strcpy(temp_file_name,file_name);
-    strcat(temp_file_name,".out");
-    output_file = fopen(temp_file_name,"w+");
-  }
-
-  if(!output_file)fatal("Can't open results file!");
-  fprintf(output_file,"#BIND_OUTPUT version: %s\n\n",VERSION_STRING);
-
-  /********
-
-    read in the data
-
-  *********/
-  read_inputfile(unit_cell,details,file_name,&num_orbs,&orbital_lookup_table,the_file,parm_file_name);
-
-  /* copy the file name into the details structure */
-  strcpy(details->filename,file_name);
-
-
-  /* open the file that will be used for walsh output (if we need one) */
-  if(details->walsh_details.num_vars != 0){
-    // If we are using stdin and stdout, then write all output to stdout
-    if (use_stdin_stdout) {
-      walsh_file = stdout;
-    }
-    else {
-      /* open the file that will be used for results */
-      strcpy(temp_file_name,file_name);
-      strcat(temp_file_name,".walsh");
-      walsh_file = fopen(temp_file_name,"w+");
-    }
-    if(!walsh_file)fatal("Can't open Walsh results file!");
-  }
-
-  /**********
-
-    In order to be able to have the number of symmetry elements change
-      with the distortions in a Walsh diagram, determine what elements
-      are present throughout the distortion.
-
-  **********/
-  if(details->walsh_details.num_vars != 0){
-    walsh_update(unit_cell,details,0,0);
-    find_walsh_sym_ops(unit_cell,details);
-  }else{
-    if( unit_cell->using_Zmat )
-      eval_Zmat_locs(unit_cell->atoms,unit_cell->num_atoms,unit_cell->dim,1);
-    else if( unit_cell->using_xtal_coords ) eval_xtal_coord_locs(unit_cell,1);
-    if( unit_cell->geom_frags && !details->walsh_details.num_vars )
-      process_geom_frags(unit_cell);
-
-    if(details->use_symmetry) find_sym_ops(details,unit_cell);
-  }
-
-  /*****
-    if we are using automagic k-points, at this point
-     we may need to do a walsh_update to get a set of atomic
-     positions, then we can calculate that atomic positions
-     to determine the lattice constants so that a valid
-     reciprocal lattice can be built.
-  ******/
-  if(details->use_automatic_kpoints){
-    if(details->walsh_details.num_vars != 0 ) walsh_update(unit_cell,details,0,0);
-
-    automagic_k_points(details,unit_cell);
-  }
-
-  /*********
-
-    Put any error checking that needs to be done into this
-     function
-
-  *********/
-  check_for_errors(unit_cell,details,num_orbs);
 
   /********
 
@@ -693,20 +576,147 @@ for( walsh_step=0; walsh_step<details->walsh_details.num_steps; walsh_step++){
                    properties,orbital_lookup_table,walsh_step);
     }
   }
-} /* end of walsh loop */
-
-fprintf(status_file,"Done!\n");
-fprintf(stdout,"Done!\n");
-
-/* close the files and exit */
-#ifdef INCLUDE_NETCDF_SUPPORT
-if( details->do_netCDF ){
-  netCDF_close_file(details);
 }
-#endif
+}
+
+void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
+  char temp_file_name[500],err_string[500];
+  FILE *temp_file;
+  FILE *the_file=0;
+  int walsh_step;
+  char test_string[80];
+  int zeta_converged,Hii_converged;
+  real new_num_electrons;
+  COOP_type *COOP_ptr;
+  int i;
+
+  /************
+
+    get space for the atomic data and experimental (numerical experiments!! YES!)
+    parameters...   (and make sure we got it)
+
+  **************/
+  unit_cell = (cell_type *)calloc(1,sizeof(cell_type));
+  details = (detail_type *)calloc(1,sizeof(detail_type));
+  if(!unit_cell || !details) fatal("Can't allocate initial memory.");
 
   if (!use_stdin_stdout) {
-    fclose(status_file);
-    fclose(output_file);
+    /* check to see if we can open the input file */
+    temp_file = fopen(file_name,"r");
+    if( !temp_file ){
+      sprintf(err_string,"Can't open input file: %s",file_name);
+      fatal(err_string);
+    }
+    fclose(temp_file);
   }
+
+  // If we are using stdin and stdout, then write all status to stdout
+  if (use_stdin_stdout) {
+    status_file = stdout;
+  }
+  else {
+    /* open the file that will be used to dump progress reports */
+    strcpy(temp_file_name,file_name);
+    strcat(temp_file_name,".status");
+    status_file = fopen(temp_file_name,"w+");
+  }
+  if(!status_file)fatal("Can't open status file!");
+
+  // If we are using stdin and stdout, then write all output to stdout
+  if (use_stdin_stdout) {
+    output_file = stdout;
+  }
+  else {
+    /* open the file that will be used for results */
+    strcpy(temp_file_name,file_name);
+    strcat(temp_file_name,".out");
+    output_file = fopen(temp_file_name,"w+");
+  }
+
+  if(!output_file)fatal("Can't open results file!");
+  fprintf(output_file,"#BIND_OUTPUT version: %s\n\n",VERSION_STRING);
+
+  /********
+
+    read in the data
+
+  *********/
+  read_inputfile(unit_cell,details,file_name,&num_orbs,&orbital_lookup_table,the_file,parm_file_name);
+
+  /* copy the file name into the details structure */
+  strcpy(details->filename,file_name);
+
+
+  /* open the file that will be used for walsh output (if we need one) */
+  if(details->walsh_details.num_vars != 0){
+    // If we are using stdin and stdout, then write all output to stdout
+    if (use_stdin_stdout) {
+      walsh_file = stdout;
+    }
+    else {
+      /* open the file that will be used for results */
+      strcpy(temp_file_name,file_name);
+      strcat(temp_file_name,".walsh");
+      walsh_file = fopen(temp_file_name,"w+");
+    }
+    if(!walsh_file)fatal("Can't open Walsh results file!");
+  }
+
+  /**********
+
+    In order to be able to have the number of symmetry elements change
+      with the distortions in a Walsh diagram, determine what elements
+      are present throughout the distortion.
+
+  **********/
+  if(details->walsh_details.num_vars != 0){
+    walsh_update(unit_cell,details,0,0);
+    find_walsh_sym_ops(unit_cell,details);
+  }else{
+    if( unit_cell->using_Zmat )
+      eval_Zmat_locs(unit_cell->atoms,unit_cell->num_atoms,unit_cell->dim,1);
+    else if( unit_cell->using_xtal_coords ) eval_xtal_coord_locs(unit_cell,1);
+    if( unit_cell->geom_frags && !details->walsh_details.num_vars )
+      process_geom_frags(unit_cell);
+
+    if(details->use_symmetry) find_sym_ops(details,unit_cell);
+  }
+
+  /*****
+    if we are using automagic k-points, at this point
+     we may need to do a walsh_update to get a set of atomic
+     positions, then we can calculate that atomic positions
+     to determine the lattice constants so that a valid
+     reciprocal lattice can be built.
+  ******/
+  if(details->use_automatic_kpoints){
+    if(details->walsh_details.num_vars != 0 ) walsh_update(unit_cell,details,0,0);
+
+    automagic_k_points(details,unit_cell);
+  }
+
+  /*********
+
+    Put any error checking that needs to be done into this
+     function
+
+  *********/
+  check_for_errors(unit_cell,details,num_orbs);
+
+  inner_wrapper(file_name,use_stdin_stdout);
+
+  fprintf(status_file,"Done!\n");
+  fprintf(stdout,"Done!\n");
+
+  /* close the files and exit */
+  #ifdef INCLUDE_NETCDF_SUPPORT
+  if( details->do_netCDF ){
+    netCDF_close_file(details);
+  }
+  #endif
+
+    if (!use_stdin_stdout) {
+      fclose(status_file);
+      fclose(output_file);
+    }
 }
