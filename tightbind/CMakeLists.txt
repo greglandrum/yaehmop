@@ -23,7 +23,6 @@ set(YAEHMOP_SRCS
   K_overlap_mat.c
   kpoints.c
   lovlap.c
-  main.c
   matrices.c
   memory.c
   mod_mulliken.c
@@ -78,8 +77,12 @@ add_definitions(-DEHT_PARM_FILE=\"${PARM_FILE_LOC}\")
 # This just adds an underscore after some function names in the source...
 add_definitions(-DUNDERSCORE_FORTRAN)
 
+# create the library
+add_library(yaehmop_eht ${YAEHMOP_SRCS})
+
 # Add the executable and link to the C math library
-add_executable(bind ${YAEHMOP_SRCS})
+add_executable(bind main.c)
+target_link_libraries(bind yaehmop_eht)
 
 # If we are using LAPACK and BLAS, link to them
 if(USE_BLAS_LAPACK)
