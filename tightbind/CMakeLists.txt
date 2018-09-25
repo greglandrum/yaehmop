@@ -4,6 +4,7 @@ project(yaehmop C)
 
 # Source files
 set(YAEHMOP_SRCS
+  abfns.c
   avg_props.c
   bands.c
   charge_mat.c
@@ -20,6 +21,7 @@ set(YAEHMOP_SRCS
   K_hamil.c
   K_overlap_mat.c
   kpoints.c
+  lovlap.c
   main.c
   matrices.c
   memory.c
@@ -69,21 +71,6 @@ if(USE_F2C AND BUILD_STATIC)
 endif(USE_F2C AND BUILD_STATIC)
 
 if(USE_F2C)
-  # We link to the static library of F2C to avoid an error
-  set(F2C_LIB "f2c.a")
-
-  message("-- Building with F2C. Fortran compilers are NOT required.")
-  message("-- The F2C library IS required, however.")
-  message("-- F2C_LIB is currently: ${F2C_LIB}")
-  message("-- Set the F2C library with -DF2C_LIB=<f2c_loc>. Static library is preferred.")
-  message("-- Turn F2C off with -DUSE_F2C=OFF")
-
-  set(YAEHMOP_SRCS
-    ${YAEHMOP_SRCS}
-    f2c_files/abfns.c
-    f2c_files/lovlap.c
-  )
-
   # If we aren't using blas and lapack, we must build these as well
   if(NOT USE_BLAS_LAPACK)
     set(YAEHMOP_SRCS
