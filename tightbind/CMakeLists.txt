@@ -82,7 +82,10 @@ add_library(yaehmop_eht ${YAEHMOP_SRCS})
 
 # Add the executable and link to the C math library
 add_executable(bind main.c)
-target_link_libraries(bind yaehmop_eht)
+target_link_libraries(bind yaehmop_eht m)
+
+add_executable(test_eht test_driver.c)
+target_link_libraries(test_eht yaehmop_eht m)
 
 # If we are using LAPACK and BLAS, link to them
 if(USE_BLAS_LAPACK)
@@ -145,6 +148,3 @@ if(BUILD_STATIC)
   endif(APPLE)
 
 endif(BUILD_STATIC)
-
-# Link to the C Math library
-target_link_libraries(bind m)

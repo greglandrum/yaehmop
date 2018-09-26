@@ -350,6 +350,7 @@ extern void gen_k_point_mesh PROTO((point_type * *points, int num_per_vect[3],
 extern void automagic_k_points PROTO((detail_type * details, cell_type *cell));
 
 extern void run_bind PROTO((char *, bool, char *));
+extern void run_eht PROTO((FILE *));
 
 extern int *my_malloc PROTO((long));
 extern int *my_calloc PROTO((int, int));
