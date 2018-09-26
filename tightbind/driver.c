@@ -720,3 +720,79 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
       fclose(output_file);
     }
 }
+
+/* assumes the global unit_cell and details structures have been set up
+as have num_orbs and the orbital_lookup_table
+*/
+void run_eht(FILE *outstream ){
+  int walsh_step;
+  int i;
+  bool use_stdin_stdout=true;
+
+  status_file = outstream;
+  output_file = outstream;
+
+  fprintf(output_file,"#BIND_OUTPUT version: %s\n\n",VERSION_STRING);
+
+  /********
+
+    read in the data
+
+  *********/
+  //read_inputfile(unit_cell,details,file_name,&num_orbs,&orbital_lookup_table,the_file,parm_file_name);
+
+  /* copy the file name into the details structure */
+  strcpy(details->filename,"no_file");
+
+
+  /* open the file that will be used for walsh output (if we need one) */
+  if(details->walsh_details.num_vars != 0){
+    walsh_file = outstream;
+  }
+
+  /**********
+
+    In order to be able to have the number of symmetry elements change
+      with the distortions in a Walsh diagram, determine what elements
+      are present throughout the distortion.
+
+  **********/
+  if(details->walsh_details.num_vars != 0){
+    walsh_update(unit_cell,details,0,0);
+    find_walsh_sym_ops(unit_cell,details);
+  }else{
+    if( unit_cell->using_Zmat )
+      eval_Zmat_locs(unit_cell->atoms,unit_cell->num_atoms,unit_cell->dim,1);
+    else if( unit_cell->using_xtal_coords ) eval_xtal_coord_locs(unit_cell,1);
+    if( unit_cell->geom_frags && !details->walsh_details.num_vars )
+      process_geom_frags(unit_cell);
+
+    if(details->use_symmetry) find_sym_ops(details,unit_cell);
+  }
+
+  /*****
+    if we are using automagic k-points, at this point
+     we may need to do a walsh_update to get a set of atomic
+     positions, then we can calculate that atomic positions
+     to determine the lattice constants so that a valid
+     reciprocal lattice can be built.
+  ******/
+  if(details->use_automatic_kpoints){
+    if(details->walsh_details.num_vars != 0 ) walsh_update(unit_cell,details,0,0);
+
+    automagic_k_points(details,unit_cell);
+  }
+
+  /*********
+
+    Put any error checking that needs to be done into this
+     function
+
+  *********/
+  check_for_errors(unit_cell,details,num_orbs);
+
+  inner_wrapper("no_file",true);
+
+  fprintf(status_file,"Done!\n");
+
+}
