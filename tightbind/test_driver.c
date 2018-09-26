@@ -85,15 +85,17 @@ void main(int argc, char **argv){
   details->K_POINTS = (k_point_type *)calloc(1,sizeof(k_point_type));
   if( !details->K_POINTS ) fatal("Can't allocate the single k point.");
   details->K_POINTS[0].weight = 1.0;
-  details->avg_props = 1;
-  details->no_total_DOS_PRT = 1;
+  details->avg_props = 0;
+  details->use_symmetry = 1;
+  details->net_chg_PRT=1;
+  details->ROP_mat_PRT=1;
 
 
   unit_cell->using_Zmat = 0;
   unit_cell->using_xtal_coords = 0;
 
 
-  unit_cell->num_atoms = 2;
+  unit_cell->num_atoms = 3;
   unit_cell->atoms = (atom_type *)calloc(unit_cell->num_atoms,sizeof(atom_type));
   if(!unit_cell->atoms){
     sprintf(err_string,"Can't allocate memory for: %d atoms.",unit_cell->num_atoms);
@@ -104,13 +106,18 @@ void main(int argc, char **argv){
   unit_cell->atoms[0].loc.y = 0.0;
   unit_cell->atoms[0].loc.z = 0.0;
 
-  safe_strcpy(unit_cell->atoms[1].symb,"H");
+  safe_strcpy(unit_cell->atoms[1].symb,"C");
   unit_cell->atoms[1].loc.x = 0.0;
   unit_cell->atoms[1].loc.y = 0.0;
   unit_cell->atoms[1].loc.z = 1.0;
+
+  safe_strcpy(unit_cell->atoms[2].symb,"N");
+  unit_cell->atoms[2].loc.x = 0.0;
+  unit_cell->atoms[2].loc.y = 0.0;
+  unit_cell->atoms[2].loc.z = 2.1;
+
   unit_cell->charge = 0.0;
 
-  details->use_symmetry = 1;
 
   // shouldn't need to change below here
   fill_atomic_parms(unit_cell->atoms,unit_cell->num_atoms,NULL,NULL);
@@ -118,10 +125,22 @@ void main(int argc, char **argv){
   charge_to_num_electrons(unit_cell);
   build_orbital_lookup_table(unit_cell,&num_orbs,&orbital_lookup_table);
 
+
   /* install the sig_int handler */
   signal(SIGINT,handle_sigint);
 
   run_eht(dest);
+
+  //pull properties
+  for(int i=0;i<unit_cell->num_atoms;i++){
+   printf(">>>> Atom %d: %.2f\n",i+1,properties.net_chgs[i]);
+  }
+
+  for(int i=0;i<unit_cell->num_atoms;i++){
+  for(int j=0;j<i;j++){
+   printf(">>>> ROP %d-%d: %.2f\n",i+1,j+1,properties.ROP_mat[i*(i+1)/2 + j]);
+  }
+}
 
   free(unit_cell);
   free(details);
