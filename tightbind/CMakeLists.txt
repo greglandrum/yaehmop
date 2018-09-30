@@ -4,6 +4,7 @@ project(yaehmop C)
 
 # Source files
 set(YAEHMOP_SRCS
+  abfns.c
   avg_props.c
   bands.c
   charge_mat.c
@@ -20,6 +21,7 @@ set(YAEHMOP_SRCS
   K_hamil.c
   K_overlap_mat.c
   kpoints.c
+  lovlap.c
   main.c
   matrices.c
   memory.c
@@ -43,12 +45,6 @@ set(YAEHMOP_SRCS
   Zmat.c
 )
 
-# Should we use F2C?
-option(USE_F2C
-  "Whether to compile using only C compilers with the F2C library
-   Note that you must be able to link to the f2c library for this to work."
-  ON)
-
 # Should we use blas and lapack?
 option(USE_BLAS_LAPACK
        "Whether or not to link to BLAS and LAPACK for much faster matrix
@@ -59,64 +55,16 @@ option(BUILD_STATIC
        "Whether or not to build the entire executable as static"
        OFF)
 
-# Using F2C and building statically is possible, but libf2c.a will likely have
-# a dynamic dependency (unless one built it from source themselves). So this
-# is probably not going to produce a purely static executable...
-# There seems to be some issues with this...
-if(USE_F2C AND BUILD_STATIC)
-  message(FATAL_ERROR
-          "We currently do not support both USE_F2C and BUILD_STATIC together.")
-endif(USE_F2C AND BUILD_STATIC)
 
-if(USE_F2C)
-  # We link to the static library of F2C to avoid an error
-  set(F2C_LIB "f2c.a")
-
-  message("-- Building with F2C. Fortran compilers are NOT required.")
-  message("-- The F2C library IS required, however.")
-  message("-- F2C_LIB is currently: ${F2C_LIB}")
-  message("-- Set the F2C library with -DF2C_LIB=<f2c_loc>. Static library is preferred.")
-  message("-- Turn F2C off with -DUSE_F2C=OFF")
-
+# If we aren't using blas and lapack, we must build these as well
+if(NOT USE_BLAS_LAPACK)
   set(YAEHMOP_SRCS
     ${YAEHMOP_SRCS}
-    f2c_files/abfns.c
-    f2c_files/lovlap.c
+    cboris.c
+    diag.c
   )
+endif(NOT USE_BLAS_LAPACK)
 
-  # If we aren't using blas and lapack, we must build these as well
-  if(NOT USE_BLAS_LAPACK)
-    set(YAEHMOP_SRCS
-      ${YAEHMOP_SRCS}
-      f2c_files/cboris.c
-      f2c_files/diag.c
-    )
-  endif(NOT USE_BLAS_LAPACK)
-
-else(USE_F2C)
-  message("-- Building without F2C. Fortran compilers ARE required.")
-  # We have to find a Fortran compiler if we are not using F2C
-  enable_language(Fortran)
-  set(YAEHMOP_SRCS
-    ${YAEHMOP_SRCS}
-    abfns.f
-    lovlap.f
-  )
-
-  # If we aren't using blas and lapack, we must build these as well
-  if(NOT USE_BLAS_LAPACK)
-    set(YAEHMOP_SRCS
-      ${YAEHMOP_SRCS}
-      cboris.f
-      diag.f
-    )
-  endif(NOT USE_BLAS_LAPACK)
-
-  # Link statically to the gfortran libraries if we need to
-  if (APPLE AND BUILD_STATIC)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgfortran")
-  endif(APPLE AND BUILD_STATIC)
-endif(USE_F2C)
 
 # We link to the static library to avoid an error
 
@@ -131,11 +79,6 @@ add_definitions(-DUNDERSCORE_FORTRAN)
 
 # Add the executable and link to the C math library
 add_executable(bind ${YAEHMOP_SRCS})
-
-# If we are using F2C, we have to link to the library
-if(USE_F2C)
-  target_link_libraries(bind ${F2C_LIB})
-endif(USE_F2C)
 
 # If we are using LAPACK and BLAS, link to them
 if(USE_BLAS_LAPACK)

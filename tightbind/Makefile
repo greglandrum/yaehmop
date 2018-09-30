@@ -8,7 +8,7 @@
 # to change where the program looks for the extended hueckel parameters
 #   change the following:
 # This is the one for isolobal
-PARM_FILE_LOC = \"/home/glandrum/yaehmop/tightbind/eht_parms.dat\"
+PARM_FILE_LOC = \"/yaehmop/tightbind/eht_parms.dat\"
 
 # to use floats instead of doubles, insert -DUSE_FLOATS here.
 #  to perform real symmetry analysis (with principle axis location), use
@@ -16,7 +16,7 @@ PARM_FILE_LOC = \"/home/glandrum/yaehmop/tightbind/eht_parms.dat\"
 #     portions of the meschach libraries installed.
 
 #stripped down with optimization and LAPACK
-CFLAGS =  -g  -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DUNDERSCORE_FORTRAN -DANAL_ABOUT_PROTOTYPES
+CFLAGS =  -g  -I/usr/local/include/ -DEHT_PARM_FILE=$(PARM_FILE_LOC) -DANAL_ABOUT_PROTOTYPES
 
 # these are the flags that get passed to the fortran compiler
 #F77FLAGS = -g
@@ -25,7 +25,8 @@ F77FLAGS = -O
 #A linux box w/o complib (using GNU compilers)
 #LIBS = -lm -lf2c 
 LIBS = -lm 
-LOCALLIBS = /usr/lib/liblapack.a /usr/lib/libblas.a -lg2c
+LOCALLIBS = 
+#LOCALLIBS = /usr/lib/x86_64-linux-gnu/lapack/liblapack.a /usr/lib/x86_64-linux-gnu/blas/libblas.a
 
 COBJS = main.o genutil.o fileio.o globals.o memory.o distance_mat.o \
  R_overlap_mat.o mov.o R_hamil.o K_hamil.o kpoints.o K_overlap_mat.o \
@@ -33,11 +34,11 @@ COBJS = main.o genutil.o fileio.o globals.o memory.o distance_mat.o \
  transforms.o symmetry.o princ_axes.o avg_props.o DOS_stuff.o COOP_stuff.o \
  Zmat.o bands.o FMO_stuff.o xtal_coords.o matrices.o chg_it.o \
  mod_mulliken.o postprocess.o muller.o geom_frags.o solid_symmetry.o \
- recip_space.o netCDF_support.o 
+ recip_space.o netCDF_support.o lovlap.o abfns.o cboris.o diag.o
 
 
 #F2COBJS = lovlap.f2c.o abfns.f2c.o cboris.f2c.o diag.f2c.o
-FOBJS = lovlap.o abfns.o cboris.o diag.o
+FOBJS =  
 
 all: bind
 
