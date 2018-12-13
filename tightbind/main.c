@@ -105,6 +105,11 @@ char test_string[80];
 //  argc = ccommand(&argv);
 
 #endif
+  if (strcmp(argv[1], "-v") == 0){
+    fprintf(stdout, "version 1.0?\n");
+    exit(0);
+  }
+
   /* make sure the program was called with the right arguments */
   if( argc < 2){
     fprintf(stderr,"Usage: bind <inputfile> [paramfile]\n");
