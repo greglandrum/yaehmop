@@ -263,8 +263,13 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
         sprintf(tempfilename,"%s.OV",details->filename);
 
 #ifndef USING_THE_MAC
-        overlap_file = open(tempfilename,
-                            O_RDWR|O_TRUNC|O_APPEND|O_CREAT,S_IRUSR|S_IWUSR);
+#ifndef _MSC_VER
+		overlap_file = open(tempfilename,
+			O_RDWR | O_TRUNC | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
+#else
+		overlap_file = open(tempfilename,
+			O_RDWR | O_TRUNC | O_APPEND | O_CREAT, _S_IREAD | _S_IWRITE);
+#endif
 #else
         overlap_file = open(tempfilename,O_RDWR|O_TRUNC|O_APPEND|O_CREAT);
 #endif
@@ -299,8 +304,13 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       if(i==0){
         sprintf(tempfilename,"%s.HAM",details->filename);
 #ifndef USING_THE_MAC
-        hamil_file = open(tempfilename,
-                          O_RDWR|O_APPEND|O_CREAT,S_IRUSR|S_IWUSR);
+#ifndef _MSC_VER
+		hamil_file = open(tempfilename,
+			O_RDWR | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
+#else
+		hamil_file = open(tempfilename,
+			O_RDWR | O_APPEND | O_CREAT, _S_IREAD | _S_IWRITE);
+#endif
 #else
         hamil_file = open(tempfilename,O_RDWR|O_APPEND|O_CREAT);
 #endif
