@@ -105,8 +105,8 @@ char test_string[80];
 //  argc = ccommand(&argv);
 
 #endif
-  if (strcmp(argv[1], "-v") == 0){
-    fprintf(stdout, "version 1.0?\n");
+  if( argc == 2 && strcmp(argv[1], "-v") == 0){
+    fprintf(stdout, "version: %s\n", VERSION_STRING);
     exit(0);
   }
 
