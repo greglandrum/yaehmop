@@ -39,14 +39,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 void main(int argc, char **argv){
   char err_string[240];
 
-  status_file = stdout;
-  output_file = stdout;
+  FILE *nullfile = fopen("nul","w");
 
-    unit_cell = (cell_type *)calloc(1,sizeof(cell_type));
-    details = (detail_type *)calloc(1,sizeof(detail_type));
-    if(!unit_cell || !details) fatal("Can't allocate initial memory.");
+  status_file = nullfile;
+  output_file = nullfile;
 
-    FILE *dest=stdout;
+  unit_cell = (cell_type *)calloc(1,sizeof(cell_type));
+  details = (detail_type *)calloc(1,sizeof(detail_type));
+  if(!unit_cell || !details) fatal("Can't allocate initial memory.");
+  FILE *dest=nullfile;
 
   /*******
     initialize some variables
