@@ -80,12 +80,16 @@ add_definitions(-DUNDERSCORE_FORTRAN)
 # create the library
 add_library(yaehmop_eht ${YAEHMOP_SRCS})
 
+if(NOT MSVC_VERSION)
+set(SYSTEM_MATH_LIBRARY m)
+endif(NOT MSVC_VERSION)
+
 # Add the executable and link to the C math library
 add_executable(bind main.c)
-target_link_libraries(bind yaehmop_eht m)
+target_link_libraries(bind yaehmop_eht ${SYSTEM_MATH_LIBRARY})
 
 add_executable(test_eht test_driver.c)
-target_link_libraries(test_eht yaehmop_eht m)
+target_link_libraries(test_eht yaehmop_eht ${SYSTEM_MATH_LIBRARY})
 
 # If we are using LAPACK and BLAS, link to them
 if(USE_BLAS_LAPACK)
