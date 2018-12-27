@@ -98,11 +98,16 @@ void main()
 //  argc = ccommand(&argv);
 
 #else
+  if( argc == 2 && strcmp(argv[1], "-v") == 0){
+    fprintf(stdout, "version: %s\n", VERSION_STRING);
+    exit(0);
+  }
+
   // If the argument is --use_stdin_stdout, use stdin and stdout! Makes sense...
   if (strcmp(argv[1], "--use_stdin_stdout") == 0){
     use_stdin_stdout = true;
   }
-
+  
   /* make sure the program was called with the right arguments */
   if( argc < 2){
     fprintf(stderr,"Usage: bind <inputfile> [paramfile]\n");
