@@ -58,8 +58,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif /* defined(_NO_PROTO) || defined(__alpha) || defined(MIPSEL) */
 #endif /* PROTO */
 
-extern void main PROTO((int, char **));
-
 extern real eval_COOP PROTO((COOP_type *, detail_type *, cell_type *, int,
                              avg_prop_info_type *, hermetian_matrix_type,
                              K_orb_ptr_type *, int *));
