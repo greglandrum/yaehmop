@@ -130,6 +130,7 @@ void full_R_space_Hamiltonian(cell_type *cell,detail_type *details,
   atom_type *atom_ptr1,*atom_ptr2;
   real temp,temp2;
   static real *diagonal_elements=0;
+  static int diagonal_elements_size=0;
 #if 0
 real *rham;
 
@@ -137,9 +138,11 @@ rham = (real *)calloc(num_orbs*num_orbs,sizeof(real));
 #endif
 
   /* get space for the diagonal elements if it hasn't been done already */
-  if( !diagonal_elements ){
+  if( !diagonal_elements || diagonal_elements_size != num_orbs){
+    if(diagonal_elements) free(diagonal_elements);
     diagonal_elements = (real *)calloc(num_orbs,sizeof(real));
     if( !diagonal_elements )fatal("Can't get memory to build hamiltonian.");
+    diagonal_elements_size = num_orbs;
   }
 
   /******
