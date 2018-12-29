@@ -73,19 +73,8 @@ void main()
 #endif
 {
   FILE *temp_file;
-<<<<<<< HEAD
-  char file_name[80],err_string[240];
-char test_string[80];
-  int zeta_converged,Hii_converged;
-  real new_num_electrons;
-  COOP_type *COOP_ptr;
-  int i;
-  FILE *the_file=0;
-  int walsh_step;
-=======
   char file_name[500];
   FILE *the_file=0;
->>>>>>> 19d4ceb... move driver code to separate file
   bool use_stdin_stdout = false;
 #ifdef USING_THE_MAC
   int argc;
