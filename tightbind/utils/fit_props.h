@@ -37,12 +37,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include <math.h>
 
-#ifdef USING_THE_MAC
-#include <SIOUX.h>
-extern FILE *choose_mac_file(char *, char);
-#include "Mac_Fopen.h"
-#endif
-
 /******
   These are used by the fileio routines.
 *******/

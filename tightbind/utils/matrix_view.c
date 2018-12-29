@@ -29,13 +29,9 @@
 real tic_values[] = {3.0,2.5,2.0,1.5,1.0,0.5,0.25,0.1,0.05,-1.0};
 
 
-#ifndef USING_THE_MAC
 void main(argc, argv)
   int argc;
   char **argv;
-#else
-void main()
-#endif
 {
   int infile;
   FILE *psfile,*the_file;
@@ -49,30 +45,7 @@ void main()
   real mag,max_mag;
   real gray;
   int tot_cells, cells_written;
-#ifdef USING_THE_MAC
-  int argc;
-  char argv[4][80];
 
-        /* set up some stuff for Sioux */
-        //SIOUXSettings.standalone = FALSE;
-        SIOUXSettings.asktosaveonclose = FALSE;
-        SIOUXSettings.autocloseonquit = FALSE;
-        printf("Starting matrix_view.\n");
-
-  the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
-  if( !the_file ) {
-          fatal("User cancelled intial file open");
-  }
-
-  printf("Enter name of output (PS) file: ");
-  scanf("%s",argv[2]);
-  argc = 3;
-
-
-  /* get the command line arguments */
-//  argc = ccommand(&argv);
-
-#endif
   if(argc < 3){
     fatal("Usage: matrix_view infile outfile");
   }
@@ -81,11 +54,8 @@ void main()
   else draw_grid = 0;
 
   /* open the file */
-#ifndef USING_THE_MAC
   infile = open(argv[1],O_RDONLY,"r");
-#else
-  infile = open(argv[1],O_RDONLY);
-#endif
+
   if( infile == -1 ){
     error("Can't open file for binary I/O.");
     return;

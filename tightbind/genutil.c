@@ -121,11 +121,6 @@ void nonfatal_bug( char *errorstring, char *file, int line )
 void fatal( errorstring )
   char *errorstring;
 {
-#ifdef USING_THE_MAC
-  char composite_string[255];
-  const char *initstring = "FATAL ERROR: ";
-  unsigned char len;
-#endif
   fprintf( stderr, "FATAL ERROR: %s.\nExecution Terminated.\n",
       errorstring );
   if( status_file ){
@@ -136,13 +131,6 @@ void fatal( errorstring )
   if(output_file){
     fflush(output_file);
   }
-#ifdef USING_THE_MAC
-        bzero(composite_string,255*sizeof(char));
-        strcpy((char *)composite_string,initstring);
-        strcat((char *)composite_string,errorstring);
-        ParamText(CtoPstr(composite_string),NULL,NULL,NULL);
-        Alert(130, NULL);
-#endif
   exit(-1);
 }
 
@@ -154,13 +142,6 @@ void fatal( errorstring )
 void error( errorstring )
   char *errorstring;
 {
-#ifdef USING_THE_MAC
-  char composite_string[255];
-  const char *initstring = "ERROR: ";
-  short disposition;
-  unsigned char len;
-#endif
-
 
   fprintf( stderr, "ERROR: %s.\n", errorstring );
   if( status_file ){
@@ -168,19 +149,6 @@ void error( errorstring )
     fflush(status_file);
   }
   if( output_file) fflush(output_file);
-
-#ifdef USING_THE_MAC
-        bzero(composite_string,255*sizeof(char));
-        strcpy((char *)composite_string,initstring);
-        strcat((char *)composite_string,errorstring);
-
-        ParamText(CtoPstr(composite_string),NULL,NULL,NULL);
-        disposition = Alert(131, NULL);
-        switch(disposition){
-        case 2: fprintf(stderr,"Continuing\n");break;
-        case 1: fprintf(stderr,"Terminated Execution\n");exit(555);
-        }
-#endif
 
   return;
 }

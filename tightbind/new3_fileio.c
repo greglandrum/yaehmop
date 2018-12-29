@@ -78,13 +78,6 @@ void read_NEW3file(cell,details,infile,parm_file_name)
   int temp;
 
   p_DOS_type *p_DOS,*temp_p_dos;
-#ifdef USING_THE_MAC
-  fprintf(stderr,"That doesn't look like a bind input file.  This version\n \
-  of bind makes no attempt to read in new3 input files, so we're going to\n \
-  error out now and let you try another input file\n");
-  fatal("Bogus input file\n");
-
-#else
 
   /* if we made it this far, the title of the file has already been read in.... */
 
@@ -289,5 +282,4 @@ contributions.");
     details->num_KPOINTS = 1;
     details->K_POINTS = points;
   }
-#endif
 }
