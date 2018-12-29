@@ -1510,6 +1510,7 @@ void find_MO_symmetries(num_orbs,details,cell,eigenset,overlap,orbital_lookup_ta
 {
   static real *AO_coeffs=0;
   static real *norm_fact=0;
+  static int norm_fact_size=0;
   int i,j,k,ops_so_far;
   int num_atoms;
   int atom1,atom2;
@@ -1526,8 +1527,12 @@ void find_MO_symmetries(num_orbs,details,cell,eigenset,overlap,orbital_lookup_ta
     /* this needs to be larger for f orbitals */
     AO_coeffs = (real *)calloc(END_D + 1,sizeof(real));
     if( !AO_coeffs ) fatal("Can't get space for AO_coeffs in find_MO_symmetries.");
+  }
+  if(norm_fact_size != num_orbs || !norm_fact){
+    if(norm_fact) free(norm_fact);
     norm_fact = (real *)calloc(num_orbs,sizeof(real));
     if( !norm_fact ) fatal("Can't get memory for norm_fact in find_MO_symmetries.");
+    norm_fact_size = num_orbs;
   }
 
   num_atoms = cell->num_atoms;
