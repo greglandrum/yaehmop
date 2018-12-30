@@ -8,13 +8,9 @@
 ************************************************************************/
 #include "fit_props.h"
 
-#ifndef USING_THE_MAC
 void main(argc, argv)
   int argc;
   char **argv;
-#else
-void main()
-#endif
 {
   int i,j,k;
   FILE *infile,*outfile,*the_file;
@@ -36,27 +32,6 @@ void main()
   int num_walsh_steps;
   int which_walsh_step;
   int temp;
-#ifdef USING_THE_MAC
-  int argc;
-  char argv[4][80];
-
-        /* set up some stuff for Sioux */
-        //SIOUXSettings.standalone = FALSE;
-        SIOUXSettings.asktosaveonclose = FALSE;
-        SIOUXSettings.autocloseonquit = FALSE;
-        printf("Starting fit_coop.\n");
-
-  the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
-  if( !the_file ) {
-          fatal("User cancelled intial file open");
-  } else{
-          argc = 2;
-  }
-
-  /* get the command line arguments */
-//  argc = ccommand(&argv);
-
-#endif
 
   /* open the files */
   if( argc < 2 ){

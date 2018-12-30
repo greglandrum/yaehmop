@@ -59,45 +59,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 FILE *COHP_file;
 const char greetings[]="Welcome to the 10th Anniversary edition of YAeHMOP!\n";
 
-#ifdef USING_THE_MAC
-extern FILE *choose_mac_file(char *,char);
-#include "Mac_Fopen.h"
-#endif
-
-#ifndef USING_THE_MAC
 void main(argc, argv)
   int argc;
   char **argv;
-#else
-void main()
-#endif
 {
   FILE *temp_file;
   char file_name[500];
   FILE *the_file=0;
   bool use_stdin_stdout = false;
-#ifdef USING_THE_MAC
-  int argc;
-  char argv[4][80];
 
-        /* set up some stuff for Sioux */
-        //SIOUXSettings.standalone = FALSE;
-        SIOUXSettings.asktosaveonclose = FALSE;
-        SIOUXSettings.autocloseonquit = FALSE;
-        printf("Starting bind.\n");
-
-  the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
-  if( !the_file ) {
-          fatal("User cancelled intial file open");
-  } else{
-          argc = 2;
-          strncpy(file_name,argv[1],500);
-  }
-
-  /* get the command line arguments */
-//  argc = ccommand(&argv);
-
-#endif
   if( argc == 2 && strcmp(argv[1], "-v") == 0){
     fprintf(stdout, "version: %s\n", VERSION_STRING);
     exit(0);

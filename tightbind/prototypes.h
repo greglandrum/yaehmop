@@ -378,6 +378,3 @@ extern int zheev_ PROTO((char *jobz, char *uplo, integer *n, doublecomplex *a,
                          integer *lwork, doublereal *rwork, integer *info));
 #endif
 
-#ifdef USING_THE_MAC
-extern FILE *choose_mac_file(char *file_name, char);
-#endif

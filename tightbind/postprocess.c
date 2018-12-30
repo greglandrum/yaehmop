@@ -316,14 +316,10 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
     *******/
     if(!FCO_file){
       sprintf(FCO_filename,"%s.FCO",details->filename);
-#ifndef USING_THE_MAC
 #ifndef _MSC_VER
-	  FCO_file = open(FCO_filename, O_RDWR | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
+  	  FCO_file = open(FCO_filename, O_RDWR | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
 #else
-	  FCO_file = open(FCO_filename, O_RDWR | O_TRUNC | O_CREAT, _S_IREAD | _S_IWRITE);
-#endif
-#else
-      FCO_file = open(FCO_filename,O_RDWR|O_APPEND|O_CREAT);
+	    FCO_file = open(FCO_filename, O_RDWR | O_TRUNC | O_CREAT, _S_IREAD | _S_IWRITE);
 #endif
       if( FCO_file == -1 ){
         fatal("Can't open .FCO file for binary I/O");

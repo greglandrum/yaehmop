@@ -262,16 +262,12 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       if(i==0){
         sprintf(tempfilename,"%s.OV",details->filename);
 
-#ifndef USING_THE_MAC
 #ifndef _MSC_VER
-		overlap_file = open(tempfilename,
-			O_RDWR | O_TRUNC | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
+    		overlap_file = open(tempfilename,
+    			O_RDWR | O_TRUNC | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 #else
-		overlap_file = open(tempfilename,
-			O_RDWR | O_TRUNC | O_APPEND | O_CREAT, _S_IREAD | _S_IWRITE);
-#endif
-#else
-        overlap_file = open(tempfilename,O_RDWR|O_TRUNC|O_APPEND|O_CREAT);
+    		overlap_file = open(tempfilename,
+    			O_RDWR | O_TRUNC | O_APPEND | O_CREAT, _S_IREAD | _S_IWRITE);
 #endif
 
         if( overlap_file == -1 ){
@@ -303,16 +299,12 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       /* if this is the first call, the open the file */
       if(i==0){
         sprintf(tempfilename,"%s.HAM",details->filename);
-#ifndef USING_THE_MAC
 #ifndef _MSC_VER
-		hamil_file = open(tempfilename,
-			O_RDWR | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
+    		hamil_file = open(tempfilename,
+    			O_RDWR | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 #else
-		hamil_file = open(tempfilename,
-			O_RDWR | O_APPEND | O_CREAT, _S_IREAD | _S_IWRITE);
-#endif
-#else
-        hamil_file = open(tempfilename,O_RDWR|O_APPEND|O_CREAT);
+		    hamil_file = open(tempfilename,
+			    O_RDWR | O_APPEND | O_CREAT, _S_IREAD | _S_IWRITE);
 #endif
         if( hamil_file == -1 ){
           fatal("Can't open .HAM file for binary I/O");

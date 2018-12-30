@@ -453,10 +453,8 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
 
 
   /* open the parameter file */
-#ifndef USING_THE_MAC
   if (!parm_file_name)
     parm_file_name = (char *)getenv("BIND_PARM_FILE");
-#endif
   if( !parm_file_name ){
     parm_file_name = (char *)calloc(240,sizeof(char));
     if(!parm_file_name)fatal("can't get memory for parm_file_name");
@@ -467,21 +465,12 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
   bzero(custom_atoms,MAX_CUSTOM_ATOMS*sizeof(atom_type));
 
   /* make sure that it opened, but don't exit if not... */
-#ifndef USING_THE_MAC
   if(!parmfile){
     safe_strcpy(err_string,"Can't open parameter file: ");
     strcat(err_string,parm_file_name);
     strcat(err_string," using default data in eht_parms.h...");
     error(err_string);
   }
-#else
-#include "Mac_Fopen.h"
-  if( !parmfile ){
-          error("Can't open parm file, please specify a name");
-          parmfile = choose_mac_file(parm_file_name,MAC_FOPEN_OPEN_NOCD);
-          if( !parmfile ) fatal("Still can't do it.");
-  }
-#endif
   /* loop over the atoms and get the parameters */
   num_custom = 0;
   for(i=0;i<num_atoms;i++){
