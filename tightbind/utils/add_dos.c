@@ -39,13 +39,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ************************************************************************/
 #include "fit_props.h"
 
-#ifndef USING_THE_MAC
 void main(argc, argv)
   int argc;
   char **argv;
-#else
-void main()
-#endif
 {
   int i,j,k;
   FILE *infile1,*infile2,*outfile, *the_file;
@@ -58,34 +54,6 @@ void main()
   int curve1,curve2;
   real val1, val2;
   char window_by_hand;
- #ifdef USING_THE_MAC
-  int argc;
-  char argv[4][80];
-
-        /* set up some stuff for Sioux */
-        //SIOUXSettings.standalone = FALSE;
-        SIOUXSettings.asktosaveonclose = FALSE;
-        SIOUXSettings.autocloseonquit = FALSE;
-        printf("Starting bind.\n");
-
-  the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
-  if( !the_file ) {
-          fatal("User cancelled intial file open");
-  }
-  the_file = choose_mac_file(argv[2],MAC_FOPEN_OPEN_CD);
-  if( !the_file ) {
-          fatal("User cancelled second file open");
-  }
-
-  printf("Enter the name of the output file: ");
-  scanf("%s",argv[3]);
-
-  argc = 4;
-  /* get the command line arguments */
-//  argc = ccommand(&argv);
-
-#endif
-
 
   /* open the files */
   if( argc < 4 ){

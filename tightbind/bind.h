@@ -75,12 +75,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef USING_THE_MAC
 #include <sys/stat.h>
 #include <sys/types.h>
-#else
-#include <SIOUX.h>
-#endif
 
 #ifdef INCLUDE_NETCDF_SUPPORT
 #include <netcdf.h>
@@ -93,11 +89,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   properly.  In general the user doesn't have to worry about this.
 
 **********/
-#ifndef USING_THE_MAC
-#include <stdlib.h>
-#else
-#include <unix.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -141,10 +132,8 @@ the
 ******/
 #define BOOL_CHAR_TO_VALUE(a) a = (a == 'T' ? 1 : 0)
 
-#ifndef USING_THE_MAC
 #define TRUE 1
 #define FALSE 0
-#endif
 
 /*****
   used as tabs into the matrices

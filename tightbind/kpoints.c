@@ -262,12 +262,8 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       if(i==0){
         sprintf(tempfilename,"%s.OV",details->filename);
 
-#ifndef USING_THE_MAC
         overlap_file = open(tempfilename,
                             O_RDWR|O_TRUNC|O_APPEND|O_CREAT,S_IRUSR|S_IWUSR);
-#else
-        overlap_file = open(tempfilename,O_RDWR|O_TRUNC|O_APPEND|O_CREAT);
-#endif
 
         if( overlap_file == -1 ){
           fatal("Can't open .OV file for binary I/O");
@@ -298,12 +294,9 @@ void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
       /* if this is the first call, the open the file */
       if(i==0){
         sprintf(tempfilename,"%s.HAM",details->filename);
-#ifndef USING_THE_MAC
         hamil_file = open(tempfilename,
                           O_RDWR|O_APPEND|O_CREAT,S_IRUSR|S_IWUSR);
-#else
-        hamil_file = open(tempfilename,O_RDWR|O_APPEND|O_CREAT);
-#endif
+
         if( hamil_file == -1 ){
           fatal("Can't open .HAM file for binary I/O");
         }

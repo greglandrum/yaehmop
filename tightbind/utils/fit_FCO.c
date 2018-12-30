@@ -85,13 +85,9 @@ int sort_FCO_helper(const void *p1,const void *p2)
 
 
 
-#ifndef USING_THE_MAC
 void main(argc, argv)
   int argc;
   char **argv;
-#else
-void main()
-#endif
 {
   int FCO_file;
   int test_int;
@@ -117,27 +113,6 @@ void main()
   int which_frag,orbs_this_frag;
 
 long int calls_to_exp = 0;
- #ifdef USING_THE_MAC
-  int argc;
-  char argv[4][80];
-
-        /* set up some stuff for Sioux */
-        //SIOUXSettings.standalone = FALSE;
-        SIOUXSettings.asktosaveonclose = FALSE;
-        SIOUXSettings.autocloseonquit = FALSE;
-        printf("Starting fit_FCO.\n");
-
-  the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
-  if( !the_file ) {
-          fatal("User cancelled intial file open");
-  } else{
-          argc = 2;
-  }
-
-  /* get the command line arguments */
-//  argc = ccommand(&argv);
-
-#endif
 
   if(argc < 2){
     fatal("Usage: fit_FCO <infile>");
@@ -146,11 +121,8 @@ long int calls_to_exp = 0;
 
   /* open the input file */
   sprintf(filename,"%s.FCO",argv[1]);
-#ifndef USING_THE_MAC
   FCO_file = open(filename,O_RDONLY,"r");
-#else
-  FCO_file = open(filename,O_RDONLY);
-#endif
+
   if( FCO_file == -1 ){
     error("Can't open file for binary I/O.");
     return;

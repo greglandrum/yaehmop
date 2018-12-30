@@ -36,13 +36,9 @@ int sort_distances_helper(dist1,dist2)
   else return( 0 );
 }
 
-#ifndef USING_THE_MAC
 void main(argc, argv)
   int argc;
   char **argv;
-#else
-void main()
-#endif
 {
   FILE *the_file;
   int infile;
@@ -58,28 +54,6 @@ void main()
   int num_so_far;
   int curr_type;
   char *dummies;
-#ifdef USING_THE_MAC
-  int argc;
-  char argv[4][80];
-
-        /* set up some stuff for Sioux */
-        //SIOUXSettings.standalone = FALSE;
-        SIOUXSettings.asktosaveonclose = FALSE;
-        SIOUXSettings.autocloseonquit = FALSE;
-        printf("Starting cooperate.\n");
-
-  the_file = choose_mac_file(argv[1],MAC_FOPEN_OPEN_CD);
-  if( !the_file ) {
-          fatal("User cancelled intial file open");
-  } else{
-          argc = 2;
-  }
-
-  /* get the command line arguments */
-//  argc = ccommand(&argv);
-
-#endif
-
 
   if(argc < 2){
     fatal("Usage: cooperate infile [min_dist max_dist tolerance]");
@@ -101,11 +75,7 @@ void main()
   }
 
   /* open the file */
-#ifndef USING_THE_MAC
   infile = open(argv[1],O_RDONLY,"r");
-#else
-  infile = open(argv[1],O_RDONLY);
-#endif
   if( infile == -1 ){
     fatal("Can't open file for binary I/O.");
   }
