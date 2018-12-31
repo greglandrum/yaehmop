@@ -136,6 +136,7 @@ extern void construct_band_structure PROTO(
 extern void eval_charge_matrix PROTO((cell_type *, eigenset_type,
                                       hermetian_matrix_type, int, int *, real *,
                                       real *));
+extern void reduced_charge_matrix PROTO((int, int, int *, real *, real *));
 extern void check_a_cell PROTO((atom_type *, point_type, int, real, char *));
 extern void check_nn_contacts PROTO((cell_type *, detail_type *details));
 extern void build_distance_matrix PROTO((cell_type *, detail_type *details));

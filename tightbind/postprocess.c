@@ -737,6 +737,11 @@ INCREASE to the right)\n");
                       num_orbs);
     }
 
+    /* this stores the reduced charge matrix */
+    if( details->Rchg_mat_PRT ){
+      reduced_charge_mat(cell->num_atoms,num_orbs,orbital_lookup_table,
+                       properties->chg_mat,properties->Rchg_mat);
+    }
 
     if( details->chg_mat_PRT || details->Rchg_mat_PRT ){
       fprintf(output_file,"\n\n; \t\tq-q-q-q-q-q-q-q  Charge Matrix q-q-q-q-q-q-q-q\n");
@@ -751,6 +756,14 @@ INCREASE to the right)\n");
                          LABEL_COLS,details->line_width);
 
     }
+    if( details->Rchg_mat_PRT ){
+      fprintf(output_file,
+              "\n;   Reduced Charge Matrix Independant of Occupation\n");
+      printmat(properties->Rchg_mat,cell->num_atoms,num_orbs,output_file,1e-5,
+                      (char)0,details->line_width);
+    }
+
+
     /******
       put in reduced charge matrix stuff here
       *******/

@@ -467,7 +467,7 @@ is present.\n");
         if( !(properties->chg_mat) )
           fatal("Can't get space for the charge matrix.");
         if( details->Rchg_mat_PRT ){
-          properties->Rchg_mat = (real *)my_calloc(cell->num_atoms*cell->num_atoms,sizeof(real));
+          properties->Rchg_mat = (real *)my_calloc(cell->num_atoms*num_orbs,sizeof(real));
           if( !(properties->Rchg_mat) )
             fatal("Can't get space for the reduced charge matrix.");
         }
