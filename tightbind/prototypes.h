@@ -199,6 +199,7 @@ extern void allocate_matrices
            hermetian_matrix_type *, complex **, complex **, eigenset_type *,
            real **, real **, real **, complex **, prop_type *,
            avg_prop_info_type **, int, int *, int *, K_orb_ptr_type **));
+extern void cleanup_memory PROTO(());
 extern void mov PROTO((real *, real *, real *, real *, int, int, real, int, int,
                        int, int, atom_type *));
 extern void calc_occupations PROTO((detail_type *, real, int, real *,

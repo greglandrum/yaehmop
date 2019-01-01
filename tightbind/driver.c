@@ -75,369 +75,424 @@ void inner_wrapper(char *file_name, bool use_stdin_stdout){
       fprintf(output_file,"%d \t %s\n",i+1,test_string);
     }
   }
-/**********
-
-  now do the calculation (loop over walsh diagram points)
-
-  NOTE: this loops always gets executed at least once, since we
-    assume that walsh_details.num_steps has been set to 1.
-
-***********/
-for( walsh_step=0; walsh_step<details->walsh_details.num_steps; walsh_step++){
-
-  /* open the file that will be used for band output (if we need one) */
-  if(details->band_info){
-    if( details->walsh_details.num_steps > 1 )
-      sprintf(temp_file_name,"%s.step%d.band",file_name,walsh_step+1);
-    else
-      sprintf(temp_file_name,"%s.band",file_name);
-    // If we are using stdin and stdout, just use that for the band file
-    if (use_stdin_stdout) {
-      band_file = stdout;
-      // Let's write the name of the file at the top of this part
-      fprintf(stdout, "%s\n", temp_file_name);
-    }
-    else {
-      if( band_file ) fclose(band_file);
-      band_file = fopen(temp_file_name,"w+");
-    }
-    if(!band_file)fatal("Can't open band results file!");
-  }
-
-  /* open the file that will be used for FMO output (if we need one) */
-  if(details->num_FMO_frags){
-    if( details->walsh_details.num_steps > 1 )
-      sprintf(temp_file_name,"%s.step%d.FMO",file_name,walsh_step+1);
-    else
-      sprintf(temp_file_name,"%s.FMO",file_name);
-
-    // If we are using stdin and stdout, just use that for the FMO file
-    if (use_stdin_stdout) {
-      FMO_file = stdout;
-      // Let's write the name of the file at the top of this part
-      fprintf(stdout, "%s\n", temp_file_name);
-    }
-    else {
-      if(FMO_file) fclose(FMO_file);
-      FMO_file = fopen(temp_file_name,"w+");
-    }
-    if(!FMO_file)fatal("Can't open FMO results file!");
-    /******
-
-      put the header into the FMO file
-
-    *******/
-    init_FMO_file(details,num_orbs,unit_cell->num_electrons);
-  }
-
-
-  /*******
-
-    if we are doing a walsh diagram, set up the positions now
-
-    *******/
-  if( details->walsh_details.num_vars != 0 ){
-    walsh_update(unit_cell,details,walsh_step,1);
-
-    /* reset the charges in the update_zetas procedure */
-    update_zetas(unit_cell,properties.net_chgs,(real)unit_cell->num_atoms*ZETA_TOL,
-                 &zeta_converged,RESET);
-  }
-
-  if( details->Execution_Mode != MOLECULAR ){
-    display_lattice_parms(unit_cell);
-  }
-
   /**********
 
-    generate the distance_matrix
+    now do the calculation (loop over walsh diagram points)
 
-    ***********/
-  build_distance_matrix(unit_cell,details);
+    NOTE: this loops always gets executed at least once, since we
+      assume that walsh_details.num_steps has been set to 1.
+
+  ***********/
+  for( walsh_step=0; walsh_step<details->walsh_details.num_steps; walsh_step++){
+
+    /* open the file that will be used for band output (if we need one) */
+    if(details->band_info){
+      if( details->walsh_details.num_steps > 1 )
+        sprintf(temp_file_name,"%s.step%d.band",file_name,walsh_step+1);
+      else
+        sprintf(temp_file_name,"%s.band",file_name);
+      // If we are using stdin and stdout, just use that for the band file
+      if (use_stdin_stdout) {
+        band_file = stdout;
+        // Let's write the name of the file at the top of this part
+        fprintf(stdout, "%s\n", temp_file_name);
+      }
+      else {
+        if( band_file ) fclose(band_file);
+        band_file = fopen(temp_file_name,"w+");
+      }
+      if(!band_file)fatal("Can't open band results file!");
+    }
+
+    /* open the file that will be used for FMO output (if we need one) */
+    if(details->num_FMO_frags){
+      if( details->walsh_details.num_steps > 1 )
+        sprintf(temp_file_name,"%s.step%d.FMO",file_name,walsh_step+1);
+      else
+        sprintf(temp_file_name,"%s.FMO",file_name);
+
+      // If we are using stdin and stdout, just use that for the FMO file
+      if (use_stdin_stdout) {
+        FMO_file = stdout;
+        // Let's write the name of the file at the top of this part
+        fprintf(stdout, "%s\n", temp_file_name);
+      }
+      else {
+        if(FMO_file) fclose(FMO_file);
+        FMO_file = fopen(temp_file_name,"w+");
+      }
+      if(!FMO_file)fatal("Can't open FMO results file!");
+      /******
+
+        put the header into the FMO file
+
+      *******/
+      init_FMO_file(details,num_orbs,unit_cell->num_electrons);
+    }
 
 
-  /* check to see if any calculations are necessary */
-  if(!(details->just_geom)){
+    /*******
+
+      if we are doing a walsh diagram, set up the positions now
+
+      *******/
+    if( details->walsh_details.num_vars != 0 ){
+      walsh_update(unit_cell,details,walsh_step,1);
+
+      /* reset the charges in the update_zetas procedure */
+      update_zetas(unit_cell,properties.net_chgs,(real)unit_cell->num_atoms*ZETA_TOL,
+                  &zeta_converged,RESET);
+    }
+
+    if( details->Execution_Mode != MOLECULAR ){
+      display_lattice_parms(unit_cell);
+    }
 
     /**********
 
-      loop until the zeta values converge (if we are doing either a self
-      consistent calculation or charge iteration,  otherwise this
-      just gets executed once)
+      generate the distance_matrix
 
       ***********/
-    zeta_converged = 0;
-    Hii_converged = 0;
-    while( !zeta_converged || !Hii_converged ){
-      /*************
+    build_distance_matrix(unit_cell,details);
 
-        if we evaluate all of the overlaps once, then do it now...
 
-        **************/
-      if( (details->Execution_Mode == FAT && details->store_R_overlaps ) ||
-         details->Execution_Mode == MOLECULAR ){
-        /* build the R space overlap matrix */
-        R_space_overlap_matrix(unit_cell,details,Overlap_R,num_orbs,
-                               tot_overlaps,orbital_lookup_table,0);
+    /* check to see if any calculations are necessary */
+    if(!(details->just_geom)){
+
+      /**********
+
+        loop until the zeta values converge (if we are doing either a self
+        consistent calculation or charge iteration,  otherwise this
+        just gets executed once)
+
+        ***********/
+      zeta_converged = 0;
+      Hii_converged = 0;
+      while( !zeta_converged || !Hii_converged ){
+        /*************
+
+          if we evaluate all of the overlaps once, then do it now...
+
+          **************/
+        if( (details->Execution_Mode == FAT && details->store_R_overlaps ) ||
+          details->Execution_Mode == MOLECULAR ){
+          /* build the R space overlap matrix */
+          R_space_overlap_matrix(unit_cell,details,Overlap_R,num_orbs,
+                                tot_overlaps,orbital_lookup_table,0);
+
+          /***********
+
+            if we're doing FMO, do all the work for it now...
+
+            for standard FMO (projecting molecular orbitals) we only
+            need to do this once.
+
+            ***********/
+          if( details->num_FMO_frags || (details->num_FCO_frags &&
+                                        details->Execution_Mode == MOLECULAR) ){
+
+            /******
+
+              build the hamiltonian... this is molecular type hamiltonian, so
+              it's built differently here when we are doing an extended system.
+
+              *******/
+            full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,num_orbs,
+                                    orbital_lookup_table,1);
+
+            /* first build the matrices */
+            build_FMO_overlap(details,num_orbs,unit_cell->num_atoms,Overlap_R,
+                              orbital_lookup_table);
+            build_FMO_hamil(details,num_orbs,unit_cell->num_atoms,Hamil_R,
+                            orbital_lookup_table);
+
+            /* now diagonalize them */
+            diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_work);
+
+            /* generate the transform matrices */
+            gen_FMO_tform_matrices(details);
+          }
+          /* build the real hamiltonian */
+          full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,
+                                  num_orbs,orbital_lookup_table,0);
+
+
+        }
+        else if( details->Execution_Mode == FAT &&
+                !details->store_R_overlaps ){
+          fprintf(stderr,"Storing S(k) instead of S(R)\n");
+          fprintf(status_file,
+                  "Storing the %d S(k)'s instead of the %d S(R)'s to save memory.\n",
+                  details->num_KPOINTS,tot_overlaps);
+
+          build_all_K_overlaps(unit_cell,details,Overlap_R,Overlap_K,
+                              num_orbs,tot_overlaps,orbital_lookup_table);
+
+          /* build the real hamiltonian */
+          full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,
+                                  num_orbs,orbital_lookup_table,0);
+
+        }
+        else if( details->Execution_Mode == THIN ){
+          /* just find the diagonal elements now... */
+          R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,num_orbs,
+                              orbital_lookup_table);
+        }
 
         /***********
 
-          if we're doing FMO, do all the work for it now...
+          time to actually do the real work, i.e. do all the K points
+          (or just diagonalize the matrices for the molecular case).
 
-          for standard FMO (projecting molecular orbitals) we only
-          need to do this once.
 
-          ***********/
-        if( details->num_FMO_frags || (details->num_FCO_frags &&
-                                       details->Execution_Mode == MOLECULAR) ){
+          work2 comes back holding the occupation numbers.
+          work3 has the reduced overlap matrix.
 
+          ************/
+        loop_over_k_points(unit_cell,details,Overlap_R,Hamil_R,Overlap_K,
+                          Hamil_K,cmplx_hamil,cmplx_overlap,
+                          eigenset,work1,work2,work3,cmplx_work,
+                          &properties,
+                          avg_prop_info,num_orbs,orbital_lookup_table);
+
+
+        if( !details->just_matrices ){
           /******
 
-            build the hamiltonian... this is molecular type hamiltonian, so
-            it's built differently here when we are doing an extended system.
+          evaluate the electrostatic term for molecular optimizations
 
-            *******/
-          full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,num_orbs,
-                                   orbital_lookup_table,1);
+          work2 is used to pass in the occupation numbers, and
+          work3 is filled (in the
+          function) with the orbital occupation numbers.
+          *******/
+          if( details->Execution_Mode == MOLECULAR && details->eval_electrostat ){
+            eval_electrostatics(unit_cell,num_orbs,eigenset,work2,
+                                properties.OP_mat,
+                                orbital_lookup_table,&electrostatic_term,
+                                &eHMO_term,
+                                &total_energy,work3,properties.net_chgs);
 
-          /* first build the matrices */
-          build_FMO_overlap(details,num_orbs,unit_cell->num_atoms,Overlap_R,
-                            orbital_lookup_table);
-          build_FMO_hamil(details,num_orbs,unit_cell->num_atoms,Hamil_R,
-                          orbital_lookup_table);
+            /* display the results */
+            fprintf(output_file,"\n; Energy Partitioning:\n");
+            fprintf(output_file,"\t        extended Hueckel Energy: %lg eV\n",
+                    eHMO_term);
+            fprintf(output_file,"\t Electrostatic Repulsion Energy: %lg eV\n",
+                    electrostatic_term);
+            fprintf(output_file,"\t                   Total Energy: %lg eV\n",
+                    total_energy);
 
-          /* now diagonalize them */
-          diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_work);
-
-          /* generate the transform matrices */
-          gen_FMO_tform_matrices(details);
-        }
-        /* build the real hamiltonian */
-        full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,
-                                 num_orbs,orbital_lookup_table,0);
-
-
-      }
-      else if( details->Execution_Mode == FAT &&
-              !details->store_R_overlaps ){
-        fprintf(stderr,"Storing S(k) instead of S(R)\n");
-        fprintf(status_file,
-                "Storing the %d S(k)'s instead of the %d S(R)'s to save memory.\n",
-                details->num_KPOINTS,tot_overlaps);
-
-        build_all_K_overlaps(unit_cell,details,Overlap_R,Overlap_K,
-                             num_orbs,tot_overlaps,orbital_lookup_table);
-
-        /* build the real hamiltonian */
-        full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,
-                                 num_orbs,orbital_lookup_table,0);
-
-      }
-      else if( details->Execution_Mode == THIN ){
-        /* just find the diagonal elements now... */
-        R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,num_orbs,
-                            orbital_lookup_table);
-      }
-
-      /***********
-
-        time to actually do the real work, i.e. do all the K points
-        (or just diagonalize the matrices for the molecular case).
-
-
-        work2 comes back holding the occupation numbers.
-        work3 has the reduced overlap matrix.
-
-        ************/
-      loop_over_k_points(unit_cell,details,Overlap_R,Hamil_R,Overlap_K,
-                         Hamil_K,cmplx_hamil,cmplx_overlap,
-                         eigenset,work1,work2,work3,cmplx_work,
-                         &properties,
-                         avg_prop_info,num_orbs,orbital_lookup_table);
-
-
-      if( !details->just_matrices ){
-        /******
-
-        evaluate the electrostatic term for molecular optimizations
-
-        work2 is used to pass in the occupation numbers, and
-        work3 is filled (in the
-        function) with the orbital occupation numbers.
-        *******/
-        if( details->Execution_Mode == MOLECULAR && details->eval_electrostat ){
-          eval_electrostatics(unit_cell,num_orbs,eigenset,work2,
-                              properties.OP_mat,
-                              orbital_lookup_table,&electrostatic_term,
-                              &eHMO_term,
-                              &total_energy,work3,properties.net_chgs);
-
-          /* display the results */
-          fprintf(output_file,"\n; Energy Partitioning:\n");
-          fprintf(output_file,"\t        extended Hueckel Energy: %lg eV\n",
-                  eHMO_term);
-          fprintf(output_file,"\t Electrostatic Repulsion Energy: %lg eV\n",
-                  electrostatic_term);
-          fprintf(output_file,"\t                   Total Energy: %lg eV\n",
-                  total_energy);
-
-          fprintf(stderr,"%lg %lg %lg %lg\n", unit_cell->distance_mat[1],
-                  eHMO_term,electrostatic_term,total_energy);
-        }
-
-        /*********
-        do the average properties calculations
-        *********/
-        if( details->avg_props ){
-          sort_avg_prop_info(details,num_orbs,avg_prop_info,orbital_ordering);
-
-          find_crystal_occupations(details,unit_cell->num_electrons,num_orbs,
-                                   orbital_ordering,&(properties.Fermi_E));
-
-          /******
-            now determine net charges, and orbital occupations
-
-            the AO occupations come back in work2 in case anything else needs to
-            be done with them.
-            *******/
-          calc_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
-                          avg_prop_info,&properties,work2);
-
-
-
-          /******
-
-            update the zeta values for the self-consistent procedure....
-
-            for the moment this only works for molecular calculations.
-
-            *******/
-          if( details->Execution_Mode == MOLECULAR && details->vary_zeta ){
-            update_zetas(unit_cell,properties.net_chgs,
-                         (real)unit_cell->num_atoms*ZETA_TOL,&zeta_converged,NORMAL);
-          }
-          else{
-            zeta_converged = 1;
+            fprintf(stderr,"%lg %lg %lg %lg\n", unit_cell->distance_mat[1],
+                    eHMO_term,electrostatic_term,total_energy);
           }
 
+          /*********
+          do the average properties calculations
+          *********/
+          if( details->avg_props ){
+            sort_avg_prop_info(details,num_orbs,avg_prop_info,orbital_ordering);
 
+            find_crystal_occupations(details,unit_cell->num_electrons,num_orbs,
+                                    orbital_ordering,&(properties.Fermi_E));
 
-          /********
-
-            now that we have the average occupations, we can go on and
-            do charge iteration if it is required.
-
-            *********/
-          if( details->do_chg_it ){
-            update_chg_it_parms(details,unit_cell,work2,&Hii_converged,num_orbs,
-                                orbital_lookup_table);
-
-          }else if( details->do_muller_it ){
-
-            print_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
-                             avg_prop_info,properties,work2);
-
-            update_muller_it_parms(details,unit_cell,work2,
-                                   &Hii_converged,num_orbs,
-                                   orbital_lookup_table);
-
-          } else{
-            Hii_converged = 1;
-          }
-
-
-          if( Hii_converged && zeta_converged){
-            /* write the parms used to obtain that data. */
-            write_atom_parms(details,unit_cell->atoms,unit_cell->num_atoms,1);
             /******
-              find the average overlap population and reduced OP matrices
-              as well as the the average OP's that the user requested.
+              now determine net charges, and orbital occupations
+
+              the AO occupations come back in work2 in case anything else needs to
+              be done with them.
               *******/
-            if( details->avg_OP_mat_PRT || details->avg_ROP_mat_PRT ){
-              calc_avg_OP(details,unit_cell,num_orbs,orbital_ordering,
-                          avg_prop_info,Overlap_R,properties);
+            calc_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
+                            avg_prop_info,&properties,work2);
+
+
+
+            /******
+
+              update the zeta values for the self-consistent procedure....
+
+              for the moment this only works for molecular calculations.
+
+              *******/
+            if( details->Execution_Mode == MOLECULAR && details->vary_zeta ){
+              update_zetas(unit_cell,properties.net_chgs,
+                          (real)unit_cell->num_atoms*ZETA_TOL,&zeta_converged,NORMAL);
+            }
+            else{
+              zeta_converged = 1;
             }
 
-#ifdef INCLUDE_NETCDF_SUPPORT
-            if( details->do_netCDF ){
-              netCDF_init_file(details,unit_cell,num_orbs,
-                               walsh_step);
-              netCDF_write_Es(details,num_orbs,avg_prop_info);
-              netCDF_write_MOs(details,num_orbs,avg_prop_info);
-            }
-#endif
-            /* Density of States */
-            if( !details->no_total_DOS_PRT || !details->just_avgE ){
-              gen_total_DOS(details,unit_cell,num_orbs,avg_prop_info,orbital_ordering);
 
-              /* Projected Density of States */
-              if( details->num_proj_DOS ){
-                gen_projected_DOS(details,unit_cell,num_orbs,avg_prop_info,
+
+            /********
+
+              now that we have the average occupations, we can go on and
+              do charge iteration if it is required.
+
+              *********/
+            if( details->do_chg_it ){
+              update_chg_it_parms(details,unit_cell,work2,&Hii_converged,num_orbs,
+                                  orbital_lookup_table);
+
+            }else if( details->do_muller_it ){
+
+              print_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
+                              avg_prop_info,properties,work2);
+
+              update_muller_it_parms(details,unit_cell,work2,
+                                    &Hii_converged,num_orbs,
+                                    orbital_lookup_table);
+
+            } else{
+              Hii_converged = 1;
+            }
+
+
+            if( Hii_converged && zeta_converged){
+              /* write the parms used to obtain that data. */
+              write_atom_parms(details,unit_cell->atoms,unit_cell->num_atoms,1);
+              /******
+                find the average overlap population and reduced OP matrices
+                as well as the the average OP's that the user requested.
+                *******/
+              if( details->avg_OP_mat_PRT || details->avg_ROP_mat_PRT ){
+                calc_avg_OP(details,unit_cell,num_orbs,orbital_ordering,
+                            avg_prop_info,Overlap_R,properties);
+              }
+
+  #ifdef INCLUDE_NETCDF_SUPPORT
+              if( details->do_netCDF ){
+                netCDF_init_file(details,unit_cell,num_orbs,
+                                walsh_step);
+                netCDF_write_Es(details,num_orbs,avg_prop_info);
+                netCDF_write_MOs(details,num_orbs,avg_prop_info);
+              }
+  #endif
+              /* Density of States */
+              if( !details->no_total_DOS_PRT || !details->just_avgE ){
+                gen_total_DOS(details,unit_cell,num_orbs,avg_prop_info,orbital_ordering);
+
+                /* Projected Density of States */
+                if( details->num_proj_DOS ){
+                  gen_projected_DOS(details,unit_cell,num_orbs,avg_prop_info,
+                                    orbital_ordering,orbital_lookup_table);
+                }
+                fprintf(output_file,"# END OF DOS\n\n");
+              }
+              /* check to see if we need to do a COOP */
+              if( details->the_COOPS ){
+                gen_COOP(details,unit_cell,num_orbs,avg_prop_info,Overlap_R,
+                        orbital_ordering,orbital_lookup_table);
+              }
+
+              /*************
+
+                print out the stuff that will appear at the bottom of the file.
+
+                *************/
+
+              /* Fermi level */
+              fprintf(output_file,"\n;  The Fermi Level was determined for %d K points based on\n",
+                      details->num_KPOINTS);
+              fprintf(output_file,";     an ordering of %d crystal orbitals occupied by %lf electrons\n",
+                      num_orbs*details->num_KPOINTS,unit_cell->num_electrons);
+              fprintf(output_file,";      in the unit cell (%lf electrons total)\n",
+                      unit_cell->num_electrons*(real)details->num_KPOINTS);
+              fprintf(output_file,"#Fermi_Energy:  %lf\n",properties.Fermi_E);
+
+              /* print the moments if we generated them */
+              if( details->do_moments && details->moments ){
+                fprintf(output_file,"; Moments Analysis\n");
+                fprintf(output_file,";  Moments are normalized by the 0th moment and\n");
+                fprintf(output_file,";   referenced to the 1st\n");
+                fprintf(output_file,"Moment \t Value\n");
+                for(i=0;i<=details->num_moments;i++){
+                  fprintf(output_file,"%d \t %8.4lg\n",i,details->moments[i]);
+                }
+              }
+
+              print_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
+                              avg_prop_info,properties,work2);
+
+              /* deal with multiple occupations, if there are any */
+              if( details->num_occup_AVG ){
+                new_num_electrons = unit_cell->num_electrons;
+                fprintf(output_file,
+                        "\n;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+                fprintf(output_file,"\n# ALTERNATE OCCUPATION ANALYSIS\n");
+                fprintf(output_file,"%d Alternate Occupations were done\n",
+                        details->num_occup_AVG);
+                for(i=0;i<=details->num_occup_AVG;i++){
+                  if( i ) new_num_electrons += details->occup_AVG_step;
+                  find_crystal_occupations(details,new_num_electrons,
+                                          num_orbs,orbital_ordering,
+                                          &(properties.Fermi_E));
+                  calc_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
+                                  avg_prop_info,&properties,work2);
+
+                  fprintf(output_file,"\n#NUM_ELECTRONS_PER_CELL: %lf\n",
+                          new_num_electrons);
+                  fprintf(output_file,"#Fermi_Energy:  %lf\n",
+                          properties.Fermi_E);
+                  print_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
+                                  avg_prop_info,properties,work2);
+                  if( details->the_COOPS ){
+                    gen_avg_COOPs(details,unit_cell,num_orbs,avg_prop_info,Overlap_R,
                                   orbital_ordering,orbital_lookup_table);
-              }
-              fprintf(output_file,"# END OF DOS\n\n");
-            }
-            /* check to see if we need to do a COOP */
-            if( details->the_COOPS ){
-              gen_COOP(details,unit_cell,num_orbs,avg_prop_info,Overlap_R,
-                       orbital_ordering,orbital_lookup_table);
-            }
+                  }
+                  if( details->num_FMO_frags ){
+                    calc_avg_FMO_occups(details,num_orbs,orbital_ordering,
+                                        avg_prop_info,work2);
+                  }
 
-            /*************
+                  /********
 
-              print out the stuff that will appear at the bottom of the file.
+                    now print out the average values of the COOP's that
+                    the user asked for
 
-              *************/
+                  **********/
+                  COOP_ptr = details->the_COOPS;
 
-            /* Fermi level */
-            fprintf(output_file,"\n;  The Fermi Level was determined for %d K points based on\n",
-                    details->num_KPOINTS);
-            fprintf(output_file,";     an ordering of %d crystal orbitals occupied by %lf electrons\n",
-                    num_orbs*details->num_KPOINTS,unit_cell->num_electrons);
-            fprintf(output_file,";      in the unit cell (%lf electrons total)\n",
-                    unit_cell->num_electrons*(real)details->num_KPOINTS);
-            fprintf(output_file,"#Fermi_Energy:  %lf\n",properties.Fermi_E);
+                  if( COOP_ptr ){
+                    fprintf(output_file,"\n; Average Values of COOP's\n");
+                  }
+                  while(COOP_ptr){
+                    if( COOP_ptr->type == P_DOS_ATOM ){
+                      fprintf(output_file,"(%d) Between atoms %s%d and %s%d: %lf\n",
+                              COOP_ptr->which,
+                              unit_cell->atoms[COOP_ptr->contrib1].symb,
+                              COOP_ptr->contrib1+1,
+                              unit_cell->atoms[COOP_ptr->contrib2].symb,
+                              COOP_ptr->contrib2+1,
+                              COOP_ptr->avg_value);
+                    }
+                    else if(COOP_ptr->type == P_DOS_ORB){
+                      fprintf(output_file,"(%d) Between orbitals %d and %d: %lf\n",
+                              COOP_ptr->which,
+                              COOP_ptr->contrib1+1,
+                              COOP_ptr->contrib2+1,
+                              COOP_ptr->avg_value);
+                    }
+                    else if(COOP_ptr->type == P_DOS_FMO){
+                      fprintf(output_file,"(%d) Between fmo's %d and %d: %lf\n",
+                              COOP_ptr->which,
+                              COOP_ptr->contrib1+1,
+                              COOP_ptr->contrib2+1,
+                              COOP_ptr->avg_value);
+                    }
+                    COOP_ptr = COOP_ptr->next_type;
+                  }
 
-            /* print the moments if we generated them */
-            if( details->do_moments && details->moments ){
-              fprintf(output_file,"; Moments Analysis\n");
-              fprintf(output_file,";  Moments are normalized by the 0th moment and\n");
-              fprintf(output_file,";   referenced to the 1st\n");
-              fprintf(output_file,"Moment \t Value\n");
-              for(i=0;i<=details->num_moments;i++){
-                fprintf(output_file,"%d \t %8.4lg\n",i,details->moments[i]);
-              }
-            }
+                }
 
-            print_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
-                             avg_prop_info,properties,work2);
-
-            /* deal with multiple occupations, if there are any */
-            if( details->num_occup_AVG ){
-              new_num_electrons = unit_cell->num_electrons;
-              fprintf(output_file,
-                      "\n;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-              fprintf(output_file,"\n# ALTERNATE OCCUPATION ANALYSIS\n");
-              fprintf(output_file,"%d Alternate Occupations were done\n",
-                      details->num_occup_AVG);
-              for(i=0;i<=details->num_occup_AVG;i++){
-                if( i ) new_num_electrons += details->occup_AVG_step;
-                find_crystal_occupations(details,new_num_electrons,
-                                         num_orbs,orbital_ordering,
-                                         &(properties.Fermi_E));
+                /* to be safe, redo the original occupation stuff */
+                find_crystal_occupations(details,unit_cell->num_electrons,
+                                        num_orbs,orbital_ordering,
+                                        &(properties.Fermi_E));
                 calc_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
                                 avg_prop_info,&properties,work2);
+              }
 
-                fprintf(output_file,"\n#NUM_ELECTRONS_PER_CELL: %lf\n",
-                        new_num_electrons);
-                fprintf(output_file,"#Fermi_Energy:  %lf\n",
-                        properties.Fermi_E);
-                print_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
-                                 avg_prop_info,properties,work2);
-                if( details->the_COOPS ){
-                  gen_avg_COOPs(details,unit_cell,num_orbs,avg_prop_info,Overlap_R,
-                                orbital_ordering,orbital_lookup_table);
-                }
+
+              if( !details->just_avgE && !details->num_occup_AVG ){
                 if( details->num_FMO_frags ){
                   calc_avg_FMO_occups(details,num_orbs,orbital_ordering,
                                       avg_prop_info,work2);
@@ -448,7 +503,7 @@ for( walsh_step=0; walsh_step<details->walsh_details.num_steps; walsh_step++){
                   now print out the average values of the COOP's that
                   the user asked for
 
-                **********/
+                  **********/
                 COOP_ptr = details->the_COOPS;
 
                 if( COOP_ptr ){
@@ -480,103 +535,49 @@ for( walsh_step=0; walsh_step<details->walsh_details.num_steps; walsh_step++){
                   }
                   COOP_ptr = COOP_ptr->next_type;
                 }
-
-              }
-
-              /* to be safe, redo the original occupation stuff */
-              find_crystal_occupations(details,unit_cell->num_electrons,
-                                       num_orbs,orbital_ordering,
-                                       &(properties.Fermi_E));
-              calc_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
-                              avg_prop_info,&properties,work2);
-            }
-
-
-            if( !details->just_avgE && !details->num_occup_AVG ){
-              if( details->num_FMO_frags ){
-                calc_avg_FMO_occups(details,num_orbs,orbital_ordering,
-                                    avg_prop_info,work2);
-              }
-
-              /********
-
-                now print out the average values of the COOP's that
-                the user asked for
-
-                **********/
-              COOP_ptr = details->the_COOPS;
-
-              if( COOP_ptr ){
-                fprintf(output_file,"\n; Average Values of COOP's\n");
-              }
-              while(COOP_ptr){
-                if( COOP_ptr->type == P_DOS_ATOM ){
-                  fprintf(output_file,"(%d) Between atoms %s%d and %s%d: %lf\n",
-                          COOP_ptr->which,
-                          unit_cell->atoms[COOP_ptr->contrib1].symb,
-                          COOP_ptr->contrib1+1,
-                          unit_cell->atoms[COOP_ptr->contrib2].symb,
-                          COOP_ptr->contrib2+1,
-                          COOP_ptr->avg_value);
-                }
-                else if(COOP_ptr->type == P_DOS_ORB){
-                  fprintf(output_file,"(%d) Between orbitals %d and %d: %lf\n",
-                          COOP_ptr->which,
-                          COOP_ptr->contrib1+1,
-                          COOP_ptr->contrib2+1,
-                          COOP_ptr->avg_value);
-                }
-                else if(COOP_ptr->type == P_DOS_FMO){
-                  fprintf(output_file,"(%d) Between fmo's %d and %d: %lf\n",
-                          COOP_ptr->which,
-                          COOP_ptr->contrib1+1,
-                          COOP_ptr->contrib2+1,
-                          COOP_ptr->avg_value);
-                }
-                COOP_ptr = COOP_ptr->next_type;
-              }
-            } /* end of if(!details->just_avgE) */
-          } /* end of if(Hii_converged && zeta_converged) */
-        } /* end of if(details->avg_props) */
+              } /* end of if(!details->just_avgE) */
+            } /* end of if(Hii_converged && zeta_converged) */
+          } /* end of if(details->avg_props) */
+          else{
+            /* we need to set convergence stuff here */
+            Hii_converged = 1;
+            zeta_converged = 1;
+          }
+        } /* end of if(!details->just_matrices */
         else{
-          /* we need to set convergence stuff here */
           Hii_converged = 1;
           zeta_converged = 1;
         }
-      } /* end of if(!details->just_matrices */
-      else{
-        Hii_converged = 1;
-        zeta_converged = 1;
+      }/* end of convergence loop */
+
+      /*********
+        check to see if a band structure is being done.
+        if so deal with it.
+        **********/
+      if( details->band_info ){
+        construct_band_structure(unit_cell,details,Overlap_R,
+                                Hamil_R,Overlap_K,
+                                Hamil_K,cmplx_hamil,cmplx_overlap,
+                                eigenset,work1,work2,work3,cmplx_work,
+                                num_orbs,orbital_lookup_table);
+
       }
-    }/* end of convergence loop */
+    }
 
-    /*********
-      check to see if a band structure is being done.
-      if so deal with it.
-      **********/
-    if( details->band_info ){
-      construct_band_structure(unit_cell,details,Overlap_R,
-                               Hamil_R,Overlap_K,
-                               Hamil_K,cmplx_hamil,cmplx_overlap,
-                               eigenset,work1,work2,work3,cmplx_work,
-                               num_orbs,orbital_lookup_table);
-
+    /******
+      print out any important walsh results
+      ******/
+    if( details->walsh_details.num_vars != 0 ){
+      if( details->Execution_Mode != MOLECULAR ){
+        walsh_output( details,unit_cell,num_orbs,eigenset,Overlap_K,Hamil_K,
+                    properties,orbital_lookup_table,walsh_step);
+      }else{
+        walsh_output( details,unit_cell,num_orbs,eigenset,Overlap_R,Hamil_R,
+                    properties,orbital_lookup_table,walsh_step);
+      }
     }
   }
-
-  /******
-    print out any important walsh results
-    ******/
-  if( details->walsh_details.num_vars != 0 ){
-    if( details->Execution_Mode != MOLECULAR ){
-      walsh_output( details,unit_cell,num_orbs,eigenset,Overlap_K,Hamil_K,
-                   properties,orbital_lookup_table,walsh_step);
-    }else{
-      walsh_output( details,unit_cell,num_orbs,eigenset,Overlap_R,Hamil_R,
-                   properties,orbital_lookup_table,walsh_step);
-    }
-  }
-}
+  cleanup_memory();
 }
 
 void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){

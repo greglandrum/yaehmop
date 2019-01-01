@@ -659,7 +659,57 @@ is present.\n");
   }
 }
 
+void cleanup_memory()
+{
+  sym_op_type *next=sym_ops_present;
+  while(next){
+    sym_op_type *tmp = next;
+    next = next->next;
+    CONDITIONAL_FREE(next->equiv_atoms);
+    CONDITIONAL_FREE(tmp);
+  }
+  CONDITIONAL_FREE(Hamil_R.mat);
+  CONDITIONAL_FREE(Overlap_R.mat);
+  if(unit_cell->dim != 0){
+    CONDITIONAL_FREE(Hamil_K.mat);
+    CONDITIONAL_FREE(Overlap_K.mat);
+  }    
+  CONDITIONAL_FREE(eigenset.val);
+  CONDITIONAL_FREE(eigenset.vectR);
+  CONDITIONAL_FREE(eigenset.vectI);
+  CONDITIONAL_FREE(work1);
+  CONDITIONAL_FREE(work2);
+  CONDITIONAL_FREE(work3);
+  CONDITIONAL_FREE(cmplx_hamil);
+  CONDITIONAL_FREE(cmplx_overlap);
+  CONDITIONAL_FREE(cmplx_work);
+  CONDITIONAL_FREE(orbital_lookup_table);
+  CONDITIONAL_FREE(avg_prop_info);
+  CONDITIONAL_FREE(orbital_ordering);
+  CONDITIONAL_FREE(OP_mat);
+  CONDITIONAL_FREE(net_chgs);
+  CONDITIONAL_FREE(unique_atoms);
+  CONDITIONAL_FREE(details->K_POINTS);
+  CONDITIONAL_FREE(details->occup_KPOINTS);
+  CONDITIONAL_FREE(details->moments);
+  CONDITIONAL_FREE(details->characters);
+  CONDITIONAL_FREE(details->atoms_to_vary);
+  CONDITIONAL_FREE(unit_cell->atoms);
+  CONDITIONAL_FREE(unit_cell->geom_frags);
+  CONDITIONAL_FREE(unit_cell->distance_mat);
+  CONDITIONAL_FREE(unit_cell->equiv_atoms);
+  CONDITIONAL_FREE(properties.OP_mat);
+  CONDITIONAL_FREE(properties.ROP_mat);
+  CONDITIONAL_FREE(properties.chg_mat);
+  CONDITIONAL_FREE(properties.Rchg_mat);
+  CONDITIONAL_FREE(properties.net_chgs);
+  CONDITIONAL_FREE(properties.mod_OP_mat);
+  CONDITIONAL_FREE(properties.mod_ROP_mat);
+  CONDITIONAL_FREE(properties.mod_net_chgs);
 
+  CONDITIONAL_FREE(unit_cell);
+  CONDITIONAL_FREE(details);
+}
 
 
 
