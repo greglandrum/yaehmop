@@ -40,6 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************/
 #include "bind.h"
 
+
 /****************************************************************************
  *
  *                   Procedure postprocess_FMO
@@ -315,7 +316,11 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
     *******/
     if(!FCO_file){
       sprintf(FCO_filename,"%s.FCO",details->filename);
-      FCO_file = open(FCO_filename,O_RDWR|O_TRUNC|O_CREAT,S_IRUSR|S_IWUSR);
+#ifndef _MSC_VER
+  	  FCO_file = open(FCO_filename, O_RDWR | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
+#else
+	    FCO_file = open(FCO_filename, O_RDWR | O_TRUNC | O_CREAT, _S_IREAD | _S_IWRITE);
+#endif
       if( FCO_file == -1 ){
         fatal("Can't open .FCO file for binary I/O");
       }
@@ -732,6 +737,11 @@ INCREASE to the right)\n");
                       num_orbs);
     }
 
+    /* this stores the reduced charge matrix */
+    if( details->Rchg_mat_PRT ){
+      reduced_charge_mat(cell->num_atoms,num_orbs,orbital_lookup_table,
+                       properties->chg_mat,properties->Rchg_mat);
+    }
 
     if( details->chg_mat_PRT || details->Rchg_mat_PRT ){
       fprintf(output_file,"\n\n; \t\tq-q-q-q-q-q-q-q  Charge Matrix q-q-q-q-q-q-q-q\n");
@@ -746,6 +756,14 @@ INCREASE to the right)\n");
                          LABEL_COLS,details->line_width);
 
     }
+    if( details->Rchg_mat_PRT ){
+      fprintf(output_file,
+              "\n;   Reduced Charge Matrix Independant of Occupation\n");
+      printmat(properties->Rchg_mat,cell->num_atoms,num_orbs,output_file,1e-5,
+                      (char)0,details->line_width);
+    }
+
+
     /******
       put in reduced charge matrix stuff here
       *******/

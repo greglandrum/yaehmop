@@ -138,3 +138,59 @@ void eval_charge_matrix(cell,eigenset,overlap,num_orbs,
 
   }
 }
+
+/****************************************************************************
+ *
+ *                   Procedure reduced_charge_mat
+ *
+ * Arguments: num_atoms: int
+ *         num_orbs: int
+ * orbital_lookup_table: pointer to int.
+ *         Chg_matrix: pointer to real
+ *        RChg_matrix: pointer to real
+ *
+ *
+ * Returns: none
+ *
+ * Action:  Generates the reduced charge matrix by summing
+ *    up the individual atomic contributions in Chg_matrix.
+ *
+ *   the results are stored in 'RChg_matrix which should be at least
+ *     num_atoms * num_orbs
+ *
+ ****************************************************************************/
+void reduced_charge_mat(num_atoms,num_orbs,orbital_lookup_table,Chg_matrix,RChg_matrix)
+  int num_atoms,num_orbs,*orbital_lookup_table;
+  real *Chg_matrix;
+  real *RChg_matrix;
+{
+  int i,j,k,l;
+  int ktab;
+  int i_orb_tab, j_orb_tab;
+  int i_orb_end,j_orb_end;
+  int num_elements;
+  real temp;
+
+  num_elements = 0;
+
+  /**********
+    loop over the atoms in the unit cell
+  **********/
+  for(i=0;i<num_atoms;i++){
+    /* find this atom's orbitals */
+    find_atoms_orbs(num_orbs,num_atoms,i,orbital_lookup_table,&i_orb_tab,&i_orb_end);
+    if( i_orb_tab >= 0 ){
+      /* first do the cross terms involving this atom */
+      for(j=0;j<num_orbs;j++){
+        temp = 0;
+        for(k=i_orb_tab; k<i_orb_end; k++){
+          temp += Chg_matrix[j*num_orbs+k];
+        }
+        /*********
+          store the element....
+          **********/
+        RChg_matrix[i*num_orbs+j] = temp;
+      }
+    }
+  }
+}

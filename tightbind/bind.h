@@ -74,7 +74,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -263,8 +263,12 @@ the
 #define ABS(a) ((a) > 0 ? (a) : -(a))
 
 #ifndef USE_BZERO
+#ifndef bzero
 #define bzero(a, b) (memset((void *)(a), 0, (b)))
+#endif
+#ifndef bcopy
 #define bcopy(a, b, c) (memcpy((void *)(b), (const void *)(a), (c)))
+#endif
 #endif
 
 /* default values for the muller iteration procedure */

@@ -481,8 +481,11 @@ void dump_distance_mats(cell,details)
 
   /* open the file */
   sprintf(tempfilename,"%s.DMAT",details->filename);
+#ifndef _MSC_VER
   matfile = open(tempfilename,O_RDWR|O_APPEND|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR);
-
+#else
+  matfile = open(tempfilename, O_RDWR | O_APPEND | O_CREAT | O_TRUNC, _S_IREAD | _S_IWRITE);
+#endif
   if( matfile == -1 ){
     error("Can't open DMAT file for binary I/O");
     return;

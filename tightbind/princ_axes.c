@@ -140,6 +140,7 @@ void find_princ_axes(atoms,locs,princ_axes,moments,num_atoms)
     }
   }
 #else
+  bzero(moments,3*sizeof(real));
   bzero(princ_axes,9*sizeof(real));
   princ_axes[0][0] = 1.0;
   princ_axes[1][1] = 1.0;
