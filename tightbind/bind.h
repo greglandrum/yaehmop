@@ -98,7 +98,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define FATAL_BUG(__a__) fatal_bug((__a__), __FILE__, __LINE__)
 #define NONFATAL_BUG(__a__) nonfatal_bug((__a__), __FILE__, __LINE__)
-#define CONDITIONAL_FREE(__a__) if(__a__){ free(__a__); __a__ = 0; }
 
 #define VERSION_STRING "3.0"
 

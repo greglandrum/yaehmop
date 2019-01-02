@@ -577,7 +577,6 @@ void inner_wrapper(char *file_name, bool use_stdin_stdout){
       }
     }
   }
-  cleanup_memory();
 }
 
 void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
@@ -705,6 +704,7 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
   check_for_errors(unit_cell,details,num_orbs);
 
   inner_wrapper(file_name,use_stdin_stdout);
+  cleanup_memory();
 
   fprintf(status_file,"Done!\n");
   fprintf(stdout,"Done!\n");

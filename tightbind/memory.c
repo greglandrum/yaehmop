@@ -41,6 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "bind.h"
 
 
+#define CONDITIONAL_FREE(__a__) if(__a__){ free(__a__); __a__ = 0; }
 
 
 long tot_usage = 0;
@@ -665,7 +666,7 @@ void cleanup_memory()
   while(next){
     sym_op_type *tmp = next;
     next = next->next;
-    CONDITIONAL_FREE(next->equiv_atoms);
+    CONDITIONAL_FREE(tmp->equiv_atoms);
     CONDITIONAL_FREE(tmp);
   }
   CONDITIONAL_FREE(Hamil_R.mat);
@@ -706,7 +707,11 @@ void cleanup_memory()
   CONDITIONAL_FREE(properties.mod_OP_mat);
   CONDITIONAL_FREE(properties.mod_ROP_mat);
   CONDITIONAL_FREE(properties.mod_net_chgs);
-
+  CONDITIONAL_FREE(unit_cell->atoms);
+  CONDITIONAL_FREE(unit_cell->geom_frags);
+  CONDITIONAL_FREE(unit_cell->distance_mat);
+  CONDITIONAL_FREE(unit_cell->sym_elems);
+  CONDITIONAL_FREE(unit_cell->equiv_atoms);
   CONDITIONAL_FREE(unit_cell);
   CONDITIONAL_FREE(details);
 }

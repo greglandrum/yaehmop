@@ -258,7 +258,7 @@ void write_atom_parms(detail_type *details,atom_type *atoms,int num_atoms,
   int i,j;
   char found_this_one;
 
-  if( first_call ){
+  if( first_call || !unique_atoms ){
     unique_atoms = (atom_type *)calloc(num_atoms,sizeof(atom_type));
     if(!unique_atoms)fatal("Can't allocate unique atom list");
     num_unique_atoms = 0;
