@@ -152,3 +152,14 @@ if(BUILD_STATIC)
   endif(APPLE)
 
 endif(BUILD_STATIC)
+
+# Install instructions
+set(YAEHMOP_INSTALL_HDRS
+  bind.h
+  prototypes.h
+  symmetry.h
+)
+
+install(TARGETS bind DESTINATION bin)
+install(TARGETS yaehmop_eht DESTINATION lib)
+install(FILES ${YAEHMOP_INSTALL_HDRS} DESTINATION include)
