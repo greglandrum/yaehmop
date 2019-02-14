@@ -114,16 +114,19 @@ if(USE_BLAS_LAPACK)
       message("--       to libquadmath statically.")
       find_package(LAPACK REQUIRED)
       target_link_libraries(bind ${LAPACK_LIBRARIES})
+      target_link_libraries(test_eht ${LAPACK_LIBRARIES})
     else(APPLE)
       message("-- Attempting to link to liblapack.a and libblas.a")
       message("-- Note that we must also link to gfortran for static linking")
       # We have to statically link to lapack and blas
       target_link_libraries(bind liblapack.a libblas.a)
+      target_link_libraries(test_eht liblapack.a libblas.a)
     endif(APPLE)
 
     # Link these as well if we are not using MINGW
     if(NOT MINGW)
       target_link_libraries(bind libgfortran.a libquadmath.a)
+      target_link_libraries(test_eht libgfortran.a libquadmath.a)
     endif(NOT MINGW)
   else(STATIC_BLAS_LAPACK)
     # If we are just linking to the dynamic libraries, cmake can find them
@@ -133,6 +136,7 @@ if(USE_BLAS_LAPACK)
     message("-- Lapack found")
     message("-- Lapack and Blas libraries are: ${LAPACK_LIBRARIES}")
     target_link_libraries(bind ${LAPACK_LIBRARIES})
+    target_link_libraries(test_eht ${LAPACK_LIBRARIES})
   endif(STATIC_BLAS_LAPACK)
   # This is needed for the code
   add_definitions(-DUSE_LAPACK)
