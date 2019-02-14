@@ -349,6 +349,8 @@ extern void gen_k_point_mesh PROTO((point_type * *points, int num_per_vect[3],
                                     real offset));
 extern void automagic_k_points PROTO((detail_type * details, cell_type *cell));
 
+extern void set_details_defaults PROTO((detail_type*));
+extern void set_cell_defaults PROTO((cell_type*));
 extern void run_bind PROTO((char *, bool, char *));
 extern void run_eht PROTO((FILE *));
 

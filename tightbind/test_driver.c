@@ -52,33 +52,10 @@ void main(int argc, char **argv){
   /*******
     initialize some variables
     ********/
-  details->walsh_details.num_steps = 1;
-  details->walsh_details.num_vars = 0;
-  details->use_symmetry = 0;
-  details->find_princ_axes = 0;
-  details->vary_zeta = 0;
-  details->avg_props = 0;
-  details->just_geom = 0;
-  details->dump_overlap = 0;
-  details->dump_hamil = 0;
-  details->sparsify_value = 0.0;
-  details->Execution_Mode = FAT;
-  details->the_const = THE_CONST;
-  details->weighted_Hij = 1;
-  details->eval_electrostat = 0;
-  details->close_nn_contact = NN_DISTANCE;
-  details->symm_tol = SYMM_TOL;
-  details->muller_mix = MULLER_MIX_DEF;
-  details->muller_E_tol = MULLER_E_TOL_DEF;
-  details->muller_Z_tol = MULLER_Z_TOL_DEF;
-  details->num_moments = 4;
-  details->line_width = 80;
-  details->k_offset = K_OFFSET;
-  unit_cell->equiv_atoms = 0;
-
+  set_details_defaults(details);
+  set_cell_defaults(unit_cell);
 
   safe_strcpy(details->title,"test job");
-
 
   // molecular calculation
   details->Execution_Mode = MOLECULAR;
