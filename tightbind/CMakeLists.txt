@@ -84,13 +84,15 @@ endif(NOT MSVC)
 # Add the executable and link to the C math library
 add_executable(bind main.c)
 
-option(BIND_NAME "Name of bind binary" OFF)
-if(NOT BIND_NAME)
-  set(BIND_NAME bind)
-endif(NOT BIND_NAME)
-set_target_properties(bind PROPERTIES OUTPUT_NAME ${BIND_NAME})
-message("-- Writing bind binary to \"${BIND_NAME}\"")
-message("-- Use -DBIND_NAME=<name> to modify")
+if(NOT BIND_EXE_NAME)
+  set(BIND_EXE_NAME bind)
+  message("-- Writing bind binary to \"${BIND_EXE_NAME}\"")
+  message("-- Use -DBIND_EXE_NAME=<name> to modify")
+else()
+  message("-- Writing bind binary to \"${BIND_EXE_NAME}\"")
+endif()
+
+set_target_properties(bind PROPERTIES OUTPUT_NAME ${BIND_EXE_NAME})
 
 target_link_libraries(bind yaehmop_eht ${MATH_LIB})
 
