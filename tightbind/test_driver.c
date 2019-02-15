@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 void main(int argc, char **argv){
   char err_string[240];
-
+  int i, j;
   FILE *nullfile = fopen("nul","w");
 
   status_file = nullfile;
@@ -133,12 +133,12 @@ void main(int argc, char **argv){
   run_eht(dest);
 
   //pull properties
-  for(int i=0;i<unit_cell->num_atoms;i++){
+  for(i=0;i<unit_cell->num_atoms;i++){
    printf(">>>> Atom %d: %.2f\n",i+1,properties.net_chgs[i]);
   }
 
-  for(int i=0;i<unit_cell->num_atoms;i++){
-  for(int j=0;j<i;j++){
+  for(i=0;i<unit_cell->num_atoms;i++){
+  for(j=0;j<i;j++){
    printf(">>>> ROP %d-%d: %.2f\n",i+1,j+1,properties.ROP_mat[i*(i+1)/2 + j]);
   }
 }
