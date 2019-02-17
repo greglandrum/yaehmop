@@ -65,9 +65,6 @@ if(NOT USE_BLAS_LAPACK)
   )
 endif(NOT USE_BLAS_LAPACK)
 
-
-# We link to the static library to avoid an error
-
 # The location of the parameters file needs to be defined
 set(PARM_FILE_LOC ${yaehmop_SOURCE_DIR}/eht_parms.dat)
 message("-- Parameter file is currently set to ${PARM_FILE_LOC}")
@@ -86,6 +83,17 @@ endif(NOT MSVC)
 
 # Add the executable and link to the C math library
 add_executable(bind main.c)
+
+if(NOT BIND_EXE_NAME)
+  set(BIND_EXE_NAME bind)
+  message("-- Writing bind binary to \"${BIND_EXE_NAME}\"")
+  message("-- Use -DBIND_EXE_NAME=<name> to modify")
+else()
+  message("-- Writing bind binary to \"${BIND_EXE_NAME}\"")
+endif()
+
+set_target_properties(bind PROPERTIES OUTPUT_NAME ${BIND_EXE_NAME})
+
 target_link_libraries(bind yaehmop_eht ${MATH_LIB})
 
 add_executable(test_eht test_driver.c)
