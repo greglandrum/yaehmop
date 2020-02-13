@@ -28,7 +28,7 @@ LIBS = -lm
 LOCALLIBS = 
 #LOCALLIBS = /usr/lib/x86_64-linux-gnu/lapack/liblapack.a /usr/lib/x86_64-linux-gnu/blas/libblas.a
 
-COBJS = main.o genutil.o fileio.o globals.o memory.o distance_mat.o \
+COBJS = main.o driver.o genutil.o fileio.o globals.o memory.o distance_mat.o \
  R_overlap_mat.o mov.o R_hamil.o K_hamil.o kpoints.o K_overlap_mat.o \
  mulliken.o charge_mat.o zetas.o electrostat.o new3_fileio.o walsh.o \
  transforms.o symmetry.o princ_axes.o avg_props.o DOS_stuff.o COOP_stuff.o \
