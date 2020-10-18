@@ -469,8 +469,11 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
     safe_strcpy(err_string,"Can't open parameter file: ");
     strcat(err_string,parm_file_name);
     strcat(err_string," using default data in eht_parms.h...");
+    free(parm_file_name);
     error(err_string);
   }
+  free(parm_file_name);
+
   /* loop over the atoms and get the parameters */
   num_custom = 0;
   for(i=0;i<num_atoms;i++){
