@@ -438,6 +438,7 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
   point_type saveloc;
   Z_mat_type saveZloc;
   FILE *parmfile;
+  int own_parm_file_name; 
   int i,j;
   int num_read;
   int save_which;
@@ -451,7 +452,7 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
   real Hii,exp1,exp2,c1,c2;
 
 
-
+  own_parm_file_name = 0;
   /* open the parameter file */
   if (!parm_file_name)
     parm_file_name = (char *)getenv("BIND_PARM_FILE");
@@ -459,6 +460,7 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
     parm_file_name = (char *)calloc(240,sizeof(char));
     if(!parm_file_name)fatal("can't get memory for parm_file_name");
     safe_strcpy(parm_file_name,EHT_PARM_FILE);
+    own_parm_file_name = 1;
   }
   parmfile = fopen(parm_file_name,"r");
 
@@ -469,10 +471,10 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
     safe_strcpy(err_string,"Can't open parameter file: ");
     strcat(err_string,parm_file_name);
     strcat(err_string," using default data in eht_parms.h...");
-    free(parm_file_name);
+    if(own_parm_file_name) free(parm_file_name);
     error(err_string);
   }
-  free(parm_file_name);
+  if(own_parm_file_name) free(parm_file_name);
 
   /* loop over the atoms and get the parameters */
   num_custom = 0;
