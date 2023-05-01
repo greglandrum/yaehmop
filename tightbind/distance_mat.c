@@ -263,10 +263,6 @@ void build_distance_matrix(cell,details)
 
   num_atoms = cell->num_atoms;
 
-  /* space for the list of symbols */
-  symbols = (char *)calloc(num_atoms*4,sizeof(char));
-  if(!symbols) fatal("Can't get space for symbols");
-
   /********
     get space for the distance matrix
       (we only need half of the matrix, since it's symmetrical)
@@ -290,7 +286,7 @@ void build_distance_matrix(cell,details)
 
       /* check to see if the distance is too short */
       if( dist < TOO_SHORT && cell->atoms[i].at_number > 0 && cell->atoms[j].at_number > 0){
-        fprintf(stderr,"!!! Warning !!! Distance between atoms %d and %d (%f A) \
+        fprintf(status_file,"!!! Warning !!! Distance between atoms %d and %d (%f A) \
 is suspicious.\n",i+1,j+1,dist);
       }
       if( dist > max_dist ) max_dist = dist;
@@ -300,16 +296,22 @@ is suspicious.\n",i+1,j+1,dist);
     /* put in the diagonal element */
     cell->distance_mat[num_so_far++] = 0.0;
 
-    /* copy the symbol into the list of symbols */
-    symbols[i*4] = cell->atoms[i].symb[0];
-    symbols[i*4+1] = cell->atoms[i].symb[1];
-    symbols[i*4+2] = 0;
   }
 
   if( details->distance_mat_PRT ){
+    /* space for the list of symbols */
+    symbols = (char *)calloc(num_atoms*4,sizeof(char));
+    if(!symbols) fatal("Can't get space for symbols");
+    for(i=0;i<num_atoms;i++){
+      /* copy the symbol into the list of symbols */
+      symbols[i*4] = cell->atoms[i].symb[0];
+      symbols[i*4+1] = cell->atoms[i].symb[1];
+      symbols[i*4+2] = 0;
+    }
+
     print_sym_mat(cell->distance_mat,num_atoms,num_atoms,output_file,
                   "\n\n;****** DISTANCE MATRIX *********",symbols,details->line_width);
-
+    free(symbols);
     /* check close contacts to nearest neighbors */
     if( cell->dim > 0 ){
       fprintf(output_file,"# Inter-Cell distances less than %6.4lf Angstroms:\n",
@@ -318,7 +320,6 @@ is suspicious.\n",i+1,j+1,dist);
 
     }
   }
-  free(symbols);
 
   if(details->dump_dist_mat) dump_distance_mats(cell,details);
 
