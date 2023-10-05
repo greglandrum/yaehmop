@@ -662,17 +662,20 @@ is present.\n");
 
 void cleanup_memory()
 {
-  int i;
-  for(i=0;i<details->num_KPOINTS;i++){
-    CONDITIONAL_FREE(avg_prop_info[i].orbs);
-    CONDITIONAL_FREE(avg_prop_info[i].orbsI);
-    CONDITIONAL_FREE(avg_prop_info[i].chg_mat);
-    CONDITIONAL_FREE(avg_prop_info[i].energies);
-    if( details->num_FMO_frags || details->num_FCO_frags){
-      CONDITIONAL_FREE(avg_prop_info[i].FMO_orbs);
-      CONDITIONAL_FREE(avg_prop_info[i].FMO_orbsI);
-      CONDITIONAL_FREE(avg_prop_info[i].FMO_chg_mat);
+  if(avg_prop_info != NULL) {
+    for(int i=0;i<details->num_KPOINTS;i++){
+      CONDITIONAL_FREE(avg_prop_info[i].orbs);
+      CONDITIONAL_FREE(avg_prop_info[i].orbsI);
+      CONDITIONAL_FREE(avg_prop_info[i].chg_mat);
+      CONDITIONAL_FREE(avg_prop_info[i].energies);
+      if( details->num_FMO_frags || details->num_FCO_frags){
+        CONDITIONAL_FREE(avg_prop_info[i].FMO_orbs);
+        CONDITIONAL_FREE(avg_prop_info[i].FMO_orbsI);
+        CONDITIONAL_FREE(avg_prop_info[i].FMO_chg_mat);
+      }
     }
+    free(avg_prop_info);
+    avg_prop_info = NULL;
   }
   sym_op_type *next=sym_ops_present;
   while(next){
@@ -697,7 +700,6 @@ void cleanup_memory()
   CONDITIONAL_FREE(cmplx_overlap);
   CONDITIONAL_FREE(cmplx_work);
   CONDITIONAL_FREE(orbital_lookup_table);
-  CONDITIONAL_FREE(avg_prop_info);
   CONDITIONAL_FREE(orbital_ordering);
   CONDITIONAL_FREE(OP_mat);
   CONDITIONAL_FREE(net_chgs);
