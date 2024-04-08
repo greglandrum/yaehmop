@@ -59,9 +59,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 FILE *COHP_file;
 const char greetings[]="Welcome to the 10th Anniversary edition of YAeHMOP!\n";
 
-void main(argc, argv)
-  int argc;
-  char **argv;
+int main(int argc, char **argv)
 {
   FILE *temp_file;
   char file_name[500];

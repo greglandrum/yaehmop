@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "stdbool.h"
 
 
-void main(int argc, char **argv){
+int main(int argc, char **argv){
   char err_string[240];
   int i, j;
   FILE *nullfile = fopen("nul","w");
