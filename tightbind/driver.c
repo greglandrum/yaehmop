@@ -35,8 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // For booleans
 #include "stdbool.h"
 
-void set_details_defaults(details)
-     detail_type *details;
+void set_details_defaults(detail_type *details)
   /* Set defaults struct to default options, ie off*/
 {
   details->walsh_details.num_steps = 1;
@@ -62,8 +61,7 @@ void set_details_defaults(details)
   details->line_width = 80;
   details->k_offset = K_OFFSET;
 }
-void set_cell_defaults(cell)
-     cell_type *cell;
+void set_cell_defaults(cell_type *cell)
 {
   cell->equiv_atoms = 0;
   cell->charge = -1000.0;

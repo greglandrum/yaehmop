@@ -257,14 +257,8 @@ void calc_muller_parms(atom_type *atom, real s_occup,real p_occup,real d_occup,
  *   atomic Hii's and zetas using Muller's iteration technique
  *
  ****************************************************************************/
-void update_muller_it_parms(details,cell,AO_occups,converged,num_orbs,
-                      orbital_lookup_table)
-  detail_type *details;
-  cell_type *cell;
-  real *AO_occups;
-  int *converged;
-  int num_orbs;
-  int *orbital_lookup_table;
+void update_muller_it_parms(detail_type *details,cell_type *cell,real *AO_occups,int *converged,int num_orbs,
+                      int *orbital_lookup_table)
 {
   static int num_its = 0;
   static char *atoms_done=0;

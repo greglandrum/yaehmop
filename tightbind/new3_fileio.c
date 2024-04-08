@@ -55,11 +55,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Action: reads all the data out of the file 'infile
 *
 *****************************************************************************/
-void read_NEW3file(cell,details,infile,parm_file_name)
-  cell_type *cell;
-  detail_type *details;
-  FILE *infile;
-  char *parm_file_name;
+void read_NEW3file(cell_type *cell,detail_type *details,FILE *infile,char *parm_file_name)
 {
   char err_string[240];
   char instring[90];

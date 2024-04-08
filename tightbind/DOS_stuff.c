@@ -73,12 +73,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *
  ****************************************************************************/
-void gen_total_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering)
-  detail_type *details;
-  cell_type *cell;
-  int num_orbs;
-  avg_prop_info_type *avg_prop_info;
-  K_orb_ptr_type *orbital_ordering;
+void gen_total_DOS(detail_type *details,cell_type *cell,int num_orbs,avg_prop_info_type *avg_prop_info,K_orb_ptr_type *orbital_ordering)
 {
   int i,j;
   int tot_num_orbs;
@@ -217,10 +212,7 @@ void gen_total_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering)
  *  This is just the charge matrix element for 'which_AO.
  *
  ****************************************************************************/
-real orb_contribution(num_orbs,kpoint,MO,avg_prop_info,which_AO)
-  int num_orbs,kpoint,MO;
-  avg_prop_info_type *avg_prop_info;
-  int which_AO;
+real orb_contribution(int num_orbs,int kpoint,int MO,avg_prop_info_type *avg_prop_info,int which_AO)
 {
   real contrib;
 
@@ -247,10 +239,7 @@ real orb_contribution(num_orbs,kpoint,MO,avg_prop_info,which_AO)
  *  This is just the charge matrix element for 'which_FMO.
  *
  ****************************************************************************/
-real FMO_contribution(num_orbs,kpoint,MO,avg_prop_info,which_FMO)
-  int num_orbs,kpoint,MO;
-  avg_prop_info_type *avg_prop_info;
-  int which_FMO;
+real FMO_contribution(int num_orbs,int kpoint,int MO,avg_prop_info_type *avg_prop_info,int which_FMO)
 {
   real contrib;
 
@@ -279,11 +268,8 @@ real FMO_contribution(num_orbs,kpoint,MO,avg_prop_info,which_FMO)
  *   'which_atom to this MO.
  *
  ****************************************************************************/
-real atom_contribution(num_orbs,num_atoms,kpoint,MO,avg_prop_info,which_atom,
-                        orbital_lookup_table)
-  int num_orbs,num_atoms,kpoint,MO;
-  avg_prop_info_type *avg_prop_info;
-  int which_atom,*orbital_lookup_table;
+real atom_contribution(int num_orbs,int num_atoms,int kpoint,int MO,avg_prop_info_type *avg_prop_info,int which_atom,
+                        int *orbital_lookup_table)
 {
   int i,atom_begin,atom_end;
   float *chg_mat_ptr;
@@ -324,14 +310,9 @@ real atom_contribution(num_orbs,num_atoms,kpoint,MO,avg_prop_info,which_atom,
  * Action:  Generates all of the projected DOS curves.
  *
  ****************************************************************************/
-void gen_projected_DOS(details,cell,num_orbs,avg_prop_info,orbital_ordering,
-                       orbital_lookup_table)
-  detail_type *details;
-  cell_type *cell;
-  int num_orbs;
-  avg_prop_info_type *avg_prop_info;
-  K_orb_ptr_type *orbital_ordering;
-  int *orbital_lookup_table;
+void gen_projected_DOS(detail_type *details,cell_type *cell,int num_orbs,avg_prop_info_type *avg_prop_info,
+                       K_orb_ptr_type *orbital_ordering,
+                       int *orbital_lookup_table)
 {
   int i,j,k,l;
   int tot_num_orbs,num_states,begin,end;

@@ -67,11 +67,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *    this symmetry op will be printed out as well.
 *
 *****************************************************************************/
-void name_sym_element(elem,the_file,num_atoms,show_equiv)
-  sym_op_type *elem;
-  FILE *the_file;
-  int num_atoms;
-  int show_equiv;
+void name_sym_element(sym_op_type *elem,FILE *the_file,int num_atoms,int show_equiv)
 {
   int i;
 
@@ -130,13 +126,7 @@ void name_sym_element(elem,the_file,num_atoms,show_equiv)
 *  This also constructs the list of equivalent atoms: 'equiv_atoms
 *
 *****************************************************************************/
-void compare_molecules(atoms,locs1,locs2,num_atoms,equiv_atoms,present,symm_tol)
-  atom_type *atoms;
-  point_type *locs1,*locs2;
-  int num_atoms;
-  int *equiv_atoms;
-  char *present;
-  real symm_tol;
+void compare_molecules(atom_type *atoms,point_type *locs1,point_type *locs2,int num_atoms,int *equiv_atoms,char *present,real symm_tol)
 {
   int i,j;
   char found;
@@ -316,6 +306,8 @@ void construct_rotn_mats(enum possible_axis axis,real angle,
 
     axis_v->z = 1.0;
     break;
+  default:
+    break;
   }
 }
 
@@ -335,9 +327,7 @@ void construct_rotn_mats(enum possible_axis axis,real angle,
 *   is only called once so who cares?
 *
 *****************************************************************************/
-void gen_sym_ops(the_ops,num_ops)
-  sym_op_type **the_ops;
-  int *num_ops;
+void gen_sym_ops(sym_op_type **the_ops,int *num_ops)
 {
   sym_op_type *op_ptr;
   enum possible_sym_op op;
@@ -382,7 +372,7 @@ void gen_sym_ops(the_ops,num_ops)
             ******/
             op_ptr->next = make_new_sym_op();
             op_ptr = op_ptr->next;
-            *num_ops++;
+            ++(*num_ops);
           }
           break;
         case Improper_Rotation:
@@ -472,6 +462,8 @@ void gen_sym_ops(the_ops,num_ops)
 
               op_ptr->axis.z = 1.0;
               break;
+            default:
+              break;
             }
             op_ptr->angle = angle;
             op_ptr->order = i;
@@ -482,7 +474,7 @@ void gen_sym_ops(the_ops,num_ops)
               ******/
             op_ptr->next = make_new_sym_op();
             op_ptr = op_ptr->next;
-            *num_ops++;
+            ++(*num_ops);
           }
           break;
         case Mirror:
@@ -513,10 +505,14 @@ void gen_sym_ops(the_ops,num_ops)
 
             op_ptr->axis.z = 1.0;
             break;
+          default:
+            break;
           }
           op_ptr->next = make_new_sym_op();
           op_ptr = op_ptr->next;
-          *num_ops++;
+            ++(*num_ops);
+          break;
+        default:
           break;
         }
       }
@@ -537,7 +533,7 @@ void gen_sym_ops(the_ops,num_ops)
       *********/
       op_ptr->next = make_new_sym_op();
       op_ptr = op_ptr->next;
-      *num_ops++;
+      ++(*num_ops);
     }
   }
 
@@ -962,9 +958,7 @@ void find_off_axis_sym_ops(detail_type *details,cell_type *cell,
 *    variable sym_ops_present
 *
 *****************************************************************************/
-void find_sym_ops(details,cell)
-  detail_type *details;
-  cell_type *cell;
+void find_sym_ops(detail_type *details,cell_type *cell)
 {
   int i,j,itab,jtab;
   static point_type *COM_locs,*new_locs;
@@ -1257,9 +1251,7 @@ void find_sym_ops(details,cell)
 *  from the list, and any element which appears will never be found.
 *
 *****************************************************************************/
-void find_walsh_sym_ops(cell,details)
-  cell_type *cell;
-  detail_type *details;
+void find_walsh_sym_ops(cell_type *cell,detail_type *details)
 {
   int i,j;
   point_type *COM_locs,*new_locs;
@@ -1500,13 +1492,8 @@ void find_walsh_sym_ops(cell,details)
 *    with them.
 *
 *****************************************************************************/
-void find_MO_symmetries(num_orbs,details,cell,eigenset,overlap,orbital_lookup_table)
-  int num_orbs;
-  detail_type *details;
-  cell_type *cell;
-  eigenset_type eigenset;
-  hermetian_matrix_type overlap;
-  int *orbital_lookup_table;
+void find_MO_symmetries(int num_orbs,detail_type *details,cell_type *cell,eigenset_type eigenset,
+  hermetian_matrix_type overlap,int *orbital_lookup_table)
 {
   static real *AO_coeffs=0;
   static real *norm_fact=0;

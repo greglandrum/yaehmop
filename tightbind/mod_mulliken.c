@@ -79,14 +79,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *     be filled with the occupation numbers of the various orbitals.
  *
  ****************************************************************************/
-void modified_mulliken(cell,eigenset,overlap,num_orbs,
-                       occupations,orbital_lookup_table,OP_matrix,
-                       mod_OP_matrix,net_chgs,accum)
-  cell_type *cell;
-  eigenset_type eigenset;
-  hermetian_matrix_type overlap;
-  int num_orbs,*orbital_lookup_table;
-  real *occupations,*OP_matrix,*mod_OP_matrix,*accum,*net_chgs;
+void modified_mulliken(cell_type *cell,eigenset_type eigenset,hermetian_matrix_type overlap,int num_orbs,
+                       real *occupations,int *orbital_lookup_table,real *OP_matrix,
+                       real *mod_OP_matrix,real *net_chgs,real *accum)
 {
   int num_atoms;
   int i,j,k;

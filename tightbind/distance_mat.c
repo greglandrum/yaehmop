@@ -64,12 +64,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *   out in the output file.
 *
 *****************************************************************************/
-void check_a_cell(atoms,vect,num_atoms,closest_nn_contact,descriptor)
-  atom_type *atoms;
-  point_type vect;
-  int num_atoms;
-  real closest_nn_contact;
-  char *descriptor;
+void check_a_cell(atom_type *atoms,point_type vect,int num_atoms,real closest_nn_contact,char *descriptor)
 {
   int i,j;
   real min_squared;
@@ -118,9 +113,7 @@ void check_a_cell(atoms,vect,num_atoms,closest_nn_contact,descriptor)
 *      These contacts are printed to the output file.
 *
 *****************************************************************************/
-void check_nn_contacts(cell,details)
-  cell_type *cell;
-  detail_type *details;
+void check_nn_contacts(cell_type *cell,detail_type *details)
 {
   int num_atoms;
   int i,j;
@@ -250,9 +243,7 @@ void check_nn_contacts(cell,details)
 *  see the file notes.outl for the representation of symmetric matrices.
 *
 *****************************************************************************/
-void build_distance_matrix(cell,details)
-  cell_type *cell;
-  detail_type *details;
+void build_distance_matrix(cell_type *cell,detail_type *details)
 {
   int num_atoms;
   int i,j;
@@ -338,8 +329,7 @@ is suspicious.\n",i+1,j+1,dist);
 *     reciprocal lattice vectors
 *
 *****************************************************************************/
-void display_lattice_parms(cell)
-  cell_type *cell;
+void display_lattice_parms(cell_type *cell)
 {
   static char first_call=0;
 
@@ -452,15 +442,13 @@ typedef struct{
 *      it to a binary output file.
 *
 *****************************************************************************/
-void dump_distance_mats(cell,details)
-  cell_type *cell;
-  detail_type *details;
+void dump_distance_mats(cell_type *cell,detail_type *details)
 {
   int num_atoms;
   int i,j,itab,jtab;
   point_type cell_dim[3];
   point_type temp,vect;
-  char tempfilename[240];
+  char tempfilename[512];
   int matfile;
   int num_so_far;
   real dist,max_dist=-1;
@@ -477,7 +465,6 @@ void dump_distance_mats(cell,details)
     cell_dim[i].y = cell->atoms[jtab].loc.y-cell->atoms[itab].loc.y;
     cell_dim[i].z = cell->atoms[jtab].loc.z-cell->atoms[itab].loc.z;
   }
-
 
   /* open the file */
   sprintf(tempfilename,"%s.DMAT",details->filename);

@@ -118,8 +118,7 @@ void nonfatal_bug( char *errorstring, char *file, int line )
  *
  * in case the job was queued, the error message is echoed to the status file
  */
-void fatal( errorstring )
-  char *errorstring;
+void fatal( char *errorstring )
 {
   fprintf( stderr, "FATAL ERROR: %s.\nExecution Terminated.\n",
       errorstring );
@@ -139,8 +138,7 @@ void fatal( errorstring )
  *
  * in case the job was queued, the error message is echoed to the status file
  */
-void error( errorstring )
-  char *errorstring;
+void error( char *errorstring )
 {
 
   fprintf( stderr, "ERROR: %s.\n", errorstring );
@@ -163,8 +161,7 @@ void handle_sigint()
 /*********
   converts a string to all uppercase
 **********/
-void upcase(string)
-  char *string;
+void upcase(char *string)
 {
   int i,len,diff;
 
@@ -191,8 +188,7 @@ void upcase(string)
 *  to make the use of strtok a little easier.
 *
 *****************************************************************************/
-char *safe_strcpy(str1,str2)
-  char *str1, *str2;
+char *safe_strcpy(char *str1,char *str2)
 {
   if( !str1 ) fatal("safe_strcpy called with null str1");
   if( !str2 ){
@@ -406,10 +402,7 @@ void map_orb_num_to_name(char *name,int orb_num,int *orbital_lookup_table,
 *   if a given number is less than 'tol then a 0 is printed instead
 *
 *****************************************************************************/
-void debugmat( mat, num_row, num_col, tol )
-  real *mat;
-  int num_row,num_col;
-  real tol;
+void debugmat( real *mat, int num_row, int num_col, real tol )
 {
   int i,j;
   int beg_col,end_col;
@@ -915,11 +908,7 @@ int skipcomments(FILE *file,char *string,char toggle)
 *  'orbital_lookup_table.  This does check for dummy atoms.
 *
 *****************************************************************************/
-void find_atoms_orbs(num_orbs,num_atoms,atom,orbital_lookup_table,begin,end)
-  int num_orbs,num_atoms;
-  int atom;
-  int *orbital_lookup_table;
-  int *begin,*end;
+void find_atoms_orbs(int num_orbs,int num_atoms,int atom,int *orbital_lookup_table,int *begin,int *end)
 {
   char done;
   int next_real_atom;
@@ -979,9 +968,7 @@ void find_atoms_orbs(num_orbs,num_atoms,atom,orbital_lookup_table,begin,end)
  *
  *****************************************************************************/
 
-int overlap_tab_from_vect(vect,cell)
-  point_type *vect;
-  cell_type *cell;
+int overlap_tab_from_vect(point_type *vect,cell_type *cell)
 {
   int x,y,z;
   int L,M,N;
@@ -1048,10 +1035,7 @@ int overlap_tab_from_vect(vect,cell)
 *   user can do that will screw things up.
 *
 *****************************************************************************/
-void check_for_errors(cell,details,num_orbs)
-  cell_type *cell;
-  detail_type *details;
-  int num_orbs;
+void check_for_errors(cell_type *cell,detail_type *details,int num_orbs)
 {
   int i,j;
   COOP_type *COOP_ptr,*COOP_ptr2;
@@ -1178,10 +1162,7 @@ void check_for_errors(cell,details,num_orbs)
 * Action:  Counts the number of orbitals and builds the orbital lookup table.
 *
 *****************************************************************************/
-void build_orbital_lookup_table(cell,num_orbs,orbital_lookup_table)
-  cell_type *cell;
-  int *num_orbs;
-  int **orbital_lookup_table;
+void build_orbital_lookup_table(cell_type *cell,int *num_orbs,int **orbital_lookup_table)
 {
   int i;
   int num_so_far,atoms_so_far;
@@ -1272,16 +1253,8 @@ void build_orbital_lookup_table(cell,num_orbs,orbital_lookup_table)
 * Action:  Writes the MO output file.
 *
 *****************************************************************************/
-void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
-               num_atoms,orbital_lookup_table)
-  detail_type *details;
-  int num_orbs;
-  eigenset_type eigenset;
-  int kpoint;
-  atom_type *unique_atoms;
-  int num_unique_atoms;
-  int num_atoms;
-  int *orbital_lookup_table;
+void print_MOs(detail_type *details,int num_orbs,eigenset_type eigenset,int kpoint,atom_type *unique_atoms,int num_unique_atoms,
+               int num_atoms,int *orbital_lookup_table)
 {
   static char first_call=1;
   static int x_mirror_present,y_mirror_present,z_mirror_present;
@@ -1474,8 +1447,7 @@ void print_MOs(details,num_orbs,eigenset,kpoint,unique_atoms,num_unique_atoms,
 *
 *
 *****************************************************************************/
-double d_sign(a,b)
-  double a,b;
+double d_sign(double a,double b)
 {
   double x;
 
@@ -1502,9 +1474,7 @@ double d_sign(a,b)
  *   this deals with entries of the form "3-7", parsing this into 3,4,5,6,7.
  *
  ****************************************************************************/
-void parse_integer_string(string,values,num_values)
-  char *string;
-  int **values,*num_values;
+void parse_integer_string(char *string,int **values,int *num_values)
 {
   int max_values;
   char local_string[400],num_string[80];
@@ -1568,10 +1538,7 @@ void parse_integer_string(string,values,num_values)
  * Action: Does a binary dump of the contents of 'mat into 'file
  *
  ****************************************************************************/
-void dump_hermetian_mat(file,mat,num_orbs)
-  int file;
-  real *mat;
-  int num_orbs;
+void dump_hermetian_mat(int file,real *mat,int num_orbs)
 {
   write(file,(const char *)mat,num_orbs*num_orbs*sizeof(real));
 }
@@ -1594,11 +1561,7 @@ void dump_hermetian_mat(file,mat,num_orbs)
  *     format Heinrich Roder likes.
  *
  ****************************************************************************/
-void dump_sparse_mat(file,mat,num_orbs,cut_off)
-  FILE *file;
-  real *mat;
-  int num_orbs;
-  real cut_off;
+void dump_sparse_mat(FILE *file,real *mat,int num_orbs,real cut_off)
 {
   int i,j,itab,jtab;
   int num_non_zero,num_written;
@@ -1693,8 +1656,7 @@ void dump_sparse_mat(file,mat,num_orbs,cut_off)
  *   upon the specified charge.
  *
  ****************************************************************************/
-void charge_to_num_electrons(cell)
-  cell_type *cell;
+void charge_to_num_electrons(cell_type *cell)
 {
   int i;
   real accum;

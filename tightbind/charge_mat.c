@@ -68,13 +68,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *    ahhhhh, the suffering one must do for execution speed. :-)
  *
  ****************************************************************************/
-void eval_charge_matrix(cell,eigenset,overlap,num_orbs,
-                          orbital_lookup_table,chg_matrix,accum)
-  cell_type *cell;
-  eigenset_type eigenset;
-  hermetian_matrix_type overlap;
-  int num_orbs,*orbital_lookup_table;
-  real *chg_matrix,*accum;
+void eval_charge_matrix(cell_type *cell,eigenset_type eigenset,hermetian_matrix_type overlap,int num_orbs,
+                          int *orbital_lookup_table,real *chg_matrix,real *accum)
 {
   int num_atoms;
   int i,j,k,l;
@@ -159,10 +154,7 @@ void eval_charge_matrix(cell,eigenset,overlap,num_orbs,
  *     num_atoms * num_orbs
  *
  ****************************************************************************/
-void reduced_charge_mat(num_atoms,num_orbs,orbital_lookup_table,Chg_matrix,RChg_matrix)
-  int num_atoms,num_orbs,*orbital_lookup_table;
-  real *Chg_matrix;
-  real *RChg_matrix;
+void reduced_charge_mat(int num_atoms,int num_orbs,int *orbital_lookup_table,real *Chg_matrix,real *RChg_matrix)
 {
   int i,j,k,l;
   int ktab;

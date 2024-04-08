@@ -60,14 +60,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *   atomic Hii's using the charge iteration formula.
  *
  ****************************************************************************/
-void update_chg_it_parms(details,cell,AO_occups,converged,num_orbs,
-                         orbital_lookup_table)
-  detail_type *details;
-  cell_type *cell;
-  real *AO_occups;
-  int *converged;
-  int num_orbs;
-  int *orbital_lookup_table;
+void update_chg_it_parms(detail_type *details,cell_type *cell,real *AO_occups,int *converged,int num_orbs,
+                         int *orbital_lookup_table)
 {
   static real *AO_store=0;
   static int num_calls=0;

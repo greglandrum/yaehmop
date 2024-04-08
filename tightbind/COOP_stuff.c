@@ -70,16 +70,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   * Action:   This evaluates and returns the actual COOP.
   *
   ****************************************************************************/
- real eval_COOP(COOP,details,cell,num_orbs,prop_info,R_overlaps,orbital_ordering,
-                 orbital_lookup_table)
-   COOP_type *COOP;
-   detail_type *details;
-   cell_type *cell;
-   int num_orbs;
-   avg_prop_info_type *prop_info;
-   hermetian_matrix_type R_overlaps;
-   K_orb_ptr_type *orbital_ordering;
-   int *orbital_lookup_table;
+ real eval_COOP(COOP_type *COOP,detail_type *details,cell_type *cell,int num_orbs,avg_prop_info_type *prop_info,hermetian_matrix_type R_overlaps,
+                K_orb_ptr_type *orbital_ordering,
+                int *orbital_lookup_table)
  {
    static point_type *cell_dim=0;
    static real *overlap_store=0;
@@ -673,15 +666,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *    present in the expression for P_uv.
   *
   ****************************************************************************/
- void gen_COOP(details,cell,num_orbs,avg_prop_info,R_overlaps,orbital_ordering,
-               orbital_lookup_table)
-   detail_type *details;
-   cell_type *cell;
-   int num_orbs;
-   avg_prop_info_type *avg_prop_info;
-   hermetian_matrix_type R_overlaps;
-   K_orb_ptr_type *orbital_ordering;
-   int *orbital_lookup_table;
+ void gen_COOP(detail_type *details,cell_type *cell,int num_orbs,avg_prop_info_type *avg_prop_info,hermetian_matrix_type R_overlaps,
+               K_orb_ptr_type *orbital_ordering,
+               int *orbital_lookup_table)
  {
    int i,j;
    int tot_num_orbs,num_COOPS;
@@ -849,15 +836,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *   Everything here is done the same way as in gen_COOP
   *
   ****************************************************************************/
- void gen_avg_COOPs(details,cell,num_orbs,avg_prop_info,R_overlaps,orbital_ordering,
-                    orbital_lookup_table)
-   detail_type *details;
-   cell_type *cell;
-   int num_orbs;
-   avg_prop_info_type *avg_prop_info;
-   hermetian_matrix_type R_overlaps;
-   K_orb_ptr_type *orbital_ordering;
-   int *orbital_lookup_table;
+ void gen_avg_COOPs(detail_type *details,cell_type *cell,int num_orbs,avg_prop_info_type *avg_prop_info,hermetian_matrix_type R_overlaps,K_orb_ptr_type *orbital_ordering,
+                    int *orbital_lookup_table)
  {
    int i,j;
    int tot_num_orbs,num_COOPS;
@@ -979,9 +959,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *                                              *
 ***********************************************/
 
-void intercell_COOP_check(COOP)
-
-COOP_type *COOP;
+void intercell_COOP_check(COOP_type *COOP)
 {
   int temp;
 
@@ -1008,4 +986,3 @@ COOP_type *COOP;
     COOP->cell.z *= -1.0;
   }
 }
-

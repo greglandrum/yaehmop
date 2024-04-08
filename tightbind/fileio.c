@@ -374,10 +374,7 @@ void write_atom_parms(detail_type *details,atom_type *atoms,int num_atoms,
  *   EHT_PARM_FILE given above (or in the makefile)
  *
  *****************************************************************************/
-void fill_chg_it_parms(atoms,num_atoms,num_lines,infile)
-  atom_type *atoms;
-  int num_atoms,num_lines;
-  FILE *infile;
+void fill_chg_it_parms(atom_type *atoms,int num_atoms,int num_lines,FILE *infile)
 {
   int i,j,num_read;
   char symb[10],instring[240];
@@ -428,11 +425,7 @@ void fill_chg_it_parms(atoms,num_atoms,num_lines,infile)
  *   EHT_PARM_FILE given above (or in the makefile)
  *
  *****************************************************************************/
-void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
-  atom_type *atoms;
-  int num_atoms;
-  FILE *infile;
-  char *parm_file_name;
+void fill_atomic_parms(atom_type *atoms,int num_atoms,FILE *infile,char *parm_file_name)
 {
   char err_string[240],instring[240];
   point_type saveloc;
@@ -801,10 +794,7 @@ void fill_atomic_parms(atoms,num_atoms,infile,parm_file_name)
  * Action:  This parses all the printing options that were given...
  *
  *****************************************************************************/
-void parse_printing_options(infile,details,cell)
-  FILE *infile;
-  detail_type *details;
-  cell_type *cell;
+void parse_printing_options(FILE *infile,detail_type *details,cell_type *cell)
 {
   char instring[240];
   char type_string[40];
@@ -1063,10 +1053,7 @@ void parse_printing_options(infile,details,cell)
  * Action:  This parses the equivalent atom list given by the user
  *
  *****************************************************************************/
-void parse_equiv_atoms(infile,details,cell)
-  FILE *infile;
-  detail_type *details;
-  cell_type *cell;
+void parse_equiv_atoms(FILE *infile,detail_type *details,cell_type *cell)
 {
   char instring[400];
   int num_equiv;
@@ -1134,10 +1121,7 @@ void parse_equiv_atoms(infile,details,cell)
  *    the change I made in the notation used.
  *
  *****************************************************************************/
-void parse_muller_parms(infile,details,cell)
-  FILE *infile;
-  detail_type *details;
-  cell_type *cell;
+void parse_muller_parms(FILE *infile,detail_type *details,cell_type *cell)
 {
   char instring[400],foostring[80];
   int i,j;
@@ -1347,10 +1331,7 @@ void parse_muller_parms(infile,details,cell)
  * Action:  This parses all the charge iteration options that were given...
  *
  *****************************************************************************/
-void parse_charge_iteration(infile,details,cell)
-  FILE *infile;
-  detail_type *details;
-  cell_type *cell;
+void parse_charge_iteration(FILE *infile,detail_type *details,cell_type *cell)
 {
   char instring[240];
   char tempstring[240];
@@ -1474,15 +1455,8 @@ void parse_charge_iteration(infile,details,cell)
  *   the information is read into the two structures 'cell and 'details
  *
  *****************************************************************************/
-void read_inputfile(cell,details,name,num_orbs,orbital_lookup_table,the_file,
-                    parm_file_name)
-  cell_type *cell;
-  detail_type *details;
-  char *name;
-  int *num_orbs;
-  int **orbital_lookup_table;
-  FILE *the_file;
-  char *parm_file_name;
+void read_inputfile(cell_type *cell,detail_type *details,char *name,int *num_orbs,int **orbital_lookup_table,FILE *the_file,
+                    char *parm_file_name)
 {
   walsh_details_type *walsh;
   band_info_type *band_info;
@@ -2206,7 +2180,7 @@ calculation.\n");
             } else{
               safe_strcpy(tempstring,(char *)strtok(0,",\n"));
             }
-            if( !tempstring || tempstring[0] == 0){
+            if( tempstring[0] == 0){
               done = 1;
             }
             else{
@@ -2462,7 +2436,7 @@ calculation.\n");
           safe_strcpy(tempstring,(char *)strtok(0,",\n"));
 
           /* error checking */
-          if( !tempstring || tempstring[0] == 0 ){
+          if( tempstring[0] == 0 ){
             fatal("Number of electrons unspecified for some fragments.");
           }
 
@@ -2522,7 +2496,7 @@ calculation.\n");
           safe_strcpy(tempstring,(char *)strtok(0,",\n"));
 
           /* error checking */
-          if( !tempstring || tempstring[0] == 0 ){
+          if( tempstring[0] == 0 ){
             fatal("Number of electrons unspecified for some fragments.");
           }
 

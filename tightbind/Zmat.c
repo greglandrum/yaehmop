@@ -45,9 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 /* helper function to find a particular numbered atom in an array of atoms */
-int find_atom(atoms,num_atoms,which)
-  atom_type *atoms;
-  int num_atoms,which;
+int find_atom(atom_type *atoms,int num_atoms,int which)
 {
   static char err_string[120];
   int i;
@@ -60,6 +58,7 @@ int find_atom(atoms,num_atoms,which)
   sprintf(err_string,"Can't find atom %d (of %d) in find_atom.\n",
           which,num_atoms);
   FATAL_BUG(err_string);
+  return(0);
 }
 
 

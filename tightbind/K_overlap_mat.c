@@ -66,11 +66,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *   k-point.
 *
 ****************************************************************************/
-void build_k_overlap_FAT(cell,kpoint,overlapR,overlapK,num_orbs)
-  cell_type *cell;
-  k_point_type *kpoint;
-  hermetian_matrix_type overlapR,overlapK;
-  int num_orbs;
+void build_k_overlap_FAT(cell_type *cell,k_point_type *kpoint,hermetian_matrix_type overlapR,hermetian_matrix_type overlapK,int num_orbs)
 {
   int i,j,k,l,m;
   int itab,jtab,ktab;
@@ -207,12 +203,8 @@ printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);
 * Action: This generates the overlap matrix for a given k-point
 *
 ****************************************************************************/
-void build_k_overlap_THIN(cell,details,kpoint,overlapR,overlapK,num_orbs)
-  cell_type *cell;
-  detail_type *details;
-  k_point_type *kpoint;
-  hermetian_matrix_type overlapR,overlapK;
-  int num_orbs;
+void build_k_overlap_THIN(cell_type *cell,detail_type *details,k_point_type *kpoint,
+                          hermetian_matrix_type overlapR,hermetian_matrix_type overlapK,int num_orbs)
 {
   int i,j,k,l,m;
   int itab,jtab,ktab;
@@ -410,13 +402,9 @@ printmat(overlapK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);
  *   memory
  *
  ****************************************************************************/
-void build_all_K_overlaps(cell,details,overlapR,overlapK,num_orbs,
-                          tot_overlaps,orbital_lookup_table)
-  cell_type *cell;
-  detail_type *details;
-  hermetian_matrix_type overlapR,overlapK;
-  int num_orbs,tot_overlaps;
-  int *orbital_lookup_table;
+void build_all_K_overlaps(cell_type *cell,detail_type *details,
+                          hermetian_matrix_type overlapR,hermetian_matrix_type overlapK,int num_orbs,
+                          int tot_overlaps,int *orbital_lookup_table)
 {
   k_point_type *kpoint;
   int which_k;
