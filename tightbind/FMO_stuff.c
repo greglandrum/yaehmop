@@ -53,10 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Action: writes the header to the FMO output file.
 *
 ****************************************************************************/
-void init_FMO_file(details,num_orbs,num_electrons)
-  detail_type *details;
-  int num_orbs;
-  real num_electrons;
+void init_FMO_file(detail_type *details,int num_orbs,real num_electrons)
 {
   int i;
 
@@ -93,12 +90,7 @@ void init_FMO_file(details,num_orbs,num_electrons)
 *    'details.
 *
 ****************************************************************************/
-void build_FMO_overlap(details,num_orbs,num_atoms,overlap,orbital_lookup_table)
-  detail_type *details;
-  int num_orbs;
-  int num_atoms;
-  hermetian_matrix_type overlap;
-  int *orbital_lookup_table;
+void build_FMO_overlap(detail_type *details,int num_orbs,int num_atoms,hermetian_matrix_type overlap,int *orbital_lookup_table)
 {
   FMO_frag_type *FMO_frag;
   int i,j;
@@ -179,12 +171,7 @@ void build_FMO_overlap(details,num_orbs,num_atoms,overlap,orbital_lookup_table)
 *    'details.
 *
 ****************************************************************************/
-void build_FMO_hamil(details,num_orbs,num_atoms,hamil,orbital_lookup_table)
-  detail_type *details;
-  int num_orbs;
-  int num_atoms;
-  hermetian_matrix_type hamil;
-  int *orbital_lookup_table;
+void build_FMO_hamil(detail_type *details,int num_orbs,int num_atoms,hermetian_matrix_type hamil,int *orbital_lookup_table)
 {
   FMO_frag_type *FMO_frag;
   int i,j;
@@ -282,10 +269,7 @@ void build_FMO_hamil(details,num_orbs,num_atoms,hamil,orbital_lookup_table)
 *   returns (they will not).
 *
 ****************************************************************************/
-void diagonalize_FMO(details,work1,work2,work3,cmplx_hamil,cmplx_overlap,cmplx_work)
-  detail_type *details;
-  real *work1,*work2,*work3;
-  complex *cmplx_hamil,*cmplx_overlap,*cmplx_work;
+void diagonalize_FMO(detail_type *details,real *work1,real *work2,real *work3,complex *cmplx_hamil,complex *cmplx_overlap,complex *cmplx_work)
 {
   FMO_frag_type *FMO_frag;
   int i,j,k,itab,jtab,ktab;
@@ -526,8 +510,7 @@ INCREASE to the right)\n");
 *   orbitals from the AO to the FMO basis.
 *
 ****************************************************************************/
-void gen_FMO_tform_matrices(details)
-  detail_type *details;
+void gen_FMO_tform_matrices(detail_type *details)
 {
   FMO_frag_type *FMO_frag;
   real *matR, *matI;
@@ -636,12 +619,7 @@ fprintf(output_file,"\n\n\n");
 *    below.
 *
 ****************************************************************************/
-void tform_wavefuncs_to_FMO_basis(details,num_orbs,num_atoms,eigenset,orbital_lookup_table)
-  detail_type *details;
-  int num_orbs;
-  int num_atoms;
-  eigenset_type eigenset;
-  int *orbital_lookup_table;
+void tform_wavefuncs_to_FMO_basis(detail_type *details,int num_orbs,int num_atoms,eigenset_type eigenset,int *orbital_lookup_table)
 {
   FMO_frag_type *FMO_frag;
 
@@ -773,14 +751,8 @@ fprintf(output_file,"\n\n\n");
 *    The results are placed in 'cmplx_mat.
 *
 ****************************************************************************/
-void tform_matrix_to_FMO_basis(details,num_orbs,num_atoms,AO_matR,AO_matI,
-                               temp_matR,temp_matI,cmplx_mat,orbital_lookup_table)
-  detail_type *details;
-  int num_orbs;
-  int num_atoms;
-  real *AO_matR,*AO_matI,*temp_matR,*temp_matI;
-  complex_matrix_type cmplx_mat;
-  int *orbital_lookup_table;
+void tform_matrix_to_FMO_basis(detail_type *details,int num_orbs,int num_atoms,real *AO_matR,real *AO_matI,
+                               real *temp_matR,real *temp_matI,complex_matrix_type cmplx_mat,int *orbital_lookup_table)
 {
   FMO_frag_type *FMO_frag;
 
@@ -968,15 +940,8 @@ fprintf(output_file,"\n\n\n");
 *   The results of the multiplication are put into the matrix 'results
 *
 ****************************************************************************/
-void tform_hermetian_matrix_to_FMO_basis(details,num_orbs,num_atoms,herm_mat,
-                               temp_matR,temp_matI,results,orbital_lookup_table)
-  detail_type *details;
-  int num_orbs;
-  int num_atoms;
-  hermetian_matrix_type herm_mat;
-  real *temp_matR,*temp_matI;
-  hermetian_matrix_type results;
-  int *orbital_lookup_table;
+void tform_hermetian_matrix_to_FMO_basis(detail_type *details,int num_orbs,int num_atoms,hermetian_matrix_type herm_mat,
+                               real *temp_matR,real *temp_matI,hermetian_matrix_type results,int *orbital_lookup_table)
 {
   FMO_frag_type *FMO_frag;
 

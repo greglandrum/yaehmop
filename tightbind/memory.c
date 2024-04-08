@@ -214,24 +214,16 @@ int *my_realloc(int *ptr, int size)
 *       stored in one triangle and the imaginary in the other.
 *
 *****************************************************************************/
-void allocate_matrices(cell,details,H_R,S_R,
-                       H_K,S_K,cmplx_hamil,cmplx_overlap,eigenset,work1,work2,
-                       work3,cmplx_work,properties,avg_prop_info,num_orbs,tot_overlaps,
-                       orbital_lookup_table,orbital_ordering)
-  cell_type *cell;
-  detail_type *details;
-  hermetian_matrix_type *H_R,*S_R;
-  hermetian_matrix_type *H_K,*S_K;
-  complex **cmplx_hamil,**cmplx_overlap;
-  eigenset_type *eigenset;
-  real **work1,**work2,**work3;
-  complex **cmplx_work;
-  prop_type *properties;
-  avg_prop_info_type **avg_prop_info;
-  int num_orbs;
-  int *tot_overlaps;
-  int *orbital_lookup_table;
-  K_orb_ptr_type **orbital_ordering;
+void allocate_matrices(cell_type *cell,detail_type *details,
+                       hermetian_matrix_type *H_R,hermetian_matrix_type *S_R,
+                       hermetian_matrix_type *H_K,hermetian_matrix_type *S_K,
+                       complex **cmplx_hamil,complex **cmplx_overlap,
+                       eigenset_type *eigenset,
+                       real **work1,real **work2,
+                       real **work3,complex **cmplx_work,
+                       prop_type *properties,avg_prop_info_type **avg_prop_info,
+                       int num_orbs,int *tot_overlaps,
+                       int *orbital_lookup_table,K_orb_ptr_type **orbital_ordering)
 {
 
   FMO_frag_type *FMO_frag;

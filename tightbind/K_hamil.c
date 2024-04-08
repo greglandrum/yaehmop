@@ -60,11 +60,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *
  ****************************************************************************/
-void build_k_hamil_FAT(cell,hamilR,hamilK,overlapK,num_orbs)
-  cell_type *cell;
-  hermetian_matrix_type hamilR,hamilK;
-  hermetian_matrix_type overlapK;
-  int num_orbs;
+void build_k_hamil_FAT(cell_type *cell,hermetian_matrix_type hamilR,hermetian_matrix_type hamilK,
+                        hermetian_matrix_type overlapK,int num_orbs)
 {
   int i,j;
   int itab,jtab;
@@ -114,11 +111,8 @@ printmat(hamilK.mat,num_orbs,num_orbs,output_file,1e-6,details->line_width);
  *    insignificant in terms of the diagonalization and building S(K).
  *
  ****************************************************************************/
-void build_k_hamil_THIN(cell,hamilR,hamilK,overlapK,num_orbs)
-  cell_type *cell;
-  hermetian_matrix_type hamilR,hamilK;
-  hermetian_matrix_type overlapK;
-  int num_orbs;
+void build_k_hamil_THIN(cell_type *cell,hermetian_matrix_type hamilR,hermetian_matrix_type hamilK,
+                        hermetian_matrix_type overlapK,int num_orbs)
 {
   int i,j;
   int itab,jtab;

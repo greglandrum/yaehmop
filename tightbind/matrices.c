@@ -53,10 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Action: zeroes all the elements of 'mat which are smaller than 'value
 *
 ****************************************************************************/
-void sparsify_hermetian_matrix(value,mat,num_orbs)
-  real value;
-  hermetian_matrix_type mat;
-  int num_orbs;
+void sparsify_hermetian_matrix(real value,hermetian_matrix_type mat,int num_orbs)
 {
   int i,j,itab,jtab;
   int num_zeroed;
@@ -106,10 +103,7 @@ void sparsify_hermetian_matrix(value,mat,num_orbs)
 *         which are smaller than 'value
 *
 ****************************************************************************/
-void sparsify_matrix(value,mat_R,mat_I,num_orbs)
-  real value;
-  real *mat_R,*mat_I;
-  int num_orbs;
+void sparsify_matrix(real value,real *mat_R,real *mat_I,int num_orbs)
 {
   int i,j,itab,jtab;
   int num_zeroed;

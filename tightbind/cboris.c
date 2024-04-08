@@ -6,7 +6,12 @@ Produced by gmFortran V30.59(10/26/17) on 9/18/18 at 9:02:32
 void cboris(int *n,int *nd,double *a,double *b,double *c,double *d,double *e,
     double *f,int *fail)
 {
-extern void cchol(),ctred2(),ctql2();
+
+
+extern void cchol(int *n,int *nd,double *a,int *fail);
+extern void ctred2(int *n,int *nd,double *a,double *b,double *d,double *e,double *f);
+extern void ctql2(int *n,int *nd,double *d,double *e,double *f,double *a,double *b,
+    int *fail);
 static int lf,i,ia,j,k,ja,ii;
 /*
 

@@ -98,25 +98,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *
  ****************************************************************************/
-void loop_over_k_points(cell,details,overlapR,hamilR,overlapK,hamilK,
-                        cmplx_hamil,cmplx_overlap,
-                        eigenset,work1,work2,work3,cmplx_work,
-                        properties,avg_prop_info,
-                        num_orbs,orbital_lookup_table)
-  cell_type *cell;
-  detail_type *details;
-  hermetian_matrix_type overlapR,hamilR;
-  hermetian_matrix_type overlapK,hamilK;
-  complex *cmplx_hamil,*cmplx_overlap;
-  eigenset_type eigenset;
-  real *work1,*work2,*work3;
-  complex *cmplx_work;
-  prop_type *properties;
-  avg_prop_info_type *avg_prop_info;
-  int num_orbs;
-  int *orbital_lookup_table;
+void loop_over_k_points(cell_type *cell,detail_type *details,
+                        hermetian_matrix_type overlapR,hermetian_matrix_type hamilR,
+                        hermetian_matrix_type overlapK,hermetian_matrix_type hamilK,
+                        complex *cmplx_hamil,complex *cmplx_overlap,
+                        eigenset_type eigenset,real *work1,real *work2,real *work3,
+                        complex *cmplx_work,
+                        prop_type *properties,avg_prop_info_type *avg_prop_info,
+                        int num_orbs,int *orbital_lookup_table)
 {
-  static char tempfilename[240];
+  static char tempfilename[512];
   static char *label=0;
   static FILE *sparse_OVfile,*sparse_HAMfile;
   k_point_type *kpoint;

@@ -52,8 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *
  ****************************************************************************/
-int factorial(num)
-  int num;
+int factorial(int num)
 {
   int i;
   real accum;
@@ -67,8 +66,7 @@ int factorial(num)
 }
 
 /* this is the helper function for quicksorting the atomic energy level array */
-int compare_energies(a,b)
-  const void *a,*b;
+int compare_energies(const void *a,const void *b)
 {
   return( (int)( *(real *)a - *(real *)b) );
 }
@@ -87,9 +85,7 @@ int compare_energies(a,b)
  *   the "free atomic energy" used in extended Hueckel binding calculations.
  *
  ****************************************************************************/
-void free_atomic_energy(cell,energy,work_array)
-  cell_type *cell;
-  real *energy,*work_array;
+void free_atomic_energy(cell_type *cell,real *energy,real *work_array)
 {
   atom_type *atom;
   int i;
@@ -165,12 +161,7 @@ void free_atomic_energy(cell,energy,work_array)
  *  the results are stored in 'accum which should be at least 'num_orbs long
  *
  ****************************************************************************/
-void AO_occupations(cell,num_orbs,OP_mat,orbital_lookup_table,accum)
-  cell_type *cell;
-  int num_orbs;
-  int *orbital_lookup_table;
-  real *OP_mat;
-  real *accum;
+void AO_occupations(cell_type *cell,int num_orbs,real *OP_mat,int *orbital_lookup_table,real *accum)
 {
   atom_type *atom;
   static real *free_atom_occups=0;
@@ -320,15 +311,9 @@ fprintf(stderr,"Atom %d p orbital occupation: %lg\n",i,accum[orbs_so_far]);
  *  I've tried to keep the notation in the code similar.
  *
  ****************************************************************************/
-void eval_electrostatics(cell,num_orbs,eigenset,occupations,OP_mat,orbital_lookup_table,
-                         electrostat_term,eHMO_term,total_E,accum,net_chgs)
-  cell_type *cell;
-  int num_orbs;
-  int *orbital_lookup_table;
-  real *occupations,*OP_mat;
-  eigenset_type eigenset;
-  real *electrostat_term,*eHMO_term,*total_E;
-  real *accum,*net_chgs;
+void eval_electrostatics(cell_type *cell,int num_orbs,eigenset_type eigenset,real *occupations,
+                         real *OP_mat,int *orbital_lookup_table,
+                         real *electrostat_term,real *eHMO_term,real *total_E,real *accum,real *net_chgs)
 {
   static real *atomic_energy=0;
   atom_type *atomA,*atomB;

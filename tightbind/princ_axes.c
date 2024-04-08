@@ -68,11 +68,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *   to translate the atoms to center of mass coordinates first.
 *
 *****************************************************************************/
-void find_princ_axes(atoms,locs,princ_axes,moments,num_atoms)
-  atom_type *atoms;
-  point_type *locs;
-  real moments[3],princ_axes[3][3];
-  int num_atoms;
+void find_princ_axes(atom_type *atoms,point_type *locs,real princ_axes[3][3],real moments[3],int num_atoms)
 {
   int i,j;
   atom_type *atom;

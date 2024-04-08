@@ -63,23 +63,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Returns: none
  *
  ****************************************************************************/
-void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
-                        cmplx_hamil,cmplx_overlap,
-                        eigenset,work1,work2,work3,cmplx_work,
-                        properties,avg_prop_info,
-                        num_orbs,orbital_lookup_table)
-  cell_type *cell;
-  detail_type *details;
-  hermetian_matrix_type overlapR,hamilR;
-  hermetian_matrix_type overlapK,hamilK;
-  complex *cmplx_hamil,*cmplx_overlap;
-  eigenset_type eigenset;
-  real *work1,*work2,*work3;
-  complex *cmplx_work;
-  prop_type *properties;
-  avg_prop_info_type *avg_prop_info;
-  int num_orbs;
-  int *orbital_lookup_table;
+void postprocess_FMO(cell_type *cell,detail_type *details,hermetian_matrix_type overlapR,hermetian_matrix_type hamilR,
+                        hermetian_matrix_type overlapK,hermetian_matrix_type hamilK,
+                        complex *cmplx_hamil,complex *cmplx_overlap,
+                        eigenset_type eigenset,real *work1,real *work2,real *work3,complex *cmplx_work,
+                        prop_type *properties,avg_prop_info_type *avg_prop_info,
+                        int num_orbs,int *orbital_lookup_table)
 {
   real *occupations;
   real *chg_mat;
@@ -264,27 +253,16 @@ void postprocess_FMO(cell,details,overlapR,hamilR,overlapK,hamilK,
  * Returns: none
  *
  ****************************************************************************/
-void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
-                        cmplx_hamil,cmplx_overlap,
-                        eigenset,work1,work2,work3,cmplx_work,
-                        properties,avg_prop_info,
-                        num_orbs,orbital_lookup_table)
-  cell_type *cell;
-  detail_type *details;
-  hermetian_matrix_type overlapR,hamilR;
-  hermetian_matrix_type overlapK,hamilK;
-  complex *cmplx_hamil,*cmplx_overlap;
-  eigenset_type eigenset;
-  real *work1,*work2,*work3;
-  complex *cmplx_work;
-  prop_type *properties;
-  avg_prop_info_type *avg_prop_info;
-  int num_orbs;
-  int *orbital_lookup_table;
+void postprocess_FCO(cell_type *cell,detail_type *details,hermetian_matrix_type overlapR,hermetian_matrix_type hamilR,
+                        hermetian_matrix_type overlapK,hermetian_matrix_type hamilK,
+                        complex *cmplx_hamil,complex *cmplx_overlap,
+                        eigenset_type eigenset,real *work1,real *work2,real *work3,complex *cmplx_work,
+                        prop_type *properties,avg_prop_info_type *avg_prop_info,
+                        int num_orbs,int *orbital_lookup_table)
 {
 
   static int FCO_file=0;
-  char FCO_filename[240];
+  char FCO_filename[512];
 
   real tot_K_weight;
   real *occupations;
@@ -511,23 +489,13 @@ void postprocess_FCO(cell,details,overlapR,hamilR,overlapK,hamilK,
  *   and easier to deal with.
  *
  ****************************************************************************/
-void postprocess_results(cell,details,overlapR,hamilR,overlapK,hamilK,
-                        cmplx_hamil,cmplx_overlap,
-                        eigenset,work1,work2,work3,cmplx_work,
-                        properties,avg_prop_info,
-                        num_orbs,orbital_lookup_table)
-  cell_type *cell;
-  detail_type *details;
-  hermetian_matrix_type overlapR,hamilR;
-  hermetian_matrix_type overlapK,hamilK;
-  complex *cmplx_hamil,*cmplx_overlap;
-  eigenset_type eigenset;
-  real *work1,*work2,*work3;
-  complex *cmplx_work;
-  prop_type *properties;
-  avg_prop_info_type *avg_prop_info;
-  int num_orbs;
-  int *orbital_lookup_table;
+void postprocess_results(cell_type *cell,detail_type *details,hermetian_matrix_type overlapR,hermetian_matrix_type hamilR,
+                        hermetian_matrix_type overlapK,hermetian_matrix_type hamilK,
+                        complex *cmplx_hamil,complex *cmplx_overlap,
+                        eigenset_type eigenset,
+                        real *work1,real *work2,real *work3,complex *cmplx_work,
+                        prop_type *properties,avg_prop_info_type *avg_prop_info,
+                        int num_orbs,int *orbital_lookup_table)
 {
 
   real *occupations;

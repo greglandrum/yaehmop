@@ -893,14 +893,9 @@ printmat(overlap,num_orbs,num_orbs,status_file,1e-6,0,details->line_width);
  *
  *
  *****************************************************************************/
-void R_space_overlap_matrix(cell,details,overlap,num_orbs,tot_overlaps,
-                            orbital_lookup_table,which_one)
-  cell_type *cell;
-  detail_type *details;
-  hermetian_matrix_type overlap;
-  int num_orbs,tot_overlaps;
-  int *orbital_lookup_table;
-  int which_one;
+void R_space_overlap_matrix(cell_type *cell,detail_type *details,hermetian_matrix_type overlap,
+    int num_orbs,int tot_overlaps,
+                            int *orbital_lookup_table,int which_one)
 {
   char err_string[240];
   int overlaps_so_far;

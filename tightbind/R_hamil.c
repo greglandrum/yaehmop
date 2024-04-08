@@ -65,12 +65,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *     K space hamiltonian (the important one) is built.
  *
  ****************************************************************************/
-void R_space_Hamiltonian(cell,details,overlap,hamil,num_orbs,orbital_lookup_table)
-  cell_type *cell;
-  detail_type *details;
-  hermetian_matrix_type overlap,hamil;
-  int num_orbs;
-  int *orbital_lookup_table;
+void R_space_Hamiltonian(cell_type *cell,detail_type *details,hermetian_matrix_type overlap,hermetian_matrix_type hamil,int num_orbs,int *orbital_lookup_table)
 {
   int i,j;
   int orb_tab1;

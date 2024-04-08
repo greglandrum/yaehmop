@@ -65,11 +65,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *   comments will follow the clue when I get one
 *
 ********************************************************************************/
-void mov(sigma,pi,delta,phi,which1,which2,dist,q_num1,q_num2,
-         l1,l2,atoms)
-  real *sigma,*pi,*delta,*phi,dist;
-  int which1,which2,q_num1,q_num2,l1,l2;
-  atom_type *atoms;
+void mov(real *sigma,real *pi,real *delta,real *phi,int which1,int which2,real dist,int q_num1,int q_num2,
+         int l1,int l2,atom_type *atoms)
 {
   int i,j,num_zeta1,num_zeta2;
   real coeff_1,coeff_2,sk1,sk2,r;

@@ -60,12 +60,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *         specified orbitals.
  *
  ****************************************************************************/
-void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
-  detail_type *details;
-  real num_electrons;
-  int num_orbs;
-  real *occupations;
-  eigenset_type eigenset;
+void calc_occupations(detail_type *details,real num_electrons,int num_orbs,real *occupations,eigenset_type eigenset)
 {
   int i,begin_degen,end_degen,num_degen_levels,last_occup;
   real num_degen_electrons;
@@ -148,10 +143,7 @@ void calc_occupations(details,num_electrons,num_orbs,occupations,eigenset)
  *     num_atoms * num_atoms
  *
  ****************************************************************************/
-void reduced_mulliken(num_atoms,num_orbs,orbital_lookup_table,OP_matrix,ROP_matrix)
-  int num_atoms,num_orbs,*orbital_lookup_table;
-  real *OP_matrix;
-  real *ROP_matrix;
+void reduced_mulliken(int num_atoms,int num_orbs,int *orbital_lookup_table,real *OP_matrix,real *ROP_matrix)
 {
   int i,j,k,l;
   int ktab;
@@ -222,11 +214,7 @@ void reduced_mulliken(num_atoms,num_orbs,orbital_lookup_table,OP_matrix,ROP_matr
  *     details->num_FMO_frags * details->num_FMO_frags
  *
  ****************************************************************************/
-void FMO_reduced_mulliken(details,num_atoms,num_orbs,OP_matrix,ROP_matrix)
-  detail_type *details;
-  int num_atoms,num_orbs;
-  real *OP_matrix;
-  real *ROP_matrix;
+void FMO_reduced_mulliken(detail_type *details,int num_atoms,int num_orbs,real *OP_matrix,real *ROP_matrix)
 {
   FMO_frag_type *FMO_frag1,*FMO_frag2;
   int frag1,frag2;
@@ -356,13 +344,8 @@ void FMO_reduced_mulliken(details,num_atoms,num_orbs,OP_matrix,ROP_matrix)
  *     be filled with the occupation numbers of the various orbitals.
  *
  ****************************************************************************/
-void eval_mulliken(cell,eigenset,overlap,num_orbs,
-                   occupations,orbital_lookup_table,OP_matrix,net_chgs,accum)
-  cell_type *cell;
-  eigenset_type eigenset;
-  hermetian_matrix_type overlap;
-  int num_orbs,*orbital_lookup_table;
-  real *occupations,*OP_matrix,*accum,*net_chgs;
+void eval_mulliken(cell_type *cell,eigenset_type eigenset,hermetian_matrix_type overlap,int num_orbs,
+                   real *occupations,int *orbital_lookup_table,real *OP_matrix,real *net_chgs,real *accum)
 {
   int num_atoms;
   int i,j,k;

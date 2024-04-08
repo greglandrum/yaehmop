@@ -71,15 +71,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  The AO occupations are returned in AO_occups.
  *
  ****************************************************************************/
-void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
-                     properties,AO_occups)
-  detail_type *details;
-  cell_type *cell;
-  int num_orbs;
-  K_orb_ptr_type *orbital_ordering;
-  avg_prop_info_type *avg_prop_info;
-  prop_type *properties;
-  real *AO_occups;
+void calc_avg_occups(detail_type *details,cell_type *cell,int num_orbs,K_orb_ptr_type *orbital_ordering,avg_prop_info_type *avg_prop_info,
+                     prop_type *properties,real *AO_occups)
 {
   int i,j,k;
   real tot_num_K=0.0;
@@ -191,15 +184,8 @@ void calc_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
  *  net charges on all the atoms, to the output file.
  *
  ****************************************************************************/
-void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
-                     properties,AO_occups)
-  detail_type *details;
-  cell_type *cell;
-  int num_orbs;
-  K_orb_ptr_type *orbital_ordering;
-  avg_prop_info_type *avg_prop_info;
-  prop_type properties;
-  real *AO_occups;
+void print_avg_occups(detail_type *details,cell_type *cell,int num_orbs,K_orb_ptr_type *orbital_ordering,avg_prop_info_type *avg_prop_info,
+                     prop_type properties,real *AO_occups)
 {
   int i,j,k,f_occup_print=0;
   real tot_num_K=0.0;
@@ -342,13 +328,8 @@ void print_avg_occups(details,cell,num_orbs,orbital_ordering,avg_prop_info,
  *  The FMO occupations are returned in FMO_occups.
  *
  ****************************************************************************/
-void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
-                         FMO_occups)
-  detail_type *details;
-  int num_orbs;
-  K_orb_ptr_type *orbital_ordering;
-  avg_prop_info_type *avg_prop_info;
-  real *FMO_occups;
+void calc_avg_FMO_occups(detail_type *details,int num_orbs,K_orb_ptr_type *orbital_ordering,avg_prop_info_type *avg_prop_info,
+                         real *FMO_occups)
 {
   int i,j,k;
   real tot_num_K=0.0;
@@ -466,15 +447,8 @@ void calc_avg_FMO_occups(details,num_orbs,orbital_ordering,avg_prop_info,
  *   stored in the appropriate places in 'properties.
  *
  ****************************************************************************/
-void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
-                     overlapR,properties)
-  detail_type *details;
-  cell_type *cell;
-  int num_orbs;
-  K_orb_ptr_type *orbital_ordering;
-  avg_prop_info_type *avg_prop_info;
-  hermetian_matrix_type overlapR;
-  prop_type properties;
+void calc_avg_OP(detail_type *details,cell_type *cell,int num_orbs,K_orb_ptr_type *orbital_ordering,avg_prop_info_type *avg_prop_info,
+                     hermetian_matrix_type overlapR,prop_type properties)
 {
   int i,j,k,l;
   real tot_num_K=0.0;
@@ -637,13 +611,8 @@ void calc_avg_OP(details,cell,num_orbs,orbital_ordering,avg_prop_info,
  *  The Fermi Energy is stored in the the variable 'Fermi_E.
  *
  ****************************************************************************/
-void find_crystal_occupations(details,electrons_per_cell,num_orbs,
-                              orbital_ordering,Fermi_E)
-  detail_type *details;
-  real electrons_per_cell;
-  int num_orbs;
-  K_orb_ptr_type *orbital_ordering;
-  real *Fermi_E;
+void find_crystal_occupations(detail_type *details,real electrons_per_cell,int num_orbs,
+                              K_orb_ptr_type *orbital_ordering,real *Fermi_E)
 {
   int i;
   int tot_orbs;
@@ -773,15 +742,8 @@ void find_crystal_occupations(details,electrons_per_cell,num_orbs,
  *    in the file indicated by the element (depending on execution mode)
  *
  ****************************************************************************/
-void store_avg_prop_info(details,which_k,eigenset,overlap,num_orbs,
-                         chg_mat,avg_prop_info)
-  detail_type *details;
-  int which_k;
-  eigenset_type eigenset;
-  hermetian_matrix_type overlap;
-  int num_orbs;
-  real *chg_mat;
-  avg_prop_info_type *avg_prop_info;
+void store_avg_prop_info(detail_type *details,int which_k,eigenset_type eigenset,hermetian_matrix_type overlap,int num_orbs,
+                         real *chg_mat,avg_prop_info_type *avg_prop_info)
 {
   int i,j;
   int itab,jtab;
@@ -834,8 +796,7 @@ void store_avg_prop_info(details,which_k,eigenset,overlap,num_orbs,
     orbital energies.
 
 *******/
-int sort_energies_helper(orb1,orb2)
-  const void *orb1, *orb2;
+int sort_energies_helper(const void *orb1,const void *orb2)
 {
   real diff;
 
@@ -871,11 +832,7 @@ int sort_energies_helper(orb1,orb2)
  *   point to their energies within the avg_prop_info array is sorted.
  *
  ****************************************************************************/
-void sort_avg_prop_info(details,num_orbs,avg_prop_info,orbital_ordering)
-  detail_type *details;
-  int num_orbs;
-  avg_prop_info_type *avg_prop_info;
-  K_orb_ptr_type *orbital_ordering;
+void sort_avg_prop_info(detail_type *details,int num_orbs,avg_prop_info_type *avg_prop_info,K_orb_ptr_type *orbital_ordering)
 {
   int i,j;
   int itab;

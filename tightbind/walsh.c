@@ -64,10 +64,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *  NOTE:  I'll give you a fence post problem....
 *
 *****************************************************************************/
-void auto_walsh(values,num_steps,begin,end)
-  real *values;
-  int num_steps;
-  real begin,end;
+void auto_walsh(real *values,int num_steps,real begin,real end)
 {
   int i;
   real tot_dist,step,cur_val;
@@ -382,16 +379,9 @@ void walsh_update(cell_type *cell,detail_type *details,int step,char printing)
 *  puts the relevant information in the walsh output file.
 *
 *****************************************************************************/
-void walsh_output(details,cell,num_orbs,eigenset,overlap,hamil,
-                  properties,orbital_lookup_table,step)
-  detail_type *details;
-  cell_type *cell;
-  int num_orbs;
-  eigenset_type eigenset;
-  hermetian_matrix_type overlap,hamil;
-  prop_type properties;
-  int *orbital_lookup_table;
-  int step;
+void walsh_output(detail_type *details,cell_type *cell,int num_orbs,eigenset_type eigenset,
+ hermetian_matrix_type overlap,hermetian_matrix_type hamil,
+                  prop_type properties,int *orbital_lookup_table,int step)
 {
   static char first_call=1;
   int i;

@@ -55,8 +55,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *   the resulting difference is returned in 'diff.
 *
 *****************************************************************************/
-void vector_diff(vect1,vect2,diff)
-  point_type *vect1,*vect2,*diff;
+void vector_diff(point_type *vect1,point_type *vect2,point_type *diff)
 {
   diff->x = vect1->x-vect2->x;
   diff->y = vect1->y-vect2->y;
@@ -74,8 +73,7 @@ void vector_diff(vect1,vect2,diff)
 * Action:  This normalizes vector 'vect and returns the result in 'norm_vect
 *
 *****************************************************************************/
-void normalize_vector(vect,norm_vect)
-  point_type *vect,*norm_vect;
+void normalize_vector(point_type *vect,point_type *norm_vect)
 {
   real norm_fact;
 
@@ -99,8 +97,7 @@ void normalize_vector(vect,norm_vect)
 * Action:  Returns the dot product of 'vect1 and 'vect2
 *
 *****************************************************************************/
-real dot_prod(vect1,vect2)
-  point_type *vect1,*vect2;
+real dot_prod(point_type *vect1,point_type *vect2)
 {
   return(vect1->x*vect2->x + vect1->y*vect2->y + vect1->z*vect2->z);
 }
@@ -137,8 +134,7 @@ void scale_vector(point_type *vect,real scalar)
 *   vector in 'result
 *
 *****************************************************************************/
-void cross_prod(vect1,vect2,result)
-  point_type *vect1,*vect2,*result;
+void cross_prod(point_type *vect1,point_type *vect2,point_type *result)
 {
 
   result->x = vect1->y*vect2->z - vect1->z*vect2->y;
@@ -189,9 +185,7 @@ void mult_matrices(real *mat1,real *mat2,real *result,int dim)
 * Action:  Translates all the atomic positions in 'atom_locs by 'pos
 *
 *****************************************************************************/
-void translate_atoms(atom_locs,pos,num_atoms)
-  point_type *atom_locs,pos;
-  int num_atoms;
+void translate_atoms(point_type *atom_locs,point_type pos,int num_atoms)
 {
   int i;
 
@@ -223,10 +217,7 @@ void translate_atoms(atom_locs,pos,num_atoms)
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
-void transform_atomic_locs(atom_locs,t_mat,num_atoms)
-  point_type *atom_locs;
-  real t_mat[T_MAT_DIM][T_MAT_DIM];
-  int num_atoms;
+void transform_atomic_locs(point_type *atom_locs,real t_mat[T_MAT_DIM][T_MAT_DIM],int num_atoms)
 {
   int atom,i,j;
   static real loc[T_MAT_DIM],new_loc[T_MAT_DIM];
@@ -317,10 +308,7 @@ void transform_one_point(point_type *the_point,real t_mat[T_MAT_DIM][T_MAT_DIM])
 *    use for the eigenvectors of a matrix.
 *
 *****************************************************************************/
-void transform_3x3_transpose(atom_locs,t_mat,num_atoms)
-  point_type *atom_locs;
-  real t_mat[3][3];
-  int num_atoms;
+void transform_3x3_transpose(point_type *atom_locs,real t_mat[3][3],int num_atoms)
 {
   int atom,i,j;
   static real loc[3],new_loc[3];
@@ -366,8 +354,7 @@ void transform_3x3_transpose(atom_locs,t_mat,num_atoms)
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
-void transform_p_orbs(coeffs,t_mat)
-  real *coeffs,t_mat[T_MAT_DIM][T_MAT_DIM];
+void transform_p_orbs(real *coeffs,real t_mat[T_MAT_DIM][T_MAT_DIM])
 {
   static real result[T_MAT_DIM];
   int i,j;
@@ -401,8 +388,7 @@ void transform_p_orbs(coeffs,t_mat)
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
-void transform_d_orbs(coeffs,d_t_mat)
-  real *coeffs,d_t_mat[D_T_MAT_DIM][D_T_MAT_DIM];
+void transform_d_orbs(real *coeffs,real d_t_mat[D_T_MAT_DIM][D_T_MAT_DIM])
 {
   static real result[D_T_MAT_DIM];
   int i,j;
@@ -434,10 +420,7 @@ void transform_d_orbs(coeffs,d_t_mat)
 *   the matrices in 'sym_op.
 *
 *****************************************************************************/
-void transform_orbitals(atom,coeffs,sym_op)
-  atom_type *atom;
-  real *coeffs;
-  sym_op_type *sym_op;
+void transform_orbitals(atom_type *atom,real *coeffs,sym_op_type *sym_op)
 {
   real *coeff_tab;
 
@@ -480,11 +463,7 @@ void transform_orbitals(atom,coeffs,sym_op)
 *    use for the eigenvectors of a matrix.
 *
 *****************************************************************************/
-void full_transform(atoms,COM,t_mat,num_atoms)
-  atom_type *atoms;
-  point_type COM;
-  real t_mat[3][3];
-  int num_atoms;
+void full_transform(atom_type *atoms,point_type COM,real t_mat[3][3],int num_atoms)
 {
   int atom,i,j;
   static real loc[3],new_loc[3];
@@ -535,10 +514,7 @@ void full_transform(atoms,COM,t_mat,num_atoms)
 *    fill in the values for the homogeneous variables.
 *
 *****************************************************************************/
-void transform_atoms(atoms,t_mat,num_atoms)
-  atom_type *atoms;
-  real t_mat[T_MAT_DIM][T_MAT_DIM];
-  int num_atoms;
+void transform_atoms(atom_type *atoms,real t_mat[T_MAT_DIM][T_MAT_DIM],int num_atoms)
 {
   int atom,i,j;
   static real loc[T_MAT_DIM],new_loc[T_MAT_DIM];
