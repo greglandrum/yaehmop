@@ -707,7 +707,7 @@ INCREASE to the right)\n");
 
     /* this stores the reduced charge matrix */
     if( details->Rchg_mat_PRT ){
-      reduced_charge_mat(cell->num_atoms,num_orbs,orbital_lookup_table,
+      reduced_charge_matrix(cell->num_atoms,num_orbs,orbital_lookup_table,
                        properties->chg_mat,properties->Rchg_mat);
     }
 

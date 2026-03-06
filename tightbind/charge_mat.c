@@ -154,7 +154,7 @@ void eval_charge_matrix(cell_type *cell,eigenset_type eigenset,hermetian_matrix_
  *     num_atoms * num_orbs
  *
  ****************************************************************************/
-void reduced_charge_mat(int num_atoms,int num_orbs,int *orbital_lookup_table,real *Chg_matrix,real *RChg_matrix)
+void reduced_charge_matrix(int num_atoms,int num_orbs,int *orbital_lookup_table,real *Chg_matrix,real *RChg_matrix)
 {
   int i,j,k,l;
   int ktab;
