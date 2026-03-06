@@ -74,11 +74,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #ifndef _MSC_VER
 #include <unistd.h>
 #endif
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #ifdef INCLUDE_NETCDF_SUPPORT
 #include <netcdf.h>
