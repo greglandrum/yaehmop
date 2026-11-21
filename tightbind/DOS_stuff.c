@@ -454,11 +454,12 @@ void gen_projected_DOS(detail_type *details,cell_type *cell,int num_orbs,avg_pro
               FATAL_BUG("Invalid projection type in gen_proj_DOS.");
             }
           }
+          /* weight with the k point of this state (state j), before moving on */
+          accum *= (real)details->K_POINTS[orbital_ordering[j].Kpoint].weight;
           j++;
 
           if( j < tot_num_orbs ){
             diff = (real)*(orbital_ordering[i].energy) - (real)*(orbital_ordering[j].energy);
-            accum *= (real)details->K_POINTS[orbital_ordering[j].Kpoint].weight;
           }
 
           num_at_this_E += accum;
