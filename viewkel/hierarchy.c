@@ -338,14 +338,18 @@ void free_obj(object_type *obj)
     D_FREE(obj->prim->prop_graph->the_data->fills);
     D_FREE(obj->prim->prop_graph->the_data);
 
-    if(obj->prim->prop_graph->the_integration->curve_names)
-      D_FREE(obj->prim->prop_graph->the_integration->curve_names);
-    D_FREE(obj->prim->prop_graph->the_integration->curves_to_display);
-    D_FREE(obj->prim->prop_graph->the_integration->styles);
-    D_FREE(obj->prim->prop_graph->the_integration->fills);
-    D_FREE(obj->prim->prop_graph->the_integration);
-    D_FREE(obj->prim->prop_graph->the_integration->data);
-    D_FREE(obj->prim->prop_graph->the_integration->raw_data);
+    /* the integration is optional, and its arrays must be
+       freed before the structure itself */
+    if( obj->prim->prop_graph->the_integration ){
+      if(obj->prim->prop_graph->the_integration->curve_names)
+        D_FREE(obj->prim->prop_graph->the_integration->curve_names);
+      D_FREE(obj->prim->prop_graph->the_integration->curves_to_display);
+      D_FREE(obj->prim->prop_graph->the_integration->styles);
+      D_FREE(obj->prim->prop_graph->the_integration->fills);
+      D_FREE(obj->prim->prop_graph->the_integration->data);
+      D_FREE(obj->prim->prop_graph->the_integration->raw_data);
+      D_FREE(obj->prim->prop_graph->the_integration);
+    }
 
     D_FREE(obj->prim->prop_graph);
   }
