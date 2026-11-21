@@ -247,6 +247,9 @@ void inner_wrapper(char *file_name, bool use_stdin_stdout){
           /* build the real hamiltonian */
           full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,
                                   num_orbs,orbital_lookup_table,0);
+          /* SOC with two spin tables: spin-down hamiltonian (soc.c) */
+          soc_build_down_hamiltonian(unit_cell,details,Overlap_R,num_orbs,
+                                     orbital_lookup_table);
 
 
         }
@@ -263,6 +266,9 @@ void inner_wrapper(char *file_name, bool use_stdin_stdout){
           /* build the real hamiltonian */
           full_R_space_Hamiltonian(unit_cell,details,Overlap_R,Hamil_R,
                                   num_orbs,orbital_lookup_table,0);
+          /* SOC with two spin tables: spin-down hamiltonian (soc.c) */
+          soc_build_down_hamiltonian(unit_cell,details,Overlap_R,num_orbs,
+                                     orbital_lookup_table);
 
         }
         else if( details->Execution_Mode == THIN ){
@@ -322,6 +328,10 @@ void inner_wrapper(char *file_name, bool use_stdin_stdout){
           *********/
           if( details->avg_props ){
             sort_avg_prop_info(details,num_orbs,avg_prop_info,orbital_ordering);
+
+            /* spin channel with --common-fermi: electrons of this channel
+               from the energies of both channels (spin.c) */
+            spin_exchange_fermi(details,unit_cell,num_orbs,orbital_ordering);
 
             find_crystal_occupations(details,unit_cell->num_electrons,num_orbs,
                                     orbital_ordering,&(properties.Fermi_E));
@@ -425,7 +435,7 @@ void inner_wrapper(char *file_name, bool use_stdin_stdout){
               fprintf(output_file,"\n;  The Fermi Level was determined for %d K points based on\n",
                       details->num_KPOINTS);
               fprintf(output_file,";     an ordering of %d crystal orbitals occupied by %lf electrons\n",
-                      num_orbs*details->num_KPOINTS,unit_cell->num_electrons);
+                      num_orbs*num_spin_comp*details->num_KPOINTS,unit_cell->num_electrons);
               fprintf(output_file,";      in the unit cell (%lf electrons total)\n",
                       unit_cell->num_electrons*(real)details->num_KPOINTS);
               fprintf(output_file,"#Fermi_Energy:  %lf\n",properties.Fermi_E);
@@ -443,6 +453,10 @@ void inner_wrapper(char *file_name, bool use_stdin_stdout){
 
               print_avg_occups(details,unit_cell,num_orbs,orbital_ordering,
                               avg_prop_info,properties,work2);
+
+              /* SOC: average spin moments (soc.c) */
+              soc_print_spin_moments(details,unit_cell,num_orbs,orbital_ordering,
+                                     avg_prop_info);
 
               /* deal with multiple occupations, if there are any */
               if( details->num_occup_AVG ){
@@ -612,6 +626,20 @@ void inner_wrapper(char *file_name, bool use_stdin_stdout){
 }
 
 void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
+  run_bind_ex(file_name, file_name, use_stdin_stdout, parm_file_name);
+}
+
+/****************************************************************************
+ *
+ *                   Procedure run_bind_ex
+ *
+ *   As run_bind, but the outputs (.out, .status, .band, .HAM, ...) are
+ *   named after out_name instead of the input file (used for
+ *   the _up and _down spin channels).
+ *
+ ****************************************************************************/
+void run_bind_ex(char *file_name, char *out_name, bool use_stdin_stdout,
+                 char *parm_file_name ){
   char temp_file_name[500],err_string[500];
   FILE *temp_file;
   FILE *the_file=0;
@@ -648,7 +676,7 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
   }
   else {
     /* open the file that will be used to dump progress reports */
-    strcpy(temp_file_name,file_name);
+    strcpy(temp_file_name,out_name);
     strcat(temp_file_name,".status");
     status_file = fopen(temp_file_name,"w+");
   }
@@ -660,7 +688,7 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
   }
   else {
     /* open the file that will be used for results */
-    strcpy(temp_file_name,file_name);
+    strcpy(temp_file_name,out_name);
     strcat(temp_file_name,".out");
     output_file = fopen(temp_file_name,"w+");
   }
@@ -675,8 +703,41 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
   *********/
   read_inputfile(unit_cell,details,file_name,&num_orbs,&orbital_lookup_table,the_file,parm_file_name);
 
-  /* copy the file name into the details structure */
-  strcpy(details->filename,file_name);
+  /* copy the (output) file name into the details structure */
+  strcpy(details->filename,out_name);
+
+  /* one spin channel: one electron per state, own electron count */
+  if( spin_channel ){
+    real tot_electrons = unit_cell->num_electrons;
+    spin_input_electrons = tot_electrons;
+    max_occup = 1.0;
+    if( spin_nelec >= 0.0 ) unit_cell->num_electrons = spin_nelec;
+    else unit_cell->num_electrons = 0.5*tot_electrons;
+    fprintf(output_file,"#SPIN_CHANNEL: %s\n",spin_channel == 1 ? "up" : "down");
+    fprintf(output_file,"; parameter file of this channel: %s\n",
+            parm_file_name ? parm_file_name : "(default)");
+    fprintf(output_file,"; electrons from the input (both channels): %lf\n",tot_electrons);
+    fprintf(output_file,"#ELECTRONS_THIS_CHANNEL: %lf\n",unit_cell->num_electrons);
+    if( spin_const > 0.0 ){
+      fprintf(output_file,"; THE CONST of the input (%lf) replaced by %lf for this channel\n",
+              details->the_const,spin_const);
+      details->the_const = spin_const;
+    }
+    fprintf(output_file,"#THE_CONST: %lf\n",details->the_const);
+    fprintf(output_file,"; one electron per state in this channel; net charges are\n");
+    fprintf(output_file,";   per channel (half of the valence electrons minus the\n");
+    fprintf(output_file,";   channel population): add up and down for the total\n\n");
+    if( details->do_chg_it || details->do_muller_it )
+      fatal("Charge iteration is not implemented for spin-polarized runs.");
+    if( spin_common_fermi ){
+      if( details->num_occup_AVG )
+        fatal("Alternate occupations can't be used with --common-fermi.");
+      if( details->Execution_Mode == MOLECULAR || !details->avg_props )
+        fatal("--common-fermi needs an extended system with average properties.");
+      fprintf(output_file,"; the electrons of this channel come from the Fermi level shared\n");
+      fprintf(output_file,";   by both channels (--common-fermi), see below\n");
+    }
+  }
 
 
   /* open the file that will be used for walsh output (if we need one) */
@@ -687,7 +748,7 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
     }
     else {
       /* open the file that will be used for results */
-      strcpy(temp_file_name,file_name);
+      strcpy(temp_file_name,out_name);
       strcat(temp_file_name,".walsh");
       walsh_file = fopen(temp_file_name,"w+");
     }
@@ -735,7 +796,14 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
   *********/
   check_for_errors(unit_cell,details,num_orbs);
 
-  inner_wrapper(file_name,use_stdin_stdout);
+  /* spin-orbit coupling (soc.c): read lambdas, build H_SOC */
+  soc_setup(unit_cell,details,num_orbs,orbital_lookup_table);
+
+
+  inner_wrapper(out_name,use_stdin_stdout);
+
+  /* spin channel: Fermi level, electrons and charges to the parent (spin.c) */
+  spin_send_summary(unit_cell,details,&properties);
   cleanup_memory();
 
   fprintf(status_file,"Done!\n");

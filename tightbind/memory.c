@@ -498,19 +498,27 @@ is present.\n");
         *******/
       for(i=0;i<details->num_KPOINTS;i++){
         if( !details->just_avgE ){
-          (*avg_prop_info)[i].orbs = (float *)my_calloc(num_orbs*(num_orbs),sizeof(float));
-          (*avg_prop_info)[i].orbsI = (float *)my_calloc(num_orbs*(num_orbs),sizeof(float));
+          (*avg_prop_info)[i].orbs = (float *)my_calloc(num_spin_comp*num_orbs*(num_orbs),sizeof(float));
+          (*avg_prop_info)[i].orbsI = (float *)my_calloc(num_spin_comp*num_orbs*(num_orbs),sizeof(float));
+          /* SOC: 2n spinor states, spin-up part in orbs, spin-down in orbs_dn */
+          if( num_spin_comp == 2 ){
+            (*avg_prop_info)[i].orbs_dn = (float *)my_calloc(2*num_orbs*num_orbs,sizeof(float));
+            (*avg_prop_info)[i].orbsI_dn = (float *)my_calloc(2*num_orbs*num_orbs,sizeof(float));
+            (*avg_prop_info)[i].chg_spin = (float *)my_calloc(2*num_orbs*num_orbs,sizeof(float));
+            if( !(*avg_prop_info)[i].orbsI_dn || !(*avg_prop_info)[i].chg_spin )
+              fatal("Can't get memory for the SOC states in the avg_prop_info array.");
+          }
 #ifdef KEEP_OVERLAP_MATS
           (*avg_prop_info)[i].S = (float *)my_calloc(num_orbs*(num_orbs),sizeof(float));
 #endif
-          (*avg_prop_info)[i].chg_mat = (float *)my_calloc(num_orbs*(num_orbs),
+          (*avg_prop_info)[i].chg_mat = (float *)my_calloc(num_spin_comp*num_orbs*(num_orbs),
                                                         sizeof(float));
 
           if( !(*avg_prop_info)[i].chg_mat ){
             fatal("Can't get memory for an array within the avg_prop_info array.");
           }
         }
-        (*avg_prop_info)[i].energies = (float *)my_calloc(num_orbs,sizeof(float));
+        (*avg_prop_info)[i].energies = (float *)my_calloc(num_spin_comp*num_orbs,sizeof(float));
         if( !(*avg_prop_info)[i].energies){
           fatal("Can't get memory for avg_prop_info energies\n");
         }
@@ -528,7 +536,7 @@ is present.\n");
         }
       }
 
-      *orbital_ordering = (K_orb_ptr_type *)my_calloc(num_orbs*
+      *orbital_ordering = (K_orb_ptr_type *)my_calloc(num_spin_comp*num_orbs*
                                                    details->num_KPOINTS,
                                                    sizeof(K_orb_ptr_type));
       if(!(*orbital_ordering))
@@ -658,6 +666,9 @@ void cleanup_memory()
     for(int i=0;i<details->num_KPOINTS;i++){
       CONDITIONAL_FREE(avg_prop_info[i].orbs);
       CONDITIONAL_FREE(avg_prop_info[i].orbsI);
+      CONDITIONAL_FREE(avg_prop_info[i].orbs_dn);
+      CONDITIONAL_FREE(avg_prop_info[i].orbsI_dn);
+      CONDITIONAL_FREE(avg_prop_info[i].chg_spin);
       CONDITIONAL_FREE(avg_prop_info[i].chg_mat);
       CONDITIONAL_FREE(avg_prop_info[i].energies);
       if( details->num_FMO_frags || details->num_FCO_frags){

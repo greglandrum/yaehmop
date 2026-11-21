@@ -75,3 +75,13 @@ avg_prop_info_type *avg_prop_info;
 K_orb_ptr_type *orbital_ordering;
 
 bool print_progress = false;
+
+/* spin polarization and spin-orbit coupling */
+real max_occup = 2.0;
+int spin_channel = 0;
+real spin_nelec = -1.0;
+real spin_const = -1.0;
+char *soc_file_name = 0;
+int num_spin_comp = 1;
+char *soc_parm_down = 0;
+real soc_const_up = -1.0, soc_const_down = -1.0;

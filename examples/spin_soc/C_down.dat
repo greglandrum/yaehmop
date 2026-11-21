@@ -1,0 +1,4 @@
+; carbon, spin-down channel (example: p level 0.5 eV higher)
+C        6      4      1     2     s  -21.400   1.6250   0.0000   1.0000   0.0000
+C        6      4      1     2     p  -10.900   1.6250   0.0000   1.0000   0.0000
+END

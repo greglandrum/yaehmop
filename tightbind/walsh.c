@@ -601,6 +601,10 @@ void walsh_output(detail_type *details,cell_type *cell,int num_orbs,eigenset_typ
     case PRT_CHG_MAT:
       switch(p_info->type){
       case P_DOS_ORB:
+        if( soc_active() ){
+          /* SOC: spinor state contrib1, spin-up + spin-down weight */
+          fprintf(walsh_file,"%8.6lf ",soc_chg_element(p_info->contrib1,p_info->contrib2));
+        } else
         fprintf(walsh_file,"%8.6lf ",properties.chg_mat[p_info->contrib1*num_orbs+
                                                          p_info->contrib2]);
         break;
@@ -652,6 +656,10 @@ void walsh_output(detail_type *details,cell_type *cell,int num_orbs,eigenset_typ
       fprintf(walsh_file,"%8.6lf ",properties.total_E);
       break;
     case PRT_ORB_ENERGY:
+      if( soc_active() ){
+        /* SOC: energy of spinor state contrib1 */
+        fprintf(walsh_file,"%8.6lf ",soc_state_energy(p_info->contrib1));
+      } else
       fprintf(walsh_file,"%8.6lf ",EIGENVAL(eigenset,p_info->contrib1));
       break;
     case PRT_ORB_COEFF:

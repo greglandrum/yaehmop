@@ -597,6 +597,8 @@ typedef struct {
   float *FMO_orbs, *FMO_orbsI; /* the wavefunctions in the FMO basis*/
   float *FMO_chg_mat;          /* the charge matrix in the FMO basis*/
   float *energies;
+  float *orbs_dn, *orbsI_dn;   /* SOC: spin-down part of the spinor states */
+  float *chg_spin;             /* SOC: spin-up minus spin-down part of chg_mat */
 } avg_prop_info_type;
 
 /*****
@@ -933,5 +935,22 @@ extern K_orb_ptr_type *orbital_ordering;
 extern real electrostatic_term, eHMO_term, total_energy;
 
 extern bool print_progress; // Shall we print progress during calculations?
+
+/* spin polarization and spin-orbit coupling */
+extern real max_occup;      /* electrons per state: 2 spinless, 1 spin channel or SOC */
+extern int spin_channel;    /* 0: spinless, 1: spin up, 2: spin down */
+extern real spin_nelec;     /* electrons in this channel (< 0: half of the total) */
+extern real spin_const;     /* K (THE CONST) of this channel (< 0: the input value) */
+extern char *soc_file_name; /* spin-orbit parameter file (NULL: no SOC) */
+extern int spin_pipe_out, spin_pipe_in; /* spin channel <-> parent process (spin.c) */
+extern int spin_common_fermi;          /* --common-fermi */
+extern real spin_input_electrons;      /* electrons of the input (both channels) */
+extern char *soc_parm_down;            /* SOC + spin: parameter table of spin down */
+extern real soc_const_up, soc_const_down; /* SOC + spin: K per spin (< 0: input) */
+extern int num_spin_comp;   /* spin components of a state: 1, or 2 with SOC (2n states
+                               of n orbitals x 2 spins at each k point) */
+/* fraction of the atomic valence electrons that belongs to this calculation
+   (each spin channel holds half of them) */
+#define VALENCE_FRACTION (spin_channel ? 0.5 : 1.0)
 
 #include "prototypes.h"
