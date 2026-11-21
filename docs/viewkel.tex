@@ -659,7 +659,9 @@ band graph.
 
 \item {\bf Fermi E}: allows you to enter a value for the Fermi energy.
 The location of the Fermi energy is not stored in the band file, so
-you must enter this yourself to get an accurate value.
+you must enter this yourself to get an accurate value (for the band
+files of a spin-polarized run it is read from the {\tt .spin} file,
+see below).
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%
@@ -708,6 +710,40 @@ control of graph data.
 
 %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%
+\section{Spin-polarized calculations}
+
+A spin-polarized run of \calcprog\ (options {\tt --parm-up} and
+{\tt --parm-down}) writes one set of output files per spin channel,
+with {\tt \_up} or {\tt \_down} before the extension of the input name
+({\tt foo.bind} gives {\tt foo\_up.bind.band}, {\tt foo\_down.bind.band},
+\ldots), and a summary {\tt foo.bind.spin} with the Fermi level. When
+\viewprog\ reads a band file or a property file (made by {\tt fit\_dos}
+or {\tt fit\_coop}) whose name contains {\tt \_up.}, it also reads the
+file with {\tt \_down.} in its place, if it exists, and shows both
+channels in the same graph:
+
+\begin{itemize}
+\item band structures: the spin-down bands are drawn dashed;
+\item DOS: the spin-down curves are drawn on the negative side, with
+the line style of the corresponding spin-up curve;
+\item COOP: the spin-down curves are drawn dashed (with their sign);
+\item the Fermi energy is taken from the {\tt .spin} file (the common
+Fermi level if the run used {\tt --common-fermi}, otherwise the one of
+the spin-up channel).
+\end{itemize}
+
+If there are $n$ spin-up curves, curve $n+i$ is the spin-down partner of
+curve $i$. In the command-line interface, {\sf curve} $i$ toggles both.
+For DOS and COOP data the two files must have the same energy grid, so
+run {\tt fit\_dos} or {\tt fit\_coop} with the same energy window and
+step for both channels; otherwise \viewprog\ prints a message and shows
+the spin-up channel only. Files whose names do not contain {\tt \_up.}
+are read as usual. The outputs of a spin--orbit calculation ({\tt --soc})
+need nothing special: the band file has $2n$ bands and the DOS and COOP
+data have the usual format.
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
 \section{Using \viewprog\ from a Tek terminal}
 
 When you are sitting at a Tek terminal (Tek 4014 compatible),
@@ -738,6 +774,20 @@ the X windows version of \viewprog.
 
 {\bf Note:}  It has been a long time since I have worked on the
 Tektronix version of \viewprog, so it's not guaranteed to work at all.
+
+The command-line interface is also used when there is no X display, or
+when \viewprog\ is started with {\tt -t}. It can then be driven by a file
+of commands, for example to make PostScript figures in a script:
+
+\shrinkspacing
+\begin{verbatim}
+printf "band\nfoo.bind.band\n\nprint\nbands.ps\nquit\n" | \
+    stdbuf -i0 viewkel -t
+\end{verbatim}
+\resumespacing
+
+\noindent ({\tt stdbuf -i0} is needed because readline buffers
+redirected input.)
 
 %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%
