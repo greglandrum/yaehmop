@@ -50,6 +50,7 @@ void set_details_defaults(detail_type *details)
   details->sparsify_value = 0.0;
   details->Execution_Mode = FAT;
   details->the_const = THE_CONST;
+  details->the_const_diag = THE_CONST;
   details->weighted_Hij = 1;
   details->eval_electrostat = 0;
   details->close_nn_contact = NN_DISTANCE;
@@ -734,6 +735,12 @@ void run_bind(char *file_name, bool use_stdin_stdout, char *parm_file_name ){
 
   *********/
   check_for_errors(unit_cell,details,num_orbs);
+
+  if( details->the_const_diag != THE_CONST ){
+    fprintf(output_file,"; K of the diagonal H_ii(k) term (THE CONST DIAG): %lf\n",
+            details->the_const_diag);
+    fprintf(output_file,"#THE_CONST_DIAG: %lf\n",details->the_const_diag);
+  }
 
   inner_wrapper(file_name,use_stdin_stdout);
   cleanup_memory();

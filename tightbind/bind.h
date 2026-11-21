@@ -859,6 +859,7 @@ typedef struct {
 
   /* this is K, the constant used for the Hij's */
   real the_const;
+  real the_const_diag; /* K of H_ii(k): an orbital with its own images */
 
   real sparsify_value;
 
