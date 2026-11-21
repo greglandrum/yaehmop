@@ -49,6 +49,109 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
+
+/****************************************************************************
+ *
+ *                   Procedure add_spin_down_props
+ *
+ *   Spin-polarized run: reads the curves of the spin-down channel from
+ *   'partner (same energy grid) and appends them to the graph.  DOS curves
+ *   of spin down are drawn on the negative side (mirrored), COOP curves of
+ *   spin down are drawn dashed.  Curve i+n is the spin-down partner of
+ *   curve i; both are shown or hidden together at the start.
+ *
+ ****************************************************************************/
+static void add_spin_down_props(prop_graph_type *prop_graph,char *partner)
+{
+  graph_type *u,*d;
+  FILE *infile;
+  char instring[MAX_STR_LEN];
+  point_type2D *raw;
+  char *disp,*styles,*fills,*names;
+  int nu,nd,nt,np,i,j,ok;
+  float sgn;
+
+  infile = fopen(partner,"r");
+  if( !infile ) return;
+  d = (graph_type *)D_CALLOC(1,sizeof(graph_type));
+  if( !d ) fatal("Can't get space for the spin-down curves.");
+  skipcomments(infile,instring);
+  read_graph_data(infile,d,1,1);
+  fclose(infile);
+  u = prop_graph->the_data;
+  ok = d->num_curves > 0 && d->num_p == u->num_p;
+  for(i=0;ok && i<u->num_p;i++){
+    if( fabs(d->raw_data[i*d->num_curves].y - u->raw_data[i*u->num_curves].y) > 1e-4 ) ok = 0;
+  }
+  if( !ok ){
+    printf("%s doesn't have the energy grid of %s: showing one spin channel only.\n",
+           partner,prop_graph->filename);
+  } else {
+    nu = u->num_curves; nd = d->num_curves; nt = nu+nd; np = u->num_p;
+    sgn = prop_graph->type == DOS_PROP ? -1.0 : 1.0;
+    raw = (point_type2D *)D_CALLOC(np*nt,sizeof(point_type2D));
+    disp = (char *)D_CALLOC(nt,sizeof(char));
+    styles = (char *)D_CALLOC(nt,sizeof(char));
+    fills = (char *)D_CALLOC(nt,sizeof(char));
+    names = (char *)D_CALLOC((nt+1)*NORMAL_STR_LEN,sizeof(char));
+    if( !raw || !disp || !styles || !fills || !names )
+      fatal("Can't get space for the spin-polarized curves.");
+    for(i=0;i<np;i++){
+      for(j=0;j<nu;j++) raw[i*nt+j] = u->raw_data[i*nu+j];
+      for(j=0;j<nd;j++){
+        raw[i*nt+nu+j].x = sgn*d->raw_data[i*nd+j].x;
+        raw[i*nt+nu+j].y = d->raw_data[i*nd+j].y;
+      }
+    }
+    for(j=0;j<nu;j++){
+      disp[j] = u->curves_to_display[j];
+      styles[j] = u->styles[j];
+      fills[j] = u->fills ? u->fills[j] : 0;
+    }
+    for(j=0;j<nd;j++){
+      disp[nu+j] = j < nu ? u->curves_to_display[j] : 0;
+      styles[nu+j] = prop_graph->type == DOS_PROP ? (j < nu ? u->styles[j] : j) : 2;
+      fills[nu+j] = j < nu ? fills[j] : 0;
+    }
+    if( u->curve_names ){
+      /* the title is kept at 0, the name of curve i at i+1 (as read_graph_data) */
+      strncpy(names,u->curve_names,NORMAL_STR_LEN-1);
+      for(j=0;j<nt;j++){
+        int k = j < nu ? j : j-nu;
+        char *src = (k+1 < nu) ? &u->curve_names[(k+1)*NORMAL_STR_LEN] : "";
+        snprintf(&names[(j+1)*NORMAL_STR_LEN],NORMAL_STR_LEN,"%.*s%s%s",NORMAL_STR_LEN-8,
+                 src,src[0] ? "_" : "",j < nu ? "up" : "down");
+      }
+      D_FREE(u->curve_names);
+    }
+    u->curve_names = names;
+    D_FREE(u->raw_data); u->raw_data = raw;
+    D_FREE(u->data);
+    u->data = (point_type2D *)D_CALLOC(np*nt,sizeof(point_type2D));
+    if( !u->data ) fatal("Can't get space for the spin-polarized curves.");
+    D_FREE(u->curves_to_display); u->curves_to_display = disp;
+    D_FREE(u->styles); u->styles = styles;
+    if( u->fills ) D_FREE(u->fills);
+    u->fills = fills;
+    u->num_curves = nt;
+    for(i=0;i<np*nt;i++){
+      if( raw[i].x > u->max_x ) u->max_x = raw[i].x;
+      if( raw[i].x < u->min_x ) u->min_x = raw[i].x;
+    }
+    prop_graph->spin_down_start = nu;
+    printf("Spin-polarized curves: %s (curves 1-%d) and %s (curves %d-%d%s).\n",
+           prop_graph->filename,nu,partner,nu+1,nt,
+           prop_graph->type == DOS_PROP ? ", drawn as negative DOS" : ", dashed");
+  }
+  if( d->raw_data ) D_FREE(d->raw_data);
+  if( d->data ) D_FREE(d->data);
+  if( d->curves_to_display ) D_FREE(d->curves_to_display);
+  if( d->styles ) D_FREE(d->styles);
+  if( d->fills ) D_FREE(d->fills);
+  if( d->curve_names ) D_FREE(d->curve_names);
+  D_FREE(d);
+}
+
 /****************************************************************************
  *
  *                   Procedure new_prop_graph
@@ -145,6 +248,13 @@ void new_prop_graph(char *filename)
       whichobj->prim->prop_graph->type = DOS_PROP;
     }
     read_graph_data(infile,whichobj->prim->prop_graph->the_data,1,1);
+    /* spin-polarized run: add the spin-down channel */
+    {
+      char partner[MAX_STR_LEN];
+      if( whichobj->prim->prop_graph->the_data->num_curves &&
+          spin_partner_file(file_name,partner) )
+        add_spin_down_props(whichobj->prim->prop_graph,partner);
+    }
     preprocess_graph_data(whichobj->prim->prop_graph->the_data);
   }
 
@@ -180,7 +290,8 @@ void new_prop_graph(char *filename)
       find out whether or not there is integration data in the
       data file.
       ***********/
-    if(skipcomments(infile,instring) >= 0 ){
+    if( !whichobj->prim->prop_graph->spin_down_start &&
+        skipcomments(infile,instring) >= 0 ){
       upcase(instring);
       if( instring[0] == '#' && strstr(instring,"INTEGRATION") ){
 
@@ -226,6 +337,10 @@ void new_prop_graph(char *filename)
       sscanf(instring,"%s %lf",foostring,&(whichobj->prim->prop_graph->Fermi_E));
       whichobj->prim->prop_graph->show_fermi = 1;
     }
+    /* spin-polarized run: Fermi level of the .spin summary */
+    if( whichobj->prim->prop_graph->spin_down_start &&
+        spin_summary_fermi(file_name,&(whichobj->prim->prop_graph->Fermi_E)) )
+      whichobj->prim->prop_graph->show_fermi = 1;
 
     /* make the button window */
 #ifdef INTERACTIVE_USE

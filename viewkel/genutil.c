@@ -948,3 +948,72 @@ void angles_from_bond_vect(point_type *p1,point_type *p2,
   *theta_y = t_y;
   *theta_z = t_z;
 }
+
+/****************************************************************************
+ *
+ *   Spin-polarized runs of bind
+ *
+ *   bind --parm-up ... --parm-down ... writes one set of outputs per spin
+ *   channel, with _up / _down before the extension of the input name
+ *   (Fe.bind -> Fe_up.bind.band, Fe_down.bind.band) and a summary
+ *   Fe.bind.spin with the Fermi level.  When a file with "_up." in its
+ *   name is read, viewkel looks for the "_down." file and shows both
+ *   channels together.
+ *
+ ****************************************************************************/
+
+/* name of the spin-down partner of a spin-up file; returns 1 if it exists */
+int spin_partner_file(char *name,char *partner)
+{
+  char *base,*p,*last=0;
+  FILE *f;
+
+  base = strrchr(name,'/');
+  base = base ? base+1 : name;
+  p = base;
+  while( (p = strstr(p,"_up.")) ){ last = p; p++; }
+  if( !last ) return 0;
+  sprintf(partner,"%.*s_down.%s",(int)(last-name),name,last+4);
+  f = fopen(partner,"r");
+  if( !f ) return 0;
+  fclose(f);
+  return 1;
+}
+
+/****
+  Fermi level of a spin-polarized run from the summary file of bind
+  (Fe_up.bind.band -> Fe.bind.spin): the common Fermi level if there is
+  one (--common-fermi), otherwise the one of the spin-up channel.
+  Returns 1 if found.
+****/
+int spin_summary_fermi(char *name,float *Fermi_E)
+{
+  char summary[MAX_STR_LEN],instring[MAX_STR_LEN],*base,*p,*last=0,*dot;
+  FILE *f;
+  double val;
+  int found = 0;
+
+  base = strrchr(name,'/');
+  base = base ? base+1 : name;
+  p = base;
+  while( (p = strstr(p,"_up.")) ){ last = p; p++; }
+  if( !last ) return 0;
+  sprintf(summary,"%.*s%s",(int)(last-name),name,last+3);
+  dot = strrchr(summary,'.');
+  if( dot && dot > summary+(last-name) ) *dot = 0;
+  strcat(summary,".spin");
+  f = fopen(summary,"r");
+  if( !f ) return 0;
+  while( fgets(instring,MAX_STR_LEN,f) ){
+    if( !strncmp(instring,"#Fermi_Energy:",14) && sscanf(instring+14,"%lf",&val) == 1 ){
+      *Fermi_E = val; found = 2;
+    } else if( found < 2 && !strncmp(instring,"#Fermi_Energy_up:",17) &&
+               sscanf(instring+17,"%lf",&val) == 1 ){
+      *Fermi_E = val; found = 1;
+    }
+  }
+  fclose(f);
+  if( found ) printf("Fermi level %g eV from %s%s\n",*Fermi_E,summary,
+                     found == 2 ? " (common to both channels)" : " (spin up channel)");
+  return found ? 1 : 0;
+}

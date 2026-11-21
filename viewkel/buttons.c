@@ -551,6 +551,9 @@ void free_but_win(button_win_type *but_win,button_win_type **but_list)
   button_type *button,*last;
   char found;
 
+  /* objects made in text (-t) mode have no button window */
+  if( !but_win ) return;
+
   /* first find the window in the list */
   temp = *but_list;
 
@@ -982,6 +985,10 @@ void build_main_button_window(button_win_type **button_winP)
   strcpy(string,"Main Options");
 
   /* open the window and get some space */
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
+#endif
   *button_winP = new_button_win(*button_winP,string);
   button_win = *button_winP;
 
@@ -1257,6 +1264,10 @@ void build_PS_options_button_window(button_win_type **button_winP)
 
   /* open the window and get some space */
   strcpy(string,"PS Options");
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
+#endif
   *button_winP = new_button_win(*button_winP,string);
   button_win = *button_winP;
 
@@ -1389,6 +1400,10 @@ void build_label_button_window(button_win_type **button_winP,label_type *label)
 
   /* open the window and get some space */
   strcpy(string,"Label Options");
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
+#endif
   *button_winP = new_button_win(*button_winP,string);
   button_win = *button_winP;
 
@@ -1448,6 +1463,10 @@ void build_molec_button_window(button_win_type **button_winP,molec_type *molec)
 #endif
 #ifdef MAC_GRAPHICS
         strcpy(string,"Molec");
+#endif
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
 #endif
   *button_winP = new_button_win(*button_winP,string);
   button_win = *button_winP;
@@ -1850,6 +1869,10 @@ void build_graph_button_window(button_win_type **button_winP,graph_type *graph)
 #ifdef MAC_GRAPHICS
         strcpy(string,"Graph");
 #endif
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
+#endif
   *button_winP = new_button_win(*button_winP,string);
 
   button_win = *button_winP;
@@ -2041,6 +2064,10 @@ void build_walsh_button_window(button_win_type **button_winP,
 #endif
 #ifdef MAC_GRAPHICS
         strcpy(string,"Walsh");
+#endif
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -2264,6 +2291,10 @@ void build_band_button_window(button_win_type **button_winP,
 #ifdef MAC_GRAPHICS
         strcpy(string,"Bands");
 #endif
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
+#endif
   *button_winP = new_button_win(*button_winP,string);
 
   button_win = *button_winP;
@@ -2478,6 +2509,10 @@ void build_prop_graph_button_window(button_win_type **button_winP,
 #endif
 #ifdef MAC_GRAPHICS
         strcpy(string,"Props");
+#endif
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -2743,6 +2778,10 @@ void build_FMO_button_window(button_win_type **button_winP,
 #ifdef MAC_GRAPHICS
         strcpy(string,"FMO");
 #endif
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
+#endif
   *button_winP = new_button_win(*button_winP,string);
 
   button_win = *button_winP;
@@ -2999,6 +3038,10 @@ void build_MO_surf_button_window(button_win_type **button_winP,
 #endif
 #ifdef MAC_GRAPHICS
         strcpy(string,"MO");
+#endif
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
 #endif
   *button_winP = new_button_win(*button_winP,string);
 
@@ -3526,6 +3569,10 @@ void build_cont_plot_button_window(button_win_type **button_winP,
 #endif
 #ifdef MAC_GRAPHICS
         strcpy(string,"Cont_Plot");
+#endif
+#ifdef X_GRAPHICS
+  /* text (-t) mode: there is no X display for button windows */
+  if( !doing_X ) return;
 #endif
   *button_winP = new_button_win(*button_winP,string);
 

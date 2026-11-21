@@ -174,6 +174,8 @@ extern void readstringparm PROTO((char *, char **));
 extern void readmultistringparm PROTO((char *, int, char **));
 extern char *safe_strcpy PROTO((char *, char *));
 extern int skipcomments PROTO((FILE *, char *));
+extern int spin_partner_file PROTO((char *, char *));
+extern int spin_summary_fermi PROTO((char *, float *));
 extern void upcase PROTO((char *));
 extern void dump_molecular_coords PROTO((molec_type *));
 extern float my_drand PROTO((float));

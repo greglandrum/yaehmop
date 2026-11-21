@@ -205,6 +205,9 @@ typedef struct {
   char show_fermi;
   char integs_for_tics;
   float Fermi_E;
+  /* spin-polarized run: curves from spin_down_start on are the
+     spin-down ones (0: one channel only) */
+  int spin_down_start;
 } prop_graph_type;
 
 /**********
@@ -231,6 +234,9 @@ typedef struct {
   float Fermi_E;
   special_point_type *special_points;
   graph_type *the_data;
+  /* spin-polarized run: curves from spin_down_start on are the
+     spin-down bands (0: one channel only) */
+  int spin_down_start;
 #ifdef SUPPORT_FATBANDS
   int fatband_fill;
   int num_fatbands;
