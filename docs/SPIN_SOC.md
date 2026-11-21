@@ -164,7 +164,7 @@ python3 tests/spin_soc/run_tests.py --bind build/bind [--ref-bind <bind of maste
 
 The SOC reference inside the script is an independent numpy version of the lambda L.S
 model. The MoS2 inputs (`tests/spin_soc/data/`) come from a fit of yaehmop-bandfit
-(https://github.com/tromer-unb/yaehmop-bandfit) to HSE06+SOC bands; the bcc Fe tables
+(a parameter-fitting tool whose repository is still private) to HSE06+SOC bands; the bcc Fe tables
 (one per spin channel) from a fit to spin-polarized PBE bands.
 
 - Without the new options: `.out` and `.band` of the examples diamond, XeF4, Te2Br and
