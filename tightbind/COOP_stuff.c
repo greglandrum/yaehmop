@@ -70,7 +70,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   * Action:   This evaluates and returns the actual COOP.
   *
   ****************************************************************************/
- real eval_COOP(COOP_type *COOP,detail_type *details,cell_type *cell,int num_orbs,avg_prop_info_type *prop_info,hermetian_matrix_type R_overlaps,
+ static real eval_COOP_spin(int spin,COOP_type *COOP,detail_type *details,cell_type *cell,int num_orbs,avg_prop_info_type *prop_info,hermetian_matrix_type R_overlaps,
                 K_orb_ptr_type *orbital_ordering,
                 int *orbital_lookup_table)
  {
@@ -118,8 +118,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    }
 
    /* get pointers to the orbital information */
-   MO_ptr = &(prop_info->orbs[orbital_ordering->MO*num_orbs]);
-   MO_ptrI = &(prop_info->orbsI[orbital_ordering->MO*num_orbs]);
+   if( spin == 0 ){
+     MO_ptr = &(prop_info->orbs[orbital_ordering->MO*num_orbs]);
+     MO_ptrI = &(prop_info->orbsI[orbital_ordering->MO*num_orbs]);
+   } else {
+     /* SOC: spin-down part of the spinor state */
+     MO_ptr = &(prop_info->orbs_dn[orbital_ordering->MO*num_orbs]);
+     MO_ptrI = &(prop_info->orbsI_dn[orbital_ordering->MO*num_orbs]);
+   }
 
    /* figure out which overlap matrix and phase factor we should be using */
    which_overlap = overlap_tab_from_vect(&(COOP->cell),cell);
@@ -636,6 +642,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    return(answer);
  }
 
+/****************************************************************************
+ *
+ *                   Function eval_COOP
+ *
+ *  The COOP of one crystal orbital (for 2 electrons in it).  With SOC
+ *  the state is a spinor; S_spinor = I2 (x) S, so its COOP is
+ *  the sum of the COOPs of its spin-up and spin-down parts.
+ *
+ ****************************************************************************/
+ real eval_COOP(COOP_type *COOP,detail_type *details,cell_type *cell,int num_orbs,avg_prop_info_type *prop_info,hermetian_matrix_type R_overlaps,
+                K_orb_ptr_type *orbital_ordering,
+                int *orbital_lookup_table)
+ {
+   real answer;
+   answer = eval_COOP_spin(0,COOP,details,cell,num_orbs,prop_info,R_overlaps,
+                           orbital_ordering,orbital_lookup_table);
+   if( num_spin_comp == 2 ){
+     answer += eval_COOP_spin(1,COOP,details,cell,num_orbs,prop_info,R_overlaps,
+                              orbital_ordering,orbital_lookup_table);
+   }
+   return(answer);
+ }
+
 
  /****************************************************************************
   *
@@ -679,7 +708,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    real num_occup_bands;
    COOP_type *COOP_ptr1,*COOP_ptr2;
 
-   tot_num_orbs = num_orbs * details->num_KPOINTS;
+   tot_num_orbs = num_orbs * num_spin_comp * details->num_KPOINTS;
 
    fprintf(output_file,"# COOP (Crystal Orbital Overlap Population) results\n");
 
@@ -759,7 +788,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                      &(avg_prop_info[orbital_ordering[i].Kpoint]),
                      R_overlaps,
                      &(orbital_ordering[i]),orbital_lookup_table);
-         COOP_accum += temp;
+         COOP_accum += temp*max_occup/2.0; /* states hold max_occup electrons */
 
          /*****
            accumulate the average value.  Since the calculation done in
@@ -784,7 +813,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                          &(avg_prop_info[orbital_ordering[j].Kpoint]),
                          R_overlaps,
                          &(orbital_ordering[j]),orbital_lookup_table);
-             COOP_accum += temp;
+             COOP_accum += temp*max_occup/2.0; /* states hold max_occup electrons */
 
              COOP_ptr1->avg_value += orbital_ordering[j].occup * temp / 2.0;
 
@@ -848,7 +877,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    real num_occup_bands;
    COOP_type *COOP_ptr1,*COOP_ptr2;
 
-   tot_num_orbs = num_orbs * details->num_KPOINTS;
+   tot_num_orbs = num_orbs * num_spin_comp * details->num_KPOINTS;
 
    /*******
 
@@ -900,7 +929,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                      &(avg_prop_info[orbital_ordering[i].Kpoint]),
                      R_overlaps,
                      &(orbital_ordering[i]),orbital_lookup_table);
-         COOP_accum += temp;
+         COOP_accum += temp*max_occup/2.0; /* states hold max_occup electrons */
 
          /*****
            accumulate the average value.  Since the calculation done in
@@ -925,7 +954,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                          &(avg_prop_info[orbital_ordering[j].Kpoint]),
                          R_overlaps,
                          &(orbital_ordering[j]),orbital_lookup_table);
-             COOP_accum += temp;
+             COOP_accum += temp*max_occup/2.0; /* states hold max_occup electrons */
 
              COOP_ptr1->avg_value += orbital_ordering[j].occup * temp / 2.0;
 

@@ -70,9 +70,9 @@ void calc_occupations(detail_type *details,real num_electrons,int num_orbs,real 
 
   /* just loop until we run out of electrons */
   for(i=0;i<num_orbs && electrons_left > 0.0;i++){
-    if( electrons_left >= 2.0){
-      occupations[i] = 2.0;
-      electrons_left -= 2.0;
+    if( electrons_left >= max_occup){
+      occupations[i] = max_occup;
+      electrons_left -= max_occup;
     }
     else if( electrons_left > 0.0 ){
       occupations[i] = electrons_left;
@@ -426,7 +426,7 @@ void eval_mulliken(cell_type *cell,eigenset_type eigenset,hermetian_matrix_type 
       }
 
       /* subtract off the number of valence electrons */
-      net_chg += cell->atoms[i].num_valence;
+      net_chg += VALENCE_FRACTION*cell->atoms[i].num_valence;
 
       net_chgs[i] = net_chg;
     }

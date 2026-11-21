@@ -215,6 +215,12 @@ void loop_over_k_points(cell_type *cell,detail_type *details,
       FATAL_BUG("Somehow a bogus execution mode got passed to loop_over_kpoints.");
     }
 
+    /* spin-orbit coupling: spinor matrices, dumps and energies (soc.c) */
+    if( soc_active() ){
+      soc_kpoint(cell,details,i,num_KPOINTS,hamilK,overlapK,num_orbs);
+      continue;
+    }
+
     /* do we need to print out the overlap matrix? */
     if( details->overlap_mat_PRT ){
       fprintf(output_file,
