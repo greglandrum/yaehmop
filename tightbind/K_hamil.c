@@ -71,8 +71,11 @@ void build_k_hamil_FAT(cell_type *cell,hermetian_matrix_type hamilR,hermetian_ma
 
 
     /* do the diagonal elements */
-    hamilK.mat[itab+i] = hamilR.mat[itab+i]*(1-THE_CONST+
-                                     THE_CONST*overlapK.mat[itab+i]);
+    /* H_ii(R) = K Hii S_ii(R) for R != 0  ->  H_ii(k) = Hii (1 - K + K S_ii(k))
+       with K = details->the_const_diag (keyword THE CONST DIAG, default 1.75,
+       the value that was hardwired here) */
+    hamilK.mat[itab+i] = hamilR.mat[itab+i]*(1-details->the_const_diag+
+                                     details->the_const_diag*overlapK.mat[itab+i]);
 
     /* now the off diagonals */
     for(j=0;j<i;j++){
@@ -118,10 +121,12 @@ void build_k_hamil_THIN(cell_type *cell,hermetian_matrix_type hamilR,hermetian_m
   int itab,jtab;
   real temp,temp2;
 
-  hamilK.mat[0] = hamilR.mat[0]*(1-THE_CONST+THE_CONST*overlapK.mat[0]);
+  hamilK.mat[0] = hamilR.mat[0]*(1-details->the_const_diag+
+                                 details->the_const_diag*overlapK.mat[0]);
   for(i=1;i<num_orbs;i++){
     itab = i*num_orbs;
-    hamilK.mat[itab+i] = hamilR.mat[i]*(1-THE_CONST+THE_CONST*overlapK.mat[itab+i]);
+    hamilK.mat[itab+i] = hamilR.mat[i]*(1-details->the_const_diag+
+                                        details->the_const_diag*overlapK.mat[itab+i]);
     for(j=0;j<i;j++){
       jtab = j*num_orbs;
       /******
@@ -130,7 +135,8 @@ void build_k_hamil_THIN(cell_type *cell,hermetian_matrix_type hamilR,hermetian_m
       temp = hamilR.mat[i]+hamilR.mat[j];
       temp2 = (hamilR.mat[i]-hamilR.mat[j])/temp;
       temp2 = temp2*temp2;
-      temp2 = .5*(THE_CONST + temp2 + temp2*temp2*(1-THE_CONST));
+      /* THE CONST of the input (1.75 was hardwired here) */
+      temp2 = .5*(details->the_const + temp2 + temp2*temp2*(1-details->the_const));
       temp2 *= temp;
       hamilK.mat[jtab+i] = temp2*overlapK.mat[jtab+i];
       hamilK.mat[itab+j] = temp2*overlapK.mat[itab+j];

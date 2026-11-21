@@ -177,3 +177,5 @@ set(YAEHMOP_INCLUDE_DIR "include/yaehmop")
 install(TARGETS bind DESTINATION bin)
 install(TARGETS yaehmop_eht DESTINATION lib)
 install(FILES ${YAEHMOP_INSTALL_HDRS} DESTINATION "${YAEHMOP_INCLUDE_DIR}")
+# the BSD license has to go with binary redistributions
+install(FILES ${yaehmop_SOURCE_DIR}/license.txt DESTINATION share/yaehmop)

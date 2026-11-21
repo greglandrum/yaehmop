@@ -410,6 +410,20 @@ Allows replacement of the value \pvar{K} used in evaluating the H$_{ij}$
 elements.  The next line should contain the new value for \pvar{K}.
 By default \pvar{K}=1.75.
 
+In extended systems this \pvar{K} is used for the elements between
+different orbitals. The interaction of an orbital with its own images
+in the other cells, $H_{ii}(\mathbf{R}) = K H_{ii} S_{ii}(\mathbf{R})$,
+which gives $H_{ii}(\mathbf{k}) = H_{ii}\,(1 - K + K S_{ii}(\mathbf{k}))$,
+uses the value set with {\sf The Const Diag}.
+
+%%%%%%%%
+\subsection{{\sf The Const Diag} (optional)}
+
+The value of \pvar{K} for the diagonal elements $H_{ii}(\mathbf{k})$ of an
+extended system (an orbital with its own images in the other cells, see
+{\sf The Constant}). The value can be on the same line or on the next one.
+By default \pvar{K}=1.75, independently of {\sf The Constant}.
+
 %%%%%%%%
 \subsection{{\sf Zero Overlap} (optional)}
 

@@ -1618,6 +1618,18 @@ void read_inputfile(cell_type *cell,detail_type *details,char *name,int *num_orb
       }
 
       /*----------------------------------------------------------------------*/
+      else if(strstr(instring,"THE CONST DIAG")){
+        /* K of the diagonal H_ii(k) term (an orbital with its own images in
+           the other cells); default 1.75.  Tested before "THE CONST", which
+           is a substring of it. */
+        if( sscanf(instring,"%s %s %s %lf",string1,string2,string1,
+                   &(details->the_const_diag)) != 4 ){
+          skipcomments(infile,instring,FATAL);
+          sscanf(instring,"%lf",&(details->the_const_diag));
+        }
+        fprintf(status_file,"K of the diagonal (same orbital, other cells) = %lf\n",
+                details->the_const_diag);
+      }
       else if(strstr(instring,"THE CONST")){
         fprintf(status_file,"Reading in a new value for the constant K.\n");
         if( sscanf(instring,"%s %s %lf",string1,string2,
