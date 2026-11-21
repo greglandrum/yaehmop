@@ -130,7 +130,8 @@ void build_k_hamil_THIN(cell_type *cell,hermetian_matrix_type hamilR,hermetian_m
       temp = hamilR.mat[i]+hamilR.mat[j];
       temp2 = (hamilR.mat[i]-hamilR.mat[j])/temp;
       temp2 = temp2*temp2;
-      temp2 = .5*(THE_CONST + temp2 + temp2*temp2*(1-THE_CONST));
+      /* THE CONST of the input (1.75 was hardwired here) */
+      temp2 = .5*(details->the_const + temp2 + temp2*temp2*(1-details->the_const));
       temp2 *= temp;
       hamilK.mat[jtab+i] = temp2*overlapK.mat[jtab+i];
       hamilK.mat[itab+j] = temp2*overlapK.mat[itab+j];
