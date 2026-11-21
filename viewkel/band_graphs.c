@@ -324,6 +324,73 @@ void read_band_data(FILE *infile,band_graph_type *band_graph)
 
 
 
+
+/****************************************************************************
+ *
+ *                   Procedure add_spin_down_bands
+ *
+ *   Spin-polarized run: reads the bands of the spin-down channel from
+ *   'partner and appends them to 'band_graph as extra curves (drawn
+ *   dashed).  The Fermi level comes from the .spin summary of bind.
+ *
+ ****************************************************************************/
+static void add_spin_down_bands(band_graph_type *band_graph,char *partner)
+{
+  band_graph_type *dn;
+  graph_type *u,*d;
+  point_type2D *raw;
+  FILE *infile;
+  int nu,nd,np,i,j;
+
+  infile = fopen(partner,"r");
+  if( !infile ) return;
+  dn = (band_graph_type *)D_CALLOC(1,sizeof(band_graph_type));
+  if( !dn ) fatal("Can't get space for the spin-down bands.");
+  read_band_data(infile,dn);
+  fclose(infile);
+  u = band_graph->the_data;
+  d = dn->the_data;
+  if( !d || !d->num_curves || d->num_p != u->num_p ||
+      dn->num_special_points != band_graph->num_special_points
+#ifdef SUPPORT_FATBANDS
+      || band_graph->num_fatbands || dn->num_fatbands
+#endif
+      ){
+    printf("%s doesn't match %s: showing one spin channel only.\n",partner,
+           band_graph->filename);
+  } else {
+    nu = u->num_curves; nd = d->num_curves; np = u->num_p;
+    raw = (point_type2D *)D_CALLOC(np*(nu+nd),sizeof(point_type2D));
+    if( !raw ) fatal("Can't get space for the spin-polarized bands.");
+    for(i=0;i<np;i++){
+      for(j=0;j<nu;j++) raw[i*(nu+nd)+j] = u->raw_data[i*nu+j];
+      for(j=0;j<nd;j++) raw[i*(nu+nd)+nu+j] = d->raw_data[i*nd+j];
+    }
+    D_FREE(u->raw_data);
+    u->raw_data = raw;
+    D_FREE(u->data);
+    u->data = (point_type2D *)D_CALLOC(np*(nu+nd),sizeof(point_type2D));
+    if( !u->data ) fatal("Can't get space for the spin-polarized bands.");
+    u->num_curves = nu+nd;
+    if( d->max_y > u->max_y ) u->max_y = d->max_y;
+    if( d->min_y < u->min_y ) u->min_y = d->min_y;
+    band_graph->spin_down_start = nu;
+    printf("Spin-polarized bands: %s (solid) and %s (dashed).\n",
+           band_graph->filename,partner);
+    if( spin_summary_fermi(band_graph->filename,&band_graph->Fermi_E) )
+      band_graph->show_fermi = 1;
+  }
+  if( d ){
+    if( d->raw_data ) D_FREE(d->raw_data);
+    if( d->data ) D_FREE(d->data);
+    if( d->curves_to_display ) D_FREE(d->curves_to_display);
+    if( d->styles ) D_FREE(d->styles);
+    D_FREE(d);
+  }
+  if( dn->special_points ) D_FREE(dn->special_points);
+  D_FREE(dn);
+}
+
 /****************************************************************************
  *
  *                   Procedure new_band_graph
@@ -407,6 +474,14 @@ void new_band_graph(char *filename)
   if( !failed ){
     strcpy(whichobj->prim->band_graph->filename,file_name);
     read_band_data(infile,whichobj->prim->band_graph);
+    /* spin-polarized run: add the spin-down channel */
+    {
+      char partner[MAX_STR_LEN];
+      if( whichobj->prim->band_graph->the_data &&
+          whichobj->prim->band_graph->the_data->num_curves &&
+          spin_partner_file(file_name,partner) )
+        add_spin_down_bands(whichobj->prim->band_graph,partner);
+    }
     preprocess_band_graph_data(whichobj->prim->band_graph);
   }
 
@@ -633,7 +708,11 @@ void draw_band_graph(prim_type *prim,object_type *obj)
     tot_num_p = the_graph->num_curves*the_graph->num_p;
 #endif
     for(i=0;i<the_graph->num_curves;i++){
-      g_change_linestyle(the_graph->styles[0]);
+      /* spin-polarized run: spin-down bands dashed */
+      if( band_graph->spin_down_start && i >= band_graph->spin_down_start )
+        g_change_linestyle(2);
+      else
+        g_change_linestyle(the_graph->styles[0]);
 #ifdef SUPPORT_FATBANDS
       if( prim->band_graph->num_fatbands && prim->band_graph->fatbands_on ){
         g_change_linewidth(0.5);

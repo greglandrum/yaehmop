@@ -1197,6 +1197,13 @@ void parse_commands(void)
         if( which_curve <= the_graph->num_curves ){
           the_graph->curves_to_display[which_curve-1] =
             !(the_graph->curves_to_display[which_curve-1]);
+          /* spin-polarized property graph: the spin-down partner follows */
+          if( prop_graph && prop_graph->spin_down_start &&
+              which_curve <= prop_graph->spin_down_start &&
+              which_curve-1+prop_graph->spin_down_start < the_graph->num_curves ){
+            the_graph->curves_to_display[which_curve-1+prop_graph->spin_down_start] =
+              the_graph->curves_to_display[which_curve-1];
+          }
         }else{
           fprintf(stderr,"There are only %d curves in the data set!\n",
                   the_graph->num_curves);
