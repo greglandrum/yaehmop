@@ -28,7 +28,7 @@ LIBS = -lm
 LOCALLIBS = -L/usr/local/lib -llapack -lblas -lf2c
 
 COBJS = main.o driver.o genutil.o fileio.o globals.o memory.o distance_mat.o \
- R_overlap_mat.o mov.o R_hamil.o K_hamil.o kpoints.o K_overlap_mat.o \
+ R_overlap_mat.o mov.o R_hamil.o K_hamil.o kpoints.o K_overlap_mat.o soc.o spin.o \
  mulliken.o charge_mat.o zetas.o electrostat.o new3_fileio.o walsh.o \
  transforms.o symmetry.o princ_axes.o avg_props.o DOS_stuff.o COOP_stuff.o \
  Zmat.o bands.o FMO_stuff.o xtal_coords.o matrices.o chg_it.o \

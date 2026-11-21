@@ -205,7 +205,8 @@ void construct_band_structure(cell_type *cell,detail_type *details,
   fprintf(band_file,"%d k points connecting them. There are\n",
           bands->points_per_line);
 
-  fprintf(band_file,"%d orbitals in the unit cell.\n",num_orbs);
+  fprintf(band_file,"%d orbitals in the unit cell.\n",
+          soc_active() ? soc_num_states() : num_orbs);
 
   for(i=0;i<bands->num_special_points;i++){
     fprintf(band_file,"%s %lf %lf %lf\n",
@@ -250,6 +251,17 @@ void construct_band_structure(cell_type *cell,detail_type *details,
 
 if( print_progress )
   fprintf(stderr,">");
+
+    /* spin-orbit coupling: 2n spinor energies (soc.c) */
+    if( soc_active() ){
+      real *soc_E = soc_band_energies(details,hamilK,overlapK,num_orbs);
+      fprintf(band_file,"; K point: %lf %lf %lf\n",
+              kpoint->loc.x,kpoint->loc.y,kpoint->loc.z);
+      for(j=0;j<soc_num_states();j++){
+        fprintf(band_file,"%10.8lg\n",soc_E[j]);
+      }
+      continue;
+    }
 
     /******
       The matrix diagonalization routine destroys the overlap matrix,

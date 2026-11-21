@@ -1060,8 +1060,8 @@ void check_for_errors(cell_type *cell,detail_type *details,int num_orbs)
   }
 
   /* mabye there are too many electrons? */
-  if( cell->num_electrons > (real)(2.0*num_orbs)){
-    fatal("num_electrons is greater than twice the num_orbs.\n\tThis is probably wrong");
+  if( cell->num_electrons > (real)(max_occup*num_orbs)){
+    fatal("num_electrons is greater than max_occup*num_orbs.\n\tThis is probably wrong");
   }
 
   /* what about K points for average properties calculations? */

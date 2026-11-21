@@ -1,0 +1,126 @@
+\chapter{Spin polarization and spin--orbit coupling}
+\sloppy
+
+\calcprog can do collinear spin-polarized calculations, with one set of
+atomic parameters per spin channel, and on-site spin--orbit coupling
+(SOC), also combined. Runs without the options below give the same
+results as before. A shorter description, with the test results, is in
+{\tt docs/SPIN\_SOC.md}.
+
+\shrinkspacing
+\begin{verbatim}
+bind [options] <inputfile> [paramfile]
+ --parm-up FILE --parm-down FILE
+        spin-polarized run, one table per channel
+ --nelec-up X --nelec-down X
+        electrons in each channel (default: half each)
+ --const-up K --const-down K
+        K (The Constant) of each channel
+ --common-fermi
+        one Fermi level for both channels
+ --soc FILE
+        spin-orbit coupling (with --parm-up/--parm-down:
+        SOC on top of the two spin channels)
+ -h, --help
+        list the options
+\end{verbatim}
+\resumespacing
+
+%%%%%%%%
+\section{Spin-polarized runs}
+
+\noindent {\tt bind --parm-up up.dat --parm-down down.dat foo.bind}
+
+Each spin channel is an independent extended \huek calculation that
+uses its own parameter table (same format as {\tt eht\_parms.dat}), so
+the two channels can have different $H_{ii}$ and zetas. The two
+channels run as two processes at the same time (this needs a POSIX
+system; on Windows the program stops with a message). Each state holds
+one electron.
+
+Every output of a channel gets {\tt \_up} or {\tt \_down} before the
+extension of the input name: {\tt foo.bind} gives {\tt foo\_up.bind.out},
+{\tt foo\_up.bind.band}, {\tt foo\_down.bind.out}, \ldots. The formats
+are those of a spinless run, so the utility programs and \viewprog read
+them as usual (\viewprog also shows both channels together, see the
+\viewprog chapter).
+
+\begin{description}
+\item[Electrons.] By default each channel gets half of the electrons of
+  the input ({\sf Electrons} or {\sf Charge}), and has its own Fermi
+  level. {\tt --nelec-up}/{\tt --nelec-down} fix the electrons of each
+  channel (i.e.\ the magnetic moment).
+\item[Common Fermi level.] With {\tt --common-fermi} the two channels
+  share one Fermi level, and the electrons of each channel come out of
+  it. This needs an extended system with {\sf Average Properties}.
+\item[Summary.] Every spin-polarized run writes {\tt foo.bind.spin}: the
+  Fermi level(s), $N_\uparrow$, $N_\downarrow$, the magnetic moment
+  $N_\uparrow-N_\downarrow$, the average energy and, per atom, the
+  populations of both channels, the net charge and the moment.
+\item[Net charges] in the {\tt .out} of a channel are half of the
+  valence electrons minus the population of that channel; add the two
+  channels for the total. COOP curves of a channel are for one electron
+  per state.
+\item[K per channel.] {\tt --const-up}/{\tt --const-down} replace
+  {\sf The Constant} of the input in each channel.
+\item[Not available:] charge iteration.
+\end{description}
+
+%%%%%%%%
+\section{Spin--orbit coupling}
+
+\noindent {\tt bind --soc soc.dat foo.bind [paramfile]}
+
+The spin--orbit term $\lambda_{A,l}\,\mathbf{L}\cdot\mathbf{S}$ acts
+between the orbitals of the same shell of the same atom. The file
+{\tt soc.dat} has one line per element and shell, with $\lambda$ in eV
+(lines starting with {\tt \#} or {\tt ;} are comments):
+
+\shrinkspacing
+\begin{verbatim}
+# element shell lambda_eV
+Mo  d  0.063
+S   p  0.198
+\end{verbatim}
+\resumespacing
+
+The calculation is done in a basis of $2n$ spinors (the $n$ orbitals
+with spin up, then the same orbitals with spin down):
+$H(\mathbf{k}) \to I_2\otimes H(\mathbf{k}) + H_{SOC}$,
+$S(\mathbf{k}) \to I_2\otimes S(\mathbf{k})$. Each state holds one
+electron. A $p$ level splits into $j=3/2$ ($+\lambda/2$) and $j=1/2$
+($-\lambda$), a $d$ level into $j=5/2$ ($+\lambda$) and $j=3/2$
+($-3\lambda/2$).
+
+\begin{description}
+\item[Outputs.] The {\tt .band} file has $2n$ bands; {\sf Dump Hamil}
+  and {\sf Dump Overlap} write the $2n\times2n$ spinor matrices in the
+  usual format; {\tt foo.bind.SOC} lists the nonzero elements of
+  $H_{SOC}$.
+\item[Properties.] Fermi level, total and projected DOS, COOP/COHP,
+  orbital occupations, net charges, overlap populations, charge
+  matrices, wavefunctions, charge iteration, Walsh diagrams, molecules
+  and the THIN mode (bands) work with SOC. Orbital and atom numbers keep
+  their usual meaning: a projection on an orbital adds its spin-up and
+  spin-down parts. Energy levels and the rows of the charge matrix refer
+  to the $2n$ spinor states. The {\tt .out} also has the spin moments
+  $m_z=N_\uparrow-N_\downarrow$ per atom.
+\item[Not available with SOC:] FMO/FCO, {\sf MO print}, zeta variation,
+  modified Mulliken analysis, the electrostatic energy, netCDF. The
+  program stops with a message naming the option.
+\item[Build.] SOC needs \calcprog built with LAPACK.
+\item[f shells.] SOC in $f$ shells is implemented but has not been
+  validated.
+\end{description}
+
+%%%%%%%%
+\section{SOC on top of two spin channels}
+
+\noindent {\tt bind --soc soc.dat --parm-up up.dat \\ \hspace*{2em} --parm-down down.dat foo.bind}
+
+One calculation with $H(\mathbf{k}) = \mathrm{diag}(H_\uparrow(\mathbf{k}),
+H_\downarrow(\mathbf{k})) + H_{SOC}$ (collinear magnetization along $z$
+plus spin--orbit coupling). The two tables may differ in the $H_{ii}$
+(and {\tt --const-up}/{\tt --const-down} in $K$), not in the basis or
+the zetas. There is one Fermi level for all the electrons of the input.
+\fussy
