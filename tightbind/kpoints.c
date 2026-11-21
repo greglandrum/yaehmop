@@ -292,10 +292,10 @@ void loop_over_k_points(cell_type *cell,detail_type *details,
         sprintf(tempfilename,"%s.HAM",details->filename);
 #ifndef _MSC_VER
     		hamil_file = open(tempfilename,
-    			O_RDWR | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
+    			O_RDWR | O_TRUNC | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
 #else
 		    hamil_file = open(tempfilename,
-			    O_RDWR | O_APPEND | O_CREAT, _S_IREAD | _S_IWRITE);
+			    O_RDWR | O_TRUNC | O_APPEND | O_CREAT, _S_IREAD | _S_IWRITE);
 #endif
         if( hamil_file == -1 ){
           fatal("Can't open .HAM file for binary I/O");
