@@ -92,8 +92,8 @@ wtb.x < input-SOC.dat          # bands in out/bands.dat (energies relative to th
 
 ## Example: MoS2 monolayer (`example_MoS2/`)
 
-The parametrization is a [yaehmop-bandfit](https://github.com/tromer-unb/yaehmop-bandfit) fit
-to FHI-aims HSE06+SOC bands (the same one as `tests/spin_soc/data`). The input `MoS2.bind` has the band path Γ-M-K-Γ (40 points per line)
+The parametrization is a fit with yaehmop-bandfit (a parameter-fitting tool whose repository
+is still private) to FHI-aims HSE06+SOC bands (the same one as `tests/spin_soc/data`). The input `MoS2.bind` has the band path Γ-M-K-Γ (40 points per line)
 and the 11×11×1 mesh with 15 decimals. `run_example.sh` does everything:
 
 ```
