@@ -1,0 +1,14 @@
+MoS2 without SOC: 17 bands, 123 k points (WanTiBEXOS) on the YAeHMOP path
+  converted file (huckel-NP.dat) diagonalized in double precision vs YAeHMOP:
+      all bands 7.93e-06 eV;  bands within VBM-6 .. VBM+4 eV 5.38e-07 eV
+  WanTiBEXOS (wtb.x, single precision) vs YAeHMOP:
+      all bands 1.13e-03 eV;  bands within VBM-6 .. VBM+4 eV 4.88e-05 eV
+  band gap: YAeHMOP 2.312981 eV, WanTiBEXOS 2.312991 eV
+
+MoS2 with SOC: 34 bands, 123 k points (WanTiBEXOS) on the YAeHMOP path
+  converted file (huckel-SOC.dat) diagonalized in double precision vs YAeHMOP:
+      all bands 9.70e-06 eV;  bands within VBM-6 .. VBM+4 eV 5.37e-07 eV
+  WanTiBEXOS (wtb.x, single precision) vs YAeHMOP:
+      all bands 1.15e-03 eV;  bands within VBM-6 .. VBM+4 eV 6.59e-05 eV
+  band gap: YAeHMOP 2.268108 eV, WanTiBEXOS 2.268106 eV
+  SOC splitting of the top valence band at K: YAeHMOP 0.165011 eV, WanTiBEXOS 0.165014 eV
